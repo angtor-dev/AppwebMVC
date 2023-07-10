@@ -9,12 +9,17 @@ class Model
         $this->db = new Database();
     }
 
-    public function listar() : array
+    public static function listar() : array
     {
-        $table = get_class($this);
+        $bd = new Database();
+        $table = static::class;
         $query = "SELECT * FROM $table";
         
-        return $this->query($query)->fetchAll(PDO::FETCH_ASSOC);
+        $stmt = $bd->connect()->query($query);
+        $stmt->setFetchMode(PDO::FETCH_CLASS, $table);
+        
+        return $stmt->fetchAll();
+    }
     }
 
     protected function query(String $query) : PDOStatement {
