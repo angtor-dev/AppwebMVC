@@ -14,7 +14,7 @@ class Model
         $bd = new Database();
         $table = static::class;
         $query = "SELECT * FROM $table";
-        
+
         $stmt = $bd->connect()->query($query);
         $stmt->setFetchMode(PDO::FETCH_CLASS, $table);
         
@@ -35,6 +35,33 @@ class Model
         }
         return $stmt->fetch();
     }
+
+    public static function cargarLista(int $id, string $fkName) : null|array
+    {
+        $bd = new Database();
+        $table = static::class;
+        $query = "SELECT * FROM $table WHERE id$fkName = $id";
+
+        $stmt = $bd->connect()->query($query);
+        $stmt->setFetchMode(PDO::FETCH_CLASS, $table);
+
+        if ($stmt->rowCount() == 0) {
+            return null;
+        }
+        return $stmt->fetchAll();
+    }
+
+    public function mapFromPost() : bool
+    {
+        if (!empty($_POST)) {
+            foreach ($_POST as $key => $value) {
+                if (property_exists($this, $key)) {
+                    $this->$key = $value;
+                }
+            }
+            return true;
+        }
+        return false;
     }
 
     protected function query(String $query) : PDOStatement {
