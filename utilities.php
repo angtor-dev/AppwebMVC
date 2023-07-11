@@ -36,6 +36,17 @@ function renderView(?string $viewName = null, ?string $viewPath = null) : void
     require "Views/_Plantillas/".$_layout.".php";
 }
 
+/**
+ * Valida si el usuario esta autenticado, de lo contrario se redirecciona al login
+ */
+function necesitaAutenticacion() : void {
+    session_start();
+    if (!isset($_SESSION['usuario'])) {
+        header('location:login');
+        exit();
+    }
+}
+
 /** 
  * Almacena el buffer de la vista que sera impresa
  * 
