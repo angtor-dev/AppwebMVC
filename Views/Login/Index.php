@@ -11,7 +11,7 @@
                             El correo o la clave son incorrectos
                         </div>
                     <?php endif ?>
-                    <form action="/AppwebMVC/Login" method="post" id="loginForm">
+                    <form action="<?= LOCAL_DIR ?>Login" method="post" id="loginForm">
                         <div class="row gap-3">
                             <div class="col-12">
                                 <input type="email" class="form-control" placeholder="correo" name="correo" required>

@@ -10,9 +10,9 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $title ?? "" ?> - <?= APP_NAME ?></title>
-    <link rel="stylesheet" href="/AppwebMVC/public/lib/fontawesome/css/all.min.css">
-    <link rel="stylesheet" href="/AppwebMVC/public/lib/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/AppwebMVC/public/css/site.css">
+    <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/lib/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/lib/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/css/site.css">
 </head>
 <body>
     <header class="p-3 bg-dark text-white" style="margin-left: 230px;">
@@ -33,7 +33,7 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
                             <?= $usuario->nombre ?>
                         </button>
                     <?php else : ?>
-                        <a href="/AppwebMVC/login" class="btn btn-primary">Iniciar sesión</a>
+                        <a href="<?= LOCAL_DIR ?>login" class="btn btn-primary">Iniciar sesión</a>
                     <?php endif ?>
                 </div>
             </div>
@@ -49,7 +49,7 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
         <hr>
         <ul class="nav nav-pills flex-column mb-auto">
             <li class="nav-item">
-                <a href="/AppwebMVC/" class="nav-link active" aria-current="page">
+                <a href="<?= LOCAL_DIR ?>" class="nav-link active" aria-current="page">
                     <i class="fa-solid fa-house-chimney fa-fw me-2"></i>
                     Inicio
                 </a>
@@ -91,7 +91,7 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
         <?= $GLOBALS['view'] ?>
     </main>
 
-    <script src="/AppwebMVC/public/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="/AppwebMVC/public/js/site.js"></script>
+    <script src="<?= LOCAL_DIR ?>public/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="<?= LOCAL_DIR ?>public/js/site.js"></script>
 </body>
 </html>
