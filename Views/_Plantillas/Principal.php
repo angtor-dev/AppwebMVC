@@ -1,3 +1,8 @@
+<?php
+/** @var ?Usuario */
+$usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -10,6 +15,31 @@
     <link rel="stylesheet" href="/AppwebMVC/public/css/site.css">
 </head>
 <body>
+    <header class="p-3 bg-dark text-white" style="margin-left: 230px;">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-end">
+                <div class="text-end">
+                    <?php if (isset($_SESSION['usuario'])) : ?>
+                        <button class="btn btn-dark">
+                            <i class="fa-solid fa-message"></i>
+                            0
+                        </button>
+                        <button class="btn btn-dark me-2">
+                            <i class="fa-solid fa-bell"></i>
+                            0
+                        </button>
+                        <button class="btn btn-outline-light">
+                            <i class="fa-solid fa-user-large me-1"></i>
+                            <?= $usuario->nombre ?>
+                        </button>
+                    <?php else : ?>
+                        <a href="/AppwebMVC/login" class="btn btn-primary">Iniciar sesión</a>
+                    <?php endif ?>
+                </div>
+            </div>
+        </div>
+    </header>
+
     <aside class="d-flex flex-column flex-shrink-0 p-3 bg-light
         position-fixed top-0 bottom-0" style="width: 230px;">
         <a href="/AppwebMVC" class="d-flex align-items-center
