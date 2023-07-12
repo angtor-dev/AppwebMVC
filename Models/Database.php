@@ -9,9 +9,9 @@ class Database
 
     public function __construct() {
         $this->host = "localhost";
-        $this->dbname = "AppwebMVC";
-        $this->user = "root";
-        $this->password = "";
+        $this->dbname = defined('DB_NAME') ? DB_NAME : "AppwebMVC";
+        $this->user = defined('DB_USER') ? DB_USER : "root";
+        $this->password = defined('DB_PASSWORD') ? DB_PASSWORD : "";
         $this->charset = "utf8mb4";
     }
 
