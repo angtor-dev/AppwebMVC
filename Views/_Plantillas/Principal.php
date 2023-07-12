@@ -10,8 +10,54 @@
     <link rel="stylesheet" href="/AppwebMVC/public/css/site.css">
 </head>
 <body>
-    <h1>Plantilla _Layout</h1>
-    <main>
+    <aside class="d-flex flex-column flex-shrink-0 p-3 bg-light
+        position-fixed top-0 bottom-0" style="width: 230px;">
+        <a href="/AppwebMVC" class="d-flex align-items-center
+            mb-0 me-md-auto link-dark text-decoration-none">
+            <span class="fs-4" style="height: 37px;"><?= APP_NAME ?></span>
+        </a>
+        <hr>
+        <ul class="nav nav-pills flex-column mb-auto">
+            <li class="nav-item">
+                <a href="/AppwebMVC/" class="nav-link active" aria-current="page">
+                    <i class="fa-solid fa-house-chimney fa-fw me-2"></i>
+                    Inicio
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link link-dark">
+                    <i class="fa-solid fa-lock fa-fw me-2"></i>
+                    Seguridad
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link link-dark">
+                    <i class="fa-solid fa-church fa-fw me-2"></i>
+                    Sedes
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link link-dark">
+                    <i class="fa-solid fa-people-group fa-fw me-2"></i>
+                    Celulas
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link link-dark">
+                    <i class="fa-solid fa-graduation-cap fa-fw me-2"></i>
+                    E.I.D.
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link link-dark">
+                    <i class="fa-solid fa-calendar fa-fw me-2"></i>
+                    Agenda
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <main style="margin-left: 230px;">
         <?= $GLOBALS['view'] ?>
     </main>
 
