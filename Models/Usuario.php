@@ -4,6 +4,7 @@ require_once "Models/Model.php";
 class Usuario extends Model
 {
     public int $id;
+    public string $cedula;
     public string $correo;
     public string $clave;
     public string $nombre;
@@ -17,17 +18,17 @@ class Usuario extends Model
         parent::__construct();
     }
 
-    public function login(string $correo, string $clave) : bool
+    public function login(string $cedula, string $clave) : bool
     {
-        if (empty($correo) || empty($clave)) {
+        if (empty($cedula) || empty($clave)) {
             return false;
         }
 
-        $query = "SELECT * FROM usuario WHERE correo = :correo";
+        $query = "SELECT * FROM usuario WHERE cedula = :cedula";
         
         try {
             $stmt = $this->prepare($query);
-            $stmt->bindValue('correo', $correo);
+            $stmt->bindValue('cedula', $cedula);
 
             $stmt->execute();
 

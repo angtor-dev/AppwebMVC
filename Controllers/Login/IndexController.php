@@ -5,7 +5,7 @@ $loginFails = false;
 if (!empty($_POST)) {
     $usuario = new Usuario();
 
-    if ($usuario->login($_POST['correo'], $_POST['clave'])) {
+    if ($usuario->login($_POST['cedula'], $_POST['clave'])) {
         session_start();
         $_SESSION['usuario'] = $usuario;
 
