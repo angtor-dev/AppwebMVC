@@ -14,6 +14,7 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/lib/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/css/site.css">
 </head>
+
 <body>
     <header class="p-3 bg-dark text-white" style="margin-left: 230px;">
         <div class="container">
@@ -28,10 +29,33 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
                             <i class="fa-solid fa-bell"></i>
                             0
                         </button>
-                        <button class="btn btn-outline-light">
-                            <i class="fa-solid fa-user-large me-1"></i>
-                            <?= $usuario->nombre ?>
-                        </button>
+                        <div class="dropdown d-inline-block">
+                            <button class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa-solid fa-user-large me-1"></i>
+                                <?= $usuario->nombre ?>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item" href="#">
+                                        <i class="fa-regular fa-circle-user fa-fw me-2"></i>
+                                        Cuenta
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="#">
+                                        <i class="fa-regular fa-heart fa-fw me-2"></i>
+                                        Preferecias
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item text-danger" href="<?= LOCAL_DIR ?>login/logout">
+                                        <i class="fa-solid fa-right-from-bracket fa-fw me-2"></i>
+                                        Cerrar sesión
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     <?php else : ?>
                         <a href="<?= LOCAL_DIR ?>login" class="btn btn-primary">Iniciar sesión</a>
                     <?php endif ?>

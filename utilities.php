@@ -41,7 +41,7 @@ function renderView(?string $viewName = null, ?string $viewPath = null) : void
  */
 function necesitaAutenticacion() : void {
     if (!isset($_SESSION['usuario'])) {
-        header('location:login');
+        header('location:'.LOCAL_DIR.'login');
         exit();
     }
 }

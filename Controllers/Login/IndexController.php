@@ -9,7 +9,7 @@ if (!empty($_POST)) {
         session_start();
         $_SESSION['usuario'] = $usuario;
 
-        header('location:home');
+        header('location:'.LOCAL_DIR);
         exit();
     }
     else {
