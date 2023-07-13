@@ -47,6 +47,9 @@ class Usuario extends Model
                     $this->$key = $value;
                 }
             }
+
+            $this->query("UPDATE usuario SET ultimoAcceso = NOW() WHERE usuario.id = $this->id");
+
             return true;
         } catch (\Throwable $th) {
             http_response_code(500);
