@@ -6,7 +6,7 @@ class Model
     protected Database $db;
 
     public function __construct() {
-        $this->db = new Database();
+        $this->db = Database::getInstance();
     }
 
     public static function listar() : array
@@ -15,7 +15,7 @@ class Model
         $table = static::class;
         $query = "SELECT * FROM $table";
 
-        $stmt = $bd->connect()->query($query);
+        $stmt = $bd->pdo()->query($query);
         $stmt->setFetchMode(PDO::FETCH_CLASS, $table);
         
         return $stmt->fetchAll();
@@ -27,7 +27,7 @@ class Model
         $table = static::class;
         $query = "SELECT * FROM $table WHERE id = $id";
 
-        $stmt = $bd->connect()->query($query);
+        $stmt = $bd->pdo()->query($query);
         $stmt->setFetchMode(PDO::FETCH_CLASS, $table);
 
         if ($stmt->rowCount() == 0) {
@@ -42,7 +42,7 @@ class Model
         $table = static::class;
         $query = "SELECT * FROM $table WHERE id$fkName = $id";
 
-        $stmt = $bd->connect()->query($query);
+        $stmt = $bd->pdo()->query($query);
         $stmt->setFetchMode(PDO::FETCH_CLASS, $table);
 
         if ($stmt->rowCount() == 0) {
@@ -65,11 +65,11 @@ class Model
     }
 
     protected function query(String $query) : PDOStatement {
-        return $this->db->connect()->query($query);
+        return $this->db->pdo()->query($query);
     }
 
     protected function prepare(String $query) : PDOStatement {
-        return $this->db->connect()->prepare($query);
+        return $this->db->pdo()->prepare($query);
     }
 }
 ?>

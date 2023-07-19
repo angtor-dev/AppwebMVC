@@ -1,21 +1,41 @@
 <?php
 class Database
 {
+    private static Database $instance = null;
+    private PDO $pdo;
+
     private string $host;
     private string $dbname;
     private string $user;
     private string $password;
     private string $charset;
 
-    public function __construct() {
+    private function __construct()
+    {
         $this->host = "localhost";
         $this->dbname = defined('DB_NAME') ? DB_NAME : "AppwebMVC";
         $this->user = defined('DB_USER') ? DB_USER : "root";
         $this->password = defined('DB_PASSWORD') ? DB_PASSWORD : "";
         $this->charset = "utf8mb4";
+
+        $this->pdo = $this->connect();
+    }
+    
+    public static function getInstance() : Database
+    {
+        if (self::$instance == null) {
+            self::$instance = new Database();
+        }
+        return self::$instance;
     }
 
-    public function connect() : PDO {
+    public function pdo() : PDO
+    {
+        return $this->pdo;
+    }
+
+    private function connect() : PDO
+    {
         try {
             $dns = "mysql:host=".$this->host.";dbname=".$this->dbname.";charset=".$this->charset;
             $options = [
@@ -29,6 +49,11 @@ class Database
             echo $e->getMessage();
             die();
         }
+    }
+
+    public function __serialize(): array
+    {
+        return array();
     }
 }
 ?>
