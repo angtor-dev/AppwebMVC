@@ -5,13 +5,9 @@ class Usuario extends Model
 {
     public int $id;
     public string $cedula;
-    public string $correo;
     public string $clave;
     public string $nombre;
     public string $apellido;
-    public string $registro;
-    public ?string $ultimoAcceso;
-    public string $ultimaActualizacion;
 
     public function __construct()
     {
