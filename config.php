@@ -1,4 +1,4 @@
 <?php
-define("APP_NAME", "AppwebMVC");
+define("APP_NAME", "Llamas de Fuego");
 define("DEVELOPER_MODE", true);
 ?>
