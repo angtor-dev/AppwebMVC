@@ -11,7 +11,7 @@ class Model
 
     public static function listar() : array
     {
-        $bd = new Database();
+        $bd = Database::getInstance();
         $table = static::class;
         $query = "SELECT * FROM $table";
 
@@ -23,7 +23,7 @@ class Model
 
     public static function cargar(int $id) : null|object
     {
-        $bd = new Database();
+        $bd = Database::getInstance();
         $table = static::class;
         $query = "SELECT * FROM $table WHERE id = $id";
 
@@ -38,7 +38,7 @@ class Model
 
     public static function cargarLista(int $id, string $fkName) : null|array
     {
-        $bd = new Database();
+        $bd = Database::getInstance();
         $table = static::class;
         $query = "SELECT * FROM $table WHERE id$fkName = $id";
 
