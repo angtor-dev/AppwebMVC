@@ -12,13 +12,19 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
     <title><?= $title ?? "" ?> - <?= APP_NAME ?></title>
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/lib/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/lib/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/css/utilities.css">
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/css/site.css">
 </head>
 
 <body>
-    <header class="p-3 bg-dark text-white" style="margin-left: 230px;">
-        <div class="container">
-            <div class="d-flex flex-wrap align-items-center justify-content-end">
+    <!-- Header -->
+    <header class="p-3 bg-dark text-white" id="header">
+        <div class="container-fluid">
+            <div class="d-flex flex-wrap align-items-center justify-content-between">
+                <a class="d-flex gap-2 align-items-center navbar-brand" href="#">
+                    <img src="/AppwebMVC/public/img/logo-32.png" width="32" height="32" class="d-inline-block">
+                    <span class="fs-4 fw-semibold"><?= APP_NAME ?></span>
+                </a>
                 <div class="text-end">
                     <?php if (isset($_SESSION['usuario'])) : ?>
                         <button class="btn btn-dark">
@@ -116,6 +122,7 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
     </main>
 
     <script src="<?= LOCAL_DIR ?>public/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="<?= LOCAL_DIR ?>public/js/utilities.js"></script>
     <script src="<?= LOCAL_DIR ?>public/js/site.js"></script>
 </body>
 </html>
