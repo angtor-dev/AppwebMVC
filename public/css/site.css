@@ -1,17 +1,35 @@
+/* Fuentes */
 @font-face {
     font-family: "Montserrat";
     src: url("AppwebMVC/public/font/Montserrat-Variable.ttf") format("ttf-variations");
     font-weight: 100 900;
 }
 
+/* Variables */
 :root {
-    --rojo: #eb3d3d;
-    --rojo-oscuro: #973131;
-    --rojo-oscuro-mas: #792525;
+    --red: #eb3d3d;
+    --red-dark: #b84343;
+    --red-darker: #a83939;
+    --grey-lighter: #f5f5f5;
+    --grey-light: #e0e0e0;
+    --grey: #7a7a7a;
+    --grey-dark: #4a5568;
+    --grey-darker: #2d3748;
+    --white: #ffffff;
 
-    --color-acento: var(--rojo-oscuro);
+    --color-acento: var(--red);
+    --color-acento-dark: var(--red-dark);
+    --color-secundario: var(--grey-dark);
+    --color-secundario-dark: var(--grey-darker);
+    --color-borde: var(--grey-light);
+
+    --sidebar-width: 240px;
+
+    /* Bootstrap overrides */
+    --bs-border-color: var(--color-borde);
 }
 
+/* Elementos */
 * {
     padding: 0;
     margin: 0;
@@ -23,6 +41,52 @@ html {
 }
 
 body {
-    background-color: #e5e5e5;
+    background-color: var(--grey-lighter);
     font-family: "Montserrat", var(--bs-font-sans-serif);
+}
+
+main {
+    margin-left: var(--sidebar-width);
+}
+
+/* Menu lateral */
+#sidebar {
+    width: var(--sidebar-width);
+    margin-top: 70px;
+}
+
+#sidebar .nav {
+    overflow-y: auto;
+    flex-wrap: nowrap;
+}
+#sidebar .nav::-webkit-scrollbar {
+	width: 5px;
+	background-color: var(--grey-lighter);
+	border-radius: 10px;
+}
+#sidebar .nav::-webkit-scrollbar-track {
+	background: var(--grey-light);
+	border-radius: 10px;
+}
+#sidebar .nav::-webkit-scrollbar-thumb {
+	background: var(--grey);
+	border-radius: 10px;
+}
+
+#sidebar .nav-link {
+    color: var(--color-secundario);
+    font-size: 14px;
+    font-weight: 600;
+}
+#sidebar .nav-link:hover, .nav-link:focus {
+    color: var(--color-secundario-dark)
+}
+#sidebar .nav-link i {
+    color: var(--color-acento-dark);
+}
+#sidebar .nav-link.active {
+    color: var(--color-acento);
+}
+#sidebar .nav-link.active i {
+    color: var(--color-acento);
 }

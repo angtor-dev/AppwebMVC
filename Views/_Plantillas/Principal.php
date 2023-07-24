@@ -70,54 +70,95 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
         </div>
     </header>
 
-    <aside class="d-flex flex-column flex-shrink-0 p-3 bg-light
-        position-fixed top-0 bottom-0" style="width: 230px;">
-        <a href="/AppwebMVC" class="d-flex align-items-center
-            mb-0 me-md-auto link-dark text-decoration-none">
-            <span class="fs-4" style="height: 37px;"><?= APP_NAME ?></span>
-        </a>
-        <hr>
-        <ul class="nav nav-pills flex-column mb-auto">
-            <li class="nav-item">
-                <a href="<?= LOCAL_DIR ?>" class="nav-link active" aria-current="page">
-                    <i class="fa-solid fa-house-chimney fa-fw me-2"></i>
-                    Inicio
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link link-dark">
-                    <i class="fa-solid fa-lock fa-fw me-2"></i>
-                    Seguridad
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link link-dark">
-                    <i class="fa-solid fa-church fa-fw me-2"></i>
+    <!-- Menu lateral -->
+    <aside id="sidebar" class="d-flex flex-column flex-shrink-0 py-3 px-2 bg-white
+        position-fixed top-0 bottom-0 border-end">
+        <div class="nav flex-column mb-auto">
+            <a href="<?= LOCAL_DIR ?>" class="nav-link active">
+                <i class="fa-solid fa-house-chimney fa-fw me-2"></i>
+                <span>Inicio</span>
+            </a>
+
+            <div class="nav-link py-0 mt-3 text-uppercase">Iglesia</div>
+            <div class="acordeon">
+                <a href="#" class="nav-link acordeon-toggle">
+                    <i class="fa-solid fa-church fa-fw me-2"></i>    
                     Sedes
                 </a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link link-dark">
-                    <i class="fa-solid fa-people-group fa-fw me-2"></i>
+                <div class="acordeon-body">
+                    <div class="acordeon-items">
+                        <a href="#" class="nav-link">
+                            <i class="fa-solid fa-list fa-fw me-2"></i>
+                            Listar
+                        </a>
+                        <a href="#" class="nav-link">
+                            <i class="fa-solid fa-earth-americas fa-fw me-2"></i>
+                            Territorios
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="acordeon">
+                <a href="#" class="nav-link acordeon-toggle">
+                    <i class="fa-solid fa-people-group fa-fw me-2"></i>    
                     Celulas
                 </a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link link-dark">
-                    <i class="fa-solid fa-graduation-cap fa-fw me-2"></i>
-                    E.I.D.
+                <div class="acordeon-body">
+                    <div class="acordeon-items">
+                        <a href="#" class="nav-link">
+                            <i class="fa-solid fa-people-line fa-fw me-2"></i>
+                            de Consolidación
+                        </a>
+                        <a href="#" class="nav-link">
+                            <i class="fa-solid fa-seedling fa-fw me-2"></i>
+                            de Crecimiento
+                        </a>
+                        <a href="#" class="nav-link">
+                            <i class="fa-solid fa-people-roof fa-fw me-2"></i>
+                            Familiares
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <a href="#" class="nav-link">
+                <i class="fa-solid fa-calendar fa-fw me-2"></i>
+                Calendario Anual
+            </a>
+            
+            <div class="nav-link py-0 mt-3 text-uppercase">Escuela</div>
+            <a href="#" class="nav-link">
+                <i class="fa-solid fa-school fa-fw me-2"></i>
+                E.I.D.
+            </a>
+            
+            <div class="nav-link py-0 mt-3 text-uppercase">Sistema</div>
+            <a href="#" class="nav-link">
+                <i class="fa-solid fa-user fa-fw me-2"></i>
+                Usuarios
+            </a>
+            <div class="acordeon">
+                <a href="#" class="nav-link acordeon-toggle">
+                    <i class="fa-solid fa-lock fa-fw me-2"></i>    
+                    Seguridad
                 </a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link link-dark">
-                    <i class="fa-solid fa-calendar fa-fw me-2"></i>
-                    Agenda
-                </a>
-            </li>
-        </ul>
+                <div class="acordeon-body">
+                    <div class="acordeon-items">
+                        <a href="#" class="nav-link">
+                            <i class="fa-solid fa-key fa-fw me-2"></i>
+                            Roles y permisos
+                        </a>
+                        <a href="#" class="nav-link">
+                            <i class="fa-solid fa-table-list fa-fw me-2"></i>
+                            Bitacora
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </aside>
 
-    <main style="margin-left: 230px;">
+    <!-- Contenido principal -->
+    <main>
         <?= $GLOBALS['view'] ?>
     </main>
 
