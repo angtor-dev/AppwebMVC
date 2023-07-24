@@ -45,8 +45,10 @@ body {
     font-family: "Montserrat", var(--bs-font-sans-serif);
 }
 
+/* Contenido principal */
 #main {
     margin-left: var(--sidebar-width);
+    padding: 1.5rem;
 }
 
 /* Menu lateral */

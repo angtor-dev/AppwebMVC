@@ -130,6 +130,14 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
                 <i class="fa-solid fa-school fa-fw me-2"></i>
                 E.I.D.
             </a>
+            <a href="#" class="nav-link">
+                <i class="fa-solid fa-users-rectangle fa-fw me-2"></i>
+                Grupos
+            </a>
+            <a href="#" class="nav-link">
+                <i class="fa-solid fa-chalkboard-user fa-fw me-2"></i>
+                Mis clases
+            </a>
             
             <div class="nav-link py-0 mt-3 text-uppercase">Sistema</div>
             <a href="#" class="nav-link">
