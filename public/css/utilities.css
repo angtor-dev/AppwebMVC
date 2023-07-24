@@ -1,0 +1,40 @@
+/**
+ * Componentes y utilidades personalizadas
+ */
+
+/* Acordeones */
+.acordeon .acordeon-body {
+    display: grid;
+    overflow: hidden;
+    transition: .3s;
+    grid-template-rows:0fr;
+}
+.acordeon .acordeon-body .acordeon-items {
+    padding-left: 24px;
+    min-height: 0;
+}
+.acordeon .acordeon-toggle {
+    width: 100%;
+    position: relative;
+    text-align: start;
+}
+.acordeon .acordeon-toggle::before {
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    content: "\f078";
+    position: absolute;
+    right: 1rem;
+    transition: transform .3s;
+    transform: rotate(-90deg);
+}
+.acordeon.show .acordeon-body {
+    grid-template-rows: 1fr;
+}
+.acordeon.show .acordeon-toggle::before {
+    transform: rotate(0deg);
+}
