@@ -36,16 +36,6 @@ function renderView(?string $viewName = null, ?string $viewPath = null) : void
     require "Views/_Plantillas/".$_layout.".php";
 }
 
-/**
- * Valida si el usuario esta autenticado, de lo contrario se redirecciona al login
- */
-function necesitaAutenticacion() : void {
-    if (!isset($_SESSION['usuario'])) {
-        header('location:'.LOCAL_DIR.'login');
-        exit();
-    }
-}
-
 /** 
  * Almacena el buffer de la vista que sera impresa
  * 
@@ -56,5 +46,35 @@ function saveViewBuffer(string $buffer)
 {
     $GLOBALS['view'] .= $buffer;
     return "";
+}
+
+/**
+ * Valida si el usuario esta autenticado, de lo contrario se redirecciona al login
+ */
+function necesitaAutenticacion() : void {
+    if (!isset($_SESSION['usuario'])) {
+        header('location:'.LOCAL_DIR.'login');
+        exit();
+    }
+}
+
+/**
+* Alamecena el nombre de un script que sera utilizado en la vista
+* @param string $scriptName Nombre del script (debe estar almacenado en public/js/)
+*/
+function agregarScript($scriptName) : void {
+    global $viewScripts;
+
+    $viewScripts[] = $scriptName;
+}
+
+/**
+* Alamecena el nombre de un archivo css que sera utilizado en la vista
+* @param string $styleName Nombre del archivo .css (debe estar almacenado en public/css/)
+*/
+function agregarCss($styleName) : void {
+    global $viewStyles;
+
+    $viewStyles[] = $styleName;
 }
 ?>

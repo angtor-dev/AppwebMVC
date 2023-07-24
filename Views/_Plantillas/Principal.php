@@ -1,4 +1,7 @@
 <?php
+global $viewScripts;
+global $viewStyles;
+
 /** @var ?Usuario */
 $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
 ?>
@@ -14,6 +17,11 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/lib/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/css/utilities.css">
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/css/site.css">
+    <?php if (!empty($viewStyles)): ?>
+        <?php foreach ($viewStyles as $css): ?>
+            <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/css/<?= $css ?>">
+        <?php endforeach ?>
+    <?php endif ?>
 </head>
 
 <body>
@@ -173,5 +181,10 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
     <script src="<?= LOCAL_DIR ?>public/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="<?= LOCAL_DIR ?>public/js/utilities.js"></script>
     <script src="<?= LOCAL_DIR ?>public/js/site.js"></script>
+    <?php if (!empty($viewScripts)): ?>
+        <?php foreach ($viewScripts as $script): ?>
+            <script src="<?= LOCAL_DIR ?>public/js/<?= $script ?>"></script>
+        <?php endforeach ?>
+    <?php endif ?>
 </body>
 </html>
