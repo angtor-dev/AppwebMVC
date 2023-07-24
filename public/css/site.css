@@ -1,3 +1,17 @@
+@font-face {
+    font-family: "Montserrat";
+    src: url("AppwebMVC/public/font/Montserrat-Variable.ttf") format("ttf-variations");
+    font-weight: 100 900;
+}
+
+:root {
+    --rojo: #eb3d3d;
+    --rojo-oscuro: #973131;
+    --rojo-oscuro-mas: #792525;
+
+    --color-acento: var(--rojo-oscuro);
+}
+
 * {
     padding: 0;
     margin: 0;
@@ -10,4 +24,5 @@ html {
 
 body {
     background-color: #e5e5e5;
+    font-family: "Montserrat", var(--bs-font-sans-serif);
 }
