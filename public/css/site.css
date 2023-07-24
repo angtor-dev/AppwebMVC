@@ -45,7 +45,7 @@ body {
     font-family: "Montserrat", var(--bs-font-sans-serif);
 }
 
-main {
+#main {
     margin-left: var(--sidebar-width);
 }
 

@@ -158,7 +158,7 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
     </aside>
 
     <!-- Contenido principal -->
-    <main>
+    <main id="main">
         <?= $GLOBALS['view'] ?>
     </main>
 
