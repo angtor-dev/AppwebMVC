@@ -98,3 +98,62 @@ body {
 #sidebar .nav-link.active i {
     color: var(--color-acento);
 }
+
+/* Tablas */
+.table td {
+    vertical-align: middle;
+}
+table tbody .acciones {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    width: 100%;
+    color: var(--color-terceario);
+}
+table tbody .acciones i {
+    cursor: pointer;
+}
+table tbody .acciones i:hover {
+    color: var(--color-acento-dark);
+}
+
+/* Datatable overrides */
+#tabla-usuarios {
+    margin-top: 1rem!important;
+    margin-bottom: 1rem!important;
+}
+#tabla-usuarios thead tr th:first-child {
+    border-top-left-radius: 8px;
+}
+#tabla-usuarios thead tr th:last-child {
+    border-top-right-radius: 8px;
+}
+#tabla-usuarios tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 8px;
+}
+#tabla-usuarios tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 8px;
+}
+#tabla-usuarios_filter {
+    display: none;
+}
+#tabla-usuarios_wrapper ul.pagination {
+    margin: 0!important;
+}
+
+.active>.page-link, .page-link.active {
+    background-color: var(--color-acento-dark);
+    border-color: var(--color-acento-dark);
+}
+.active>.page-link:hover, .page-link.active:hover {
+    color: var(--white);
+}
+.page-link {
+    color: var(--color-acento-dark);
+}
+.page-link:hover {
+    color: var(--color-acento-darker);
+}
+.page-link:hover {
+    color: var(--color-acento-darker);
+}
