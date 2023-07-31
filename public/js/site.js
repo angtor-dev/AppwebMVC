@@ -24,3 +24,8 @@ document.querySelectorAll('.datatable[id]').forEach(t => {
         })
     }
 })
+
+// Inicializa tooltips
+document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(tooltipEl => {
+    new bootstrap.Tooltip(tooltipEl)
+})

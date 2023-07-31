@@ -35,9 +35,9 @@ $title = "Usuarios";
                 <td></td>
                 <td>
                     <div class="acciones">
-                        <i class="fa-solid fa-circle-info"></i>
-                        <i class="fa-solid fa-pen"></i>
-                        <i class="fa-solid fa-trash"></i>
+                        <i class="fa-solid fa-circle-info" title="Ver detalles" data-bs-toggle="tooltip"></i>
+                        <i class="fa-solid fa-pen" title="Modificar" data-bs-toggle="tooltip"></i>
+                        <i class="fa-solid fa-trash" title="Eliminar" data-bs-toggle="tooltip"></i>
                     </div>
                 </td>
             </tr>
