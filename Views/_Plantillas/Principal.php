@@ -83,7 +83,8 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
     <aside id="sidebar" class="d-flex flex-column flex-shrink-0 py-3 px-2 bg-white
         position-fixed top-0 bottom-0 border-end">
         <div class="nav flex-column mb-auto">
-            <a href="<?= LOCAL_DIR ?>" class="nav-link active">
+            <a href="<?= LOCAL_DIR ?>"
+                class="nav-link <?= empty($uriParts[0]) || strtolower($uriParts[0]) == "home" ? "active" : "" ?>">
                 <i class="fa-solid fa-house-chimney fa-fw me-2"></i>
                 <span>Inicio</span>
             </a>
@@ -130,18 +131,22 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
                 </div>
             </div>
             <a href="#" class="nav-link">
+                <i class="fa-solid fa-users fa-fw me-2"></i>
+                Discipulos
+            </a>
+            <a href="#" class="nav-link">
                 <i class="fa-solid fa-calendar fa-fw me-2"></i>
                 Calendario Anual
             </a>
             
             <div class="nav-link py-0 mt-3 text-uppercase">Escuela</div>
             <a href="#" class="nav-link">
-                <i class="fa-solid fa-school fa-fw me-2"></i>
-                E.I.D.
+                <i class="fa-solid fa-graduation-cap fa-fw me-2"></i>
+                Niveles de crecimiento
             </a>
             <a href="#" class="nav-link">
                 <i class="fa-solid fa-users-rectangle fa-fw me-2"></i>
-                Grupos
+                Mis grupos
             </a>
             <a href="#" class="nav-link">
                 <i class="fa-solid fa-chalkboard-user fa-fw me-2"></i>
@@ -149,7 +154,8 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
             </a>
             
             <div class="nav-link py-0 mt-3 text-uppercase">Sistema</div>
-            <a href="#" class="nav-link">
+            <a href="<?= LOCAL_DIR ?>Usuarios"
+                class="nav-link <?= strtolower($uriParts[0]) == "usuarios" ? "active" : "" ?>">
                 <i class="fa-solid fa-user fa-fw me-2"></i>
                 Usuarios
             </a>
