@@ -16,7 +16,7 @@ $title = "Usuarios";
     </div>
 </div>
 
-<table class="table table-bordered table-hover datatable" id="tabla-usuarios">
+<table class="table table-bordered table-rounded table-hover datatable" id="tabla-usuarios">
     <thead>
         <tr>
             <th>Nombre</th>
