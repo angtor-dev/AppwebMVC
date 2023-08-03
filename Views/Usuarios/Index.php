@@ -23,7 +23,7 @@ $title = "Usuarios";
             <th>Cedula</th>
             <th>Correo</th>
             <th>Roles</th>
-            <th class="text-center">Acciones</th>
+            <th class="text-center" style="width: 90px;">Acciones</th>
         </tr>
     </thead>
     <tbody>
@@ -35,12 +35,39 @@ $title = "Usuarios";
                 <td></td>
                 <td>
                     <div class="acciones">
-                        <i class="fa-solid fa-circle-info" title="Ver detalles" data-bs-toggle="tooltip"></i>
-                        <i class="fa-solid fa-pen" title="Modificar" data-bs-toggle="tooltip"></i>
-                        <i class="fa-solid fa-trash" title="Eliminar" data-bs-toggle="tooltip"></i>
+                        <a role="button">
+                            <i class="fa-solid fa-circle-info" title="Ver detalles" data-bs-toggle="tooltip"></i>
+                        </a>
+                        <a role="button">
+                            <i class="fa-solid fa-pen" title="Modificar" data-bs-toggle="tooltip"></i>
+                        </a>
+                        <a role="button" data-bs-toggle="modal" data-bs-target="#confirmar-eliminacion">
+                            <i class="fa-solid fa-trash" title="Eliminar" data-bs-toggle="tooltip"></i>
+                        </a>
                     </div>
                 </td>
             </tr>
         <?php endforeach ?>
     </tbody>
 </table>
+
+<!-- Confirmar eliminación -->
+<div class="modal fade" id="confirmar-eliminacion" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Eliminar usuario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-danger mb-0" role="alert">
+                    ¿Seguro quieres eliminar este usuario?
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No, cancelar</button>
+                <button type="button" class="btn btn-danger">Si, eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
