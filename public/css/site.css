@@ -34,6 +34,9 @@
     /* Bootstrap overrides */
     --bs-border-color: var(--color-borde);
     --bs-border-radius: 0.5rem;
+    .offcanvas {
+        --bs-offcanvas-width: 450px;
+    }
 }
 
 /* Elementos */
@@ -145,4 +148,9 @@ table tbody .acciones i:hover {
 }
 .page-link:hover {
     color: var(--color-acento-darker);
+}
+
+/* Inputs dentro de offcanvas */
+.offcanvas .form-control {
+    background-color: var(--grey-lighter);
 }

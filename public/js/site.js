@@ -29,3 +29,17 @@ document.querySelectorAll('.datatable[id]').forEach(t => {
 document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(tooltipEl => {
     new bootstrap.Tooltip(tooltipEl)
 })
+
+// Inicializa validacion generica en formularios
+const forms = document.querySelectorAll('.needs-validation')
+
+forms.forEach(form => {
+    form.addEventListener('submit', event => {
+        if (!form.checkValidity()) {
+            event.preventDefault()
+            event.stopPropagation()
+        }
+
+        form.classList.add('was-validated')
+    }, false)
+})
