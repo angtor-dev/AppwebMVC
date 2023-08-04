@@ -2,5 +2,5 @@
 necesitaAutenticacion();
 $usuarios = Usuario::listar();
 
-renderView();
+renderView("Index");
 ?>

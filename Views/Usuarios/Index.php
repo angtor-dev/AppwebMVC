@@ -3,6 +3,15 @@
 $title = "Usuarios";
 ?>
 
+<?php if (!empty($alertas['exito']) && count($alertas['exito']) > 0) : ?>
+    <?php foreach ($alertas['exito'] as $alerta) : ?>
+        <div class="alert alert-success fade show alert-dismissible">
+            <?= $alerta ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <?php endforeach ?>
+<?php endif ?>
+
 <div class="d-flex align-items-end justify-content-between mb-2">
     <h4 class="mb-0 fw-bold">Usuarios</h4>
     <div class="d-flex gap-3">
