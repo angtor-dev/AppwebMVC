@@ -1,7 +1,7 @@
 <?php
 require_once "Models/Database.php";
 
-class Model
+abstract class Model
 {
     protected Database $db;
 
@@ -36,11 +36,11 @@ class Model
         return $stmt->fetch();
     }
 
-    public static function cargarLista(int $id, string $fkName) : null|array
+    public static function cargarRelaciones(int $id, string $tablaForanea) : null|array
     {
         $bd = Database::getInstance();
         $table = static::class;
-        $query = "SELECT * FROM $table WHERE id$fkName = $id";
+        $query = "SELECT * FROM $table WHERE id$tablaForanea = $id";
 
         $stmt = $bd->pdo()->query($query);
         $stmt->setFetchMode(PDO::FETCH_CLASS, $table);
