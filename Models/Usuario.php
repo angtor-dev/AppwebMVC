@@ -4,10 +4,19 @@ require_once "Models/Model.php";
 class Usuario extends Model
 {
     public int $id;
+    public ?int $idCelulaFamiliar;
+    public ?int $idCelulaCrecimiento;
+    public ?int $idConsolidador;
     public string $cedula;
     public string $clave;
     public string $nombre;
     public string $apellido;
+    public string $telefono;
+    public string $direccion;
+    public string $estadoCivil;
+    public string $fechaNacimiento;
+    public ?string $fechaConversion;
+    public ?string $motivo;
 
     public function __construct()
     {
