@@ -125,6 +125,32 @@ $title = "Usuarios";
                 </div>
             </div>
             <div class="col-sm-12">
+                <label for="input-direccion">Dirección</label>
+                <input class="form-control" type="text" name="direccion" id="input-direccion" required maxlength="50">
+                <div class="invalid-feedback">
+                    Ingresa una dirección válida
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <label for="input-fechaNacimiento">Nacimiento</label>
+                <input class="form-control" type="date" name="fechaNacimiento" id="input-fechaNacimiento" required>
+                <div class="invalid-feedback">
+                    Fecha invalida
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <label for="input-estadoCivil">Estado civil</label>
+                <select class="form-select" name="estadoCivil" id="estadoCivil" required>
+                    <option value=""></option>
+                    <?php foreach (EstadoCivil::cases() as $estado): ?>
+                        <option value="<?= $estado->value ?>"><?= $estado->name ?></option>
+                    <?php endforeach ?>
+                </select>
+                <div class="invalid-feedback">
+                    Elige una opción
+                </div>
+            </div>
+            <div class="col-sm-12">
                 <label for="input-roles">Roles</label>
                 <input class="form-control" type="text" name="roles" id="input-roles" required>
                 <div class="invalid-feedback">

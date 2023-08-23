@@ -8,6 +8,7 @@ class Usuario extends Model
     public ?int $idCelulaCrecimiento;
     public ?int $idConsolidador;
     public string $cedula;
+    public ?string $correo;
     public string $clave;
     public string $nombre;
     public string $apellido;
@@ -21,6 +22,16 @@ class Usuario extends Model
     public function __construct()
     {
         parent::__construct();
+    }
+
+    public function getEdad() : int
+    {
+        if (empty($this->fechaNacimiento)) {
+            return 0;
+        }
+        $nacimiento = new DateTime($this->fechaNacimiento);
+        $edad = (new DateTime())->diff($nacimiento)->y;
+        return $edad;
     }
 
     public function login(string $cedula, string $clave) : bool
