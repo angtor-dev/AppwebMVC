@@ -1,9 +1,22 @@
 <?php
+require_once "Models/Enums/EstadoCivil.php";
 necesitaAutenticacion();
-// TODO: Validar metodo, si es GET redirigir a Usuarios/Index
-// TODO: Validar datos antes de registrar y toda esa vaina
-// TODO: Registrar usuario
 
-$alertas['exito'][] = "Usuario registrado con exito."; // Mensaje de prueba
-require_once "Controllers/Usuarios/IndexController.php"; // Redirige a otro controlador
+if ($_SERVER['REQUEST_METHOD'] === 'GET')
+{
+    $usuario = empty($_GET['id']) || $_GET['id'] == '0' ? new Usuario() : Usuario::cargar($_GET['id']);
+
+    require_once "Views/Usuarios/_ModalUsuario.php";
+}
+elseif ($_SERVER['REQUEST_METHOD'] === 'POST')
+{
+    // TODO: Validar datos antes de registrar y toda esa vaina
+    // TODO: Registrar usuario
+
+    echo $alertas['exito'][] = "Usuario registrado con exito."; // Mensaje de prueba
+}
+else {
+    http_response_code(405);
+    die();
+}
 ?>
