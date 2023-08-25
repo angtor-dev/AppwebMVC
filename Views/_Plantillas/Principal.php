@@ -188,6 +188,27 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
 
     <!-- Contenido principal -->
     <main id="main">
+        <!-- Imprime alertas de exito o error -->
+        <?php if (!empty($_SESSION['exitos'])): ?>
+            <?php foreach ($_SESSION['exitos'] as $alerta): ?>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <?= $alerta ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            <?php endforeach ?>
+            <?php unset($_SESSION['exitos']) ?>
+        <?php endif ?>
+        <?php if (!empty($_SESSION['errores'])): ?>
+            <?php foreach ($_SESSION['errores'] as $alerta): ?>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <?= $alerta ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            <?php endforeach ?>
+            <?php unset($_SESSION['errores']) ?>
+        <?php endif ?>
+
+        <!-- Imprime la vista -->
         <?= $GLOBALS['view'] ?>
     </main>
 

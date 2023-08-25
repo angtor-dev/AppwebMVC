@@ -40,7 +40,7 @@ $title = "Usuarios";
             <tr>
                 <td><?= $usuario->nombre . " " . $usuario->apellido ?></td>
                 <td><?= $usuario->cedula ?></td>
-                <td></td>
+                <td><?= $usuario->correo ?></td>
                 <td></td>
                 <td>
                     <div class="acciones">
