@@ -19,9 +19,14 @@ class Usuario extends Model
     public ?string $fechaConversion;
     public ?string $motivo;
 
+    // public array $roles = [];
+
     public function __construct()
     {
         parent::__construct();
+        if (!empty($this->id)) {
+            // $this->roles = Rol::cargarRelaciones($this->id, get_class($this));
+        }
     }
 
     public function getEdad() : int
@@ -69,6 +74,51 @@ class Usuario extends Model
             http_response_code(500);
             throw $th;
         }
+        return true;
+    }
+
+    public function registrar() : void
+    {
+        $sql = "INSERT INTO usuario(cedula, correo, clave, nombre, apellido, telefono, direccion, estadoCivil, fechaNacimiento)
+            VALUES(:cedula, :correo, :clave, :nombre, :apellido, :telefono, :direccion, :estadoCivil, :fechaNacimiento)";
+        
+        try {
+            $stmt = $this->prepare($sql);
+            $stmt->bindValue('cedula', $this->cedula);
+            $stmt->bindValue('correo', $this->correo);
+            $stmt->bindValue('clave', $this->clave);
+            $stmt->bindValue('nombre', $this->nombre);
+            $stmt->bindValue('apellido', $this->apellido);
+            $stmt->bindValue('telefono', $this->telefono);
+            $stmt->bindValue('direccion', $this->direccion);
+            $stmt->bindValue('estadoCivil', $this->estadoCivil);
+            $stmt->bindValue('fechaNacimiento', $this->fechaNacimiento);
+
+            $stmt->execute();
+
+            return;
+        } catch (\Throwable $th) {
+            $_SESSION['errores'][] = "Ha ocurrido un error al registrar el usuario.";
+            throw $th;
+        }
+            
+    }
+
+    public function esValido() : bool
+    {
+        if (empty($this->cedula) || empty($this->nombre) || empty($this->apellido)
+            || empty($this->estadoCivil) || empty($this->fechaNacimiento)
+            || empty($this->telefono) || empty($this->direccion))
+        {
+            $_SESSION['errores'][] = "Algunos campos obligatorios estan vacios";
+            return false;
+        }
+
+        if (empty($this->id) && empty($this->clave)) {
+            $_SESSION['errores'][] = "Debe especificar una contraseña";
+            return false;
+        }
+
         return true;
     }
 }

@@ -10,10 +10,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET')
 }
 elseif ($_SERVER['REQUEST_METHOD'] === 'POST')
 {
-    // TODO: Validar datos antes de registrar y toda esa vaina
-    // TODO: Registrar usuario
+    $usuario = new Usuario();
+    $usuario->mapFromPost();
+    
+    if (!$usuario->esValido()) {
+        header("Location: /AppwebMVC/Usuarios/");
+        exit();
+    }
 
-    echo $alertas['exito'][] = "Usuario registrado con exito."; // Mensaje de prueba
+    try {
+        $usuario->clave = password_hash($usuario->clave, PASSWORD_DEFAULT);
+
+        $usuario->registrar();
+    } catch (\Throwable $th) {
+        header("Location: /AppwebMVC/Usuarios/");
+        exit();
+    }
+
+    $_SESSION['exitos'][] = "Usuario registrado con exito.";
+    header("Location: /AppwebMVC/Usuarios/");
 }
 else {
     http_response_code(405);

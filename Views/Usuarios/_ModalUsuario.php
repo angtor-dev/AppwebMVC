@@ -5,7 +5,7 @@
     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
 </div>
 <div class="offcanvas-body text-secondary">
-    <form action="/AppwebMVC/Usuarios/Registrar" method="post" id="form-usuario" class="row g-3 needs-validation" novalidate>
+    <form action="/AppwebMVC/Usuarios/<?= empty($usuario->id) ? "Registrar" : "Actualizar" ?>" method="post" id="form-usuario" class="row g-3 needs-validation" novalidate>
         <div class="col-sm-6">
             <label for="input-nombre">Nombre</label>
             <input class="form-control" type="text" name="nombre" id="input-nombre" required maxlength="50"
