@@ -20,6 +20,7 @@ class Usuario extends Model
     public ?string $fechaConversion;
     public ?string $motivo;
 
+    /** @var ?array<Rol> */
     public ?array $roles;
 
     public function __construct()
@@ -124,6 +125,36 @@ class Usuario extends Model
         }
 
         return true;
+    }
+
+    /** Valida si el usuario tiene un rol especifico */
+    public function tieneRol(string $nombreRol) : bool
+    {
+        if (empty($this->roles)) {
+            return false;
+        }
+
+        foreach ($this->roles as $rol) {
+            if (strcasecmp($rol->nombre, $nombreRol) == 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** Valida si el usuario tiene un permiso especifico */
+    public function tienePermiso(string $nombrePermiso) : bool
+    {
+        if (empty($this->roles)) {
+            return false;
+        }
+
+        foreach ($this->roles as $rol) {
+            if (property_exists($rol->permisos, $nombrePermiso) && $rol->permisos->$nombrePermiso) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 ?>
