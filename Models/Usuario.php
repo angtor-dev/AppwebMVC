@@ -1,5 +1,6 @@
 <?php
 require_once "Models/Model.php";
+require_once "Models/Rol.php";
 
 class Usuario extends Model
 {
@@ -19,13 +20,13 @@ class Usuario extends Model
     public ?string $fechaConversion;
     public ?string $motivo;
 
-    // public array $roles = [];
+    public ?array $roles;
 
     public function __construct()
     {
         parent::__construct();
         if (!empty($this->id)) {
-            // $this->roles = Rol::cargarRelaciones($this->id, get_class($this));
+            $this->roles = Rol::cargarMultiplesRelaciones($this->id, get_class($this), "UsuarioRol");
         }
     }
 
@@ -68,6 +69,10 @@ class Usuario extends Model
                     $this->$key = $value;
                 }
             }
+            // Carga roles del usuario
+            if (!empty($this->id)) {
+                $this->roles = Rol::cargarMultiplesRelaciones($this->id, get_class($this), "UsuarioRol");
+            }
 
             return true;
         } catch (\Throwable $th) {
@@ -101,7 +106,6 @@ class Usuario extends Model
             $_SESSION['errores'][] = "Ha ocurrido un error al registrar el usuario.";
             throw $th;
         }
-            
     }
 
     public function esValido() : bool
