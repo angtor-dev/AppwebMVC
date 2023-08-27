@@ -9,6 +9,11 @@ abstract class Model
         $this->db = Database::getInstance();
     }
 
+    /**
+     * Retorna un array de objetos del modelo que lo instacía
+     *
+     * @return array<Model>
+     **/
     public static function listar() : array
     {
         $bd = Database::getInstance();
@@ -21,7 +26,13 @@ abstract class Model
         return $stmt->fetchAll();
     }
 
-    public static function cargar(int $id) : null|object
+    /**
+     * Retorna una instacia del modelo actual con un id especifico
+     * 
+     * @param int $id El id a buscar en la bd
+     * @return null|Model El modelo encontrado o null en caso de no haber coincidencias
+     */
+    public static function cargar(int $id) : null|Model
     {
         $bd = Database::getInstance();
         $table = static::class;
@@ -36,7 +47,15 @@ abstract class Model
         return $stmt->fetch();
     }
 
-    public static function cargarRelaciones(int $id, string $tablaForanea) : null|array
+    /**
+     * Retorna un array de objetos del modelo que lo instacía donde el id de la tabla
+     * foranea coincida con el id del modelo
+     * 
+     * @param int $id El id del modelo actual
+     * @param string $tablaForanea El nombre de la tabla con la que se relaciona el modelo
+     * @return array<Model>
+     */
+    public static function cargarRelaciones(int $id, string $tablaForanea) : array
     {
         $bd = Database::getInstance();
         $table = static::class;
@@ -46,11 +65,40 @@ abstract class Model
         $stmt->setFetchMode(PDO::FETCH_CLASS, $table);
 
         if ($stmt->rowCount() == 0) {
-            return null;
+            return array();
         }
         return $stmt->fetchAll();
     }
 
+    /**
+     * Retorna un array de objetos del modelo que lo instacía donde el id de la tabla
+     * foranea coincida con el id del modelo en una relacion de muchos a muchos
+     * 
+     * @param int $id El id del modelo actual
+     * @param string $tablaForanea el nombre de la tabla con la que se relaciona el modelo
+     * @param string $tablaIntermediaria El nombre de la tabla intermediaria entre las relaciones
+     * @return array<Model>
+     **/
+    public static function cargarMultiplesRelaciones(
+        int $id, string $tablaForanea, string $tablaIntermediaria) : array
+    {
+        $bd = Database::getInstance();
+        $table = static::class;
+        $query = "SELECT t.* FROM $table AS t
+            INNER JOIN $tablaIntermediaria AS ti ON t.id = ti.id$table
+            WHERE ti.id$tablaForanea = $id";
+
+        // echo $query; exit();
+        $stmt = $bd->pdo()->query($query);
+        $stmt->setFetchMode(PDO::FETCH_CLASS, $table);
+
+        if ($stmt->rowCount() == 0) {
+            return array();
+        }
+        return $stmt->fetchAll();
+    }
+
+    /** Mapea los valores de un formulario post a las propiedades del objeto */
     public function mapFromPost() : bool
     {
         if (!empty($_POST)) {
@@ -64,10 +112,12 @@ abstract class Model
         return false;
     }
 
+    /** Shorthand para PDO::query() */
     protected function query(String $query) : PDOStatement {
         return $this->db->pdo()->query($query);
     }
 
+    /** Shorthand para PDO::prepare() */
     protected function prepare(String $query) : PDOStatement {
         return $this->db->pdo()->prepare($query);
     }
