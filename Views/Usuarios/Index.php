@@ -93,6 +93,8 @@ $title = "Usuarios";
             .then(data => {
                 const modalEl = document.getElementById('offcanvas-usuario')
                 modalEl.innerHTML = data
+                modalEl.querySelectorAll('.needs-validation')
+                    .forEach(agregarValidacionGenerica)
 
                 let modal = new bootstrap.Offcanvas(modalEl)
                 modal.show()

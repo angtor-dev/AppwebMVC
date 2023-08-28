@@ -33,7 +33,9 @@ document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(tooltipEl => {
 // Inicializa validacion generica en formularios
 const forms = document.querySelectorAll('.needs-validation')
 
-forms.forEach(form => {
+forms.forEach(agregarValidacionGenerica)
+
+function agregarValidacionGenerica(form) {
     form.addEventListener('submit', event => {
         if (!form.checkValidity()) {
             event.preventDefault()
@@ -42,4 +44,4 @@ forms.forEach(form => {
 
         form.classList.add('was-validated')
     }, false)
-})
+}
