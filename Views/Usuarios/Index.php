@@ -41,7 +41,13 @@ $title = "Usuarios";
                 <td><?= $usuario->nombre . " " . $usuario->apellido ?></td>
                 <td><?= $usuario->cedula ?></td>
                 <td><?= $usuario->correo ?></td>
-                <td></td>
+                <td>
+                    <?=
+                    implode(", ", array_map(function(Rol $rol) {
+                        return $rol->nombre;
+                    }, $usuario->roles));
+                    ?>
+                </td>
                 <td>
                     <div class="acciones">
                         <a role="button">

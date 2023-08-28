@@ -1,4 +1,5 @@
 <?php /** @var Usuario $usuario */ ?>
+<?php /** @var array<Rol> $roles */ ?>
 
 <div class="offcanvas-header border-bottom">
     <h5 class="offcanvas-title"> <?= empty($usuario->id) ? "Crear usuario nuevo" : "Modificar usuario" ?> </h5>
@@ -67,7 +68,10 @@
             <select class="form-select" name="estadoCivil" id="estadoCivil" required>
                 <option value=""></option>
                 <?php foreach (EstadoCivil::cases() as $estado): ?>
-                    <option value="<?= $estado->value ?>" <?= $estado->value == ($usuario->estadoCivil ?? null) ? "selected" : "" ?>><?= $estado->name ?></option>
+                    <option value="<?= $estado->value ?>"
+                        <?= $estado->value == ($usuario->estadoCivil ?? null) ? "selected" : "" ?>>
+                        <?= $estado->name ?>
+                    </option>
                 <?php endforeach ?>
             </select>
             <div class="invalid-feedback">
@@ -76,9 +80,15 @@
         </div>
         <div class="col-sm-12">
             <label for="input-roles">Roles</label>
-            <input class="form-control" type="text" name="roles" id="input-roles" required>
+            <select class="form-select" name="idRoles[]" id="select-roles" multiple required>
+                <?php foreach ($roles as $rol): ?>
+                    <option value="<?= $rol->id ?>" <?= $usuario->tieneRol($rol->nombre) ? "selected" : "" ?>>
+                        <?= $rol->nombre ?>
+                    </option>
+                <?php endforeach ?>
+            </select>
             <div class="invalid-feedback">
-                Ingresa un rol válido
+                Selecciona al menos un rol
             </div>
         </div>
         <?php if (empty($usuario->id)): ?>

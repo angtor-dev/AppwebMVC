@@ -5,6 +5,7 @@ necesitaAutenticacion();
 if ($_SERVER['REQUEST_METHOD'] === 'GET')
 {
     $usuario = empty($_GET['id']) || $_GET['id'] == '0' ? new Usuario() : Usuario::cargar($_GET['id']);
+    $roles = Rol::listar();
 
     require_once "Views/Usuarios/_ModalUsuario.php";
 }
@@ -12,6 +13,11 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST')
 {
     $usuario = new Usuario();
     $usuario->mapFromPost();
+    $idRoles = $_POST['idRoles'];
+    
+    foreach ($idRoles as $idRol) {
+        $usuario->roles[] = Rol::cargar($idRol);
+    }
     
     if (!$usuario->esValido()) {
         header("Location: /AppwebMVC/Usuarios/");

@@ -87,8 +87,11 @@ class Usuario extends Model
     {
         $sql = "INSERT INTO usuario(cedula, correo, clave, nombre, apellido, telefono, direccion, estadoCivil, fechaNacimiento)
             VALUES(:cedula, :correo, :clave, :nombre, :apellido, :telefono, :direccion, :estadoCivil, :fechaNacimiento)";
-        
+
         try {
+            $this->db->pdo()->beginTransaction();
+
+            // Registra al usuario
             $stmt = $this->prepare($sql);
             $stmt->bindValue('cedula', $this->cedula);
             $stmt->bindValue('correo', $this->correo);
@@ -102,8 +105,31 @@ class Usuario extends Model
 
             $stmt->execute();
 
+            // Registra los roles del usuario
+            $idUsuario = $this->db->pdo()->lastInsertId();
+            $idRol = null;
+
+            $sql = "INSERT INTO usuariorol(idUsuario, idRol)
+                VALUES(:idUsuario, :idRol)";
+            
+            $stmt = $this->prepare($sql);
+            $stmt->bindParam('idUsuario', $idUsuario);
+            $stmt->bindParam('idRol', $idRol);
+
+            foreach ($this->roles as $rol) {
+                $idRol = $rol->id;
+                $stmt->execute();
+            }
+
+            // Guarda los cambios
+            $this->db->pdo()->commit();
+
             return;
         } catch (\Throwable $th) {
+            // Revierte los cambios en la bd
+            if ($this->db->pdo()->inTransaction()) {
+                $this->db->pdo()->rollBack();
+            }
             $_SESSION['errores'][] = "Ha ocurrido un error al registrar el usuario.";
             throw $th;
         }
@@ -115,12 +141,17 @@ class Usuario extends Model
             || empty($this->estadoCivil) || empty($this->fechaNacimiento)
             || empty($this->telefono) || empty($this->direccion))
         {
-            $_SESSION['errores'][] = "Algunos campos obligatorios estan vacios";
+            $_SESSION['errores'][] = "Algunos campos obligatorios estan vacios.";
+            return false;
+        }
+
+        if (empty($this->roles)) {
+            $_SESSION['errores'][] = "Se debe seleccionar al menos un rol.";
             return false;
         }
 
         if (empty($this->id) && empty($this->clave)) {
-            $_SESSION['errores'][] = "Debe especificar una contraseña";
+            $_SESSION['errores'][] = "Debe especificar una contraseña.";
             return false;
         }
 
