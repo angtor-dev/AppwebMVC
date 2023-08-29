@@ -172,7 +172,7 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
                 </a>
                 <div class="acordeon-body">
                     <div class="acordeon-items">
-                        <a href="#" class="nav-link">
+                        <a href="<?= LOCAL_DIR ?>Seguridad/Roles" class="nav-link">
                             <i class="fa-solid fa-key fa-fw me-2"></i>
                             Roles y permisos
                         </a>

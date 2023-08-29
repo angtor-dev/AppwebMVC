@@ -126,7 +126,8 @@ table tbody .acciones i:hover {
     margin-top: 1rem!important;
     margin-bottom: 1rem!important;
 }
-#tabla-usuarios_filter {
+#tabla-usuarios_filter,
+#tabla-roles_filter {
     display: none;
 }
 #tabla-usuarios_wrapper ul.pagination {
