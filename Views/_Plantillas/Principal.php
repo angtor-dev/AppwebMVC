@@ -165,14 +165,15 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
                 <i class="fa-solid fa-user fa-fw me-2"></i>
                 Usuarios
             </a>
-            <div class="acordeon">
+            <div class="acordeon <?= strtolower($uriParts[0]) == "seguridad" ? "show" : "" ?>">
                 <a href="#" class="nav-link acordeon-toggle">
                     <i class="fa-solid fa-lock fa-fw me-2"></i>    
                     Seguridad
                 </a>
                 <div class="acordeon-body">
                     <div class="acordeon-items">
-                        <a href="<?= LOCAL_DIR ?>Seguridad/Roles" class="nav-link">
+                        <a href="<?= LOCAL_DIR ?>Seguridad/Roles"
+                            class="nav-link <?= strtolower($uriParts[1]??"") == "roles" ? "active" : "" ?>">
                             <i class="fa-solid fa-key fa-fw me-2"></i>
                             Roles y permisos
                         </a>

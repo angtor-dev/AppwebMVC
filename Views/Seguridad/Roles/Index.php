@@ -33,14 +33,14 @@ $title = "Roles y Permisos";
                 <td><?= $rol->nivel ?></td>
                 <td>
                     <div class="acciones">
-                        <a role="button">
-                            <i class="fa-solid fa-circle-info" title="Ver detalles" data-bs-toggle="tooltip"></i>
-                        </a>
                         <a role="button" onclick="abrirModalRol(<?= $rol->id ?>)">
                             <i class="fa-solid fa-pen" title="Modificar" data-bs-toggle="tooltip"></i>
                         </a>
                         <a role="button" data-bs-toggle="modal" data-bs-target="#confirmar-eliminacion">
                             <i class="fa-solid fa-trash" title="Eliminar" data-bs-toggle="tooltip"></i>
+                        </a>
+                        <a role="button">
+                            <i class="fa-solid fa-key" title="Gestionar permisos" data-bs-toggle="tooltip"></i>
                         </a>
                     </div>
                 </td>
