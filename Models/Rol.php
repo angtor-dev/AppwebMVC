@@ -57,6 +57,24 @@ class Rol extends Model
         }
     }
 
+    public function actualizar() : void
+    {
+        $sql = "UPDATE rol SET nombre = :nombre, descripcion = :descripcion, nivel = :nivel WHERE id = :id";
+
+        try {
+            $stmt = $this->prepare($sql);
+            $stmt->bindValue('nombre', $this->nombre);
+            $stmt->bindValue('descripcion', $this->descripcion);
+            $stmt->bindValue('nivel', $this->nivel);
+            $stmt->bindValue('id', $this->id);
+
+            $stmt->execute();
+        } catch (\Throwable $th) {
+            $_SESSION['errores'][] = "Ha ocurrido un error al actualizar el rol.";
+            throw $th;
+        }
+    }
+
     public function esValido() : bool
     {
         if (empty($this->nombre)) {

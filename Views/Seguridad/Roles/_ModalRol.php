@@ -6,6 +6,7 @@
 </div>
 <div class="offcanvas-body text-secondary">
     <form action="/AppwebMVC/Seguridad/Roles/<?= empty($rol->id) ? "Registrar" : "Actualizar" ?>" method="post" id="form-rol" class="row g-3 needs-validation" novalidate>
+        <input type="hidden" name="id" id="input-id" value="<?= $rol->id ?? "" ?>">
         <div class="col-sm-12">
             <label for="input-nombre">Nombre</label>
             <input class="form-control" type="text" name="nombre" id="input-nombre" required maxlength="30"
