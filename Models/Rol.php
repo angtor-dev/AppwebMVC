@@ -81,7 +81,7 @@ class Rol extends Model
             $_SESSION['errores'][] = "Se debe proporcionar un nombre para el rol a registrar.";
             return false;
         }
-        if (empty($this->nivel)) {
+        if (empty($this->nivel) && $this->nivel !== 0) {
             $_SESSION['errores'][] = "Se debe especificar un nivel de rol.";
             return false;
         }
