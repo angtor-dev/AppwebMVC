@@ -59,6 +59,15 @@ function necesitaAutenticacion() : void {
 }
 
 /**
+ * Redirecciona de forma segura a una url
+ * @param string $url Url a donde se redireccionará
+ */
+function redirigir($url) : void {
+    header('location: '.$url);
+    exit();
+}
+
+/**
 * Alamecena el nombre de un script que sera utilizado en la vista
 * @param string $scriptName Nombre del script (debe estar almacenado en public/js/)
 */
