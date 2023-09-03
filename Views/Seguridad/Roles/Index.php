@@ -39,7 +39,7 @@ $title = "Roles y Permisos";
                         <a role="button" data-bs-toggle="modal" data-bs-target="#confirmar-eliminacion">
                             <i class="fa-solid fa-trash" title="Eliminar" data-bs-toggle="tooltip"></i>
                         </a>
-                        <a role="button">
+                        <a role="button" onclick="abrirModalPermisos(<?= $rol->id ?>)">
                             <i class="fa-solid fa-key" title="Gestionar permisos" data-bs-toggle="tooltip"></i>
                         </a>
                     </div>
@@ -75,6 +75,11 @@ $title = "Roles y Permisos";
     <!-- Contenido cargado desde ajax -->
 </div>
 
+<!-- Actualizar permisos -->
+<div class="modal fade" tabindex="-1" id="modal-permisos">
+    <!-- Contenido cargado desde ajax -->
+</div>
+
 <script>
     function abrirModalRol(id = 0) {
         fetch('/AppwebMVC/Seguridad/Roles/Registrar?id=' + id)
@@ -89,5 +94,23 @@ $title = "Roles y Permisos";
                 modal.show()
             })
             .catch(error => console.error(error))
+    }
+
+    function abrirModalPermisos(id) {
+        fetch('/AppwebMVC/Seguridad/Roles/Permisos?id=' + id)
+            .then(res => res.text())
+            .then(data => {
+                if (data.includes("ajaxError")) throw data
+
+                const modalEl = document.getElementById('modal-permisos')
+                modalEl.innerHTML = data
+
+                let modal = new bootstrap.Modal(modalEl)
+                modal.show()
+            })
+            .catch(error => {
+                if (error.includes("ajaxError")) alerta(error)
+                console.error(error)
+            })
     }
 </script>
