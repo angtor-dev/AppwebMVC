@@ -10,6 +10,17 @@ document.querySelectorAll('.acordeon-toggle').forEach(a => {
         e.currentTarget.parentElement.classList.toggle('show'))
 })
 
+// Modales de eliminacion
+document.querySelectorAll('.modal-eliminar').forEach(modalEl => {
+    modalEl.addEventListener('show.bs.modal', e => {
+        const button = e.relatedTarget
+        const id = button.dataset.id
+        const btnEliminar = modalEl.querySelector('.btn-eliminar')
+
+        btnEliminar.href = btnEliminar.dataset.href + id
+    })
+})
+
 /* Funciones de utilidades */
 
 /**
