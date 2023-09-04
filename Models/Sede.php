@@ -6,9 +6,11 @@ class Sede extends Model
 {
     public int $id;
     public ?int $idPastor;
-    public string $pais;
     public string $codigo;
+    public string $nombre;
+    public string $estado;
     public string $direccion;
+    public int $estatus;
 
     public ?Usuario $pastor;
 
