@@ -1,37 +1,13 @@
 <?php
 necesitaAutenticacion();
 
-if ($_SERVER['REQUEST_METHOD'] === 'GET')
-{
-    if (empty($_GET['id']) || $_GET['id'] == '0') {
-        http_response_code(400);
-        echo "<span class=\"ajaxError\">Se debe especificar un rol.</span>";
-        exit();
-    }
-    $rol = Rol::cargar($_GET['id']);
-
-    require_once "Views/Seguridad/Roles/_ModalPermisos.php";
+if (empty($_GET['id']) || $_GET['id'] == '0') {
+    http_response_code(400);
+    echo "<span class=\"ajaxError\">Se debe especificar un rol.</span>";
+    exit();
 }
-elseif ($_SERVER['REQUEST_METHOD'] === 'POST')
-{
-    // $rol = new Rol();
-    // $rol->mapFromPost();
-    
-    // if (!$rol->esValido()) {
-    //     redirigir("/AppwebMVC/Seguridad/Roles/");
-    // }
 
-    // try {
-    //     $rol->registrar();
-    // } catch (\Throwable $th) {
-    //     redirigir("/AppwebMVC/Seguridad/Roles/");
-    // }
+$rol = Rol::cargar($_GET['id']);
 
-    // $_SESSION['exitos'][] = "Rol registrado con exito.";
-    // header("Location: /AppwebMVC/Seguridad/Roles/");
-}
-else {
-    http_response_code(405);
-    die();
-}
+require_once "Views/Seguridad/Roles/_ModalPermisos.php";
 ?>
