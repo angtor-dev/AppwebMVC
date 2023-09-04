@@ -1,7 +1,7 @@
 <?php
 necesitaAutenticacion();
 
-$usuarios = Usuario::listar();
+$usuarios = Usuario::listar(1);
 
 renderView("Index");
 ?>
