@@ -12,13 +12,15 @@ abstract class Model
     /**
      * Retorna un array de objetos del modelo que lo instacía
      *
+     * @param int|null $estatus Si no se especifica, retorna todas las filas de la tabla.
+     * Si se especifica, retorna las filas donde el estatus sea igual al indicado.
      * @return array<Model>
      **/
-    public static function listar() : array
+    public static function listar(int $estatus = null) : array
     {
         $bd = Database::getInstance();
         $table = static::class;
-        $query = "SELECT * FROM $table";
+        $query = "SELECT * FROM $table" . (isset($estatus) ? " WHERE estatus = $estatus" : "");
 
         $stmt = $bd->pdo()->query($query);
         $stmt->setFetchMode(PDO::FETCH_CLASS, $table);
