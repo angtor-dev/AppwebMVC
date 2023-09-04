@@ -5,6 +5,7 @@ require_once "Models/Rol.php";
 class Usuario extends Model
 {
     public int $id;
+    public int $idSede;
     public ?int $idCelulaFamiliar;
     public ?int $idCelulaCrecimiento;
     public ?int $idConsolidador;
@@ -19,13 +20,18 @@ class Usuario extends Model
     public string $fechaNacimiento;
     public ?string $fechaConversion;
     public ?string $motivo;
+    public int $estatus;
 
     /** @var ?array<Rol> */
     public ?array $roles;
+    public Sede $sede;
 
     public function __construct()
     {
         parent::__construct();
+        if (!empty($this->idSede)) {
+            $this->sede = Sede::cargar($this->idSede);
+        }
         if (!empty($this->id)) {
             $this->roles = Rol::cargarMultiplesRelaciones($this->id, get_class($this), "UsuarioRol");
         }
@@ -85,14 +91,15 @@ class Usuario extends Model
 
     public function registrar() : void
     {
-        $sql = "INSERT INTO usuario(cedula, correo, clave, nombre, apellido, telefono, direccion, estadoCivil, fechaNacimiento)
-            VALUES(:cedula, :correo, :clave, :nombre, :apellido, :telefono, :direccion, :estadoCivil, :fechaNacimiento)";
+        $sql = "INSERT INTO usuario(idSede, cedula, correo, clave, nombre, apellido, telefono, direccion, estadoCivil, fechaNacimiento)
+            VALUES(:idSede, :cedula, :correo, :clave, :nombre, :apellido, :telefono, :direccion, :estadoCivil, :fechaNacimiento)";
 
         try {
             $this->db->pdo()->beginTransaction();
 
             // Registra al usuario
             $stmt = $this->prepare($sql);
+            $stmt->bindValue('idSede', $this->idSede);
             $stmt->bindValue('cedula', $this->cedula);
             $stmt->bindValue('correo', $this->correo);
             $stmt->bindValue('clave', $this->clave);
