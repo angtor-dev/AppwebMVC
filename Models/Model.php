@@ -3,6 +3,7 @@ require_once "Models/Database.php";
 
 abstract class Model
 {
+    public int $id;
     protected Database $db;
 
     public function __construct() {
@@ -98,6 +99,25 @@ abstract class Model
             return array();
         }
         return $stmt->fetchAll();
+    }
+
+    public function eliminar($eliminadoLogico = true) : void
+    {
+        $tabla = get_class($this);
+        $query = $eliminadoLogico
+            ? "UPDATE $tabla set estatus = 0 WHERE id = :id"
+            : "DELETE FROM $tabla WHERE id = :id";
+
+        try {
+            $stmt = $this->prepare($query);
+            $stmt->bindValue('id', $this->id);
+
+            $stmt->execute();
+        } catch (\Throwable $th) {
+            if (DEVELOPER_MODE) var_dump($th); // Eliminar esto al crear vista para errores
+            $_SESSION['errores'][] = "Ha ocurrido un error al eliminar $tabla.";
+            throw $th;
+        }
     }
 
     /** Mapea los valores de un formulario post a las propiedades del objeto */
