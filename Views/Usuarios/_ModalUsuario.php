@@ -1,5 +1,6 @@
 <?php /** @var Usuario $usuario */ ?>
 <?php /** @var array<Rol> $roles */ ?>
+<?php /** @var array<Sede> $sedes */ ?>
 
 <div class="offcanvas-header border-bottom">
     <h5 class="offcanvas-title"> <?= empty($usuario->id) ? "Crear usuario nuevo" : "Modificar usuario" ?> </h5>
@@ -76,6 +77,21 @@
             </select>
             <div class="invalid-feedback">
                 Elige una opción
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <label for="input-Sede">Sede</label>
+            <select class="form-select" name="idSede" id="idSede" required>
+                <option value=""></option>
+                <?php foreach ($sedes as $sede): ?>
+                    <option value="<?= $sede->id ?>"
+                        <?= $sede->id == ($usuario->idSede ?? "") ? "selected" : "" ?>>
+                        <?= $sede->nombre ?>
+                    </option>
+                <?php endforeach ?>
+            </select>
+            <div class="invalid-feedback">
+                Elige una sede para el usuario
             </div>
         </div>
         <div class="col-sm-12">

@@ -1,4 +1,5 @@
 <?php
+require_once "Models/Sede.php";
 require_once "Models/Enums/EstadoCivil.php";
 necesitaAutenticacion();
 
@@ -6,6 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET')
 {
     $usuario = empty($_GET['id']) || $_GET['id'] == '0' ? new Usuario() : Usuario::cargar($_GET['id']);
     $roles = Rol::listar();
+    $sedes = Sede::listar(1);
 
     require_once "Views/Usuarios/_ModalUsuario.php";
 }
