@@ -29,7 +29,8 @@
                     </nav>
                 </div>
                 <div class="card-body">
-                    <form action="" method="post" id="formPermisos">
+                    <form action="/AppwebMVC/Seguridad/Roles/ActualizarPermisos" method="post" id="formPermisos">
+                        <input type="hidden" name="id" id="idPermisos" value="<?= $rol->idPermisos ?>">
                         <div class="tab-content" id="nav-tabContent">
                             <!-- Permisos de Iglesia -->
                             <div class="tab-pane fade show active" id="tab-iglesia" role="tabpanel" tabindex="0">
@@ -107,7 +108,7 @@
         </div>
         <div class="modal-footer">
             <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            <button class="btn btn-primary">Guardar</button>
+            <button class="btn btn-primary" form="formPermisos">Guardar</button>
         </div>
     </div>
 </div>
