@@ -6,7 +6,7 @@ class Sede extends Model
 {
     public int $id;
     public ?int $idPastor;
-    public string $codigo;
+    public ?string $codigo;
     public string $nombre;
     public string $estado;
     public string $direccion;
