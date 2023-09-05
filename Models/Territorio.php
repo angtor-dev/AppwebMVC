@@ -14,6 +14,11 @@ class Territorio extends Model
     public Sede $sede;
     public Usuario $lider;
 
+    //Expresiones regulares
+    private $expresion_nombre = '/^[a-zA-Z\s]{1,30}$/';
+    private $expresion_detalles = '/^[a-zA-Z0-9\s.,]{1,100}$/';
+    private $expresion_id = '/^[1-9]\d*$/';
+
     public function __construct()
     {
         parent::__construct();
@@ -196,7 +201,50 @@ class Territorio extends Model
     }
         
 
+    /////////////////// ESPACIO PARA VALIDACIONES //////////////////////
+    public function validacion_nombre(string $nombre) :void
+    {
+        try {
+            // Utilizar preg_match para validar el string contra la expresión regular
+            if (!preg_match($this->expresion_nombre, $nombre)) {
+                // Lanzar una excepción si el string no es válido
+                throw new Exception("El nombre que ingresaste no cumple con los requisitos. Ingrese nuevamente", 422);
+            }
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+            die();
+        }
+    }
+
+    public function validacion_detalles(string $detalles) :void
+    {
+        try {
+            // Utilizar preg_match para validar el string contra la expresión regular
+            if (!preg_match($this->expresion_detalles, $detalles)) {
+                // Lanzar una excepción si el string no es válido
+                throw new Exception("La direccion que ingresaste no cumple con los requisitos. Ingrese nuevamente", 422);
+            }
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+            die();
+        }
+    }
+
+    public function validacion_id(int $id) :void
+    {
+        try {
+            // Utilizar preg_match para validar el string contra la expresión regular
+            if (!preg_match($this->expresion_id, $id)) {
+                // Lanzar una excepción si el string no es válido
+                throw new Exception("El ID no cumple con los requisitos. Seleccione nuevamente", 422);
+            }
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+            die();
+        }
+    }
 
 }
-?>
-
