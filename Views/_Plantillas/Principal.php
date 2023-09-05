@@ -150,15 +150,15 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
                </a>
                <div class="acordeon-body">
                    <div class="acordeon-items">
-                       <a href="<?= LOCAL_DIR ?>CFamiliar/Registrar" class="nav-link">
+                       <a href="<?= LOCAL_DIR ?>CelulaFamiliar/Registrar" class="nav-link">
                        <i class="fa-solid fa-pen-to-square"></i>
                            Registrar
                        </a>
-                       <a href="<?= LOCAL_DIR ?>CFamiliar/Listar" class="nav-link">
+                       <a href="<?= LOCAL_DIR ?>CelulaFamiliar/Listar" class="nav-link">
                        <i class="fa-solid fa-rectangle-list"></i>
                            Listar
                        </a>
-                       <a href="<?= LOCAL_DIR ?>CFamiliar/Reunion" class="nav-link">
+                       <a href="<?= LOCAL_DIR ?>CelulaFamiliar/Reunion" class="nav-link">
                        <i class="fa-solid fa-clipboard-user"></i>
                            Listar Reuniones
                        </a>
@@ -172,15 +172,15 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
                </a>
                <div class="acordeon-body">
                    <div class="acordeon-items">
-                       <a href="<?= LOCAL_DIR ?>CCrecimiento/Registrar" class="nav-link">
+                       <a href="<?= LOCAL_DIR ?>CelulaCrecimiento/Registrar" class="nav-link">
                        <i class="fa-solid fa-pen-to-square"></i>
                            Registrar
                        </a>
-                       <a href="<?= LOCAL_DIR ?>CCrecimiento/Listar" class="nav-link">
+                       <a href="<?= LOCAL_DIR ?>CelulaCrecimiento/Listar" class="nav-link">
                        <i class="fa-solid fa-rectangle-list"></i>
                            Listar
                        </a>
-                       <a href="<?= LOCAL_DIR ?>CCrecimiento/Reunion" class="nav-link">
+                       <a href="<?= LOCAL_DIR ?>CelulaCrecimiento/Reunion" class="nav-link">
                        <i class="fa-solid fa-clipboard-user"></i>
                        Listar Reuniones
                        </a>
@@ -194,15 +194,15 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
                </a>
                <div class="acordeon-body">
                    <div class="acordeon-items">
-                       <a href="<?= LOCAL_DIR ?>CConsolidacion/Registrar" class="nav-link">
+                       <a href="<?= LOCAL_DIR ?>CelulaConsolidacion/Registrar" class="nav-link">
                        <i class="fa-solid fa-pen-to-square"></i>
                            Registrar
                        </a>
-                       <a href="<?= LOCAL_DIR ?>CConsolidacion/Listar" class="nav-link">
+                       <a href="<?= LOCAL_DIR ?>CelulaConsolidacion/Listar" class="nav-link">
                        <i class="fa-solid fa-rectangle-list"></i>
                            Listar
                        </a>
-                       <a href="<?= LOCAL_DIR ?>CConsolidacion/Reunion" class="nav-link">
+                       <a href="<?= LOCAL_DIR ?>CelulaConsolidacion/Reunion" class="nav-link">
                        <i class="fa-solid fa-clipboard-user"></i>
                        Listar Reuniones
                        </a>

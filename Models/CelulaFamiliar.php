@@ -1,15 +1,15 @@
 <?php
 require_once "Models/Model.php";
 
-class CelulaCrecimiento extends Model
+class CelulaFamiliar extends Model
 
 {   
    
 
-    public  function registrar_CelulaCrecimiento($nombre, $idLider, $idCoLider, $idTerritorio){
+    public  function registrar_CelulaFamiliar($nombre, $idLider, $idCoLider, $idTerritorio){
         try {
             
-        $sql = "INSERT INTO celulacrecimiento (nombre, idLider, idCoLider, idTerritorio) 
+        $sql = "INSERT INTO celulafamiliar (nombre, idLider, idCoLider, idTerritorio) 
         VALUES (:nombre, :idLider, :idCoLider, :idTerritorio)";
       
         $stmt = $this->db->pdo()->prepare($sql);
@@ -32,7 +32,7 @@ class CelulaCrecimiento extends Model
         }
     }  
     
-    public  function listar_CelulaCrecimiento()
+    public  function listar_CelulaFamiliar()
     {
 
         try {
@@ -45,17 +45,17 @@ class CelulaCrecimiento extends Model
             CoLider.apellido AS apellidoCoLider,
             Lider.cedula AS cedulaLider,
             CoLider.cedula AS cedulaCoLider,
-            celulacrecimiento.id,
-            celulacrecimiento.idLider,
-            celulacrecimiento.idCoLider,
-            celulacrecimiento.idTerritorio,
-            celulacrecimiento.codigo,
-            celulacrecimiento.nombre,
-            celulacrecimiento.estatus
-            FROM celulacrecimiento
-            INNER JOIN usuario AS Lider ON celulacrecimiento.idLider = Lider.id
-            INNER JOIN usuario AS CoLider ON celulacrecimiento.idCoLider = CoLider.id
-            WHERE celulacrecimiento.estatus = '1'";
+            celulafamiliar.id,
+            celulafamiliar.idLider,
+            celulafamiliar.idCoLider,
+            celulafamiliar.idTerritorio,
+            celulafamiliar.codigo,
+            celulafamiliar.nombre,
+            celulafamiliar.estatus
+            FROM celulafamiliar
+            INNER JOIN usuario AS Lider ON celulafamiliar.idLider = Lider.id
+            INNER JOIN usuario AS CoLider ON celulafamiliar.idCoLider = CoLider.id
+            WHERE celulafamiliar.estatus = '1'";
 
 
             $stmt = $this->db->pdo()->prepare($sql);
@@ -76,14 +76,14 @@ class CelulaCrecimiento extends Model
     }
 
 
-    public  function editar_CelulaCrecimiento($id, $nombre, $idLider, $idCoLider, $idTerritorio)
+    public  function editar_CelulaFamiliar($id, $nombre, $idLider, $idCoLider, $idTerritorio)
     {
 
         try {
 
 
 
-            $sql = "UPDATE celulacrecimiento SET  nombre = :nombre, idLider = :idLider, idCoLider = :idCoLider, idTerritorio = :idTerritorio WHERE celulacrecimiento.id = :id";
+            $sql = "UPDATE celulafamiliar SET  nombre = :nombre, idLider = :idLider, idCoLider = :idCoLider, idTerritorio = :idTerritorio WHERE celulafamiliar.id = :id";
 
 
             $stmt = $this->db->pdo()->prepare($sql);
@@ -106,12 +106,15 @@ class CelulaCrecimiento extends Model
         }
     }
 
-    public  function eliminar_CelulaCrecimiento($id)
+
+
+
+    public  function eliminar_CelulaFamiliar($id)
     {
 
         try {
 
-            $sql = "UPDATE celulacrecimiento SET estatus = '0' WHERE celulacrecimiento.id = :id";
+            $sql = "UPDATE celulafamiliar SET estatus = '0' WHERE celulafamiliar.id = :id";
 
             $stmt = $this->db->pdo()->prepare($sql);
 
@@ -130,18 +133,18 @@ class CelulaCrecimiento extends Model
         }
     }
 
-    public function registrar_reunion($idCelulaCrecimiento, $fecha, $tematica, $semana, $generosidad, $infantil, $juvenil, $adulto, $actividad, $observaciones)
+    public function registrar_reunion($idCelulaFamiliar, $fecha, $tematica, $semana, $generosidad, $infantil, $juvenil, $adulto, $actividad, $observaciones)
     {
        
         try {
             
-        $sql = "INSERT INTO reunioncrecimiento (idCelulaCrecimiento, fecha, tematica, semana, generosidad, infantil, juvenil, adulto, actividad, observaciones) 
-        VALUES (:idCelulaCrecimiento, :fecha, :tematica, :semana, :generosidad, :infantil, :juvenil, :adulto, :actividad, :observaciones)";
+        $sql = "INSERT INTO reunionfamiliar (idCelulaFamiliar, fecha, tematica, semana, generosidad, infantil, juvenil, adulto, actividad, observaciones) 
+        VALUES (:idCelulaFamiliar, :fecha, :tematica, :semana, :generosidad, :infantil, :juvenil, :adulto, :actividad, :observaciones)";
       
         $stmt = $this->db->pdo()->prepare($sql);
 
         
-        $stmt->bindValue(':idCelulaCrecimiento', $idCelulaCrecimiento);
+        $stmt->bindValue(':idCelulaFamiliar', $idCelulaFamiliar);
         $stmt->bindValue(':fecha', $fecha);
         $stmt->bindValue(':tematica', $tematica);
         $stmt->bindValue(':semana', $semana);
@@ -224,23 +227,23 @@ class CelulaCrecimiento extends Model
         try {
 
             $sql = "SELECT
-                    reunioncrecimiento.id,
-                    reunioncrecimiento.fecha,
-                    reunioncrecimiento.tematica,
-                    reunioncrecimiento.semana,
-                    reunioncrecimiento.generosidad,
-                    reunioncrecimiento.infantil,
-                    reunioncrecimiento.juvenil,
-                    reunioncrecimiento.adulto,
-                    reunioncrecimiento.actividad,
-                    reunioncrecimiento.observaciones,
-                    celulacrecimiento.codigo,
-                    celulacrecimiento.nombre,
-                    celulacrecimiento.id AS idcelulacrecimiento
-                FROM reunioncrecimiento
-                INNER JOIN celulacrecimiento
-                ON reunioncrecimiento.idcelulacrecimiento = celulacrecimiento.id
-                ORDER BY reunioncrecimiento.fecha DESC;";
+                    reunionfamiliar.id,
+                    reunionfamiliar.fecha,
+                    reunionfamiliar.tematica,
+                    reunionfamiliar.semana,
+                    reunionfamiliar.generosidad,
+                    reunionfamiliar.infantil,
+                    reunionfamiliar.juvenil,
+                    reunionfamiliar.adulto,
+                    reunionfamiliar.actividad,
+                    reunionfamiliar.observaciones,
+                    celulafamiliar.codigo,
+                    celulafamiliar.nombre,
+                    celulafamiliar.id AS idcelulafamiliar
+                FROM reunionfamiliar
+                INNER JOIN celulafamiliar
+                ON reunionfamiliar.idcelulafamiliar = celulafamiliar.id
+                ORDER BY reunionfamiliar.fecha DESC;";
 
 
             $stmt = $this->db->pdo()->prepare($sql);
@@ -261,13 +264,13 @@ class CelulaCrecimiento extends Model
     }
 
 
-    public  function editar_reuniones($id, $idCelulaCrecimiento, $fecha, $tematica, $semana, $generosidad, $infantil, $juvenil, $adulto, $actividad, $observaciones){
+    public  function editar_reuniones($id, $idCelulaFamiliar, $fecha, $tematica, $semana, $generosidad, $infantil, $juvenil, $adulto, $actividad, $observaciones){
        
         try {
             
-        $sql = "UPDATE reunioncrecimiento
+        $sql = "UPDATE reunionfamiliar
                 SET
-                idCelulaCrecimiento = :idCelulaCrecimiento,
+                idCelulaFamiliar = :idCelulaFamiliar,
                 fecha = :fecha,
                 tematica = :tematica,
                 semana = :semana,
@@ -282,7 +285,7 @@ class CelulaCrecimiento extends Model
         $stmt = $this->db->pdo()->prepare($sql);
 
         $stmt->bindValue(':id', $id);
-        $stmt->bindValue(':idCelulaCrecimiento', $idCelulaCrecimiento);
+        $stmt->bindValue(':idCelulaFamiliar', $idCelulaFamiliar);
         $stmt->bindValue(':fecha', $fecha);
         $stmt->bindValue(':tematica', $tematica);
         $stmt->bindValue(':semana', $semana);
@@ -313,7 +316,7 @@ class CelulaCrecimiento extends Model
 
         try {
 
-            $sql = "DELETE FROM reunioncrecimiento WHERE id = :id";
+            $sql = "DELETE FROM reunionfamiliar WHERE id = :id";
 
             $stmt = $this->db->pdo()->prepare($sql);
 
@@ -339,7 +342,7 @@ class CelulaCrecimiento extends Model
 
 
 
-            $sql = "SELECT * FROM celulacrecimiento WHERE celulacrecimiento.estatus = '1'";
+            $sql = "SELECT * FROM celulafamiliar WHERE celulafamiliar.estatus = '1'";
 
             $stmt = $this->db->pdo()->prepare($sql);
 
@@ -363,3 +366,4 @@ class CelulaCrecimiento extends Model
 
 }
 ?>
+
