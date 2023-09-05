@@ -59,6 +59,21 @@ function necesitaAutenticacion() : void {
 }
 
 /**
+ * Valida si el usuario tiene los permisos especificados, de no ser asi muestra pantalla de acceso denegado y finaliza el script
+ * @param string $permisos Los permisos a validar
+ */
+function requierePermisos(string ...$permisos) : void {
+    /** @var Usuario */
+    $usuarioSesion = $_SESSION['usuario'];
+    foreach ($permisos as $permiso) {
+        if (!$usuarioSesion->tienePermiso($permiso)) {
+            renderView("AccesoDenegado", "Home/");
+            exit();
+        }
+    }
+}
+
+/**
  * Redirecciona de forma segura a una url
  * @param string $url Url a donde se redireccionará
  */
