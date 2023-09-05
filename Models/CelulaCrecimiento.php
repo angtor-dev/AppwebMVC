@@ -2,9 +2,14 @@
 require_once "Models/Model.php";
 
 class CelulaCrecimiento extends Model
-
 {   
-   
+    public int $id;
+    public int $idLider;
+    public int $idColider;
+    public int $idTerritorio;
+    public string $codigo;
+    public string $nombre;
+    public int $estatus;
 
     public  function registrar_CelulaCrecimiento($nombre, $idLider, $idCoLider, $idTerritorio){
         try {

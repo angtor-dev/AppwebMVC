@@ -2,9 +2,14 @@
 require_once "Models/Model.php";
 
 class CelulaFamiliar extends Model
-
 {   
-   
+    public int $id;
+    public int $idLider;
+    public int $idColider;
+    public int $idTerritorio;
+    public string $codigo;
+    public string $nombre;
+    public int $estatus;
 
     public  function registrar_CelulaFamiliar($nombre, $idLider, $idCoLider, $idTerritorio){
         try {
@@ -13,7 +18,6 @@ class CelulaFamiliar extends Model
         VALUES (:nombre, :idLider, :idCoLider, :idTerritorio)";
       
         $stmt = $this->db->pdo()->prepare($sql);
-
         
         $stmt->bindValue(':nombre', $nombre);
         $stmt->bindValue(':idLider', $idLider);
