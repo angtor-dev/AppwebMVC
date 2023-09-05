@@ -3,6 +3,7 @@ require_once "Models/Database.php";
 
 abstract class Model
 {
+    public int $id;
     protected Database $db;
 
     public function __construct() {
@@ -12,13 +13,15 @@ abstract class Model
     /**
      * Retorna un array de objetos del modelo que lo instacía
      *
+     * @param int|null $estatus Si no se especifica, retorna todas las filas de la tabla.
+     * Si se especifica, retorna las filas donde el estatus sea igual al indicado.
      * @return array<Model>
      **/
-    public static function listar() : array
+    public static function listar(int $estatus = null) : array
     {
         $bd = Database::getInstance();
         $table = static::class;
-        $query = "SELECT * FROM $table";
+        $query = "SELECT * FROM $table" . (isset($estatus) ? " WHERE estatus = $estatus" : "");
 
         $stmt = $bd->pdo()->query($query);
         $stmt->setFetchMode(PDO::FETCH_CLASS, $table);
@@ -96,6 +99,25 @@ abstract class Model
             return array();
         }
         return $stmt->fetchAll();
+    }
+
+    public function eliminar($eliminadoLogico = true) : void
+    {
+        $tabla = get_class($this);
+        $query = $eliminadoLogico
+            ? "UPDATE $tabla set estatus = 0 WHERE id = :id"
+            : "DELETE FROM $tabla WHERE id = :id";
+
+        try {
+            $stmt = $this->prepare($query);
+            $stmt->bindValue('id', $this->id);
+
+            $stmt->execute();
+        } catch (\Throwable $th) {
+            if (DEVELOPER_MODE) var_dump($th); // Eliminar esto al crear vista para errores
+            $_SESSION['errores'][] = "Ha ocurrido un error al eliminar $tabla.";
+            throw $th;
+        }
     }
 
     /** Mapea los valores de un formulario post a las propiedades del objeto */

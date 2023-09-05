@@ -89,3 +89,16 @@
 .table-rounded tbody tr:last-child td:last-child {
     border-bottom-right-radius: var(--bs-border-radius);
 }
+
+/* Checkboxs de pildora */
+.pill-check {
+    display: inline-grid;
+    grid-template-columns: 18px auto;
+    gap: 8px;
+    padding: 10px 16px 10px 12px;
+    background-color: var(--grey-lighter);
+    line-height: 1.25;
+    border: var(--default-border);
+    border-radius: 100px;
+    cursor: pointer;
+}
