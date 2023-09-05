@@ -2,8 +2,6 @@
 require_once "Models/Model.php";
 
 class Sede extends Model
-<<<<<<< HEAD
-=======
 {
     public int $id;
     public ?int $idPastor;
@@ -12,10 +10,6 @@ class Sede extends Model
     public string $estado;
     public string $direccion;
     public int $estatus;
->>>>>>> develop
-
-{   // variable local que nos servira para crear la conexion a la base de datos
-   
 
     public  function registrar_Sede($idPastor, $nombre, $direccion, $estado){
         try {
@@ -73,7 +67,6 @@ class Sede extends Model
         }
     }
 
-
     public  function editar_Sede($id, $idPastor, $nombre, $direccion, $estado)
     {
 
@@ -101,9 +94,6 @@ class Sede extends Model
             die();
         }
     }
-
-
-
 
     public  function eliminar_Sede($id)
     {
@@ -133,7 +123,6 @@ class Sede extends Model
     {
 
         try {
-
             $sql = "SELECT usuario.id, usuario.cedula, usuario.nombre, usuario.apellido 
             FROM usuariorol INNER JOIN usuario ON usuario.id = usuariorol.idUsuario WHERE usuariorol.idRol = '4'";
 
@@ -153,13 +142,6 @@ class Sede extends Model
             die();
         }
     }
-
-
-
-    
-        
-
-
 }
 ?>
 
