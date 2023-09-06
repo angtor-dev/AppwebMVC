@@ -6,7 +6,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "GET",
-            url: "http://localhost/AppwebMVC/CelulaFamiliar/Registrar",
+            url: "http://localhost/AppwebMVC/CelulaConsolidacion/Registrar",
             data: {
 
                 listaLideres: 'listaLideres',
@@ -76,7 +76,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "GET",
-            url: "http://localhost/AppwebMVC/CelulaFamiliar/Registrar",
+            url: "http://localhost/AppwebMVC/CelulaConsolidacion/Registrar",
             data: {
 
                 listaTerritorio: 'listaTerritorio',
@@ -196,7 +196,7 @@ $(document).ready(function () {
             // Aquí puedes agregar el código para enviar el formulario
             $.ajax({
                 type: "POST",
-                url: "http://localhost/AppwebMVC/CelulaFamiliar/Registrar",
+                url: "http://localhost/AppwebMVC/CelulaConsolidacion/Registrar",
                 data: {
 
                     registrar: 'registrar',

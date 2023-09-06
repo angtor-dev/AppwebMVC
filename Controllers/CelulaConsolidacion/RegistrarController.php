@@ -1,7 +1,17 @@
 <?php
-require_once "Models/CelulaFamiliar.php";
+require_once "Models/CelulaConsolidacion.php";
 
-$CelulaFamiliar = new CelulaFamiliar();
+necesitaAutenticacion();
+
+$usuarioSesion = $_SESSION['usuario'];
+
+$CelulaConsolidacion = new CelulaConsolidacion();
+
+
+if (!$usuarioSesion->tienePermiso("registrarCelulaConsolidacion")) {
+    $_SESSION['errores'][] = "No seposee permiso para registrar Sede.";
+    redirigir("/AppwebMVC/Home/");
+}
 
 if (isset($_POST['registrar'])) {   
 
@@ -11,7 +21,7 @@ if (isset($_POST['registrar'])) {
     $idTerritorio = $_POST['idTerritorio'];
 
  
-   $CelulaFamiliar->registrar_CelulaFamiliar($nombre, $idLider, $idCoLider, $idTerritorio);
+   $CelulaConsolidacion->registrar_CelulaConsolidacion($nombre, $idLider, $idCoLider, $idTerritorio);
 
    echo json_encode('Lo logramos!!');
    die();
@@ -21,7 +31,7 @@ if (isset($_POST['registrar'])) {
 
 if (isset($_GET['listaLideres'])) {  
     
-    $ListaLideres = $CelulaFamiliar->listar_lideres();
+    $ListaLideres = $CelulaConsolidacion->listar_lideres();
 
     echo json_encode($ListaLideres);
    
@@ -30,7 +40,7 @@ if (isset($_GET['listaLideres'])) {
 
 if (isset($_GET['listaTerritorio'])) {  
     
-    $Listaterritorio = $CelulaFamiliar->listar_territorios();
+    $Listaterritorio = $CelulaConsolidacion->listar_territorios();
 
     echo json_encode($Listaterritorio);
    

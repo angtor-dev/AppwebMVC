@@ -1,10 +1,10 @@
 <?php
 global $viewStyles;
 global $viewScripts;
-$viewScripts = ["CelulaFamiliar-reunion.js"];
+$viewScripts = ["CelulaConsolidacion-reunion.js"];
 ?>
 
-<h2>Reuniones Celulas Familiares:</h2>
+<h2>Reuniones Celulas de Consolidacion:</h2>
 
 <div class="container-fluid">
 
@@ -14,8 +14,8 @@ $viewScripts = ["CelulaFamiliar-reunion.js"];
                 <table id="celulaDatatables" class="table table-light table-hover">
                     <thead>
                         <tr>
-                            <th>Codigo Celula Familiar</th>
-                            <th>Nombre de la Celula Familiar</th>
+                            <th>Codigo Celula Consolidacion</th>
+                            <th>Nombre de la Celula Consolidacion</th>
                             <th>Fecha de la reunión</th>
                             <th>Opciones</th>
                         </tr>
@@ -34,7 +34,7 @@ $viewScripts = ["CelulaFamiliar-reunion.js"];
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Informacion de la Celula Familiar</h5>
+                    <h5 class="modal-title">Informacion de la Celula de Consolidacion</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -43,7 +43,7 @@ $viewScripts = ["CelulaFamiliar-reunion.js"];
                     <ul class="list-group list-group-horizontal">
                         <li class="list-group-item col-4">
                             <strong>Código:</strong>
-                            <p id="inf_codigocelulafamiliar"></p>
+                            <p id="inf_codigocelulaconsolidacion"></p>
                         </li>
                     
                         <li class="list-group-item col-4">
@@ -133,12 +133,12 @@ $viewScripts = ["CelulaFamiliar-reunion.js"];
                            
                             <div class="mb-3">
 
-                                <input type="hidden" id="idreunionfamiliar">
-                                <label for="idCelulaFamiliar" class="form-label fw-bold">Celula Familiar</label>
-                                <select class="form-select" id="idCelulaFamiliar" name="idCelulaFamiliar">
+                                <input type="hidden" id="idreunionconsolidacion">
+                                <label for="idCelulaConsolidacion" class="form-label fw-bold">Celula de Consolidacion</label>
+                                <select class="form-select" id="idCelulaConsolidacion" name="idCelulaConsolidacion">
                                 </select>
-                                <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_idCelulaFamiliar" role="alert">
-                                    Debe seleccionar una CelulaFamiliar.
+                                <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_idCelulaConsolidacion" role="alert">
+                                    Debe seleccionar una Celula de Consolidacion.
                                 </div>
                             </div>
 
@@ -176,32 +176,14 @@ $viewScripts = ["CelulaFamiliar-reunion.js"];
 
                     <div class="mb-3">
                         <label class="form-label fw-bold">Asistencia:</label>
-                        <div class="row g-3">
-                            <div class="col-4">
-                                <label for="infantil" class="form-label fw-bold">Infantil:</label>
-                                <input type="number" class="form-control" id="infantil" name="infantil" placeholder="Infantil">
-                                <div class="alert alert-danger d-none" id="msj_infantil" role="alert"></div>
-                            </div>
 
-
-                            <div class="col-4">
-                                <label for="juvenil" class="form-label fw-bold">Juvenil:</label>
-                                <input type="number" class="form-control" id="juvenil" name="juvenil" placeholder="Juvenil">
-                                <div class="alert alert-danger d-none" id="msj_juvenil" role="alert"></div>
-                            </div>
-
-                            <div class="col-4">
-                                <label for="adulto" class="form-label fw-bold">Adultos:</label>
-                                <input type="number" class="form-control" id="adulto" name="adulto" placeholder="Adulto">
-                                <div class="alert alert-danger d-none" id="msj_adulto" role="alert"></div>
-                            </div>
-                        </div>
-                    </div>
 
 
 
 
                     <div class="mb-3">
+
+                    
                         <label for="actividad" class="form-label fw-bold">Actividad</label>
                         <input type="text" class="form-control" id="actividad" name="actividad" maxlength="100">
 

@@ -1,10 +1,10 @@
 <?php
 global $viewStyles;
 global $viewScripts;
-$viewScripts = ["CelulaFamiliar-listar.js"];
+$viewScripts = ["CelulaConsolidacion-listar.js"];
 ?>
 
-<h2>Celulas Familiares:</h2>
+<h2>Celulas de Consolidacion:</h2>
 
 <div class="container-fluid">
 
@@ -15,7 +15,7 @@ $viewScripts = ["CelulaFamiliar-listar.js"];
                     <thead>
                         <tr>
                             <th>Codigo</th>
-                            <th>Nombre de la Celula Familiar</th>
+                            <th>Nombre de la Celula Consolidacion</th>
                             <th>Lider</th>
                             <th>Opciones</th>
                         </tr>
@@ -34,7 +34,7 @@ $viewScripts = ["CelulaFamiliar-listar.js"];
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Informacion de la Celula Familiar</h5>
+                    <h5 class="modal-title">Informacion de la Celula Consolidacion</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -78,7 +78,7 @@ $viewScripts = ["CelulaFamiliar-listar.js"];
                   <div class="mb-3">
                     <form id="formulario">
                         <div class="mb-3 col-12">
-                            <input type="hidden" id="idCelulaFamiliar">
+                            <input type="hidden" id="idCelulaConsolidacion">
                                 <label for="nombre" class="form-label fw-bold">Nombre de la Celula</label>
                                 <input type="text" class="form-control" id="nombre" maxlength="20" name="nombre">
 
@@ -141,7 +141,7 @@ $viewScripts = ["CelulaFamiliar-listar.js"];
 
 
 
-                        <input type="hidden" id="idCelulaFamiliarR">   
+                        <input type="hidden" id="idCelulaConsolidacionR">   
                             <div class="mb-3">
                             
                                 <label for="fecha" class="form-label fw-bold">Fecha</label>
@@ -178,23 +178,7 @@ $viewScripts = ["CelulaFamiliar-listar.js"];
                             
                             <div class="mb-3">
                                 <label  class="form-label fw-bold">Asistencia:</label>
-                                <div class="row g-3"> 
-                                <div class="col-4">
-                                <label for="infantil" class="form-label fw-bold">Infantil:</label>
-                                <input type="number" class="form-control" id="infantil" name="infantil" placeholder="Infantil">
-                                       <div class="alert alert-danger d-none" id="msj_infantil" role="alert"></div></div>
 
-                                
-                                <div class="col-4">
-                                <label for="juvenil" class="form-label fw-bold">Juvenil:</label>
-                                <input type="number" class="form-control" id="juvenil" name="juvenil" placeholder="Juvenil">
-                                      <div class="alert alert-danger d-none" id="msj_juvenil" role="alert"></div></div>
-
-                                <div class="col-4">     
-                                <label for="adulto" class="form-label fw-bold">Adultos:</label>
-                                <input type="number" class="form-control" id="adulto" name="adulto" placeholder="Adulto">
-                                       <div class="alert alert-danger d-none" id="msj_adulto" role="alert"></div></div>
-                                       </div>
                             </div>
                             
                             

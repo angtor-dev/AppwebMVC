@@ -27,7 +27,7 @@ $(document).ready(function () {
                     selector.appendChild(option);
 
                 });
-                
+
                 const element = document.getElementById('idLider');
                 const choices = new Choices(element, {
                     searchEnabled: true,  // Habilita la funcionalidad de búsqueda
@@ -43,7 +43,7 @@ $(document).ready(function () {
             error: function (jqXHR, textStatus, errorThrown) {
                 // Aquí puedes manejar errores, por ejemplo:
                 console.error("Error al enviar:", textStatus, errorThrown);
-               
+
             }
         })
     }
@@ -109,107 +109,107 @@ $(document).ready(function () {
         idLider: /^[1-9]\d*$/, // Números enteros mayores a 0
         detalles: /^[a-zA-Z0-9\s.,]{1,100}$/ // Letras, números, espacios, puntos y comas con un máximo de 100 caracteres
     };
-    
+
     const validationStatus = {
         idSede: false,
         nombre: false,
         idLider: false,
         detalles: false
     };
-    
-    
-        const form = document.getElementById("formulario");
-    
-        form.addEventListener("submit", (e) => {
-            e.preventDefault();
-            
-            // Validar idSede
-            const idSede = document.getElementById("idSede").value;
-            if(!regexObj.idSede.test(idSede)) {
-                document.getElementById("msj_idSede").classList.remove("d-none");
-                validationStatus.idSede = false;
-            } else {
-                document.getElementById("msj_idSede").classList.add("d-none");
-                validationStatus.idSede = true;
-            }
-    
-            // Validar nombre
-            const nombre = document.getElementById("nombre").value;
-            if(!regexObj.nombre.test(nombre)) {
-                document.getElementById("msj_nombre").classList.remove("d-none");
-                validationStatus.nombre = false;
-            } else {
-                document.getElementById("msj_nombre").classList.add("d-none");
-                validationStatus.nombre = true;
-            }
-    
-            // Validar idLider
-            const idLider = document.getElementById("idLider").value;
-            if(!regexObj.idLider.test(idLider)) {
-                document.getElementById("msj_idLider").classList.remove("d-none");
-                validationStatus.idLider = false;
-            } else {
-                document.getElementById("msj_idLider").classList.add("d-none");
-                validationStatus.idLider = true;
-            }
-    
-            // Validar detalles
-            const detalles = document.getElementById("detalles").value;
-            if(!regexObj.detalles.test(detalles)) {
-                document.getElementById("msj_detalles").classList.remove("d-none");
-                validationStatus.detalles = false;
-            } else {
-                document.getElementById("msj_detalles").classList.add("d-none");
-                validationStatus.detalles = true;
-            }
-            
-            // Verifica si todos los campos son válidos antes de enviar el formulario
-            if(Object.values(validationStatus).every(status => status === true)) {
-                console.log("Formulario válido. Puedes enviar los datos al servidor");
-                // Aquí puedes agregar el código para enviar el formulario
-                $.ajax({
-                    type: "POST",
-                    url: "http://localhost/AppwebMVC/Territorios/Registrar",
-                    data: {
-                
-                        registrar: 'registrar',
-                        idSede: idSede,
-                        nombre: nombre,
-                        idLider: idLider,
-                        detalles: detalles
-                    },
-                    success: function (response) {
-                
-                        let data = JSON.parse(response);
-                
-                        // Aquí puedes manejar una respuesta exitosa, por ejemplo:
-                        console.log("Respuesta del servidor:", data);
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Registrado Correctamente',
-                            showConfirmButton: false,
-                            timer: 2000,
-                        })
-                
-                        document.getElementById("#formulario").reset();
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        // Aquí puedes manejar errores, por ejemplo:
-                        console.error("Error al enviar:", textStatus, errorThrown);
-                        alert("Hubo un error al realizar el registro. Por favor, inténtalo de nuevo.");
-                    }
-                });
+
+
+    const form = document.getElementById("formulario");
+
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        // Validar idSede
+        const idSede = document.getElementById("idSede").value;
+        if (!regexObj.idSede.test(idSede)) {
+            document.getElementById("msj_idSede").classList.remove("d-none");
+            validationStatus.idSede = false;
+        } else {
+            document.getElementById("msj_idSede").classList.add("d-none");
+            validationStatus.idSede = true;
+        }
+
+        // Validar nombre
+        const nombre = document.getElementById("nombre").value;
+        if (!regexObj.nombre.test(nombre)) {
+            document.getElementById("msj_nombre").classList.remove("d-none");
+            validationStatus.nombre = false;
+        } else {
+            document.getElementById("msj_nombre").classList.add("d-none");
+            validationStatus.nombre = true;
+        }
+
+        // Validar idLider
+        const idLider = document.getElementById("idLider").value;
+        if (!regexObj.idLider.test(idLider)) {
+            document.getElementById("msj_idLider").classList.remove("d-none");
+            validationStatus.idLider = false;
+        } else {
+            document.getElementById("msj_idLider").classList.add("d-none");
+            validationStatus.idLider = true;
+        }
+
+        // Validar detalles
+        const detalles = document.getElementById("detalles").value;
+        if (!regexObj.detalles.test(detalles)) {
+            document.getElementById("msj_detalles").classList.remove("d-none");
+            validationStatus.detalles = false;
+        } else {
+            document.getElementById("msj_detalles").classList.add("d-none");
+            validationStatus.detalles = true;
+        }
+
+        // Verifica si todos los campos son válidos antes de enviar el formulario
+        if (Object.values(validationStatus).every(status => status === true)) {
+            console.log("Formulario válido. Puedes enviar los datos al servidor");
+            // Aquí puedes agregar el código para enviar el formulario
+            $.ajax({
+                type: "POST",
+                url: "http://localhost/AppwebMVC/Territorios/Registrar",
+                data: {
+
+                    registrar: 'registrar',
+                    idSede: idSede,
+                    nombre: nombre,
+                    idLider: idLider,
+                    detalles: detalles
+                },
+                success: function (response) {
+
+                    let data = JSON.parse(response);
+
+                    // Aquí puedes manejar una respuesta exitosa, por ejemplo:
+                    console.log("Respuesta del servidor:", data);
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Registrado Correctamente',
+                        showConfirmButton: false,
+                        timer: 2000,
+                    })
+
+                    document.getElementById("#formulario").reset();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    // Aquí puedes manejar errores, por ejemplo:
+                    console.error("Error al enviar:", textStatus, errorThrown);
+                    alert("Hubo un error al realizar el registro. Por favor, inténtalo de nuevo.");
+                }
+            });
 
 
 
 
-            } else {
-                console.log("Formulario inválido. Por favor, corrija los errores.");
-            }
-        });
-    
+        } else {
+            console.log("Formulario inválido. Por favor, corrija los errores.");
+        }
+    });
+
 });
-    
+
 
 
 

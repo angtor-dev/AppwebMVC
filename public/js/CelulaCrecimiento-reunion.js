@@ -44,7 +44,7 @@ $(document).ready(function () {
         const datos = dataTable.row($(this).parents()).data();
 
         
-        document.getElementById('idreunionfamiliar').textContent = datos.id;
+        document.getElementById('idreunioncrecimiento').textContent = datos.id;
         document.getElementById('idCelulaCrecimiento').value = datos.idcelulafamiliar;
         document.getElementById('fecha').value = datos.fecha;
         document.getElementById('tematica').value = datos.tematica;

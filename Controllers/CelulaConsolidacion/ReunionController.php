@@ -1,16 +1,25 @@
 
 <?php
 
-use SebastianBergmann\Environment\Console;
 
-require_once "Models/CelulaFamiliar.php";
+require_once "Models/CelulaConsolidacion.php";
 
-$CelulaFamiliar = new CelulaFamiliar();
+necesitaAutenticacion();
+
+$usuarioSesion = $_SESSION['usuario'];
+
+
+$CelulaConsolidacion = new CelulaConsolidacion();
+
+if (!$usuarioSesion->tienePermiso("listarCelulaConsolidacion")) {
+    $_SESSION['errores'][] = "No seposee permiso para listar reunion.";
+    redirigir("/AppwebMVC/Home/");
+}
 
 
 if (isset($_GET['cargar_data'])) {  
     //Primero inicializamos las variables
-     $Lista = $CelulaFamiliar->listar_reuniones();
+     $Lista = $CelulaConsolidacion->listar_reuniones();
      //Variable json solamente para guardar el array de datos
      $json = array();
  
@@ -36,21 +45,22 @@ if (isset($_GET['cargar_data'])) {
 
 if (isset($_POST['editar'])) { 
     
+    if (!$usuarioSesion->tienePermiso("actualizarCelulaConsolidacion")) {
+        $_SESSION['errores'][] = "No posee permiso para editar reunion.";
+        redirigir("/AppwebMVC/Home/");
+    }
     
     $id = $_POST['id'];
-    $idCelulaFamiliar = $_POST['idCelulaFamiliar'];
+    $idCelulaConsolidacion = $_POST['idCelulaConsolidacion'];
     $fecha = $_POST['fecha'];
     $tematica = $_POST['tematica'];
     $semana = $_POST['semana'];
     $generosidad = $_POST['generosidad'];
-    $infantil = $_POST['infantil'];
-    $juvenil = $_POST['juvenil'];
-    $adulto = $_POST['adulto'];
     $actividad = $_POST['actividad'];
     $observaciones = $_POST['observaciones'];
 
  
-   $CelulaFamiliar->editar_reuniones($id, $idCelulaFamiliar, $fecha, $tematica, $semana, $generosidad, $infantil, $juvenil, $adulto, $actividad, $observaciones);
+   $CelulaConsolidacion->editar_reuniones($id, $idCelulaConsolidacion, $fecha, $tematica, $semana, $generosidad, $actividad, $observaciones);
 
    echo json_encode('Lo logramos!!');
    die();
@@ -60,9 +70,14 @@ if (isset($_POST['editar'])) {
 
 if (isset($_POST['eliminar'])) {   
 
+    if (!$usuarioSesion->tienePermiso("eliminarCelulaConsolidacion")) {
+        $_SESSION['errores'][] = "No posee permiso para eliminar reunion.";
+        redirigir("/AppwebMVC/Home/");
+    }
+
     $id = $_POST['id'];
 
-   $CelulaFamiliar->eliminar_reuniones($id);
+   $CelulaConsolidacion->eliminar_reuniones($id);
 
    echo json_encode('Lo logramos!!');
    die();
@@ -72,7 +87,7 @@ if (isset($_POST['eliminar'])) {
 
 if (isset($_GET['listarcelulas'])) {  
     
-    $listaCelulas = $CelulaFamiliar->listar_celulas();
+    $listaCelulas = $CelulaConsolidacion->listar_celulas();
 
 
     echo json_encode($listaCelulas);

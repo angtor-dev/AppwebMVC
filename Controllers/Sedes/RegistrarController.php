@@ -1,7 +1,17 @@
 <?php
 require_once "Models/Sede.php";
 
+necesitaAutenticacion();
+
+$usuarioSesion = $_SESSION['usuario'];
+
 $Sede = new Sede();
+
+
+if (!$usuarioSesion->tienePermiso("registrarSede")) {
+    $_SESSION['errores'][] = "No seposee permiso para registrar Sede.";
+    redirigir("/AppwebMVC/Sede/");
+}
 
 if (isset($_POST['registrar'])) {   
 

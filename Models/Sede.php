@@ -11,6 +11,13 @@ class Sede extends Model
     public string $direccion;
     public int $estatus;
 
+    //Expresiones regulares para validaciones
+    private $expresion_nombre = '/^[a-zA-Z\s]{1,30}$/';
+    private $expresion_direccion = '/^[a-zA-Z0-9\s.,]{1,100}$/';
+    private $expresion_id = '/^\d{1,9}$/';
+    private $estados_venezuela = ["ANZ", "APUR", "ARA", "BAR", "BOL", "CAR", "COJ", "DELTA", "FAL", "GUA",
+    "LAR", "MER", "MIR", "MON", "ESP", "POR", "SUC", "TÁCH", "TRU", "VAR", "YAR", "ZUL"];
+
     public  function registrar_Sede($idPastor, $nombre, $direccion, $estado){
         try {
             //Aqui puedes declarar una variable con el nombre que quieras. Puede ser $sql, $consulta, $query. Como desees
@@ -139,6 +146,66 @@ class Sede extends Model
             );
             //print_r($error_data);
             echo json_encode($error_data);
+            die();
+        }
+    }
+
+    public function validacion_nombre(string $nombre) :void
+    {
+        try {
+            // Utilizar preg_match para validar el string contra la expresión regular
+            if (!preg_match($this->expresion_nombre, $nombre)) {
+                // Lanzar una excepción si el string no es válido
+                throw new Exception("El nombre que ingresaste no cumple con los requisitos. Ingrese nuevamente", 422);
+            }
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+            die();
+        }
+    }
+
+    public function validacion_direccion(string $direccion) :void
+    {
+        try {
+            // Utilizar preg_match para validar el string contra la expresión regular
+            if (!preg_match($this->expresion_direccion, $direccion)) {
+                // Lanzar una excepción si el string no es válido
+                throw new Exception("La direccion que ingresaste no cumple con los requisitos. Ingrese nuevamente", 422);
+            }
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+            die();
+        }
+    }
+
+    public function validacion_id(int $id) :void
+    {
+        try {
+            // Utilizar preg_match para validar el string contra la expresión regular
+            if (!preg_match($this->expresion_id, $id)) {
+                // Lanzar una excepción si el string no es válido
+                throw new Exception("El ID no cumple con los requisitos. Seleccione nuevamente", 422);
+            }
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+            die();
+        }
+    }
+
+    public function validacion_estado(string $estado) :void
+    {
+        try {
+            // Utilizar preg_match para validar el string contra la expresión regular
+            if (!in_array($estado, $this->estados_venezuela)) {
+                // Lanzar una excepción si el string no es válido
+                throw new Exception("El estado que ha seleccionado no existe. Seleccione nuevamente", 422);
+            }
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
             die();
         }
     }

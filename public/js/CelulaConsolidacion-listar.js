@@ -1,10 +1,10 @@
-$(document).ready(function () {
+$(document).ready(function () { 
 
     const dataTable = $('#celulaDatatables').DataTable({
         responsive: true,
         ajax: {
             method: "GET",
-            url: 'http://localhost/AppwebMVC/CelulaFamiliar/Listar',
+            url: 'http://localhost/AppwebMVC/CelulaConsolidacion/Listar',
             data: { cargar_data: 'cargar_data' }
         },
         columns: [
@@ -47,7 +47,7 @@ $(document).ready(function () {
     $('#celulaDatatables tbody').on('click', '#editar', function () {
         const datos = dataTable.row($(this).parents()).data();
 
-        document.getElementById('idCelulaFamiliar').textContent = datos.id;
+        document.getElementById('idCelulaConsolidacion').textContent = datos.id;
         document.getElementById('idTerritorio').value = datos.idTerritorio;
         document.getElementById('nombre').value = datos.nombre;
         document.getElementById('idCoLider').value = datos.idCoLider;
@@ -59,7 +59,7 @@ $(document).ready(function () {
 
     $('#celulaDatatables tbody').on('click', '#reunion', function () {
         const datos = dataTable.row($(this).parents()).data();
-        document.getElementById('idCelulaFamiliarR').textContent = datos.id;
+        document.getElementById('idCelulaConsolidacionR').textContent = datos.id;
 
     })
 
@@ -77,7 +77,7 @@ $(document).ready(function () {
         swalWithBootstrapButtons.fire({
             title: '¿Estas Seguro?',
             text: "No podras acceder a este territorio otra vez!",
-            html: '<spam id="idCelulaFamiliarE"></spam>',
+            html: '<spam id="idCelulaConsolidacionE"></spam>',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: '¡Si, estoy seguro!',
@@ -86,13 +86,13 @@ $(document).ready(function () {
         }).then((result) => {
             if (result.isConfirmed) {
 
-                document.getElementById('idCelulaFamiliarE').textContent = datos.id;
-                let id = document.getElementById('idCelulaFamiliarE').textContent;
+                document.getElementById('idCelulaConsolidacionE').textContent = datos.id;
+                let id = document.getElementById('idCelulaConsolidacionE').textContent;
 
 
                 $.ajax({
                     type: "POST",
-                    url: "http://localhost/AppwebMVC/CelulaFamiliar/Listar",
+                    url: "http://localhost/AppwebMVC/CelulaConsolidacion/Listar",
                     data: {
 
                         eliminar: 'eliminar',
@@ -137,7 +137,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "GET",
-            url: "http://localhost/AppwebMVC/CelulaFamiliar/Listar",
+            url: "http://localhost/AppwebMVC/CelulaConsolidacion/Listar",
             data: {
 
                 listaLideres: 'listaLideres',
@@ -205,7 +205,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "GET",
-            url: "http://localhost/AppwebMVC/CelulaFamiliar/Listar",
+            url: "http://localhost/AppwebMVC/CelulaConsolidacion/Listar",
             data: {
 
                 listaTerritorio: 'listaTerritorio',
@@ -275,7 +275,7 @@ $(document).ready(function () {
         e.preventDefault();
 
 
-        const id = document.getElementById('idCelulaFamiliar').textContent;
+        const id = document.getElementById('idCelulaConsolidacion').textContent;
         // Validar nombre
         const nombre = document.getElementById("nombre").value;
         if (!regexObj.nombre.test(nombre)) {
@@ -323,7 +323,7 @@ $(document).ready(function () {
             // Aquí puedes agregar el código para enviar el formulario
             $.ajax({
                 type: "POST",
-                url: "http://localhost/AppwebMVC/CelulaFamiliar/Listar",
+                url: "http://localhost/AppwebMVC/CelulaConsolidacion/Listar",
                 data: {
 
                     editar: 'editar',
@@ -374,9 +374,6 @@ $(document).ready(function () {
         tematica: /^[a-zA-Z0-9\s.,]{1,100}$/, // Letras, números, espacios, puntos y comas con un máximo de 100 caracteres
         semana: /^[1-9]\d*$/, // Números enteros mayores a 0
         generosidad: /^[0-9]+(\.[0-9]{2})?$/,
-        infantil: /^[0-9]\d*$/,
-        juvenil: /^[0-9]\d*$/,
-        adulto: /^[0-9]\d*$/,
         actividad: /^[a-zA-Z0-9\s.,]{1,100}$/, // Letras, números, espacios, puntos y comas con un máximo de 100 caracteres
         observaciones: /^[a-zA-Z0-9\s.,]{1,100}$/ // Letras, números, espacios, puntos y comas con un máximo de 100 caracteres
     };
@@ -386,9 +383,6 @@ $(document).ready(function () {
         tematica: false,
         semana: false,
         generosidad: false,
-        infantil: false,
-        juvenil: false,
-        adulto: false,
         actividad: false,
         observaciones: false
     };
@@ -399,7 +393,7 @@ $(document).ready(function () {
     form2.addEventListener("submit", (e) => {
         e.preventDefault();
 
-        const idCelulaFamiliar = document.getElementById('idCelulaFamiliarR').textContent;
+        const idCelulaConsolidacion = document.getElementById('idCelulaConsolidacionR').textContent;
 
 
         
@@ -419,6 +413,7 @@ $(document).ready(function () {
             }
         }*/
 
+       
         // Validar tematica
         const tematica = document.getElementById("tematica").value;
         if (!regexObj2.tematica.test(tematica)) {
@@ -449,35 +444,6 @@ $(document).ready(function () {
             validationStatus2.generosidad = true;
         }
 
-        // Validar infantil
-        const infantil = document.getElementById("infantil").value;
-        if (!regexObj2.infantil.test(infantil)) {
-            document.getElementById("msj_infantil").classList.remove("d-none");
-            validationStatus2.infantil = false;
-        } else {
-            document.getElementById("msj_infantil").classList.add("d-none");
-            validationStatus2.infantil = true;
-        }
-
-        // Validar juvenil
-        const juvenil = document.getElementById("juvenil").value;
-        if (!regexObj2.juvenil.test(juvenil)) {
-            document.getElementById("msj_juvenil").classList.remove("d-none");
-            validationStatus2.juvenil = false;
-        } else {
-            document.getElementById("msj_juvenil").classList.add("d-none");
-            validationStatus2.juvenil = true;
-        }
-
-        // Validar adulto
-        const adulto = document.getElementById("adulto").value;
-        if (!regexObj2.adulto.test(adulto)) {
-            document.getElementById("msj_adulto").classList.remove("d-none");
-            validationStatus2.adulto = false;
-        } else {
-            document.getElementById("msj_adulto").classList.add("d-none");
-            validationStatus2.adulto = true;
-        }
 
         // Validar actividad
         const actividad = document.getElementById("actividad").value;
@@ -507,18 +473,15 @@ $(document).ready(function () {
             // Aquí puedes agregar el código para enviar el formulario
             $.ajax({
                 type: "POST",
-                url: "http://localhost/AppwebMVC/CelulaFamiliar/Listar",
+                url: "http://localhost/AppwebMVC/CelulaConsolidacion/Listar",
                 data: {
 
                     registroreunion: 'registroreunion',
-                    idCelulaFamiliar: idCelulaFamiliar,
+                    idCelulaConsolidacion: idCelulaConsolidacion,
                     fecha: fecha,
                     tematica: tematica,
                     semana: semana,
                     generosidad: generosidad,
-                    infantil: infantil,
-                    juvenil: juvenil,
-                    adulto: adulto,
                     actividad: actividad,
                     observaciones: observaciones
                 },
