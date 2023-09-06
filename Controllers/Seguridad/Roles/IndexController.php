@@ -1,7 +1,8 @@
 <?php
 necesitaAutenticacion();
+requierePermisos("consultarRoles");
 
-$roles = Rol::listar();
+$roles = Rol::listar(1);
 
 renderView();
 ?>

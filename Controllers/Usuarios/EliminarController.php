@@ -1,12 +1,7 @@
 <?php
 necesitaAutenticacion();
-/** @var Usuario */
-$usuarioSesion = $_SESSION['usuario'];
+requierePermisos("eliminarUsuarios");
 
-if (!$usuarioSesion->tienePermiso("eliminaUsuarios")) {
-    $_SESSION['errores'][] = "No posees permiso para eliminar usuarios.";
-    redirigir("/AppwebMVC/Usuarios/");
-}
 if (empty($_GET['id'])) {
     $_SESSION['errores'][] = "No se especificó ningún usuario para eliminar.";
     redirigir("/AppwebMVC/Usuarios/");

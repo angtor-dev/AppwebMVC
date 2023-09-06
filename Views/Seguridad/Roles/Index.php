@@ -43,7 +43,8 @@ $usuario = $_SESSION['usuario'];
                             </a>
                         <?php endif ?>
                         <?php if ($usuario->tienePermiso("eliminarRoles") && $rol->nombre != "Administrador"): ?>
-                            <a role="button" data-bs-toggle="modal" data-bs-target="#confirmar-eliminacion">
+                            <a role="button" data-bs-toggle="modal" data-bs-target="#confirmar-eliminacion"
+                                data-id="<?= $rol->id ?>">
                                 <i class="fa-solid fa-trash" title="Eliminar" data-bs-toggle="tooltip"></i>
                             </a>
                         <?php endif ?>
@@ -60,7 +61,7 @@ $usuario = $_SESSION['usuario'];
 </table>
 
 <!-- Confirmar eliminación -->
-<div class="modal fade" id="confirmar-eliminacion" tabindex="-1" aria-hidden="true">
+<div class="modal fade modal-eliminar" id="confirmar-eliminacion" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -74,7 +75,7 @@ $usuario = $_SESSION['usuario'];
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No, cancelar</button>
-                <button type="button" class="btn btn-danger">Si, eliminar</button>
+                <a href="#" data-href="/AppwebMVC/Seguridad/Roles/Eliminar?id=" type="button" class="btn btn-danger btn-eliminar">Si, eliminar</a>
             </div>
         </div>
     </div>
