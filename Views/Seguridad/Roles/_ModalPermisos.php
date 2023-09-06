@@ -49,23 +49,23 @@
                                 <h5>Usuarios</h5>
                                 <div class="d-flex flex-wrap gap-3 mb-3">
                                     <label class="pill-check">
-                                        <input type="checkbox" name="consultaUsuarios" value="true"
-                                            <?= $rol->permisos->consultaUsuarios ? "checked" : null ?>>
+                                        <input type="checkbox" name="consultarUsuarios" value="true"
+                                            <?= $rol->permisos->consultarUsuarios ? "checked" : null ?>>
                                         Consultar
                                     </label>
                                     <label class="pill-check">
-                                        <input type="checkbox" name="registraUsuarios" value="true"
-                                            <?= $rol->permisos->registraUsuarios ? "checked" : null ?>>
+                                        <input type="checkbox" name="registrarUsuarios" value="true"
+                                            <?= $rol->permisos->registrarUsuarios ? "checked" : null ?>>
                                         Registrar
                                     </label>
                                     <label class="pill-check">
-                                        <input type="checkbox" name="actualizaUsuarios" value="true"
-                                            <?= $rol->permisos->actualizaUsuarios ? "checked" : null ?>>
+                                        <input type="checkbox" name="actualizarUsuarios" value="true"
+                                            <?= $rol->permisos->actualizarUsuarios ? "checked" : null ?>>
                                         Actualizar
                                     </label>
                                     <label class="pill-check">
-                                        <input type="checkbox" name="eliminaUsuarios" value="true"
-                                            <?= $rol->permisos->eliminaUsuarios ? "checked" : null ?>>
+                                        <input type="checkbox" name="eliminarUsuarios" value="true"
+                                            <?= $rol->permisos->eliminarUsuarios ? "checked" : null ?>>
                                         Eliminar
                                     </label>
                                 </div>
@@ -73,30 +73,36 @@
                                 <h6>Roles y permisos</h6>
                                 <div class="d-flex flex-wrap gap-3 mb-3">
                                     <label class="pill-check">
-                                        <input type="checkbox" name="consultaRoles" value="true">
+                                        <input type="checkbox" name="consultarRoles" value="true"
+                                            <?= $rol->permisos->consultarRoles ? "checked" : null ?>>
                                         Consultar
                                     </label>
                                     <label class="pill-check">
-                                        <input type="checkbox" name="registraRoles" value="true">
+                                        <input type="checkbox" name="registrarRoles" value="true"
+                                            <?= $rol->permisos->registrarRoles ? "checked" : null ?>>
                                         Registrar
                                     </label>
                                     <label class="pill-check">
-                                        <input type="checkbox" name="actualizaRoles" value="true">
+                                        <input type="checkbox" name="actualizarRoles" value="true"
+                                            <?= $rol->permisos->actualizarRoles ? "checked" : null ?>>
                                         Actualizar
                                     </label>
                                     <label class="pill-check">
-                                        <input type="checkbox" name="eliminaRoles" value="true">
+                                        <input type="checkbox" name="eliminarRoles" value="true"
+                                            <?= $rol->permisos->eliminarRoles ? "checked" : null ?>>
                                         Eliminar
                                     </label>
                                     <label class="pill-check">
-                                        <input type="checkbox" name="gestionaPermisos" value="true">
+                                        <input type="checkbox" name="gestionarPermisos" value="true"
+                                            <?= $rol->permisos->gestionarPermisos ? "checked" : null ?>>
                                         Gestionar permisos
                                     </label>
                                 </div>
                                 <h6>Bitacora</h6>
                                 <div class="d-flex flex-wrap gap-3 mb-3">
                                     <label class="pill-check">
-                                        <input type="checkbox" name="consultaBitacora" value="true">
+                                        <input type="checkbox" name="consultarBitacora" value="true"
+                                            <?= $rol->permisos->consultarBitacora ? "checked" : null ?>>
                                         Consultar bitacora
                                     </label>
                                 </div>

@@ -29,7 +29,7 @@ class Permisos extends Model
             actualizarRoles = :actualizarRoles,
             eliminarRoles = :eliminarRoles,
             gestionarPermisos = :gestionarPermisos,
-            consultarBitacora = :consultarBitacora,
+            consultarBitacora = :consultarBitacora
             WHERE id = $this->id";
 
         try {
@@ -47,6 +47,8 @@ class Permisos extends Model
 
             $stmt->execute();
         } catch (\Throwable $th) {
+            if (DEVELOPER_MODE) echo $th->getMessage();
+            die;
             $_SESSION['errores'][] = "Ha ocurrido un error al actualizar los permisos de rol.";
             throw $th;
         }
