@@ -133,7 +133,7 @@ $viewScripts = ["CelulaCrecimiento-reunion.js"];
                            
                             <div class="mb-3">
 
-                                <input type="hidden" id="idreunionfamiliar">
+                                <input type="hidden" id="idreunioncrecimiento">
                                 <label for="idCelulaCrecimiento" class="form-label fw-bold">Celula de Crecimiento</label>
                                 <select class="form-select" id="idCelulaCrecimiento" name="idCelulaCrecimiento">
                                 </select>

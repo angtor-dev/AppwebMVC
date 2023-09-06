@@ -2,6 +2,15 @@
 require_once "Models/Sede.php";
 // Logica del controlador
 
+necesitaAutenticacion();
+
+$usuarioSesion = $_SESSION['usuario'];
+
+if (!$usuarioSesion->tienePermiso("listarSede")) {
+    $_SESSION['errores'][] = "No posee permiso para listar Sede.";
+    redirigir("/AppwebMVC/Home/");
+}
+
 $Sede = new Sede();
 
 if (isset($_GET['cargar_data'])) {  
@@ -30,7 +39,18 @@ if (isset($_GET['cargar_data'])) {
     die();
 } 
 
+
+if (isset($_GET['listaPastores'])) {  
+    
+    $ListaPastores = $Sede->listar_Pastores();
+
+    echo json_encode($ListaPastores);
+   
+    die();
+}
+
 if (isset($_POST['editar'])) {   
+
 
     $id = $_POST['id'];
     $idPastor = $_POST['idPastor'];
@@ -41,11 +61,16 @@ if (isset($_POST['editar'])) {
    $Sede->editar_Sede($id, $idPastor, $nombre, $direccion, $estado);
 
    echo json_encode('Lo logramos!!');
-   die();
-
+   die(); 
+    
 }
 
 if (isset($_POST['eliminar'])) {   
+
+    if (!$usuarioSesion->tienePermiso("eliminarSede")) {
+        $_SESSION['errores'][] = "No seposee permiso para eliminar Sede.";
+        redirigir("/AppwebMVC/Home/");
+    }
 
     $id = $_POST['id'];
 
@@ -54,15 +79,6 @@ if (isset($_POST['eliminar'])) {
    echo json_encode('Lo logramos!!');
    die();
 
-}
-
-if (isset($_GET['listaPastores'])) {  
-    
-    $ListaPastores = $Sede->listar_Pastores();
-
-    echo json_encode($ListaPastores);
-   
-    die();
 }
    
 renderView();

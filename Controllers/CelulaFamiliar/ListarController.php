@@ -1,6 +1,15 @@
 <?php
 require_once "Models/CelulaFamiliar.php";
 
+necesitaAutenticacion();
+
+$usuarioSesion = $_SESSION['usuario'];
+
+if (!$usuarioSesion->tienePermiso("listarCelulaFamiliar")) {
+    $_SESSION['errores'][] = "No seposee permiso para listar Celula Familiar.";
+    redirigir("/AppwebMVC/Home/");
+}
+
 $CelulaFamiliar = new CelulaFamiliar();
 
 
@@ -31,6 +40,11 @@ if (isset($_GET['cargar_data'])) {
  } 
 
 if (isset($_POST['editar'])) { 
+
+    if (!$usuarioSesion->tienePermiso("actualizarCelulaFamiliar")) {
+        $_SESSION['errores'][] = "No posee permiso para editar Celula Familiar.";
+        redirigir("/AppwebMVC/Home/");
+    }
     
     
     $id = $_POST['id'];
@@ -50,7 +64,12 @@ if (isset($_POST['editar'])) {
 
 
 if (isset($_POST['registroreunion'])) { 
-    
+
+    if (!$usuarioSesion->tienePermiso("resgistrarCelulaFamiliar")) {
+        $_SESSION['errores'][] = "No seposee permiso para registrar reuinion.";
+        redirigir("/AppwebMVC/Home/");
+    }
+
    
     $idCelulaFamiliar = $_POST['idCelulaFamiliar'];
     $fecha = $_POST['fecha'];
@@ -75,6 +94,11 @@ if (isset($_POST['registroreunion'])) {
 
 
 if (isset($_POST['eliminar'])) {   
+
+    if (!$usuarioSesion->tienePermiso("eliminarCelulaFamiliar")) {
+        $_SESSION['errores'][] = "No seposee permiso para elimianr Celula Familiar.";
+        redirigir("/AppwebMVC/Home/");
+    }
 
     $id = $_POST['id'];
 

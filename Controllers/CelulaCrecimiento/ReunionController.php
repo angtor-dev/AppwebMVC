@@ -1,9 +1,16 @@
 
 <?php
 
-use SebastianBergmann\Environment\Console;
-
 require_once "Models/CelulaCrecimiento.php";
+
+necesitaAutenticacion();
+
+$usuarioSesion = $_SESSION['usuario'];
+
+if (!$usuarioSesion->tienePermiso("listarCelulaCrecimiento")) {
+    $_SESSION['errores'][] = "No sposee permiso para listar reuinion.";
+    redirigir("/AppwebMVC/Home/");
+}
 
 $CelulaCrecimiento = new CelulaCrecimiento();
 
@@ -35,6 +42,11 @@ if (isset($_GET['cargar_data'])) {
  } 
 
 if (isset($_POST['editar'])) { 
+
+    if (!$usuarioSesion->tienePermiso("actualizarCelulaCrecimiento")) {
+        $_SESSION['errores'][] = "No posee permiso para editar reunion.";
+        redirigir("/AppwebMVC/Home/");
+    }
     
     
     $id = $_POST['id'];
@@ -59,6 +71,11 @@ if (isset($_POST['editar'])) {
 
 
 if (isset($_POST['eliminar'])) {   
+
+    if (!$usuarioSesion->tienePermiso("eliminarCelulaConsolidacion")) {
+        $_SESSION['errores'][] = "No seposee permiso para eliminar reuinion.";
+        redirigir("/AppwebMVC/Home/");
+    }
 
     $id = $_POST['id'];
 

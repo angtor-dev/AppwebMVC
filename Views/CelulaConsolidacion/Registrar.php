@@ -1,10 +1,10 @@
 <?php
 global $viewStyles;
 global $viewScripts;
-$viewScripts = ["CelulaFamiliar-registrar.js"];?>
+$viewScripts = ["CelulaConsolidacion-registrar.js"];?>
 
 
-<h2>Registro de Celula Familiar</h2>
+<h2>Registro de Celula Consolidacion</h2>
 
 <div class="container-fluid">
 

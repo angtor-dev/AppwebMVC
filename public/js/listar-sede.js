@@ -37,11 +37,10 @@ $(document).ready(function() {
 
         document.getElementById('idSede').textContent= datos.id;
         document.getElementById('nombre').value= datos.nombre;
-        document.getElementById('idPastor').value= datos.idPastor;
         document.getElementById('direccion').value= datos.direccion;
         document.getElementById('estado').value= datos.estado;
                                
-        
+        Listar_Pastores(datos.idPastor);
 
     })
 
@@ -116,7 +115,7 @@ $(document).ready(function() {
 
 
 
-    function Listar_Pastores() {
+    function Listar_Pastores(idPastor) {
 
       $.ajax({
           type: "GET",
@@ -131,8 +130,6 @@ $(document).ready(function() {
               let data = JSON.parse(response);
 
 
-              console.log(idPastor);
-
               let selector = document.getElementById('idPastor');
 
 
@@ -144,8 +141,10 @@ $(document).ready(function() {
                   selector.appendChild(option);
 
               });
-              const element = document.getElementById('idPastor');
-                const choices = new Choices(element, {
+
+              selector.value = idPastor;
+              
+                const choices = new Choices(selector, {
                   searchEnabled: true,  // Habilita la funcionalidad de búsqueda
                   removeItemButton: true,  // Habilita la posibilidad de remover items
                   placeholderValue: 'Selecciona una opción',  // Texto del placeholder
@@ -164,7 +163,7 @@ $(document).ready(function() {
       })
   }
 
-  Listar_Pastores();
+  
 
 
 
@@ -265,8 +264,6 @@ console.log("Respuesta del servidor:", data);
                   })
 
                
-
-document.getElementById("#formulario").reset();
 
 
 },

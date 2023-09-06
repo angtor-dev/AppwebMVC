@@ -2,6 +2,15 @@
 require_once "Models/Territorio.php";
 // Logica del controlador
 
+necesitaAutenticacion();
+
+$usuarioSesion = $_SESSION['usuario'];
+
+if (!$usuarioSesion->tienePermiso("listarTerritorio")) {
+    $_SESSION['errores'][] = "No posee permiso para listar territorio.";
+    redirigir("/AppwebMVC/Home/");
+}
+
 $Territorio = new Territorio();
 
 if (isset($_GET['cargar_data'])) {  
@@ -52,6 +61,11 @@ if (isset($_GET['listaSedes'])) {
 
 if (isset($_POST['editar'])) {   
 
+    if (!$usuarioSesion->tienePermiso("actualizarTerritorio")) {
+        $_SESSION['errores'][] = "No posee permiso para actualizar Territorio.";
+        redirigir("/AppwebMVC/Home/");
+    }
+
     $id = $_POST['id'];
     $idSede = $_POST['idSede'];
     $nombre = $_POST['nombre'];
@@ -66,6 +80,11 @@ if (isset($_POST['editar'])) {
 }
 
 if (isset($_POST['eliminar'])) {   
+
+    if (!$usuarioSesion->tienePermiso("eliminarTerritorio")) {
+        $_SESSION['errores'][] = "No posee permiso para eliminar Territorio.";
+        redirigir("/AppwebMVC/Home/");
+    }
 
     $id = $_POST['id'];
 

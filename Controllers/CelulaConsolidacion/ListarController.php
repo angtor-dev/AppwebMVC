@@ -1,12 +1,21 @@
 <?php
-require_once "Models/CelulaFamiliar.php";
+require_once "Models/CelulaConsolidacion.php";
 
-$CelulaFamiliar = new CelulaFamiliar();
+necesitaAutenticacion();
 
+$usuarioSesion = $_SESSION['usuario'];
+
+$CelulaConsolidacion = new CelulaConsolidacion();
+///hola
+
+if (!$usuarioSesion->tienePermiso("listarCelulaConsolidacion")) {
+    $_SESSION['errores'][] = "No seposee permiso para registrar Sede.";
+    redirigir("/AppwebMVC/Home/");
+}
 
 if (isset($_GET['cargar_data'])) {  
     //Primero inicializamos las variables
-     $Lista = $CelulaFamiliar->listar_CelulaFamiliar();
+     $Lista = $CelulaConsolidacion->listar_CelulaConsolidacion();
      //Variable json solamente para guardar el array de datos
      $json = array();
  
@@ -31,6 +40,11 @@ if (isset($_GET['cargar_data'])) {
  } 
 
 if (isset($_POST['editar'])) { 
+
+    if (!$usuarioSesion->tienePermiso("actualizarCelulaConsolidacion")) {
+        $_SESSION['errores'][] = "No se posee permiso para editar Sede.";
+        redirigir("/AppwebMVC/Home/");
+    }
     
     
     $id = $_POST['id'];
@@ -40,7 +54,7 @@ if (isset($_POST['editar'])) {
     $idTerritorio = $_POST['idTerritorio'];
 
  
-   $CelulaFamiliar->editar_CelulaFamiliar($id, $nombre, $idLider, $idCoLider, $idTerritorio);
+   $CelulaConsolidacion->editar_CelulaConsolidacion($id, $nombre, $idLider, $idCoLider, $idTerritorio);
 
    echo json_encode('Lo logramos!!');
    die();
@@ -50,21 +64,23 @@ if (isset($_POST['editar'])) {
 
 
 if (isset($_POST['registroreunion'])) { 
+
+    if (!$usuarioSesion->tienePermiso("resgistrarCelulaConsolidacion")) {
+        $_SESSION['errores'][] = "No seposee permiso para registrar reuinion.";
+        redirigir("/AppwebMVC/Home/");
+    }
     
    
-    $idCelulaFamiliar = $_POST['idCelulaFamiliar'];
+    $idCelulaConsolidacion = $_POST['idCelulaConsolidacion'];
     $fecha = $_POST['fecha'];
     $tematica = $_POST['tematica'];
     $semana = $_POST['semana'];
     $generosidad = $_POST['generosidad'];
-    $infantil = $_POST['infantil'];
-    $juvenil = $_POST['juvenil'];
-    $adulto = $_POST['adulto'];
     $actividad = $_POST['actividad'];
     $observaciones = $_POST['observaciones'];
 
  
-   $CelulaFamiliar->registrar_reunion($idCelulaFamiliar, $fecha, $tematica, $semana, $generosidad, $infantil, $juvenil, $adulto, $actividad, $observaciones);
+   $CelulaConsolidacion->registrar_reunion($idCelulaConsolidacion, $fecha, $tematica, $semana, $generosidad, $actividad, $observaciones);
 
    echo json_encode('Lo logramos!!');
    die();
@@ -76,9 +92,14 @@ if (isset($_POST['registroreunion'])) {
 
 if (isset($_POST['eliminar'])) {   
 
+    if (!$usuarioSesion->tienePermiso("eliminarCelulaConsolidacion")) {
+        $_SESSION['errores'][] = "No seposee permiso para elimianr Celula de Consolidacion.";
+        redirigir("/AppwebMVC/Home/");
+    }
+
     $id = $_POST['id'];
 
-   $CelulaFamiliar->eliminar_CelulaFamiliar($id);
+   $CelulaConsolidacion->eliminar_CelulaConsolidacion($id);
 
    echo json_encode('Lo logramos!!');
    die();
@@ -88,7 +109,7 @@ if (isset($_POST['eliminar'])) {
 
 if (isset($_GET['listaLideres'])) {  
     
-    $ListaLideres = $CelulaFamiliar->listar_lideres();
+    $ListaLideres = $CelulaConsolidacion->listar_lideres();
 
     echo json_encode($ListaLideres);
    
@@ -97,7 +118,7 @@ if (isset($_GET['listaLideres'])) {
 
 if (isset($_GET['listaTerritorio'])) {  
     
-    $Listaterritorio = $CelulaFamiliar->listar_territorios();
+    $Listaterritorio = $CelulaConsolidacion->listar_territorios();
 
     echo json_encode($Listaterritorio);
    
