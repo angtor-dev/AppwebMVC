@@ -161,14 +161,14 @@ $viewScripts = ["CelulaConsolidacion-listar.js"];
                             <div class="row g-3"> 
                             <div class="col-4">
                                 <label for="tematica" class="form-label fw-bold">Semana del Ciclo</label>
-                                <input type="number" class="form-control" id="semana" name="tematica" >
+                                <input type="number" class="form-control" id="semana" name="tematica" min="0">
                             <div class="alert alert-danger d-none" id="msj_semana" role="alert">Este campo no puede estar vacio</div>
                             </div>
 
 
                             <div class="col-8">
                             <label  class="form-label fw-bold">Generosidad</label>
-                                <input type="number" class="form-control" id="generosidad" name="tematica" step="0.01">
+                                <input type="number" class="form-control" id="generosidad" name="tematica" min="0" step="0.01">
                             <div class="alert alert-danger d-none" id="msj_generosidad" role="alert">Este campo no puede estar vacio</div>
                             </div>
                             </div>
@@ -177,8 +177,8 @@ $viewScripts = ["CelulaConsolidacion-listar.js"];
 
                             
                             <div class="mb-3">
-                                <label  class="form-label fw-bold">Asistencia:</label>
-
+                                <label for="discipulos" class="form-label fw-bold">Asistencia:</label>
+                                <select id="discipulos" multiple=""> </select>
                             </div>
                             
                             
@@ -194,7 +194,7 @@ $viewScripts = ["CelulaConsolidacion-listar.js"];
                             
                             <div class="mb-3">
                                 <label for="observaciones" class="form-label fw-bold">Observaciones</label>
-                                <input  type="100" class="form-control" id="observaciones" name="observaciones" rows="3"></textarea>
+                                <input  type="text" class="form-control" id="observaciones" name="observaciones" rows="3"></textarea>
                             
                             <div class="alert alert-danger d-none" id="msj_observaciones" role="alert">Este campo no puede estar vacio</div>
                             </div>
