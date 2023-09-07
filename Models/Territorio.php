@@ -52,10 +52,6 @@ class Territorio extends Model
                 $codigo = $identificador . '-' . $territorios;
             } else {
                 $territorios = Territorio::cargarRelaciones($idSede, "Sede");
-                http_response_code(422);
-                    echo json_encode($territorios);
-                    die();
-
                 if (count($territorios) > 0) {
                     // Un array para almacenar solo los números de los identificadores
                     $numeros = [];
