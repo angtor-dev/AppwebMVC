@@ -47,18 +47,18 @@ class Territorio extends Model
 
             if ($datos['territorioNumero'] === null) {
                 $id = 1;
-                $territorios = 'T' . $id;
-                $identificador = $sede->sede;
-                $codigo = $identificador . '-' . $territorios;
+                $territorio = 'T' . $id;
+                $identificador = $sede->identificador;
+                $codigo = $identificador . '-' . $territorio;
             } else {
                 $territorios = Territorio::cargarRelaciones($idSede, "Sede");
+
                 if (count($territorios) > 0) {
                     // Un array para almacenar solo los números de los identificadores
                     $numeros = [];
-                    $valores = $territorios->territorio;
-                    foreach ($valores as $resultado) {
+                    foreach ($territorios as $resultado) {
                         // Extraer el número del identificador (eliminar la "T")
-                        $numero = (int) substr($resultado, 1);  // substr($resultado, 1) elimina el primer carácter ("T")
+                        $numero = (int) substr($resultado->identificador, 1);  // substr($resultado, 1) elimina el primer carácter ("T")
                         $numeros[] = $numero;
                     }
                     // Encontrar el número más grande en el array
@@ -66,12 +66,12 @@ class Territorio extends Model
 
                     $contador = $mayorNumero + 1;
                     $territorio = 'T' . $contador;
-                    $identificador = $sede->sede;
+                    $identificador = $sede->identificador;
                     $codigo = $identificador . '-' . $territorio;
                 } else {
                     $contador = 1;
                     $territorio = 'T' . $contador;
-                    $identificador = $sede->sede;
+                    $identificador = $sede->identificador;
                     $codigo = $identificador . '-' . $territorio;
                 }
             }
@@ -79,8 +79,8 @@ class Territorio extends Model
             if ($id == 1) {
                 //Aqui puedes declarar una variable con el nombre que quieras. Puede ser $sql, $consulta, $query. Como desees
                 //Lo unico que tienes que tomar en cuenta que hay nombras que si estan predefinidos, pero relah, ya el editor te avisa
-                $sql = "INSERT INTO territorio (id, idSede, idLider, codigo, territorio, nombre, detalles, fechaCreacion) 
-                VALUES (:id, :idSede, :idLider, :codigo, :territorio, :nombre, :detalles, CURDATE())";
+                $sql = "INSERT INTO territorio (id, idSede, idLider, codigo, identificador, nombre, detalles, fechaCreacion) 
+                VALUES (:id, :idSede, :idLider, :codigo, :identificador, :nombre, :detalles, CURDATE())";
                 //no se pueden enviar los valores por variables  parametrizacion y evita inyeccion de slq':nombrequetuquieres'
                 //Todo lo que esta en VALUES() esta malo, preguntame el porque y despues quiero que escribas la respuesta aqui como comentario para que nunca se te olvide
 
@@ -93,7 +93,7 @@ class Territorio extends Model
                 $stmt->bindValue(':idSede', $idSede);
                 $stmt->bindValue(':idLider', $idLider);
                 $stmt->bindValue(':codigo', $codigo);
-                $stmt->bindValue(':territorio', $territorio);
+                $stmt->bindValue(':identificador', $territorio);
                 $stmt->bindValue(':nombre', $nombre);
                 $stmt->bindValue(':detalles', $detalles);
 
@@ -102,8 +102,8 @@ class Territorio extends Model
             }else{
                 //Aqui puedes declarar una variable con el nombre que quieras. Puede ser $sql, $consulta, $query. Como desees
                 //Lo unico que tienes que tomar en cuenta que hay nombras que si estan predefinidos, pero relah, ya el editor te avisa
-                $sql = "INSERT INTO territorio (idSede, idLider, codigo, territorio, nombre, detalles, fechaCreacion) 
-                VALUES (:idSede, :idLider, :codigo, :territorio, :nombre, :detalles, CURDATE())";
+                $sql = "INSERT INTO territorio (idSede, idLider, codigo, identificador, nombre, detalles, fechaCreacion) 
+                VALUES (:idSede, :idLider, :codigo, :identificador, :nombre, :detalles, CURDATE())";
                 //no se pueden enviar los valores por variables  parametrizacion y evita inyeccion de slq':nombrequetuquieres'
                 //Todo lo que esta en VALUES() esta malo, preguntame el porque y despues quiero que escribas la respuesta aqui como comentario para que nunca se te olvide
 
@@ -115,7 +115,7 @@ class Territorio extends Model
                 $stmt->bindValue(':idSede', $idSede);
                 $stmt->bindValue(':idLider', $idLider);
                 $stmt->bindValue(':codigo', $codigo);
-                $stmt->bindValue(':territorio', $territorio);
+                $stmt->bindValue(':identificador', $territorio);
                 $stmt->bindValue(':nombre', $nombre);
                 $stmt->bindValue(':detalles', $detalles);
 
@@ -134,6 +134,7 @@ class Territorio extends Model
             );
 
             http_response_code(422);
+            print_r($error_data);
             echo json_encode($error_data);
             die();
         }
