@@ -66,29 +66,17 @@ $(document).ready(function () {
     $('#celulaDatatables tbody').on('click', '#eliminar', function () {
         const datos = dataTable.row($(this).parents()).data();
 
-        const swalWithBootstrapButtons = Swal.mixin({
-            customClass: {
-                confirmButton: 'btn btn-success',
-                cancelButton: 'btn btn-danger'
-            },
-            buttonsStyling: false
-        })
-
-        swalWithBootstrapButtons.fire({
+        Swal.fire({
             title: '¿Estas Seguro?',
-            text: "No podras acceder a este territorio otra vez!",
-            html: '<spam id="idCelulaFamiliarE"></spam>',
+            text: "No podras acceder a esta celula otra vez!",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: '¡Si, estoy seguro!',
+            confirmButtonColor: '#007bff',
             cancelButtonText: '¡No, cancelar!',
             reverseButtons: true
         }).then((result) => {
             if (result.isConfirmed) {
-
-                document.getElementById('idCelulaFamiliarE').textContent = datos.id;
-                let id = document.getElementById('idCelulaFamiliarE').textContent;
-
 
                 $.ajax({
                     type: "POST",
@@ -96,7 +84,7 @@ $(document).ready(function () {
                     data: {
 
                         eliminar: 'eliminar',
-                        id: id,
+                        id: datos.id,
                     },
                     success: function (response) {
 
@@ -106,11 +94,13 @@ $(document).ready(function () {
                         // Aquí puedes manejar una respuesta exitosa, por ejemplo:
                         console.log("Respuesta del servidor:", data);
 
-                        swalWithBootstrapButtons.fire(
-                            '¡Borrado!',
-                            'El territorio a sido borrado',
-                            'exitosamente'
-                        )
+                        Swal.fire({
+                            icon: 'success',
+                            title: '¡Borrado!',
+                            text: 'La celula ha sido borrada',
+                            showConfirmButton: false,
+                            timer: 2000,
+                        })
 
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
@@ -119,15 +109,6 @@ $(document).ready(function () {
                         alert("Hubo un error al editar el registro. Por favor, inténtalo de nuevo.");
                     }
                 })
-            } else if (
-                /* Read more about handling dismissals below */
-                result.dismiss === Swal.DismissReason.cancel
-            ) {
-                swalWithBootstrapButtons.fire(
-                    'Cancelled',
-                    'Your imaginary file is safe :)',
-                    'error'
-                )
             }
         });
     });
@@ -356,11 +337,13 @@ $(document).ready(function () {
                 }
             });
 
-
-
-
         } else {
-            console.log("Formulario inválido. Por favor, corrija los errores.");
+            Swal.fire({
+                icon: 'error',
+                title: 'Verifique bien el formulario antes de enviar',
+                showConfirmButton: false,
+                timer: 2000,
+            })
         }
     });
 
@@ -549,7 +532,12 @@ $(document).ready(function () {
 
 
         } else {
-            alert("Formulario inválido. Por favor, corrija los errores.");
+            Swal.fire({
+                icon: 'error',
+                title: 'Verifique bien el formulario antes de ser enviado',
+                showConfirmButton: false,
+                timer: 2000,
+            })
         }
     });
 

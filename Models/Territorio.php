@@ -48,7 +48,7 @@ class Territorio extends Model
             if ($datos['territorioNumero'] === null) {
                 $id = 1;
                 $territorio = 'T' . $id;
-                $identificador = $sede->identificador;
+                $identificador = $sede->codigo;
                 $codigo = $identificador . '-' . $territorio;
             } else {
                 $territorios = Territorio::cargarRelaciones($idSede, "Sede");
@@ -66,12 +66,12 @@ class Territorio extends Model
 
                     $contador = $mayorNumero + 1;
                     $territorio = 'T' . $contador;
-                    $identificador = $sede->identificador;
+                    $identificador = $sede->codigo;
                     $codigo = $identificador . '-' . $territorio;
                 } else {
                     $contador = 1;
                     $territorio = 'T' . $contador;
-                    $identificador = $sede->identificador;
+                    $identificador = $sede->codigo;
                     $codigo = $identificador . '-' . $territorio;
                 }
             }

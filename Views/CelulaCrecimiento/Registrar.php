@@ -21,6 +21,7 @@ $viewScripts = ["CelulaCrecimiento-registrar.js"]; ?>
     <div class="mb-3">
       <label for="idLider" class="form-label fw-bold">Lider Responsable</label>
       <select class="form-select" id="idLider" name="idLider">
+        <option selected value="">Selecciona...</option>
       </select>
       <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_idLider" role="alert">
         Debe seleccionar un Lider.
@@ -30,6 +31,7 @@ $viewScripts = ["CelulaCrecimiento-registrar.js"]; ?>
     <div class="mb-3">
       <label for="CoLider" class="form-label fw-bold">Co Lider Responsable</label>
       <select class="form-select" id="idCoLider" name="idCoLider">
+        <option selected value="">Selecciona...</option>
       </select>
       <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_idCoLider" role="alert">
         Debe seleccionar un Lider.
@@ -38,7 +40,8 @@ $viewScripts = ["CelulaCrecimiento-registrar.js"]; ?>
 
     <div class="mb-1">
       <label for="idTerritorio" class="form-label fw-bold">Territorio</label>
-      <select class="form-select" id="idTerritorio" name="idTerritorio" placeholder="hola">
+      <select class="form-select" id="idTerritorio" name="idTerritorio">
+        <option selected value="">Selecciona...</option>
       </select>
       <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_idTerritorio" role="alert">
         Debe seleccionar un Territorio.

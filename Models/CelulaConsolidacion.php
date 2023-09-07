@@ -2,7 +2,7 @@
 require_once "Models/Model.php";
 
 class CelulaConsolidacion extends Model
-{   
+{
     public int $id;
     public int $idLider;
     public int $idColider;
@@ -11,32 +11,33 @@ class CelulaConsolidacion extends Model
     public string $nombre;
     public int $estatus;
 
-    public  function registrar_CelulaConsolidacion($nombre, $idLider, $idCoLider, $idTerritorio){
+    public  function registrar_CelulaConsolidacion($nombre, $idLider, $idCoLider, $idTerritorio)
+    {
         try {
-            
-        $sql = "INSERT INTO celulaconsolidacion (nombre, idLider, idCoLider, idTerritorio) 
-        VALUES (:nombre, :idLider, :idCoLider, :idTerritorio)";
-      
-        $stmt = $this->db->pdo()->prepare($sql);
 
-        
-        $stmt->bindValue(':nombre', $nombre);
-        $stmt->bindValue(':idLider', $idLider);
-        $stmt->bindValue(':idCoLider', $idCoLider);
-        $stmt->bindValue(':idTerritorio', $idTerritorio);
-        
-        $stmt->execute();
-        } catch (Exception $e) {// Muestra el mensaje de error y detén la ejecución.
+            $sql = "INSERT INTO celulaconsolidacion (nombre, idLider, idCoLider, idTerritorio) 
+        VALUES (:nombre, :idLider, :idCoLider, :idTerritorio)";
+
+            $stmt = $this->db->pdo()->prepare($sql);
+
+
+            $stmt->bindValue(':nombre', $nombre);
+            $stmt->bindValue(':idLider', $idLider);
+            $stmt->bindValue(':idCoLider', $idCoLider);
+            $stmt->bindValue(':idTerritorio', $idTerritorio);
+
+            $stmt->execute();
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
-            
+
             echo json_encode($error_data);
             die();
         }
-    }  
-    
+    }
+
     public  function listar_CelulaConsolidacion()
     {
 
@@ -68,7 +69,6 @@ class CelulaConsolidacion extends Model
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $resultado;
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -123,7 +123,6 @@ class CelulaConsolidacion extends Model
             $stmt->bindValue(":id", $id);
 
             $stmt->execute();
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -137,35 +136,55 @@ class CelulaConsolidacion extends Model
 
     public function registrar_reunion($idCelulaConsolidacion, $fecha, $tematica, $semana, $generosidad, $actividad, $observaciones)
     {
-       
-        try {
-            
-        $sql = "INSERT INTO reunionconsolidacion (idCelulaConsolidacion, fecha, tematica, semana, generosidad, actividad, observaciones) 
-        VALUES (:idCelulaConsolidacion, :fecha, :tematica, :semana, :generosidad, :actividad, :observaciones)";
-      
-        $stmt = $this->db->pdo()->prepare($sql);
 
-        
-        $stmt->bindValue(':idCelulaConsolidacion', $idCelulaConsolidacion);
-        $stmt->bindValue(':fecha', $fecha);
-        $stmt->bindValue(':tematica', $tematica);
-        $stmt->bindValue(':semana', $semana);
-        $stmt->bindValue(':generosidad', $generosidad);
-        $stmt->bindValue(':actividad', $actividad);
-        $stmt->bindValue(':observaciones', $observaciones);
-        
-        
-        $stmt->execute();
-        } catch (Exception $e) {// Muestra el mensaje de error y detén la ejecución.
+        try {
+
+            $sql = "INSERT INTO reunionconsolidacion (idCelulaConsolidacion, fecha, tematica, semana, generosidad, actividad, observaciones) 
+        VALUES (:idCelulaConsolidacion, :fecha, :tematica, :semana, :generosidad, :actividad, :observaciones)";
+
+            $stmt = $this->db->pdo()->prepare($sql);
+
+
+            $stmt->bindValue(':idCelulaConsolidacion', $idCelulaConsolidacion);
+            $stmt->bindValue(':fecha', $fecha);
+            $stmt->bindValue(':tematica', $tematica);
+            $stmt->bindValue(':semana', $semana);
+            $stmt->bindValue(':generosidad', $generosidad);
+            $stmt->bindValue(':actividad', $actividad);
+            $stmt->bindValue(':observaciones', $observaciones);
+
+            $stmt->execute();
+
+            //Registrando las asistencias
+            $consulta = "SELECT id FROM usuario ORDER BY id DESC LIMIT 1";
+            $stmt2 = $this->db->pdo()->prepare($consulta);
+            $stmt2->execute();
+
+            if ($stmt2->rowCount() > 0) {
+                $resultado = $stmt2->fetch(PDO::FETCH_ASSOC);
+                $idReunion = $resultado['id'];
+
+                foreach ($arrayDiscipulos as $values) {
+                    $sql2 = "INSERT INTO `asistencia` (`idReunion`, `idDiscipulo`) VALUES (:idReunion, :idDiscipulo)";
+                    $stmt3 = $this->db->pdo()->prepare($sql2);
+
+                    $stmt3->bindValue(':idReunion', $idReunion);
+                    $stmt3->bindValue(':idDiscipulo', $values);
+
+                    $stmt3->execute();
+                }
+            }
+            
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
-            
+
             echo json_encode($error_data);
             die();
         }
-    }  
+    }
 
 
     public  function listar_lideres()
@@ -184,7 +203,6 @@ class CelulaConsolidacion extends Model
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $resultado;
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -195,7 +213,7 @@ class CelulaConsolidacion extends Model
             die();
         }
     }
-      
+
     public  function listar_territorios()
     {
 
@@ -208,7 +226,6 @@ class CelulaConsolidacion extends Model
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $resultado;
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -219,9 +236,10 @@ class CelulaConsolidacion extends Model
             die();
         }
     }
-        
 
-    public  function listar_reuniones(){
+
+    public  function listar_reuniones()
+    {
 
         try {
 
@@ -247,7 +265,6 @@ class CelulaConsolidacion extends Model
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $resultado;
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -260,11 +277,12 @@ class CelulaConsolidacion extends Model
     }
 
 
-    public  function editar_reuniones($id, $idCelulaConsolidacion, $fecha, $tematica, $semana, $generosidad, $actividad, $observaciones){
-       
+    public  function editar_reuniones($id, $idCelulaConsolidacion, $fecha, $tematica, $semana, $generosidad, $actividad, $observaciones)
+    {
+
         try {
-            
-        $sql = "UPDATE reunionconsolidacion
+
+            $sql = "UPDATE reunionconsolidacion
                 SET
                 idCelulaConsolidacion = :idCelulaConsolidacion,
                 fecha = :fecha,
@@ -274,35 +292,36 @@ class CelulaConsolidacion extends Model
                 actividad = :actividad,
                 observaciones = :observaciones
                 WHERE id = :id";
-      
-        $stmt = $this->db->pdo()->prepare($sql);
 
-        $stmt->bindValue(':id', $id);
-        $stmt->bindValue(':idCelulaConsolidacion', $idCelulaConsolidacion);
-        $stmt->bindValue(':fecha', $fecha);
-        $stmt->bindValue(':tematica', $tematica);
-        $stmt->bindValue(':semana', $semana);
-        $stmt->bindValue(':generosidad', $generosidad);
-        $stmt->bindValue(':actividad', $actividad);
-        $stmt->bindValue(':observaciones', $observaciones);
-        
-        
-        $stmt->execute();
-        } catch (Exception $e) {// Muestra el mensaje de error y detén la ejecución.
+            $stmt = $this->db->pdo()->prepare($sql);
+
+            $stmt->bindValue(':id', $id);
+            $stmt->bindValue(':idCelulaConsolidacion', $idCelulaConsolidacion);
+            $stmt->bindValue(':fecha', $fecha);
+            $stmt->bindValue(':tematica', $tematica);
+            $stmt->bindValue(':semana', $semana);
+            $stmt->bindValue(':generosidad', $generosidad);
+            $stmt->bindValue(':actividad', $actividad);
+            $stmt->bindValue(':observaciones', $observaciones);
+
+
+            $stmt->execute();
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
-            
+
             echo json_encode($error_data);
             die();
         }
-    } 
+    }
 
 
 
 
-    public  function eliminar_reuniones($id){
+    public  function eliminar_reuniones($id)
+    {
 
         try {
 
@@ -313,7 +332,6 @@ class CelulaConsolidacion extends Model
             $stmt->bindValue(":id", $id);
 
             $stmt->execute();
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -326,7 +344,8 @@ class CelulaConsolidacion extends Model
     }
 
 
-    public  function listar_celulas(){
+    public  function listar_celulas()
+    {
 
         try {
 
@@ -337,7 +356,6 @@ class CelulaConsolidacion extends Model
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $resultado;
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -360,7 +378,6 @@ class CelulaConsolidacion extends Model
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $resultado;
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -371,9 +388,4 @@ class CelulaConsolidacion extends Model
             die();
         }
     }
-       
-
-
-
 }
-?>

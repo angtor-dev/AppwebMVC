@@ -1,6 +1,7 @@
 $(document).ready(function () {
 
     let choices;
+    let choices2;
 
     const dataTable = $('#territorioDatatables').DataTable({
         responsive: true,
@@ -45,39 +46,27 @@ $(document).ready(function () {
         const datos = dataTable.row($(this).parents()).data();
 
         document.getElementById('idTerritorio').textContent = datos.id;
-        document.getElementById('idSede').value = datos.idSede;
         document.getElementById('nombre').value = datos.nombre;
-        document.getElementById('idLider').value = datos.idLider;
         document.getElementById('detalles').value = datos.detalles;
+        Listar_Lideres(datos.idLider)
+        Listar_Sedes(datos.idSede)
 
     })
 
     $('#territorioDatatables tbody').on('click', '#eliminar', function () {
         const datos = dataTable.row($(this).parents()).data();
 
-        const swalWithBootstrapButtons = Swal.mixin({
-            customClass: {
-                confirmButton: 'btn btn-success',
-                cancelButton: 'btn btn-danger'
-            },
-            buttonsStyling: false
-        })
-
-        swalWithBootstrapButtons.fire({
+        Swal.fire({
             title: '¿Estas Seguro?',
             text: "No podras acceder a este territorio otra vez!",
-            html: '<spam id="idTerritorioE"></spam>',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: '¡Si, estoy seguro!',
+            confirmButtonColor: '#007bff',
             cancelButtonText: '¡No, cancelar!',
             reverseButtons: true
         }).then((result) => {
             if (result.isConfirmed) {
-
-                document.getElementById('idTerritorioE').textContent = datos.id;
-                let id = document.getElementById('idTerritorioE').textContent;
-
 
                 $.ajax({
                     type: "POST",
@@ -85,22 +74,20 @@ $(document).ready(function () {
                     data: {
 
                         eliminar: 'eliminar',
-                        id: id,
+                        id: datos.id,
                     },
                     success: function (response) {
-
+                        console.log(response);
                         let data = JSON.parse(response);
                         dataTable.ajax.reload();
 
-                        // Aquí puedes manejar una respuesta exitosa, por ejemplo:
-                        console.log("Respuesta del servidor:", data);
-
-                        swalWithBootstrapButtons.fire(
-                            '¡Borrado!',
-                            'El territorio a sido borrado',
-                            'exitosamente'
-                        )
-
+                        Swal.fire({
+                            icon: 'success',
+                            title: '¡Borrado!',
+                            text: 'El territorio ha sido borrado',
+                            showConfirmButton: false,
+                            timer: 2000,
+                          })
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         // Aquí puedes manejar errores, por ejemplo:
@@ -108,21 +95,12 @@ $(document).ready(function () {
                         alert("Hubo un error al editar el registro. Por favor, inténtalo de nuevo.");
                     }
                 })
-            } else if (
-                /* Read more about handling dismissals below */
-                result.dismiss === Swal.DismissReason.cancel
-            ) {
-                swalWithBootstrapButtons.fire(
-                    'Cancelled',
-                    'Your imaginary file is safe :)',
-                    'error'
-                )
-            }
+            } 
         });
     });
 
 
-    function Listar_Lideres() {
+    function Listar_Lideres(idLider) {
 
         $.ajax({
             type: "GET",
@@ -153,15 +131,13 @@ $(document).ready(function () {
                 if (choices) {
                     choices.destroy();
                 }
-                choices = new Choices(element, {
+                choices = new Choices(selector, {
+                    allowHTML: true,
                     searchEnabled: true,  // Habilita la funcionalidad de búsqueda
                     removeItemButton: true,  // Habilita la posibilidad de remover items
                     placeholderValue: 'Selecciona una opción',  // Texto del placeholder
                 });
-
-                //console.log(data);
-
-
+                choices.setChoiceByValue(idLider.toString());
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -172,9 +148,8 @@ $(document).ready(function () {
         })
     }
 
-    Listar_Lideres();
 
-    function Listar_Sedes() {
+    function Listar_Sedes(idSede) {
 
         $.ajax({
             type: "GET",
@@ -199,16 +174,19 @@ $(document).ready(function () {
                     selector.appendChild(option);
 
                 });
-                const element = document.getElementById('idSede');
-                const choices = new Choices(element, {
+
+                // Destruir la instancia existente si la hay
+                if (choices2) {
+                    choices2.destroy();
+                }
+                choices2 = new Choices(selector, {
+                    allowHTML: true,
                     searchEnabled: true,  // Habilita la funcionalidad de búsqueda
                     removeItemButton: true,  // Habilita la posibilidad de remover items
                     placeholderValue: 'Selecciona una opción',  // Texto del placeholder
                 });
 
-                //console.log(data);
-
-
+                choices2.setChoiceByValue(idSede.toString());
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -218,10 +196,6 @@ $(document).ready(function () {
             }
         })
     }
-
-    Listar_Sedes();
-
-
 
 
 

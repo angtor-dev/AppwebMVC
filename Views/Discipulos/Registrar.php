@@ -137,8 +137,7 @@ $viewScripts = ["Discipulo-registrar.js"];
             </div>
         </div>
 
-        <div class="d-flex justify-content-end">
-
+        <div>
             <button type="submit" class="btn btn-primary">Registrar</button>
         </div>
     </form>

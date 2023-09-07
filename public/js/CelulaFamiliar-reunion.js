@@ -65,30 +65,17 @@ $(document).ready(function () {
     $('#celulaDatatables tbody').on('click', '#eliminar', function () {
         const datos = dataTable.row($(this).parents()).data();
 
-        const swalWithBootstrapButtons = Swal.mixin({
-            customClass: {
-                confirmButton: 'btn btn-success',
-                cancelButton: 'btn btn-danger'
-            },
-            buttonsStyling: false
-        })
-
-        swalWithBootstrapButtons.fire({
+        Swal.fire({
             title: '¿Estas Seguro?',
-            text: "No podras acceder a este territorio otra vez!",
-            html: '<spam id="idreunionFamiliarE"></spam>',
+            text: "No podras acceder a esta celula otra vez!",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: '¡Si, estoy seguro!',
+            confirmButtonColor: '#007bff',
             cancelButtonText: '¡No, cancelar!',
             reverseButtons: true
         }).then((result) => {
             if (result.isConfirmed) {
-
-    
-                document.getElementById('idreunionFamiliarE').textContent= datos.id;
-                let id = document.getElementById('idreunionFamiliarE').textContent;
-
 
                 $.ajax({
                     type: "POST",
@@ -96,20 +83,20 @@ $(document).ready(function () {
                     data: {
 
                         eliminar: 'eliminar',
-                        id: id,
+                        id: datos.id,
                     },
                     success: function (response) {
-
+                        console.log(response);
                         let data = JSON.parse(response);
                         dataTable.ajax.reload();
 
-                        // Aquí puedes manejar una respuesta exitosa, por ejemplo:
-                        console.log("Respuesta del servidor:", data);
-
-                        swalWithBootstrapButtons.fire(
-                            'La reunion ha sido eliminada',
-                            'exitosamente'
-                        )
+                        Swal.fire({
+                            icon: 'success',
+                            title: '¡Borrado!',
+                            text: 'La reunion ha sido borrada',
+                            showConfirmButton: false,
+                            timer: 2000,
+                        })
 
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
@@ -118,15 +105,6 @@ $(document).ready(function () {
                         alert("Hubo un error al editar el registro. Por favor, inténtalo de nuevo.");
                     }
                 })
-            } else if (
-                /* Read more about handling dismissals below */
-                result.dismiss === Swal.DismissReason.cancel
-            ) {
-                swalWithBootstrapButtons.fire(
-                    'Cancelled',
-                    'Your imaginary file is safe :)',
-                    'error'
-                )
             }
         });
     });

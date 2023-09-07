@@ -46,6 +46,7 @@ $viewScripts = ["CelulaConsolidacion-registrar.js"]; ?>
       <div class="col-lg-12">
         <label for="idTerritorio" class="form-label fw-bold">Territorio</label>
         <select class="form-select" id="idTerritorio" name="idTerritorio" placeholder="hola">
+        <option selected value="">Selecciona...</option>
         </select>
         <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_idTerritorio" role="alert">
           Debe seleccionar un Territorio.

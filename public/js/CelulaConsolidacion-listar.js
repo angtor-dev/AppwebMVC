@@ -4,6 +4,7 @@ $(document).ready(function () {
     let choices2;
     let choices3;
     let choices4;
+    
 
     const dataTable = $('#celulaDatatables').DataTable({
         responsive: true,
@@ -62,32 +63,22 @@ $(document).ready(function () {
         Listar_discipulos_celula(datos.id) 
     })
 
+
+    ///////// ELIMINAR CELULA DE CONSOLIDACION ///////////
     $('#celulaDatatables tbody').on('click', '#eliminar', function () {
         const datos = dataTable.row($(this).parents()).data();
 
-        const swalWithBootstrapButtons = Swal.mixin({
-            customClass: {
-                confirmButton: 'btn btn-success',
-                cancelButton: 'btn btn-danger'
-            },
-            buttonsStyling: false
-        })
-
-        swalWithBootstrapButtons.fire({
+        Swal.fire({
             title: '¿Estas Seguro?',
-            text: "No podras acceder a este territorio otra vez!",
-            html: '<spam id="idCelulaConsolidacionE"></spam>',
+            text: 'No podras acceder a esta celula otra vez!',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: '¡Si, estoy seguro!',
+            confirmButtonColor: '#007bff',
             cancelButtonText: '¡No, cancelar!',
             reverseButtons: true
         }).then((result) => {
             if (result.isConfirmed) {
-
-                document.getElementById('idCelulaConsolidacionE').textContent = datos.id;
-                let id = document.getElementById('idCelulaConsolidacionE').textContent;
-
 
                 $.ajax({
                     type: "POST",
@@ -95,22 +86,20 @@ $(document).ready(function () {
                     data: {
 
                         eliminar: 'eliminar',
-                        id: id,
+                        id: datos.id,
                     },
                     success: function (response) {
-
+                        console.log(response);
                         let data = JSON.parse(response);
                         dataTable.ajax.reload();
 
-                        // Aquí puedes manejar una respuesta exitosa, por ejemplo:
-                        console.log("Respuesta del servidor:", data);
-
-                        swalWithBootstrapButtons.fire(
-                            '¡Borrado!',
-                            'El territorio a sido borrado',
-                            'exitosamente'
-                        )
-
+                        Swal.fire({
+                            icon: 'success',
+                            title: '¡Borrado!',
+                            text: 'La celula ha sido borrada',
+                            showConfirmButton: false,
+                            timer: 2000,
+                        })
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         // Aquí puedes manejar errores, por ejemplo:
@@ -118,16 +107,7 @@ $(document).ready(function () {
                         alert("Hubo un error al editar el registro. Por favor, inténtalo de nuevo.");
                     }
                 })
-            } else if (
-                /* Read more about handling dismissals below */
-                result.dismiss === Swal.DismissReason.cancel
-            ) {
-                swalWithBootstrapButtons.fire(
-                    'Cancelled',
-                    'Your imaginary file is safe :)',
-                    'error'
-                )
-            }
+            } 
         });
     });
 
@@ -288,8 +268,6 @@ $(document).ready(function () {
                     placeholderValue: 'Selecciona una opción',  // Texto del placeholder
                 });
 
-                choices3.setChoiceByValue(idTerritorio.toString());
-
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 // Aquí puedes manejar errores, por ejemplo:
@@ -299,7 +277,13 @@ $(document).ready(function () {
         })
     }
 
-    //Registro de Celula
+    document.getElementById('discipulos').addEventListener('change', (e) => {
+        console.log(e.target.value);
+    })
+
+
+
+    ///////////////////Registro de Celula/////////////////////
 
     const regexObj = {
 
@@ -319,7 +303,6 @@ $(document).ready(function () {
 
 
     const form = document.getElementById("formulario");
-
     form.addEventListener("submit", (e) => {
         e.preventDefault();
 
@@ -383,12 +366,10 @@ $(document).ready(function () {
                     idTerritorio: idTerritorio
                 },
                 success: function (response) {
-
+                    console.log(response);
                     let data = JSON.parse(response);
                     dataTable.ajax.reload();
 
-                    // Aquí puedes manejar una respuesta exitosa, por ejemplo:
-                    console.log("Respuesta del servidor:", data);
                     Swal.fire({
                         icon: 'success',
                         title: 'Registrado Correctamente',
@@ -409,7 +390,12 @@ $(document).ready(function () {
 
 
         } else {
-            console.log("Formulario inválido. Por favor, corrija los errores.");
+            Swal.fire({
+                icon: 'error',
+                title: 'Formulario incorrecto. Por favor, verifique sus datos antes de ser enviado',
+                showConfirmButton: false,
+                timer: 2000,
+            })
         }
     });
 
@@ -437,8 +423,8 @@ $(document).ready(function () {
     };
 
 
+    ///////// REGISTRAR REUNION ////////
     const form2 = document.getElementById("formularioReunion");
-
     form2.addEventListener("submit", (e) => {
         e.preventDefault();
 

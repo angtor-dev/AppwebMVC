@@ -178,7 +178,11 @@ $viewScripts = ["CelulaConsolidacion-listar.js"];
                             <div class="mb-3">
                                 <label for="discipulos" class="form-label fw-bold">Asistencia:</label>
                                 <select id="discipulos" multiple> 
-
+                                    <option value="">asdasd</option>
+                                    <option value="s">asdasd</option>
+                                    <option value="w">asdasd</option>
+                                    <option value="a">asdasd</option>
+                                    <option value="st">asdasd</option>
                                 </select>
                             </div>
 

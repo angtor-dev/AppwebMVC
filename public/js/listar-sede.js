@@ -49,30 +49,17 @@ $(document).ready(function () {
   $('#sedeDatatables tbody').on('click', '#eliminar', function () {
     const datos = dataTable.row($(this).parents()).data();
 
-    const swalWithBootstrapButtons = Swal.mixin({
-      customClass: {
-        confirmButton: 'btn btn-success',
-        cancelButton: 'btn btn-danger'
-      },
-      buttonsStyling: false
-    })
-
-    swalWithBootstrapButtons.fire({
+    Swal.fire({
       title: '¿Estas Seguro?',
-      text: "No volveras a tener acceso a esta Sede",
-      html: '<spam id="idSedeE"></spam>',
+      text: "No podras acceder a esta sede otra vez!",
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Si, Estoy seguro!',
-      cancelButtonText: 'No, cancelar!',
+      confirmButtonText: '¡Si, estoy seguro!',
+      confirmButtonColor: '#007bff',
+      cancelButtonText: '¡No, cancelar!',
       reverseButtons: true
     }).then((result) => {
       if (result.isConfirmed) {
-
-
-        document.getElementById('idSedeE').textContent = datos.id;
-        let id = document.getElementById('idSedeE').textContent;
-
 
         $.ajax({
           type: "POST",
@@ -80,21 +67,20 @@ $(document).ready(function () {
           data: {
 
             eliminar: 'eliminar',
-            id: id,
+            id: datos.id,
           },
           success: function (response) {
-
+            console.log(response);
             let data = JSON.parse(response);
             dataTable.ajax.reload();
 
-            // Aquí puedes manejar una respuesta exitosa, por ejemplo:
-            console.log("Respuesta del servidor:", data);
-
-            swalWithBootstrapButtons.fire(
-              'Eliminado!',
-              'La Sede fue eliminada.',
-              'success'
-            )
+            Swal.fire({
+              icon: 'success',
+              title: '¡Borrado!',
+              text: 'La sede ha sido borrada',
+              showConfirmButton: false,
+              timer: 2000,
+            })
 
           },
           error: function (jqXHR, textStatus, errorThrown) {
@@ -103,15 +89,6 @@ $(document).ready(function () {
             alert("Hubo un error al editar el registro. Por favor, inténtalo de nuevo.");
           }
         })
-      } else if (
-        /* Read more about handling dismissals below */
-        result.dismiss === Swal.DismissReason.cancel
-      ) {
-        swalWithBootstrapButtons.fire(
-          'Cancelado',
-          ':)',
-          'error'
-        )
       }
     });
   });
