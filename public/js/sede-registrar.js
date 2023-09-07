@@ -1,7 +1,7 @@
 
 $(document).ready(function () {
 
-
+    let choices;
     function Listar_Pastores() {
 
         $.ajax({
@@ -16,9 +16,14 @@ $(document).ready(function () {
 
                 let data = JSON.parse(response);
 
-
-
                 let selector = document.getElementById('idPastor');
+                // Crear y agregar la opción tipo "placeholder"
+                const placeholderOption = document.createElement('option');
+                placeholderOption.value = '';
+                placeholderOption.text = 'Selecciona un pastor';
+                placeholderOption.disabled = true;
+                placeholderOption.selected = true;
+                selector.appendChild(placeholderOption);
 
                 data.forEach(item => {
 
@@ -28,17 +33,11 @@ $(document).ready(function () {
                     selector.appendChild(option);
 
                 });
-                const element = document.getElementById('idPastor');
-                const choices = new Choices(element, {
+                choices = new Choices(selector, {
+                    allowHTML: true,
                     searchEnabled: true,  // Habilita la funcionalidad de búsqueda
                     removeItemButton: true,  // Habilita la posibilidad de remover items
-                    placeholderValue: 'Selecciona una opción',  // Texto del placeholder
                 });
-
-                // console.log(data);
-
-
-
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 // Aquí puedes manejar errores, por ejemplo:
@@ -62,6 +61,13 @@ $(document).ready(function () {
         estado: false
     };
 
+    const expresiones = {
+        nombre: /^[a-zA-Z\s]{1,30}$/,
+        id: /^\d{1,9}$/,
+        direccion: /^[a-zA-Z0-9\s]{1,100}$/,
+        estado: ["ANZ", "APUR", "ARA", "BAR", "BOL", "CAR", "COJ", "DELTA", "FAL", "GUA",
+            "LAR", "MER", "MIR", "MON", "ESP", "POR", "SUC", "TÁCH", "TRU", "VAR", "YAR", "ZUL"]
+    }
 
     $("#formulario").submit(function (event) {
         // Previene el comportamiento predeterminado del formulario
@@ -134,19 +140,20 @@ $(document).ready(function () {
                     estado: estado
                 },
                 success: function (response) {
-
                     let data = JSON.parse(response);
 
-                    // Aquí puedes manejar una respuesta exitosa, por ejemplo:
-                    console.log("Respuesta del servidor:", data);
                     Swal.fire({
                         icon: 'success',
-                        title: 'Registrado Correctamente',
+                        title: data.msj,
                         showConfirmButton: false,
                         timer: 2000,
                     })
 
-                    document.getElementById("#formulario").reset();
+                    document.getElementById('nombre').value = ''
+                    document.getElementById('direccion').value = ''
+                    document.getElementById('estado').value = ''
+                    //choices.removeActiveItems();
+                    choices.setChoiceByValue('')
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     // Aquí puedes manejar errores, por ejemplo:
@@ -157,7 +164,12 @@ $(document).ready(function () {
 
         } else {
 
-            alert('Llena el formulario correctamente');
+            Swal.fire({
+                icon: 'error',
+                title: 'Llena el formulario correctamente',
+                showConfirmButton: false,
+                timer: 2000,
+            })
         }
     });
 

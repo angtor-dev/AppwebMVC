@@ -6,6 +6,7 @@ class Territorio extends Model
     public int $id;
     public int $idSede;
     public int $idLider;
+    public int $idTerritorio;
     public string $codigo;
     public string $nombre;
     public string $detalles;
@@ -23,45 +24,125 @@ class Territorio extends Model
     {
         parent::__construct();
         if (!empty($this->idSede)) {
-            $this->sede = Usuario::cargar($this->idSede);
+            $this->sede = Sede::cargar($this->idSede);
         }
         if (!empty($this->idLider)) {
             $this->lider = Usuario::cargar($this->idLider);
         }
     }
 
-    public  function registrar_territorio($idSede, $nombre, $idLider, $detalles){
+    public  function registrar_territorio($idSede, $nombre, $idLider, $detalles)
+    {
         try {
-            //Aqui puedes declarar una variable con el nombre que quieras. Puede ser $sql, $consulta, $query. Como desees
-        //Lo unico que tienes que tomar en cuenta que hay nombras que si estan predefinidos, pero relah, ya el editor te avisa
-        $sql = "INSERT INTO territorio (idSede, nombre, idLider, detalles) 
-        VALUES (:idSede, :nombre, :idLider, :detalles)";
-        //no se pueden enviar los valores por variables  parametrizacion y evita inyeccion de slq':nombrequetuquieres'
-        //Todo lo que esta en VALUES() esta malo, preguntame el porque y despues quiero que escribas la respuesta aqui como comentario para que nunca se te olvide
 
-        //Preparamos aqui la consulta sql que hicimos ahi arriba, es decir, preparamos la variable $sql
-        $stmt = $this->db->pdo()->prepare($sql);
+            $sql = "SELECT MAX(id) AS territorioNumero FROM territorio";
+            $consultaid = $this->db->pdo()->prepare($sql);
+            $consultaid->execute();
+            $datos = $consultaid->fetch(PDO::FETCH_ASSOC);
 
-        //Ahora empezamos a ingresar los valores en la consulta sql. Es decir, ingresamos los valores parametrizados
-        //Esto con la finalidad de evitar inyecciones SQL
-        $stmt->bindValue(':idSede', $idSede);
-        $stmt->bindValue(':nombre', $nombre);
-        $stmt->bindValue(':idLider', $idLider);
-        $stmt->bindValue(':detalles', $detalles);
-    
-        //Ahora ejecutemos la consulta sql una vez ingresado todos los valores, es decir, los parametros que mencionamos arriba
-        $stmt->execute();
-        } catch (Exception $e) {// Muestra el mensaje de error y detén la ejecución.
+            $id = '';
+            $codigo = '';
+            $territorio = '';
+            $sede = Sede::cargar($idSede);
+
+            if ($datos['territorioNumero'] === null) {
+                $id = 1;
+                $territorios = 'T' . $id;
+                $identificador = $sede->sede;
+                $codigo = $identificador . '-' . $territorios;
+            } else {
+                $territorios = Territorio::cargarRelaciones($idSede, "Sede");
+                http_response_code(422);
+                    echo json_encode($territorios);
+                    die();
+
+                if (count($territorios) > 0) {
+                    // Un array para almacenar solo los números de los identificadores
+                    $numeros = [];
+                    $valores = $territorios->territorio;
+                    foreach ($valores as $resultado) {
+                        // Extraer el número del identificador (eliminar la "T")
+                        $numero = (int) substr($resultado, 1);  // substr($resultado, 1) elimina el primer carácter ("T")
+                        $numeros[] = $numero;
+                    }
+                    // Encontrar el número más grande en el array
+                    $mayorNumero = max($numeros);
+
+                    $contador = $mayorNumero + 1;
+                    $territorio = 'T' . $contador;
+                    $identificador = $sede->sede;
+                    $codigo = $identificador . '-' . $territorio;
+                } else {
+                    $contador = 1;
+                    $territorio = 'T' . $contador;
+                    $identificador = $sede->sede;
+                    $codigo = $identificador . '-' . $territorio;
+                }
+            }
+
+            if ($id == 1) {
+                //Aqui puedes declarar una variable con el nombre que quieras. Puede ser $sql, $consulta, $query. Como desees
+                //Lo unico que tienes que tomar en cuenta que hay nombras que si estan predefinidos, pero relah, ya el editor te avisa
+                $sql = "INSERT INTO territorio (id, idSede, idLider, codigo, territorio, nombre, detalles, fechaCreacion) 
+                VALUES (:id, :idSede, :idLider, :codigo, :territorio, :nombre, :detalles, CURDATE())";
+                //no se pueden enviar los valores por variables  parametrizacion y evita inyeccion de slq':nombrequetuquieres'
+                //Todo lo que esta en VALUES() esta malo, preguntame el porque y despues quiero que escribas la respuesta aqui como comentario para que nunca se te olvide
+
+                //Preparamos aqui la consulta sql que hicimos ahi arriba, es decir, preparamos la variable $sql
+                $stmt = $this->db->pdo()->prepare($sql);
+
+                //Ahora empezamos a ingresar los valores en la consulta sql. Es decir, ingresamos los valores parametrizados
+                //Esto con la finalidad de evitar inyecciones SQL
+                $stmt->bindValue(':id', $id);
+                $stmt->bindValue(':idSede', $idSede);
+                $stmt->bindValue(':idLider', $idLider);
+                $stmt->bindValue(':codigo', $codigo);
+                $stmt->bindValue(':territorio', $territorio);
+                $stmt->bindValue(':nombre', $nombre);
+                $stmt->bindValue(':detalles', $detalles);
+
+                //Ahora ejecutemos la consulta sql una vez ingresado todos los valores, es decir, los parametros que mencionamos arriba
+                $stmt->execute();
+            }else{
+                //Aqui puedes declarar una variable con el nombre que quieras. Puede ser $sql, $consulta, $query. Como desees
+                //Lo unico que tienes que tomar en cuenta que hay nombras que si estan predefinidos, pero relah, ya el editor te avisa
+                $sql = "INSERT INTO territorio (idSede, idLider, codigo, territorio, nombre, detalles, fechaCreacion) 
+                VALUES (:idSede, :idLider, :codigo, :territorio, :nombre, :detalles, CURDATE())";
+                //no se pueden enviar los valores por variables  parametrizacion y evita inyeccion de slq':nombrequetuquieres'
+                //Todo lo que esta en VALUES() esta malo, preguntame el porque y despues quiero que escribas la respuesta aqui como comentario para que nunca se te olvide
+
+                //Preparamos aqui la consulta sql que hicimos ahi arriba, es decir, preparamos la variable $sql
+                $stmt = $this->db->pdo()->prepare($sql);
+
+                //Ahora empezamos a ingresar los valores en la consulta sql. Es decir, ingresamos los valores parametrizados
+                //Esto con la finalidad de evitar inyecciones SQL
+                $stmt->bindValue(':idSede', $idSede);
+                $stmt->bindValue(':idLider', $idLider);
+                $stmt->bindValue(':codigo', $codigo);
+                $stmt->bindValue(':territorio', $territorio);
+                $stmt->bindValue(':nombre', $nombre);
+                $stmt->bindValue(':detalles', $detalles);
+
+                //Ahora ejecutemos la consulta sql una vez ingresado todos los valores, es decir, los parametros que mencionamos arriba
+                $stmt->execute();
+            }
+
+            http_response_code(200);
+            echo json_encode(array('msj' => 'Territorio registrado exitosamente', 'status' => 200));
+            die();
+
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
-            
+
+            http_response_code(422);
             echo json_encode($error_data);
             die();
         }
-    }  
-    
+    }
+
     public  function listar_territorio()
     {
 
@@ -77,7 +158,6 @@ class Territorio extends Model
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $resultado;
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -135,7 +215,6 @@ class Territorio extends Model
             $stmt->bindValue(":id", $id);
 
             $stmt->execute();
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -162,7 +241,6 @@ class Territorio extends Model
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $resultado;
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -173,7 +251,7 @@ class Territorio extends Model
             die();
         }
     }
-      
+
     public  function listar_Sedes()
     {
 
@@ -188,7 +266,6 @@ class Territorio extends Model
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $resultado;
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -199,10 +276,10 @@ class Territorio extends Model
             die();
         }
     }
-        
+
 
     /////////////////// ESPACIO PARA VALIDACIONES //////////////////////
-    public function validacion_nombre(string $nombre) :void
+    public function validacion_nombre(string $nombre): void
     {
         try {
             // Utilizar preg_match para validar el string contra la expresión regular
@@ -217,7 +294,7 @@ class Territorio extends Model
         }
     }
 
-    public function validacion_detalles(string $detalles) :void
+    public function validacion_detalles(string $detalles): void
     {
         try {
             // Utilizar preg_match para validar el string contra la expresión regular
@@ -232,7 +309,7 @@ class Territorio extends Model
         }
     }
 
-    public function validacion_id(int $id) :void
+    public function validacion_id(int $id): void
     {
         try {
             // Utilizar preg_match para validar el string contra la expresión regular
@@ -246,5 +323,4 @@ class Territorio extends Model
             die();
         }
     }
-
 }

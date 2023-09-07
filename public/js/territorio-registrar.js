@@ -1,7 +1,8 @@
 
 $(document).ready(function () {
 
-
+    let choices1;
+    let choices2;
 
     function Listar_Lideres() {
 
@@ -17,7 +18,14 @@ $(document).ready(function () {
 
                 let data = JSON.parse(response);
 
-                let selector = document.getElementById('idLider');
+                const selector = document.getElementById('idLider');
+                // Crear y agregar la opción tipo "placeholder"
+                const placeholderOption = document.createElement('option');
+                placeholderOption.value = '';
+                placeholderOption.text = 'Selecciona un Lider';
+                placeholderOption.disabled = true;
+                placeholderOption.selected = true;
+                selector.appendChild(placeholderOption);
 
                 data.forEach(item => {
 
@@ -28,8 +36,8 @@ $(document).ready(function () {
 
                 });
 
-                const element = document.getElementById('idLider');
-                const choices = new Choices(element, {
+                choices1 = new Choices(selector, {
+                    allowHTML: true,
                     searchEnabled: true,  // Habilita la funcionalidad de búsqueda
                     removeItemButton: true,  // Habilita la posibilidad de remover items
                     placeholderValue: 'Selecciona una opción',  // Texto del placeholder
@@ -65,7 +73,14 @@ $(document).ready(function () {
 
                 let data = JSON.parse(response);
 
-                let selector = document.getElementById('idSede');
+                const selector = document.getElementById('idSede');
+                // Crear y agregar la opción tipo "placeholder"
+                const placeholderOption = document.createElement('option');
+                placeholderOption.value = '';
+                placeholderOption.text = 'Selecciona una sede';
+                placeholderOption.disabled = true;
+                placeholderOption.selected = true;
+                selector.appendChild(placeholderOption);
 
                 data.forEach(item => {
 
@@ -75,8 +90,9 @@ $(document).ready(function () {
                     selector.appendChild(option);
 
                 });
-                const element = document.getElementById('idSede');
-                const choices = new Choices(element, {
+
+                choices2 = new Choices(selector, {
+                    allowHTML: true,
                     searchEnabled: true,  // Habilita la funcionalidad de búsqueda
                     removeItemButton: true,  // Habilita la posibilidad de remover items
                     placeholderValue: 'Selecciona una opción',  // Texto del placeholder
@@ -165,7 +181,6 @@ $(document).ready(function () {
 
         // Verifica si todos los campos son válidos antes de enviar el formulario
         if (Object.values(validationStatus).every(status => status === true)) {
-            console.log("Formulario válido. Puedes enviar los datos al servidor");
             // Aquí puedes agregar el código para enviar el formulario
             $.ajax({
                 type: "POST",
@@ -179,32 +194,31 @@ $(document).ready(function () {
                     detalles: detalles
                 },
                 success: function (response) {
-
+                    console.log(response);
                     let data = JSON.parse(response);
 
                     // Aquí puedes manejar una respuesta exitosa, por ejemplo:
-                    console.log("Respuesta del servidor:", data);
                     Swal.fire({
                         icon: 'success',
-                        title: 'Registrado Correctamente',
+                        title: data.msj,
                         showConfirmButton: false,
                         timer: 2000,
                     })
 
-                    document.getElementById("#formulario").reset();
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    // Aquí puedes manejar errores, por ejemplo:
-                    console.error("Error al enviar:", textStatus, errorThrown);
-                    alert("Hubo un error al realizar el registro. Por favor, inténtalo de nuevo.");
+                    const errorData = JSON.parse(jqXHR.responseText);
+                    console.log(errorData);
                 }
             });
 
-
-
-
         } else {
-            console.log("Formulario inválido. Por favor, corrija los errores.");
+            Swal.fire({
+                icon: 'error',
+                title: 'Formulario invalido para enviar. Por favor, ingrese nuevamente sus datos',
+                showConfirmButton: false,
+                timer: 2000,
+            })
         }
     });
 
