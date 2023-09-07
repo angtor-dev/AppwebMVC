@@ -152,7 +152,6 @@ $(document).ready(function () {
                     document.getElementById('nombre').value = ''
                     document.getElementById('direccion').value = ''
                     document.getElementById('estado').value = ''
-                    //choices.removeActiveItems();
                     choices.setChoiceByValue('')
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
