@@ -1,5 +1,5 @@
 <?php
-
+require_once "Models/Sede.php";
 // Logica del controlador
 
 necesitaAutenticacion();
@@ -7,15 +7,15 @@ necesitaAutenticacion();
 $usuarioSesion = $_SESSION['usuario'];
 
 if (!$usuarioSesion->tienePermiso("listarDiscipulos")) {
-    $_SESSION['errores'][] = "No posee permiso para listarDiscipulos.";
+    $_SESSION['errores'][] = "No posee permiso para listar Discipulos.";
     redirigir("/AppwebMVC/Home/");
 }
 
-$Territorio = new Territorio();
+$Discipulo = new Discipulo();
 
 if (isset($_GET['cargar_data'])) {  
    //Primero inicializamos las variables
-    $Lista = $Territorio->listar_territorio();
+    $Lista = $Discipulo->listar_discipulo();
     //Variable json solamente para guardar el array de datos
     $json = array();
 
@@ -30,7 +30,7 @@ if (isset($_GET['cargar_data'])) {
        //Si el listado esta vacio, hara esto
         //Aqui esta guardando en esa variable llamada json un arreglo vacio porque obvio no hay nada si cayo aqui ok?
         //Si esto no se hace, el datatables dara error porque no se le esta enviado nada. Esto es como un feedback para el datatables
-        $json['data'][] = null;
+        $json['data']['codigo'] = null;
         
     
     }
@@ -40,55 +40,53 @@ if (isset($_GET['cargar_data'])) {
 } 
 
 
-if (isset($_GET['listaLideres'])) {  
+if (isset($_GET['listaConsolidador'])) {  
     
-    $ListaLideres = $Territorio->listar_lideres();
+    $ListaConsolidador = $Discipulo->listar_consolidador();
 
-    echo json_encode($ListaLideres);
+    echo json_encode($ListaConsolidador);
    
     die();
 }
 
 
-if (isset($_GET['listaSedes'])) {  
-   
-   $ListaSedes = $Territorio->listar_Sedes();
 
-   echo json_encode($ListaSedes);
+if (isset($_GET['listarcelulas'])) {  
+   
+   $listacelulas = $Discipulo->listar_celulas();
+
+
+   echo json_encode($listacelulas);
   
    die();
 }
 
 if (isset($_POST['editar'])) {   
 
-    if (!$usuarioSesion->tienePermiso("actualizarDiscipulos")) {
-        $_SESSION['errores'][] = "No posee permiso para actualizar Discipulos.";
-        redirigir("/AppwebMVC/Home/");
-    }
 
     $id = $_POST['id'];
-    $idSede = $_POST['idSede'];
+    $idPastor = $_POST['idPastor'];
     $nombre = $_POST['nombre'];
-    $idLider = $_POST['idLider'];
-    $detalles = $_POST['detalles'];
+    $direccion = $_POST['direccion'];
+    $estado = $_POST['estado'];
  
-   $Territorio->editar_territorio($id, $idSede, $nombre, $idLider, $detalles);
+   $Sede->editar_discipulo($id, $idPastor, $nombre, $direccion, $estado);
 
    echo json_encode('Lo logramos!!');
-   die();
-
+   die(); 
+    
 }
 
 if (isset($_POST['eliminar'])) {   
 
     if (!$usuarioSesion->tienePermiso("eliminarDiscipulos")) {
-        $_SESSION['errores'][] = "No posee permiso para eliminar Discipulos.";
+        $_SESSION['errores'][] = "No posee permiso para eliminar Sede.";
         redirigir("/AppwebMVC/Home/");
     }
 
     $id = $_POST['id'];
 
-   $Territorio->eliminar_territorio($id);
+   $Sede->eliminar_discipulo($id);
 
    echo json_encode('Lo logramos!!');
    die();
@@ -97,3 +95,6 @@ if (isset($_POST['eliminar'])) {
    
 renderView();
 ?>
+
+
+

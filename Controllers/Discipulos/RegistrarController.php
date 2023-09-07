@@ -1,62 +1,67 @@
-
 <?php
 
+require_once "Models/Discipulo.php";
 
 
-necesitaAutenticacion();
+$Discipulo = new Discipulo();
 
-$usuarioSesion = $_SESSION['usuario'];
-
-$Territorio = new Territorio();
-
-
-if (!$usuarioSesion->tienePermiso("registraDiscipulos")) {
-    $_SESSION['errores'][] = "No posee permiso para eliminar Discipulos.";
-    redirigir("/AppwebMVC/Home/");
-}
 
 
 
 if (isset($_POST['registrar'])) {   
-
-
-
-    $idSede = $_POST['idSede'];
+    
+    $asisCrecimiento = $_POST['asisCrecimiento'];
+    $asisFamiliar = $_POST['asisFamiliar'];
+    $idConsolidador = $_POST['idConsolidador'];
+    $idcelulaconsolidacion = $_POST['idcelulaconsolidacion'];
+    $cedula = $_POST['cedula'];
     $nombre = $_POST['nombre'];
-    $idLider = $_POST['idLider'];
-    $detalles = $_POST['detalles'];
- 
-   $Territorio->registrar_territorio($idSede, $nombre, $idLider, $detalles);
+    $apellido = $_POST['apellido'];
+    $telefono = $_POST['telefono'];
+    $direccion = $_POST['direccion'];
+    $estadoCivil = $_POST['estadoCivil'];
+    $motivo = $_POST['motivo'];
+    $fechaNacimiento = $_POST['fechaNacimiento'];
+    $fechaConvercion = $_POST['fechaConvercion'];
+
+
+
+    
+   $Discipulo->registrar_discipulo($asisCrecimiento, $asisFamiliar, $idConsolidador, $idcelulaconsolidacion, $cedula, $nombre,
+   $apellido, $telefono, $direccion, $estadoCivil, $motivo, $fechaNacimiento, $fechaConvercion);
 
 
 
    echo json_encode('Lo logramos!!');
+
    die();
 
 }
 
 
-if (isset($_GET['listaLideres'])) {  
+if (isset($_GET['listaConsolidador'])) {  
     
-     $ListaLideres = $Territorio->listar_lideres();
+     $ListaConsolidador = $Discipulo->listar_consolidador();
 
-     echo json_encode($ListaLideres);
+     echo json_encode($ListaConsolidador);
     
      die();
  }
 
 
- if (isset($_GET['listaSedes'])) {  
+
+if (isset($_GET['listarcelulas'])) {  
     
-    $ListaSedes = $Territorio->listar_Sedes();
-
-    $data = json_encode($ListaSedes);
+    $listacelulas = $Discipulo->listar_celulas();
 
 
-    echo $data; 
+    echo json_encode($listacelulas);
    
     die();
 }
+
+
+
 
    
 

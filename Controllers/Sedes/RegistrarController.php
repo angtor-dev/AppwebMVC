@@ -21,10 +21,7 @@ if (isset($_POST['registrar'])) {
     $estado = $_POST['estado'];
  
    $Sede->registrar_Sede($idPastor, $nombre, $direccion, $estado);
-
-   echo json_encode('Lo logramos!!');
    die();
-
 }
 
 
