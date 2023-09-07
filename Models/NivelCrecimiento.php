@@ -18,20 +18,9 @@ class NivelCrecimiento extends Model
         }
     }
 
-    public static function listar(int $estatus = null) : array
+    public static function crearIniciales() : void
     {
-        /** @var NivelCrecimiento[] */
-        $nivelesCrecimiento = parent::listar();
-        /** @var Usuario */
-        $usuarioSesion = $_SESSION['usuario'];
-
-        foreach ($nivelesCrecimiento as $key => $nivel) {
-            if ($nivel->escuela->idSede != $usuarioSesion->idSede) {
-                unset($nivelesCrecimiento[$key]);
-            }
-        }
-
-        return $nivelesCrecimiento;
+        // Crear niveles de crecimiento iniciales
     }
 }
 ?>
