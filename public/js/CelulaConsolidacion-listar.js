@@ -53,13 +53,11 @@ $(document).ready(function () {
         document.getElementById('idCoLider').value = datos.idCoLider;
         document.getElementById('idLider').value = datos.idLider;
 
-
-
     })
 
     $('#celulaDatatables tbody').on('click', '#reunion', function () {
         const datos = dataTable.row($(this).parents()).data();
-        document.getElementById('idCelulaConsolidacionR').textContent = datos.id;
+        document.getElementById('idCelulaConsolidacionR').value = datos.id;
 
     })
 
