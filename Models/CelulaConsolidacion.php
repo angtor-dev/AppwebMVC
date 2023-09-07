@@ -238,8 +238,8 @@ class CelulaConsolidacion extends Model
                     celulaconsolidacion.id AS idcelulaconsolidacion
                 FROM reunionconsolidacion
                 INNER JOIN celulaconsolidacion
-                ON reunionconsolidacion.idcelulaconsolidacion = celulaconsolidacion.id
-                ORDER BY reunionconsolidacion.fecha DESC;";
+                ON reunionconsolidacion.idCelulaConsolidacion = celulaconsolidacion.id
+                ORDER BY reunionconsolidacion.fecha DESC";
 
 
             $stmt = $this->db->pdo()->prepare($sql);
@@ -330,12 +330,33 @@ class CelulaConsolidacion extends Model
 
         try {
 
-
-
             $sql = "SELECT * FROM celulaconsolidacion WHERE celulaconsolidacion.estatus = '1'";
 
             $stmt = $this->db->pdo()->prepare($sql);
 
+            $stmt->execute();
+            $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $resultado;
+
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
+            $error_data = array(
+                "error_message" => $e->getMessage(),
+                "error_line" => "Linea del error: " . $e->getLine()
+            );
+            //print_r($error_data);
+            echo json_encode($error_data);
+            die();
+        }
+    }
+
+
+    public function listarDiscipulados_celula($idCelulaConsolidacion)
+    {
+        try {
+
+            $sql = "SELECT * FROM discipulo WHERE idCelulaConsolidacion= :idCelulaConsolidacion";
+            $stmt = $this->db->pdo()->prepare($sql);
+            $stmt->bindValue(":idCelulaConsolidacion", $idCelulaConsolidacion);
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $resultado;

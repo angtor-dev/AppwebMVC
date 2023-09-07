@@ -3,6 +3,7 @@ $(document).ready(function () {
     let choices1;
     let choices2;
     let choices3;
+    let choices4;
 
     const dataTable = $('#celulaDatatables').DataTable({
         responsive: true,
@@ -58,7 +59,7 @@ $(document).ready(function () {
     $('#celulaDatatables tbody').on('click', '#reunion', function () {
         const datos = dataTable.row($(this).parents()).data();
         document.getElementById('idCelulaConsolidacionR').value = datos.id;
-
+        Listar_discipulos_celula(datos.id) 
     })
 
     $('#celulaDatatables tbody').on('click', '#eliminar', function () {
@@ -173,6 +174,7 @@ $(document).ready(function () {
                     choices1.destroy();
                 }
                 choices1 = new Choices(selector, {
+                    allowHTML: true,
                     searchEnabled: true,  // Habilita la funcionalidad de búsqueda
                     removeItemButton: true,  // Habilita la posibilidad de remover items
                     placeholderValue: 'Selecciona una opción',  // Texto del placeholder
@@ -183,6 +185,7 @@ $(document).ready(function () {
                     choices2.destroy();
                 }
                 choices2 = new Choices(selector2, {
+                    allowHTML: true,
                     searchEnabled: true,  // Habilita la funcionalidad de búsqueda
                     removeItemButton: true,  // Habilita la posibilidad de remover items
                     placeholderValue: 'Selecciona una opción',  // Texto del placeholder
@@ -231,6 +234,55 @@ $(document).ready(function () {
                     choices3.destroy();
                 }
                 choices3 = new Choices(selector, {
+                    allowHTML: true,
+                    searchEnabled: true,  // Habilita la funcionalidad de búsqueda
+                    removeItemButton: true,  // Habilita la posibilidad de remover items
+                    placeholderValue: 'Selecciona una opción',  // Texto del placeholder
+                });
+
+                choices3.setChoiceByValue(idTerritorio.toString());
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                // Aquí puedes manejar errores, por ejemplo:
+                console.error("Error al enviar:", textStatus, errorThrown);
+                alert("Hubo un error al realizar el registro. Por favor, inténtalo de nuevo.");
+            }
+        })
+    }
+
+
+    function Listar_discipulos_celula(idCelulaConsolidacion) {
+
+        $.ajax({
+            type: "GET",
+            url: "http://localhost/AppwebMVC/CelulaConsolidacion/Listar",
+            data: {
+                cargar_discipulos_celula: 'cargar_discipulos_celula',
+                idCelulaConsolidacion: idCelulaConsolidacion
+            },
+            success: function (response) {
+
+                console.log(response);
+                let data = JSON.parse(response);
+
+                let selector = document.getElementById('discipulos');
+
+                data.forEach(item => {
+
+                    const option = document.createElement('option');
+                    option.value = item.id;
+                    option.text = `${item.cedula} ${item.nombre} ${item.apellido}`;
+                    selector.appendChild(option);
+
+                });
+
+                // Destruir la instancia existente si la hay
+                if (choices4) {
+                    choices4.destroy();
+                }
+                choices4 = new Choices(selector, {
+                    allowHTML: true,
                     searchEnabled: true,  // Habilita la funcionalidad de búsqueda
                     removeItemButton: true,  // Habilita la posibilidad de remover items
                     placeholderValue: 'Selecciona una opción',  // Texto del placeholder
