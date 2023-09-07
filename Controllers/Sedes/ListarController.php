@@ -61,6 +61,7 @@ if (isset($_POST['editar'])) {
    $Sede->editar_Sede($id, $idPastor, $nombre, $direccion, $estado);
 
    echo json_encode('Lo logramos!!');
+   
    die(); 
     
 }

@@ -20,9 +20,9 @@ $viewScripts = ["Discipulo-registrar.js"];
                 <div class="col-md-4">
                     <label for="apellido" class="form-label fw-bold">Apellido</label>
                     <input type="text" class="form-control" id="apellido"   aria-describedby="msj_apellido" required>
-                    <div id="msj_apellido" class="valid-feedback">
+                    <div id="msj_apellido" class="invalid-feedback">
                     este campo no puede estar vacio y no acepta numeros.
-                    </div>
+                    </div> 
                 </div>
                 <div class="col-md-4">
                     <label for="cedula" class="form-label fw-bold">Cedula de Identidad</label>

@@ -129,7 +129,7 @@ $(document).ready(function () {
 
        
         let nombre = $("#nombre").val();
-        if (/^[a-zA-Z\s]{1,30}$/.test(nombre)) {
+        if (/^[a-zA-ZñÑ\s]{1,30}$/.test(nombre)) {
             validaciones.nombre = true;
             $("#nombre").removeClass("is-invalid");
             $("#nombre").addClass("is-valid");
@@ -142,7 +142,7 @@ $(document).ready(function () {
         }
 
         let apellido = $("#apellido").val();
-        if (/^[a-zA-Z\s]{1,30}$/.test(apellido)) {
+        if (/^[a-zA-ZñÑ\s]{1,30}$/.test(apellido)) {
             validaciones.apellido = true;
             $("#apellido").removeClass("is-invalid");
             $("#apellido").addClass("is-valid");
@@ -239,7 +239,7 @@ $(document).ready(function () {
         
 
         let direccion = $("#direccion").val();
-        if (/^[a-zA-Z0-9\s]{1,100}$/.test(direccion)) {
+        if (/^[a-zA-ZñÑ\s]{1,100}$/.test(direccion)) {
             validaciones.direccion = true;
             $("#direccion").removeClass("is-invalid");
             $("#direccion").addClass("is-valid");
@@ -250,7 +250,7 @@ $(document).ready(function () {
         }
 
         let motivo = $("#motivo").val();
-        if (/^[a-zA-Z0-9\s]{1,100}$/.test(motivo)) {
+        if (/^[a-zA-ZñÑ\s]{1,100}$/.test(motivo)) {
             validaciones.motivo = true;
             $("#motivo").removeClass("is-invalid");
             $("#motivo").addClass("is-valid");
