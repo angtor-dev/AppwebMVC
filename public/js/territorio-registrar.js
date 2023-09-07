@@ -207,8 +207,7 @@ $(document).ready(function () {
 
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    const errorData = JSON.parse(jqXHR.responseText);
-                    console.log(errorData);
+                    console.log(jqXHR.responseText);
                 }
             });
 
