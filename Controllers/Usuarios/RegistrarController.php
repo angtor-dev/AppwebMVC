@@ -25,7 +25,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST')
         header("Location: /AppwebMVC/Usuarios/");
         exit();
     }
-//holaaaaaaaaaaa
+    
     try {
         $usuario->clave = password_hash($usuario->clave, PASSWORD_DEFAULT);
 
