@@ -8,7 +8,7 @@ $viewScripts = ["CelulaConsolidacion-registrar.js"]; ?>
 
 <div class="container-fluid">
 
-  <form id="formulario" class="row">
+  <form id="formulario" class="row mt-4">
 
     <div class="row my-2">
       <div class="col-lg-4">
@@ -34,7 +34,7 @@ $viewScripts = ["CelulaConsolidacion-registrar.js"]; ?>
       <div class="col-lg-4">
         <label for="CoLider" class="form-label fw-bold">Co Lider Responsable</label>
         <select class="form-select" id="idCoLider" name="idCoLider">
-        <option selected value="">Selecciona...</option>
+          <option selected value="">Selecciona...</option>
         </select>
         <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_idCoLider" role="alert">
           Debe seleccionar un Lider.
@@ -42,18 +42,21 @@ $viewScripts = ["CelulaConsolidacion-registrar.js"]; ?>
       </div>
     </div>
 
-    <div class="row my-2">
-      <label for="idTerritorio" class="form-label fw-bold">Territorio</label>
-      <select class="form-select" id="idTerritorio" name="idTerritorio" placeholder="hola">
-      </select>
-      <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_idTerritorio" role="alert">
-        Debe seleccionar un Territorio.
+    <div class="row mt-2">
+      <div class="col-lg-12">
+        <label for="idTerritorio" class="form-label fw-bold">Territorio</label>
+        <select class="form-select" id="idTerritorio" name="idTerritorio" placeholder="hola">
+        </select>
+        <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_idTerritorio" role="alert">
+          Debe seleccionar un Territorio.
+        </div>
       </div>
     </div>
-</div>
-<div class="d-flex justify-content-end">
-  <button type="submit" class="btn btn-primary">Registrar</button>
-</div>
-</form>
 
+    <div class="row">
+      <div class="col-lg-12">
+        <button type="submit" class="btn btn-primary">Registrar</button>
+      </div>
+    </div>
+  </form>
 </div>

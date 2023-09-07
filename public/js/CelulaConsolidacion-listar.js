@@ -1,4 +1,8 @@
-$(document).ready(function () { 
+$(document).ready(function () {
+
+    let choices1;
+    let choices2;
+    let choices3;
 
     const dataTable = $('#celulaDatatables').DataTable({
         responsive: true,
@@ -38,20 +42,16 @@ $(document).ready(function () {
         document.getElementById('inf_idLider').textContent = text;
         document.getElementById('inf_idCoLider').textContent = text2;
         document.getElementById('inf_idTerritorio').textContent = datos.idTerritorio;
-
-
-
-
     })
 
     $('#celulaDatatables tbody').on('click', '#editar', function () {
         const datos = dataTable.row($(this).parents()).data();
 
         document.getElementById('idCelulaConsolidacion').textContent = datos.id;
-        document.getElementById('idTerritorio').value = datos.idTerritorio;
         document.getElementById('nombre').value = datos.nombre;
-        document.getElementById('idCoLider').value = datos.idCoLider;
-        document.getElementById('idLider').value = datos.idLider;
+
+        Listar_Lideres(datos.idLider, datos.idCoLider)
+        Listar_Territorio(datos.idTerritorio)
 
     })
 
@@ -131,7 +131,7 @@ $(document).ready(function () {
     });
 
 
-    function Listar_Lideres() {
+    function Listar_Lideres(idLider, idCoLider) {
 
         $.ajax({
             type: "GET",
@@ -168,24 +168,28 @@ $(document).ready(function () {
                 });
 
 
-
-                const element = document.getElementById('idLider');
-                const choices = new Choices(element, {
+                // Destruir la instancia existente si la hay
+                if (choices1) {
+                    choices1.destroy();
+                }
+                choices1 = new Choices(selector, {
                     searchEnabled: true,  // Habilita la funcionalidad de búsqueda
                     removeItemButton: true,  // Habilita la posibilidad de remover items
                     placeholderValue: 'Selecciona una opción',  // Texto del placeholder
                 });
 
-                const element2 = document.getElementById('idCoLider');
-                const choices2 = new Choices(element2, {
+                // Destruir la instancia existente si la hay
+                if (choices2) {
+                    choices2.destroy();
+                }
+                choices2 = new Choices(selector2, {
                     searchEnabled: true,  // Habilita la funcionalidad de búsqueda
                     removeItemButton: true,  // Habilita la posibilidad de remover items
                     placeholderValue: 'Selecciona una opción',  // Texto del placeholder
                 });
 
-                //console.log(data);
-
-
+                choices1.setChoiceByValue(idLider.toString());
+                choices2.setChoiceByValue(idCoLider.toString());
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -195,11 +199,8 @@ $(document).ready(function () {
         })
     }
 
-    Listar_Lideres();
 
-
-
-    function Listar_Territorio() {
+    function Listar_Territorio(idTerritorio) {
 
         $.ajax({
             type: "GET",
@@ -224,16 +225,18 @@ $(document).ready(function () {
                     selector.appendChild(option);
 
                 });
-                const element = document.getElementById('idTerritorio');
-                const choices = new Choices(element, {
+
+                // Destruir la instancia existente si la hay
+                if (choices3) {
+                    choices3.destroy();
+                }
+                choices3 = new Choices(selector, {
                     searchEnabled: true,  // Habilita la funcionalidad de búsqueda
                     removeItemButton: true,  // Habilita la posibilidad de remover items
                     placeholderValue: 'Selecciona una opción',  // Texto del placeholder
                 });
 
-                //console.log(data);
-
-
+                choices3.setChoiceByValue(idTerritorio.toString());
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -244,11 +247,7 @@ $(document).ready(function () {
         })
     }
 
-    Listar_Territorio();
-
-
     //Registro de Celula
-
 
     const regexObj = {
 
@@ -334,7 +333,7 @@ $(document).ready(function () {
                 success: function (response) {
 
                     let data = JSON.parse(response);
-                    dataTable.ajax.reload(); 
+                    dataTable.ajax.reload();
 
                     // Aquí puedes manejar una respuesta exitosa, por ejemplo:
                     console.log("Respuesta del servidor:", data);
@@ -394,24 +393,24 @@ $(document).ready(function () {
         const idCelulaConsolidacion = document.getElementById('idCelulaConsolidacionR').textContent;
 
 
-        
+
         // Validar fecha
         const fecha = document.getElementById("fecha").value;
-       /* if (fecha === "") {
-            document.getElementById("msj_fecha").classList.remove("d-none");
-            validationStatus2.fecha = false;
-        } else {
-            // Comprobar que la fecha esté en un formato válido
-            if (!regexObj2.actividad.test(fecha)) {
-                document.getElementById("msj_fecha").classList.remove("d-none");
-                validationStatus2.fecha = false;
-            } else {
-                document.getElementById("msj_fecha").classList.add("d-none");
-                validationStatus2.fecha = true;
-            }
-        }*/
+        /* if (fecha === "") {
+             document.getElementById("msj_fecha").classList.remove("d-none");
+             validationStatus2.fecha = false;
+         } else {
+             // Comprobar que la fecha esté en un formato válido
+             if (!regexObj2.actividad.test(fecha)) {
+                 document.getElementById("msj_fecha").classList.remove("d-none");
+                 validationStatus2.fecha = false;
+             } else {
+                 document.getElementById("msj_fecha").classList.add("d-none");
+                 validationStatus2.fecha = true;
+             }
+         }*/
 
-       
+
         // Validar tematica
         const tematica = document.getElementById("tematica").value;
         if (!regexObj2.tematica.test(tematica)) {
