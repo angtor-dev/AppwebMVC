@@ -118,9 +118,9 @@ $viewScripts = ["CelulaConsolidacion-listar.js"];
                                 </div>
                             </div>
 
-                            <div class="d-flex justify-content-end">
+                            <div class="d-flex justify-content-end gap-1">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                <button type="submit" class="btn btn-primary">Registrar</button>
+                                <button type="submit" class="btn btn-primary">Actualizar datos</button>
                             </div>
                         </form>
                     </div>

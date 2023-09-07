@@ -81,6 +81,7 @@ $viewScripts = ["listar-sede.js"];
                             <input type="hidden" id="idSede">
                             <label for="sede" class="form-label fw-bold">Pastor responsable</label>
                             <select class="form-select" id="idPastor" name="idPastor">
+                                <option value="">Seleccione...</option>
                             </select>
                             <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_idPastor" role="alert">
                                 Debe seleccionar un Pastor.
@@ -138,7 +139,7 @@ $viewScripts = ["listar-sede.js"];
                             </div>
                         </div>
                         
-                        <div class="d-flex justify-content-end">
+                        <div class="d-flex justify-content-end gap-1">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                         <button type="submit" class="btn btn-primary">Editar</button>
                         

@@ -103,7 +103,6 @@ if (isset($_GET['listaLideres'])) {
     $ListaLideres = $CelulaConsolidacion->listar_lideres();
 
     echo json_encode($ListaLideres);
-   
     die();
 }
 
@@ -113,6 +112,14 @@ if (isset($_GET['listaTerritorio'])) {
 
     echo json_encode($Listaterritorio);
    
+    die();
+}
+
+if (isset($_GET['cargar_discipulos_celula'])) {
+    $idCelulaConsolidacion = $_GET['idCelulaConsolidacion'];
+    $resultado = $CelulaConsolidacion->listarDiscipulados_celula($idCelulaConsolidacion);
+
+    echo json_encode($resultado);
     die();
 }
    

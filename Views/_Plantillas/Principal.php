@@ -230,7 +230,7 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
            </div>
             
             <div class="nav-link py-0 mt-3 text-uppercase">Escuela</div>
-            <a href="#" class="nav-link">
+            <a href="<?= LOCAL_DIR ?>NivelesCrecimiento" class="nav-link">
                 <i class="fa-solid fa-graduation-cap fa-fw me-2"></i>
                 Niveles de crecimiento
             </a>

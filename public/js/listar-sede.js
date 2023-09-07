@@ -1,5 +1,7 @@
 $(document).ready(function () {
 
+  let choices;
+
   const dataTable = $('#sedeDatatables').DataTable({
     responsive: true,
     ajax: {
@@ -130,9 +132,9 @@ $(document).ready(function () {
 
         let data = JSON.parse(response);
 
-
         let selector = document.getElementById('idPastor');
-
+        // Limpiar el selector antes de agregar nuevas opciones
+        selector.innerHTML = '';
 
         data.forEach(item => {
 
@@ -143,17 +145,18 @@ $(document).ready(function () {
 
         });
 
-        selector.value = idPastor;
+        // Destruir la instancia existente si la hay
+        if (choices) {
+          choices.destroy();
+        }
 
-        const choices = new Choices(selector, {
+        choices = new Choices(selector, {
+          allowHTML: true,
           searchEnabled: true,  // Habilita la funcionalidad de búsqueda
           removeItemButton: true,  // Habilita la posibilidad de remover items
-          placeholderValue: 'Selecciona una opción',  // Texto del placeholder
         });
 
-        // console.log(data);
-
-
+        choices.setChoiceByValue(idPastor.toString());
 
       },
       error: function (jqXHR, textStatus, errorThrown) {
@@ -263,9 +266,6 @@ $(document).ready(function () {
             showConfirmButton: false,
             timer: 2000,
           })
-
-
-
 
         },
         error: function (jqXHR, textStatus, errorThrown) {
