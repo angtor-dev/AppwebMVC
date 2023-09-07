@@ -7,10 +7,7 @@ necesitaAutenticacion();
 
 $usuarioSesion = $_SESSION['usuario'];
 
-if (!$usuarioSesion->tienePermiso("listarCelulaCrecimiento")) {
-    $_SESSION['errores'][] = "No sposee permiso para listar reuinion.";
-    redirigir("/AppwebMVC/Home/");
-}
+
 
 $CelulaCrecimiento = new CelulaCrecimiento();
 

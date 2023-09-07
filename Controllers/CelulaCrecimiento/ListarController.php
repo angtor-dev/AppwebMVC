@@ -7,10 +7,7 @@ $usuarioSesion = $_SESSION['usuario'];
 
 $CelulaCrecimiento = new CelulaCrecimiento();
 ///hola
-if (!$usuarioSesion->tienePermiso("listarCelulaCrecimiento")) {
-        $_SESSION['errores'][] = "No seposee permiso para listar Cecula de Crecimiento.";
-        redirigir("/AppwebMVC/Home/");
-    }
+
 
 
 if (isset($_GET['cargar_data'])) {  
@@ -43,10 +40,7 @@ if (isset($_GET['cargar_data'])) {
 
 if (isset($_POST['editar'])) { 
     
-    if (!$usuarioSesion->tienePermiso("actualizarCelulaCrecimiento")) {
-        $_SESSION['errores'][] = "No posee permiso para editar celula de Crecimiento.";
-        redirigir("/AppwebMVC/Home/");
-    }
+   
 
     $id = $_POST['id'];
     $nombre = $_POST['nombre'];
@@ -55,7 +49,7 @@ if (isset($_POST['editar'])) {
     $idTerritorio = $_POST['idTerritorio'];
 
  
-   $CelulaFamiliar->editar_CelulaFamiliar($id, $nombre, $idLider, $idCoLider, $idTerritorio);
+   $CelulaCrecimiento->editar_CelulaCrecimiento($id, $nombre, $idLider, $idCoLider, $idTerritorio);
 
    echo json_encode('Lo logramos!!');
    die();
@@ -66,10 +60,6 @@ if (isset($_POST['editar'])) {
 
 if (isset($_POST['registroreunion'])) { 
     
-    if (!$usuarioSesion->tienePermiso("resgistrarCelulaConsolidacion")) {
-        $_SESSION['errores'][] = "No posee permiso para registrar reuinion.";
-        redirigir("/AppwebMVC/Home/");
-    }
    
     $idCelulaCrecimiento = $_POST['idCelulaCrecimiento'];
     $fecha = $_POST['fecha'];
@@ -95,10 +85,7 @@ if (isset($_POST['registroreunion'])) {
 
 if (isset($_POST['eliminar'])) {   
 
-    if (!$usuarioSesion->tienePermiso("eliminarCelulaConsolidacion")) {
-        $_SESSION['errores'][] = "No seposee permiso para eliminar Celula de Consolidacion .";
-        redirigir("/AppwebMVC/Home/");
-    }
+
 
     $id = $_POST['id'];
 

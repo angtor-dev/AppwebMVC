@@ -1,24 +1,13 @@
-
 <?php
-
-
 require_once "Models/CelulaConsolidacion.php";
-
-necesitaAutenticacion();
-
-$usuarioSesion = $_SESSION['usuario'];
 
 
 $CelulaConsolidacion = new CelulaConsolidacion();
 
-if (!$usuarioSesion->tienePermiso("listarCelulaConsolidacion")) {
-    $_SESSION['errores'][] = "No seposee permiso para listar reunion.";
-    redirigir("/AppwebMVC/Home/");
-}
 
 
 if (isset($_GET['cargar_data'])) {  
-    //Primero inicializamos las variables
+    //Primero inicializamos las variablelistar_reunioness
      $Lista = $CelulaConsolidacion->listar_reuniones();
      //Variable json solamente para guardar el array de datos
      $json = array();
@@ -41,14 +30,13 @@ if (isset($_GET['cargar_data'])) {
      //Finalmente, aqui enviamos el listado
      echo json_encode($json);
      die();
- } 
+} 
+
+
 
 if (isset($_POST['editar'])) { 
     
-    if (!$usuarioSesion->tienePermiso("actualizarCelulaConsolidacion")) {
-        $_SESSION['errores'][] = "No posee permiso para editar reunion.";
-        redirigir("/AppwebMVC/Home/");
-    }
+
     
     $id = $_POST['id'];
     $idCelulaConsolidacion = $_POST['idCelulaConsolidacion'];
@@ -70,10 +58,7 @@ if (isset($_POST['editar'])) {
 
 if (isset($_POST['eliminar'])) {   
 
-    if (!$usuarioSesion->tienePermiso("eliminarCelulaConsolidacion")) {
-        $_SESSION['errores'][] = "No posee permiso para eliminar reunion.";
-        redirigir("/AppwebMVC/Home/");
-    }
+
 
     $id = $_POST['id'];
 

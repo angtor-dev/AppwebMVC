@@ -7,10 +7,7 @@ necesitaAutenticacion();
 
 $usuarioSesion = $_SESSION['usuario'];
 
-if (!$usuarioSesion->tienePermiso("listarCelulaFamiliar")) {
-    $_SESSION['errores'][] = "No posee permiso para listar reuniones.";
-    redirigir("/AppwebMVC/Home/");
-}
+
 
 $CelulaFamiliar = new CelulaFamiliar();
 

@@ -41,10 +41,7 @@ if (isset($_GET['cargar_data'])) {
 
 if (isset($_POST['editar'])) { 
 
-    if (!$usuarioSesion->tienePermiso("actualizarCelulaConsolidacion")) {
-        $_SESSION['errores'][] = "No se posee permiso para editar Sede.";
-        redirigir("/AppwebMVC/Home/");
-    }
+    
     
     
     $id = $_POST['id'];
@@ -65,10 +62,7 @@ if (isset($_POST['editar'])) {
 
 if (isset($_POST['registroreunion'])) { 
 
-    if (!$usuarioSesion->tienePermiso("resgistrarCelulaConsolidacion")) {
-        $_SESSION['errores'][] = "No seposee permiso para registrar reuinion.";
-        redirigir("/AppwebMVC/Home/");
-    }
+  
     
    
     $idCelulaConsolidacion = $_POST['idCelulaConsolidacion'];
@@ -92,10 +86,7 @@ if (isset($_POST['registroreunion'])) {
 
 if (isset($_POST['eliminar'])) {   
 
-    if (!$usuarioSesion->tienePermiso("eliminarCelulaConsolidacion")) {
-        $_SESSION['errores'][] = "No seposee permiso para elimianr Celula de Consolidacion.";
-        redirigir("/AppwebMVC/Home/");
-    }
+
 
     $id = $_POST['id'];
 

@@ -92,6 +92,9 @@ if (isset($_POST['eliminar'])) {
    die();
 
 }
+
+
+
    
 renderView();
 ?>

@@ -231,7 +231,7 @@ class Territorio extends Model
 
 
             $sql = "SELECT usuario.id, usuario.cedula, usuario.nombre, usuario.apellido 
-            FROM usuariorol INNER JOIN usuario ON usuario.id = usuariorol.idUsuario WHERE usuariorol.idRol = '3'";
+            FROM usuariorol INNER JOIN usuario ON usuario.id = usuariorol.idUsuario WHERE usuariorol.idRol IN (3, 4)";
 
             $stmt = $this->db->pdo()->prepare($sql);
 

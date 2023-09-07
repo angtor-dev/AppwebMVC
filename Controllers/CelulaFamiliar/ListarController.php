@@ -65,10 +65,6 @@ if (isset($_POST['editar'])) {
 
 if (isset($_POST['registroreunion'])) { 
 
-    if (!$usuarioSesion->tienePermiso("resgistrarCelulaFamiliar")) {
-        $_SESSION['errores'][] = "No seposee permiso para registrar reuinion.";
-        redirigir("/AppwebMVC/Home/");
-    }
 
    
     $idCelulaFamiliar = $_POST['idCelulaFamiliar'];
