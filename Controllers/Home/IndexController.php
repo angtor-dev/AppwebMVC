@@ -1,5 +1,5 @@
 <?php
-// Logica del controlador
+necesitaAutenticacion();
 
 renderView();
 ?>
