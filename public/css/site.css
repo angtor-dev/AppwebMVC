@@ -122,15 +122,20 @@ table tbody .acciones i:hover {
 }
 
 /* Datatable overrides */
-#tabla-usuarios {
+#tabla-usuarios,
+#tabla-roles,
+#tabla-niveles {
     margin-top: 1rem!important;
     margin-bottom: 1rem!important;
 }
 #tabla-usuarios_filter,
-#tabla-roles_filter {
+#tabla-roles_filter,
+#tabla-niveles_filter {
     display: none;
 }
-#tabla-usuarios_wrapper ul.pagination {
+#tabla-usuarios_wrapper ul.pagination,
+#tabla-roles_wrapper ul.pagination,
+#tabla-niveles_wrapper ul.pagination {
     margin: 0!important;
 }
 
