@@ -146,14 +146,14 @@ $viewScripts = ["CelulaConsolidacion-listar.js"];
 
                                 <label for="fecha" class="form-label fw-bold">Fecha</label>
                                 <input type="date" class="form-control" id="fecha" name="fecha">
-                                <div class="alert alert-danger d-none" id="msj_fecha" role="alert"> Debe seleccionar la fecha de la reunión</div>
+                                <div class="text-danger d-none" id="msj_fecha" role="alert"> Debe seleccionar la fecha de la reunión</div>
                             </div>
 
 
                             <div class="mb-3">
                                 <label for="tematica" class="form-label fw-bold">Tematica</label>
                                 <input type="text" class="form-control" id="tematica" name="tematica" maxlength="100">
-                                <div class="alert alert-danger d-none" id="msj_tematica" role="alert">Este campo no puede estar vacio</div>
+                                <div class="text-danger d-none" id="msj_tematica" role="alert">Este campo no puede estar vacio</div>
                             </div>
 
 
@@ -162,14 +162,14 @@ $viewScripts = ["CelulaConsolidacion-listar.js"];
                                     <div class="col-4">
                                         <label for="tematica" class="form-label fw-bold">Semana del Ciclo</label>
                                         <input type="number" class="form-control" id="semana" name="tematica" min="0">
-                                        <div class="alert alert-danger d-none" id="msj_semana" role="alert">Este campo no puede estar vacio</div>
+                                        <div class="text-danger d-none" id="msj_semana" role="alert">Este campo no puede estar vacio</div>
                                     </div>
 
 
                                     <div class="col-8">
                                         <label class="form-label fw-bold">Generosidad</label>
                                         <input type="number" class="form-control" id="generosidad" name="tematica" min="0" step="0.01">
-                                        <div class="alert alert-danger d-none" id="msj_generosidad" role="alert">Este campo no puede estar vacio</div>
+                                        <div class="text-danger d-none" id="msj_generosidad" role="alert">Este campo no puede estar vacio</div>
                                     </div>
                                 </div>
                             </div>
@@ -184,20 +184,23 @@ $viewScripts = ["CelulaConsolidacion-listar.js"];
                                     <option value="a">asdasd</option>
                                     <option value="st">asdasd</option>
                                 </select>
+                                <div class="text-danger d-none" id="msj_asistencia">
+                                    <p>Debes seleccionar discipulos para la asistencia</p>
+                                </div>
                             </div>
 
 
                             <div class="mb-3">
                                 <label for="actividad" class="form-label fw-bold">Actividad</label>
                                 <input type="text" class="form-control" id="actividad" name="actividad" maxlength="100">
-                                <div class="alert alert-danger d-none" id="msj_actividad" role="alert">Este campo no puede estar vacio</div>
+                                <div class="text-danger d-none" id="msj_actividad" role="alert">Este campo no puede estar vacio</div>
                             </div>
 
 
                             <div class="mb-3">
                                 <label for="observaciones" class="form-label fw-bold">Observaciones</label>
                                 <input type="text" class="form-control" id="observaciones" name="observaciones" rows="3"></textarea>
-                                <div class="alert alert-danger d-none" id="msj_observaciones" role="alert">Este campo no puede estar vacio</div>
+                                <div class="text-danger d-none" id="msj_observaciones" role="alert">Este campo no puede estar vacio</div>
                             </div>
 
 

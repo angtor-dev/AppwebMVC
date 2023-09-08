@@ -134,7 +134,7 @@ class CelulaConsolidacion extends Model
         }
     }
 
-    public function registrar_reunion($idCelulaConsolidacion, $fecha, $tematica, $semana, $generosidad, $actividad, $observaciones)
+    public function registrar_reunion($idCelulaConsolidacion, $fecha, $tematica, $semana, $generosidad, $actividad, $observaciones, $arrayAsistencias)
     {
 
         try {
@@ -164,7 +164,7 @@ class CelulaConsolidacion extends Model
                 $resultado = $stmt2->fetch(PDO::FETCH_ASSOC);
                 $idReunion = $resultado['id'];
 
-                foreach ($arrayDiscipulos as $values) {
+                foreach ($arrayAsistencias as $values) {
                     $sql2 = "INSERT INTO `asistencia` (`idReunion`, `idDiscipulo`) VALUES (:idReunion, :idDiscipulo)";
                     $stmt3 = $this->db->pdo()->prepare($sql2);
 
@@ -174,7 +174,11 @@ class CelulaConsolidacion extends Model
                     $stmt3->execute();
                 }
             }
-            
+
+            http_response_code(200);
+            echo json_encode(array('msj'=>'Reunion registrada correctamente', 'status'=>200));
+            die();
+
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),

@@ -35,7 +35,7 @@ $(document).ready(function () {
         document.getElementById('inf_adulto').textContent = datos.adulto;
         document.getElementById('inf_actividad').textContent = datos.actividad;
         document.getElementById('inf_observaciones').textContent = datos.observaciones;
-        
+
 
 
     })
@@ -43,12 +43,12 @@ $(document).ready(function () {
     $('#celulaDatatables tbody').on('click', '#editar', function () {
         const datos = dataTable.row($(this).parents()).data();
 
-        
+
         document.getElementById('idreunioncrecimiento').textContent = datos.id;
         document.getElementById('idCelulaCrecimiento').value = datos.idcelulafamiliar;
         document.getElementById('fecha').value = datos.fecha;
         document.getElementById('tematica').value = datos.tematica;
-        document.getElementById('semana').value= datos.semana;
+        document.getElementById('semana').value = datos.semana;
         document.getElementById('generosidad').value = datos.generosidad;
         document.getElementById('infantil').value = datos.infantil;
         document.getElementById('juvenil').value = datos.juvenil;
@@ -60,7 +60,7 @@ $(document).ready(function () {
 
     })
 
-    
+
 
     $('#celulaDatatables tbody').on('click', '#eliminar', function () {
         const datos = dataTable.row($(this).parents()).data();
@@ -77,7 +77,7 @@ $(document).ready(function () {
         }).then((result) => {
             if (result.isConfirmed) {
 
-    
+
                 $.ajax({
                     type: "POST",
                     url: "http://localhost/AppwebMVC/CelulaCrecimiento/Reunion",
@@ -105,14 +105,33 @@ $(document).ready(function () {
 
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
-                        // Aquí puedes manejar errores, por ejemplo:
-                        console.error("Error al enviar:", textStatus, errorThrown);
-                        alert("Hubo un error al editar el registro. Por favor, inténtalo de nuevo.");
+                        if (jqXHR.responseText) {
+                            let jsonResponse = JSON.parse(jqXHR.responseText);
+
+                            if (jsonResponse.msj) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: jsonResponse.msj,
+                                    showConfirmButton: true,
+                                })
+                            } else {
+                                const respuesta = JSON.stringify(jsonResponse, null, 2)
+                                Swal.fire({
+                                    background: 'red',
+                                    color: '#fff',
+                                    title: respuesta,
+                                    showConfirmButton: true,
+                                })
+                            }
+                        } else {
+                            alert('Error desconocido: ' + textStatus);
+                        }
                     }
                 })
-            } 
+            }
         });
     });
+
 
 
     function Listar_celulas() {
@@ -127,10 +146,10 @@ $(document).ready(function () {
             },
             success: function (response) {
 
-                
+
 
                 let data = JSON.parse(response);
-                
+
                 console.log(data);
 
                 let selector = document.getElementById('idCelulaCrecimiento');
@@ -145,7 +164,7 @@ $(document).ready(function () {
 
                 });
 
-    
+
                 const element = document.getElementById('idCelulaCrecimiento');
                 const choices = new Choices(element, {
                     searchEnabled: true,  // Habilita la funcionalidad de búsqueda
@@ -153,12 +172,29 @@ $(document).ready(function () {
                     placeholderValue: 'Selecciona una opción',  // Texto del placeholder
                 });
 
-
-                //console.log(data);
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                // Aquí puedes manejar errores, por ejemplo:
-                console.error("Error al enviar:", textStatus, errorThrown);
+                if (jqXHR.responseText) {
+                    let jsonResponse = JSON.parse(jqXHR.responseText);
+
+                    if (jsonResponse.msj) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: jsonResponse.msj,
+                            showConfirmButton: true,
+                        })
+                    } else {
+                        const respuesta = JSON.stringify(jsonResponse, null, 2)
+                        Swal.fire({
+                            background: 'red',
+                            color: '#fff',
+                            title: respuesta,
+                            showConfirmButton: true,
+                        })
+                    }
+                } else {
+                    alert('Error desconocido: ' + textStatus);
+                }
             }
         })
     }
@@ -166,8 +202,9 @@ $(document).ready(function () {
     Listar_celulas();
 
 
-    //Registro de Reuinion de celula      
 
+
+    //////////////////////////// REGISTRO DE REUNION ////////////////////////////
 
     const regexObj2 = {
 
@@ -203,35 +240,32 @@ $(document).ready(function () {
 
         const id = document.getElementById('idreunionfamiliar').textContent
 
+        // Validar idCelulaCrecimiento
+        const idCelulaCrecimiento = document.getElementById("idCelulaCrecimiento").value;
+        if (!regexObj2.idCelulaCrecimiento.test(idCelulaCrecimiento)) {
+            document.getElementById("msj_idCelulaCrecimiento").classList.remove("d-none");
+            validationStatus2.idCelulaCrecimiento = false;
+        } else {
+            document.getElementById("msj_idCelulaCrecimiento").classList.add("d-none");
+            validationStatus2.idCelulaCrecimiento = true;
+        }
 
 
-         // Validar idCelulaCrecimiento
-         const idCelulaCrecimiento = document.getElementById("idCelulaCrecimiento").value;
-         if (!regexObj2.idCelulaCrecimiento.test(idCelulaCrecimiento)) {
-             document.getElementById("msj_idCelulaCrecimiento").classList.remove("d-none");
-             validationStatus2.idCelulaCrecimiento = false;
-         } else {
-             document.getElementById("msj_idCelulaCrecimiento").classList.add("d-none");
-             validationStatus2.idCelulaCrecimiento = true;
-         }
-
-
-        
         // Validar fecha
         const fecha = document.getElementById("fecha").value;
-       /* if (fecha === "") {
-            document.getElementById("msj_fecha").classList.remove("d-none");
-            validationStatus2.fecha = false;
-        } else {
-            // Comprobar que la fecha esté en un formato válido
-            if (!regexObj2.actividad.test(fecha)) {
-                document.getElementById("msj_fecha").classList.remove("d-none");
-                validationStatus2.fecha = false;
-            } else {
-                document.getElementById("msj_fecha").classList.add("d-none");
-                validationStatus2.fecha = true;
-            }
-        }*/
+        /* if (fecha === "") {
+             document.getElementById("msj_fecha").classList.remove("d-none");
+             validationStatus2.fecha = false;
+         } else {
+             // Comprobar que la fecha esté en un formato válido
+             if (!regexObj2.actividad.test(fecha)) {
+                 document.getElementById("msj_fecha").classList.remove("d-none");
+                 validationStatus2.fecha = false;
+             } else {
+                 document.getElementById("msj_fecha").classList.add("d-none");
+                 validationStatus2.fecha = true;
+             }
+         }*/
 
         // Validar tematica
         const tematica = document.getElementById("tematica").value;
@@ -354,17 +388,37 @@ $(document).ready(function () {
                     document.getElementById("formularioReunion").reset();
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    // Aquí puedes manejar errores, por ejemplo:
-                    console.error("Error al enviar:", textStatus, errorThrown);
-                    alert("Hubo un error al realizar el registro. Por favor, inténtalo de nuevo.");
+                    if (jqXHR.responseText) {
+                        let jsonResponse = JSON.parse(jqXHR.responseText);
+
+                        if (jsonResponse.msj) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: jsonResponse.msj,
+                                showConfirmButton: true,
+                            })
+                        } else {
+                            const respuesta = JSON.stringify(jsonResponse, null, 2)
+                            Swal.fire({
+                                background: 'red',
+                                color: '#fff',
+                                title: respuesta,
+                                showConfirmButton: true,
+                            })
+                        }
+                    } else {
+                        alert('Error desconocido: ' + textStatus);
+                    }
                 }
             });
 
-
-
-
         } else {
-            alert("Formulario inválido. Por favor, corrija los errores.");
+            Swal.fire({
+                icon: 'error',
+                title: 'Formulario invalido. Verifique sus datos',
+                showConfirmButton: false,
+                timer: 2000,
+            });
         }
     });
 

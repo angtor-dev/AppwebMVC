@@ -52,7 +52,9 @@ $(document).ready(function () {
 
 
 
+    
 
+    /////////////////////////////////// REGISTRAR SEDE /////////////////////////////////////
 
     let validaciones = {
         idPastor: false,
@@ -155,9 +157,27 @@ $(document).ready(function () {
                     choices.setChoiceByValue('')
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    // Aquí puedes manejar errores, por ejemplo:
-                    console.error("Error al enviar:", textStatus, errorThrown);
-                    alert("Hubo un error al realizar el registro. Por favor, inténtalo de nuevo.");
+                    if (jqXHR.responseText) {
+                        let jsonResponse = JSON.parse(jqXHR.responseText);
+                
+                        if (jsonResponse.msj) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: jsonResponse.msj,
+                                showConfirmButton: true,
+                            })
+                        } else {
+                            const respuesta = JSON.stringify(jsonResponse, null, 2)
+                            Swal.fire({
+                                background: 'red',
+                                color: '#fff',
+                                title: respuesta,
+                                showConfirmButton: true,
+                            })
+                        }
+                    } else {
+                        alert('Error desconocido: ' + textStatus);
+                    }
                 }
             });
 

@@ -90,9 +90,27 @@ $(document).ready(function () {
                           })
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
-                        // Aquí puedes manejar errores, por ejemplo:
-                        console.error("Error al enviar:", textStatus, errorThrown);
-                        alert("Hubo un error al editar el registro. Por favor, inténtalo de nuevo.");
+                        if (jqXHR.responseText) {
+                            let jsonResponse = JSON.parse(jqXHR.responseText);
+                    
+                            if (jsonResponse.msj) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: jsonResponse.msj,
+                                    showConfirmButton: true,
+                                })
+                            } else {
+                                const respuesta = JSON.stringify(jsonResponse, null, 2)
+                                Swal.fire({
+                                    background: 'red',
+                                    color: '#fff',
+                                    title: respuesta,
+                                    showConfirmButton: true,
+                                })
+                            }
+                        } else {
+                            alert('Error desconocido: ' + textStatus);
+                        }
                     }
                 })
             } 
@@ -306,7 +324,12 @@ $(document).ready(function () {
 
 
         } else {
-            alert("Formulario inválido. Por favor, corrija los errores.");
+            Swal.fire({
+                        icon: 'error',
+                        title: 'Formulario invalido. Verifique sus datos',
+                        showConfirmButton: false,
+                        timer: 2000,
+                    });
         }
     });
 

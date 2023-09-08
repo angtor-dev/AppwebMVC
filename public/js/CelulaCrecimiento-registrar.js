@@ -56,10 +56,6 @@ $(document).ready(function () {
                     placeholderValue: 'Selecciona una opción',  // Texto del placeholder
                 });
 
-                //console.log(data);
-
-
-
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 // Aquí puedes manejar errores, por ejemplo:
@@ -104,10 +100,6 @@ $(document).ready(function () {
                     placeholderValue: 'Selecciona una opción',  // Texto del placeholder
                 });
 
-                //console.log(data);
-
-
-
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 // Aquí puedes manejar errores, por ejemplo:
@@ -123,8 +115,7 @@ $(document).ready(function () {
 
 
 
-
-
+    ////////////////// REGISTRAR CELULA ////////////////////
     const regexObj = {
         
         nombre: /^[a-zA-Z0-9\s.,]{1,20}$/, // Letras, números, espacios, puntos y comas con un máximo de 20 caracteres
@@ -146,8 +137,6 @@ $(document).ready(function () {
 
     form.addEventListener("submit", (e) => {
         e.preventDefault();
-
-
 
         // Validar nombre
         const nombre = document.getElementById("nombre").value;
@@ -206,11 +195,9 @@ $(document).ready(function () {
                     idTerritorio: idTerritorio
                 },
                 success: function (response) {
-
+                    console.log(response);
                     let data = JSON.parse(response);
 
-                    // Aquí puedes manejar una respuesta exitosa, por ejemplo:
-                    console.log("Respuesta del servidor:", data);
                     Swal.fire({
                         icon: 'success',
                         title: 'Registrado Correctamente',
@@ -221,17 +208,36 @@ $(document).ready(function () {
                     document.getElementById("#formulario").reset();
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    // Aquí puedes manejar errores, por ejemplo:
-                    console.error("Error al enviar:", textStatus, errorThrown);
-                    alert("Hubo un error al realizar el registro. Por favor, inténtalo de nuevo.");
+                    if (jqXHR.responseText) {
+                        let jsonResponse = JSON.parse(jqXHR.responseText);
+                
+                        if (jsonResponse.msj) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: jsonResponse.msj,
+                                showConfirmButton: true,
+                            })
+                        } else {
+                            const respuesta = JSON.stringify(jsonResponse, null, 2)
+                            Swal.fire({
+                                background: 'red',
+                                color: '#fff',
+                                title: respuesta,
+                                showConfirmButton: true,
+                            })
+                        }
+                    } else {
+                        alert('Error desconocido: ' + textStatus);
+                    }
                 }
             });
-
-
-
-
         } else {
-            console.log("Formulario inválido. Por favor, corrija los errores.");
+            Swal.fire({
+                icon: 'error',
+                title: 'Formulario invalido. Verifique sus datos',
+                showConfirmButton: false,
+                timer: 2000,
+            })
         }
     });
 

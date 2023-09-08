@@ -259,9 +259,10 @@ $(document).ready(function () {
         } else {
             validaciones.idcelulaconsolidacion = false;
             $("#idcelulaconsolidacion").removeClass("is-valid");
-            $("#idcelulaconsolidacion").addClass("is-invalid");} 
-        
-        
+            $("#idcelulaconsolidacion").addClass("is-invalid");
+        }
+
+
 
         let direccion = $("#direccion").val();
         if (/^[a-zA-ZñÑ\s]{1,100}$/.test(direccion)) {
@@ -285,18 +286,12 @@ $(document).ready(function () {
             $("#motivo").addClass("is-invalid");
         }
 
-        
-       
- 
-        // Verificar si todas las validaciones son correctas*/
-           
-    
-     });
-   
-
-   $("#formulario").submit(function (event) {
+    });
 
 
+
+
+    /////////////////////////////// REGISTRAR DISCIPULOS ///////////////////////////////////
     $("#formulario").submit(function (event) {
         event.preventDefault();
 
@@ -364,15 +359,30 @@ $(document).ready(function () {
 
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    // Aquí puedes manejar errores, por ejemplo:
-                    console.error("Error al enviar:", textStatus, errorThrown);
-                    alert("Hubo un error al realizar el registro. Por favor, inténtalo de nuevo.");
+                    if (jqXHR.responseText) {
+                        let jsonResponse = JSON.parse(jqXHR.responseText);
+
+                        if (jsonResponse.msj) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: jsonResponse.msj,
+                                showConfirmButton: true,
+                            })
+                        } else {
+                            const respuesta = JSON.stringify(jsonResponse, null, 2)
+                            Swal.fire({
+                                background: 'red',
+                                color: '#fff',
+                                title: respuesta,
+                                showConfirmButton: true,
+                            })
+                        }
+                    } else {
+                        alert('Error desconocido: ' + textStatus);
+                    }
                 }
             });
-
-
         } else {
-
             Swal.fire({
                 icon: 'error',
                 title: 'Debes llenar el formulario correctamente. Por favor, ingrese nuevamente los datos',
@@ -384,8 +394,5 @@ $(document).ready(function () {
 
     });
 
-
-
-});
 });
 

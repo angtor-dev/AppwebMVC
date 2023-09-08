@@ -150,7 +150,6 @@ class Sede extends Model
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
-            //print_r($error_data);
             echo json_encode($error_data);
             die();
         }

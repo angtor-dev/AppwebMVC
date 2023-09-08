@@ -4,7 +4,7 @@ $(document).ready(function () {
     let choices2;
     let choices3;
     let choices4;
-    
+
 
     const dataTable = $('#celulaDatatables').DataTable({
         responsive: true,
@@ -60,7 +60,7 @@ $(document).ready(function () {
     $('#celulaDatatables tbody').on('click', '#reunion', function () {
         const datos = dataTable.row($(this).parents()).data();
         document.getElementById('idCelulaConsolidacionR').value = datos.id;
-        Listar_discipulos_celula(datos.id) 
+        Listar_discipulos_celula(datos.id)
     })
 
 
@@ -107,7 +107,7 @@ $(document).ready(function () {
                         alert("Hubo un error al editar el registro. Por favor, inténtalo de nuevo.");
                     }
                 })
-            } 
+            }
         });
     });
 
@@ -277,13 +277,12 @@ $(document).ready(function () {
         })
     }
 
-    document.getElementById('discipulos').addEventListener('change', (e) => {
-        console.log(e.target.value);
-    })
 
 
 
-    ///////////////////Registro de Celula/////////////////////
+
+
+    /////////////////// ACTUALIZAR DATOS DE LA CELULA /////////////////////
 
     const regexObj = {
 
@@ -377,7 +376,6 @@ $(document).ready(function () {
                         timer: 2000,
                     })
 
-                    document.getElementById("#formulario").reset();
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     // Aquí puedes manejar errores, por ejemplo:
@@ -385,9 +383,6 @@ $(document).ready(function () {
                     alert("Hubo un error al realizar el registro. Por favor, inténtalo de nuevo.");
                 }
             });
-
-
-
 
         } else {
             Swal.fire({
@@ -401,8 +396,9 @@ $(document).ready(function () {
 
 
 
-    //Registro de Reuinion de celula      
 
+
+    /////////////// REGISTRO DE REUNION DE CELULA ////////////////////    
 
     const regexObj2 = {
 
@@ -422,32 +418,27 @@ $(document).ready(function () {
         observaciones: false
     };
 
-
-    ///////// REGISTRAR REUNION ////////
     const form2 = document.getElementById("formularioReunion");
     form2.addEventListener("submit", (e) => {
         e.preventDefault();
 
         const idCelulaConsolidacion = document.getElementById('idCelulaConsolidacionR').textContent;
 
-
-
         // Validar fecha
         const fecha = document.getElementById("fecha").value;
-        /* if (fecha === "") {
-             document.getElementById("msj_fecha").classList.remove("d-none");
-             validationStatus2.fecha = false;
-         } else {
-             // Comprobar que la fecha esté en un formato válido
-             if (!regexObj2.actividad.test(fecha)) {
-                 document.getElementById("msj_fecha").classList.remove("d-none");
-                 validationStatus2.fecha = false;
-             } else {
-                 document.getElementById("msj_fecha").classList.add("d-none");
-                 validationStatus2.fecha = true;
-             }
-         }*/
-
+        if (fecha === "") {
+            document.getElementById("msj_fecha").classList.remove("d-none");
+            validationStatus2.fecha = false;
+        } else {
+            // Comprobar que la fecha esté en un formato válido
+            if (!regexObj2.actividad.test(fecha)) {
+                document.getElementById("msj_fecha").classList.remove("d-none");
+                validationStatus2.fecha = false;
+            } else {
+                document.getElementById("msj_fecha").classList.add("d-none");
+                validationStatus2.fecha = true;
+            }
+        }
 
         // Validar tematica
         const tematica = document.getElementById("tematica").value;
@@ -479,6 +470,17 @@ $(document).ready(function () {
             validationStatus2.generosidad = true;
         }
 
+        //Validar asistencia
+        const asistencia = document.querySelector("#discipulos");
+        const selectedValues = Array.from(asistencia.selectedOptions).map(option => option.value);
+        if (selectedValues.length === 0) {
+            document.getElementById("msj_asistencia").classList.remove("d-none");
+            validationStatus2.actividad = false;
+        } else {
+            document.getElementById("msj_asistencia").classList.add("d-none");
+            validationStatus2.actividad = true;
+        }
+
 
         // Validar actividad
         const actividad = document.getElementById("actividad").value;
@@ -493,7 +495,7 @@ $(document).ready(function () {
         // Validar observaciones
         const observaciones = document.getElementById("observaciones").value;
         if (!regexObj2.observaciones.test(observaciones)) {
-            document.getElementById("msj_juvenil").classList.remove("d-none");
+            document.getElementById("msj_observaciones").classList.remove("d-none");
             validationStatus2.observaciones = false;
         } else {
             document.getElementById("msj_observaciones").classList.add("d-none");
@@ -517,37 +519,67 @@ $(document).ready(function () {
                     tematica: tematica,
                     semana: semana,
                     generosidad: generosidad,
+                    asistencias: selectedValues,
                     actividad: actividad,
                     observaciones: observaciones
                 },
                 success: function (response) {
-
+                    console.log(response);
                     let data = JSON.parse(response);
                     dataTable.ajax.reload();
 
-                    // Aquí puedes manejar una respuesta exitosa, por ejemplo:
-                    console.log("Respuesta del servidor:", data);
                     Swal.fire({
                         icon: 'success',
-                        title: 'Se registro correctamente la Reunion',
+                        title: data.msj,
                         showConfirmButton: false,
                         timer: 2000,
                     })
 
-                    document.getElementById("#formularioReunion").reset();
+                    fecha.value = ''
+                    tematica.value = ''
+                    semana.value = ''
+                    generosidad.value = ''
+                    actividad.value = ''
+                    observaciones.value = ''
+                    choices4.clear();
+
+                    //Volviendo a colocar los estados en false
+                    validationStatus2.forEach((value, key) => {
+                        validationStatus2[key] = false;
+                    });
+
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    // Aquí puedes manejar errores, por ejemplo:
-                    console.error("Error al enviar:", textStatus, errorThrown);
-                    alert("Hubo un error al realizar el registro. Por favor, inténtalo de nuevo.");
+                    if (jqXHR.responseText) {
+                        let jsonResponse = JSON.parse(jqXHR.responseText);
+                
+                        if (jsonResponse.msj) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: jsonResponse.msj,
+                                showConfirmButton: true,
+                            })
+                        } else {
+                            const respuesta = JSON.stringify(jsonResponse, null, 2)
+                            Swal.fire({
+                                background: 'red',
+                                color: '#fff',
+                                title: respuesta,
+                                showConfirmButton: true,
+                            })
+                        }
+                    } else {
+                        alert('Error desconocido: ' + textStatus);
+                    }
                 }
             });
-
-
-
-
         } else {
-            alert("Formulario inválido. Por favor, corrija los errores.");
+            Swal.fire({
+                icon: 'error',
+                title: 'Formulario invalido. Verifique sus datos',
+                showConfirmButton: false,
+                timer: 2000,
+            })
         }
     });
 

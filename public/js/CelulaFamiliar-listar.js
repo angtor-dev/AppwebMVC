@@ -104,9 +104,27 @@ $(document).ready(function () {
 
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
-                        // Aquí puedes manejar errores, por ejemplo:
-                        console.error("Error al enviar:", textStatus, errorThrown);
-                        alert("Hubo un error al editar el registro. Por favor, inténtalo de nuevo.");
+                        if (jqXHR.responseText) {
+                            let jsonResponse = JSON.parse(jqXHR.responseText);
+    
+                            if (jsonResponse.msj) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: jsonResponse.msj,
+                                    showConfirmButton: true,
+                                })
+                            } else {
+                                const respuesta = JSON.stringify(jsonResponse, null, 2)
+                                Swal.fire({
+                                    background: 'red',
+                                    color: '#fff',
+                                    title: respuesta,
+                                    showConfirmButton: true,
+                                })
+                            }
+                        } else {
+                            alert('Error desconocido: ' + textStatus);
+                        }
                     }
                 })
             }
@@ -166,10 +184,6 @@ $(document).ready(function () {
                     placeholderValue: 'Selecciona una opción',  // Texto del placeholder
                 });
 
-                //console.log(data);
-
-
-
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 // Aquí puedes manejar errores, por ejemplo:
@@ -214,10 +228,6 @@ $(document).ready(function () {
                     placeholderValue: 'Selecciona una opción',  // Texto del placeholder
                 });
 
-                //console.log(data);
-
-
-
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 // Aquí puedes manejar errores, por ejemplo:
@@ -230,7 +240,7 @@ $(document).ready(function () {
     Listar_Territorio();
 
 
-    //Registro de Celula
+    ////////////////////// ACTUALIZAR DATOS DE LA CELULA /////////////////////////
 
 
     const regexObj = {
@@ -331,9 +341,27 @@ $(document).ready(function () {
                     document.getElementById("#formulario").reset();
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    // Aquí puedes manejar errores, por ejemplo:
-                    console.error("Error al enviar:", textStatus, errorThrown);
-                    alert("Hubo un error al realizar el registro. Por favor, inténtalo de nuevo.");
+                    if (jqXHR.responseText) {
+                        let jsonResponse = JSON.parse(jqXHR.responseText);
+
+                        if (jsonResponse.msj) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: jsonResponse.msj,
+                                showConfirmButton: true,
+                            })
+                        } else {
+                            const respuesta = JSON.stringify(jsonResponse, null, 2)
+                            Swal.fire({
+                                background: 'red',
+                                color: '#fff',
+                                title: respuesta,
+                                showConfirmButton: true,
+                            })
+                        }
+                    } else {
+                        alert('Error desconocido: ' + textStatus);
+                    }
                 }
             });
 
@@ -349,7 +377,12 @@ $(document).ready(function () {
 
 
 
-    //Registro de Reuinion de celula      
+
+
+
+
+
+    //////////////////////////// REGISTRO DE REUNION ////////////////////////////////   
 
 
     const regexObj2 = {
@@ -384,8 +417,6 @@ $(document).ready(function () {
 
         const idCelulaFamiliar = document.getElementById('idCelulaFamiliarR').textContent;
 
-
-        
         // Validar fecha
         const fecha = document.getElementById("fecha").value;
        /* if (fecha === "") {
@@ -522,14 +553,29 @@ $(document).ready(function () {
                     document.getElementById("#formularioReunion").reset();
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    // Aquí puedes manejar errores, por ejemplo:
-                    console.error("Error al enviar:", textStatus, errorThrown);
-                    alert("Hubo un error al realizar el registro. Por favor, inténtalo de nuevo.");
+                    if (jqXHR.responseText) {
+                        let jsonResponse = JSON.parse(jqXHR.responseText);
+
+                        if (jsonResponse.msj) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: jsonResponse.msj,
+                                showConfirmButton: true,
+                            })
+                        } else {
+                            const respuesta = JSON.stringify(jsonResponse, null, 2)
+                            Swal.fire({
+                                background: 'red',
+                                color: '#fff',
+                                title: respuesta,
+                                showConfirmButton: true,
+                            })
+                        }
+                    } else {
+                        alert('Error desconocido: ' + textStatus);
+                    }
                 }
             });
-
-
-
 
         } else {
             Swal.fire({
