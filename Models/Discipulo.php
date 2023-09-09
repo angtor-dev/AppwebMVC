@@ -127,7 +127,30 @@ class Discipulo extends Model
 
         try {
 
-            $sql = "SELECT * FROM sede WHERE sede.estatus = '1'";
+            $sql = "SELECT Consolidador.id AS idConsolidador,
+            Consolidador.nombre AS nombreConsolidador,
+            Consolidador.apellido AS apellidoConsolidador,
+            Consolidador.cedula AS cedulaConsolidador,
+            celulaconsolidacion.id AS idcelulaconsolidacion,
+            celulaconsolidacion.codigo,
+            discipulo.id,
+            discipulo.asisCrecimiento,
+            discipulo.asisFamiliar,
+            discipulo.idConsolidador,
+            discipulo.idcelulaconsolidacion,
+            discipulo.cedula,
+            discipulo.nombre,
+            discipulo.apellido,
+            discipulo.telefono,
+            discipulo.direccion,
+            discipulo.estadoCivil,
+            discipulo.motivo,
+            discipulo.fechaNacimiento,
+            discipulo.fechaConvercion
+          FROM
+            discipulo
+            INNER JOIN usuario AS Consolidador ON discipulo.idConsolidador = Consolidador.id
+            INNER JOIN celulaconsolidacion ON discipulo.idcelulaconsolidacion = celulaconsolidacion.id";
 
             $stmt = $this->db->pdo()->prepare($sql);
 
@@ -145,21 +168,50 @@ class Discipulo extends Model
         }
     }
 
-    public  function editar_discipulo($id, $idPastor, $nombre, $direccion, $estado)
+    public  function editar_discipulo($id, $asisCrecimiento, $asisFamiliar, $idConsolidador, $idcelulaconsolidacion, $cedula, $nombre,
+    $apellido, $telefono, $direccion, $estadoCivil, $motivo, $fechaNacimiento, $fechaConvercion)
     {
 
         try {
 
-            $sql = "UPDATE sede SET idPastor = :idPastor, nombre = :nombre, estado = :estado, direccion = :direccion WHERE sede.id = :id";
+            
+
+
+            $sql = "UPDATE discipulo SET
+            asisCrecimiento = :asisCrecimiento,
+            asisFamiliar = :asisFamiliar,
+            idConsolidador = :idConsolidador,
+            idcelulaconsolidacion = :idcelulaconsolidacion,
+            cedula = :cedula,
+            nombre = :nombre,
+            apellido = :apellido,
+            telefono = :telefono,
+            direccion = :direccion,
+            estadoCivil = :estadoCivil,
+            motivo = :motivo,
+            fechaNacimiento = :fechaNacimiento,
+            fechaConvercion = :fechaConvercion
+            WHERE
+            id = :id";
 
 
             $stmt = $this->db->pdo()->prepare($sql);
 
             $stmt->bindValue(':id', $id);
-            $stmt->bindValue(':idPastor', $idPastor);
+            $stmt->bindValue(':asisCrecimiento', $asisCrecimiento);
+            $stmt->bindValue(':asisFamiliar', $asisFamiliar);
+            $stmt->bindValue(':idConsolidador', $idConsolidador);
+            $stmt->bindValue(':idcelulaconsolidacion', $idcelulaconsolidacion);
+            $stmt->bindValue(':cedula', $cedula);
             $stmt->bindValue(':nombre', $nombre);
-            $stmt->bindValue(':estado', $estado);
+            $stmt->bindValue(':apellido', $apellido);
+            $stmt->bindValue(':telefono', $telefono);
             $stmt->bindValue(':direccion', $direccion);
+            $stmt->bindValue(':estadoCivil', $estadoCivil);
+            $stmt->bindValue(':motivo', $motivo);
+            $stmt->bindValue(':fechaNacimiento', $fechaNacimiento);
+            $stmt->bindValue(':fechaConvercion', $fechaConvercion);
+
 
             $stmt->execute();
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
@@ -178,7 +230,7 @@ class Discipulo extends Model
 
         try {
 
-            $sql = "UPDATE sede SET estatus = '0' WHERE sede.id = :id";
+            $sql = "DELETE FROM discipulo WHERE id = :id";
 
             $stmt = $this->db->pdo()->prepare($sql);
 

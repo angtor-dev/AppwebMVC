@@ -59,7 +59,6 @@ if (isset($_POST['editar'])) {
 if (isset($_POST['eliminar'])) {   
 
 
-
     $id = $_POST['id'];
 
    $CelulaConsolidacion->eliminar_reuniones($id);

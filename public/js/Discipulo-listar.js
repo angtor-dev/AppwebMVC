@@ -1,6 +1,146 @@
-
 $(document).ready(function () {
 
+    let choices;
+  
+    const dataTable = $('#sedeDatatables').DataTable({
+      responsive: true,
+      ajax: {
+        method: "GET",
+        url: 'http://localhost/AppwebMVC/Discipulos/Listar',
+        data: { cargar_data: 'cargar_data' }
+      },
+      columns: [
+        { data: 'cedula' },
+        { data: 'nombre' },
+        { data: 'apellido' },
+        { data: 'codigo' },
+        {
+          defaultContent: `
+              <button type="button" id="ver_info" data-bs-toggle="modal" data-bs-target="#modal_verInfo" class="btn btn-light">Info</button>
+              <button type="button" id="editar" data-bs-toggle="modal" data-bs-target="#modal_editarInfo" class="btn btn-primary">Editar</button>
+              <button type="button" id="eliminar" class="btn btn-danger delete-btn">Eliminar</button>
+              `}
+  
+      ],
+    })
+  
+    $('#sedeDatatables tbody').on('click', '#ver_info', function () {
+      const datos = dataTable.row($(this).parents()).data();
+
+      let text = `${datos.cedulaConsolidador} ${datos.nombreConsolidador} ${datos.apellidoConsolidador}`;
+    
+      document.getElementById('inf_nombre').textContent = datos.nombre;
+      document.getElementById('inf_apellido').textContent = datos.apellido;
+      document.getElementById('inf_telefono').textContent = datos.telefono;
+      document.getElementById('inf_cedula').textContent = datos.cedula;
+      document.getElementById('inf_estadoCivil').textContent = datos.estadoCivil;
+      document.getElementById('inf_fechaNacimiento').textContent = datos.fechaNacimiento;
+      document.getElementById('inf_fechaConvercion').textContent = datos.fechaConvercion;
+      document.getElementById('inf_idConsolidador').textContent = text;
+      document.getElementById('inf_codigo').textContent = datos.codigo;
+      document.getElementById('inf_asisFamiliar').textContent = datos.asisFamiliar;
+      document.getElementById('inf_asisCrecimiento').textContent = datos.asisCrecimiento;
+      document.getElementById('inf_direccion').textContent = datos.direccion;
+      document.getElementById('inf_motivo').textContent = datos.motivo;
+     
+    })
+  
+  
+  
+    $('#sedeDatatables tbody').on('click', '#editar', function () {
+      const datos = dataTable.row($(this).parents()).data();
+  
+      document.getElementById('idDiscipulo').textContent = datos.id;
+      document.getElementById('nombre').value = datos.nombre;
+      document.getElementById('apellido').value = datos.apellido;
+      document.getElementById('cedula').value = datos.cedula;
+      document.getElementById('telefono').value = datos.telefono;
+      document.getElementById('estadoCivil').value = datos.estadoCivil;
+      document.getElementById('fechaNacimiento').value = datos.fechaNacimiento;
+      document.getElementById('fechaConvercion').value = datos.fechaNacimiento;
+      document.getElementById('idConsolidador').value = datos.idConsolidador;
+      document.getElementById('idcelulaconsolidacion').value = datos.idcelulaconsolidacion;
+      document.getElementById('asisFamiliar').value = datos.asisFamiliar;
+      document.getElementById('asisCrecimiento').value = datos.asisCrecimiento;
+      document.getElementById('direccion').value = datos.direccion;
+      document.getElementById('motivo').value = datos.motivo;
+  
+      Listar_Consolidador(datos.idConsolidador);
+  
+    })
+  
+    $('#sedeDatatables tbody').on('click', '#eliminar', function () {
+      const datos = dataTable.row($(this).parents()).data();
+  
+      const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+          confirmButton: 'btn btn-success',
+          cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+      })
+  
+      swalWithBootstrapButtons.fire({
+        title: '¿Estas Seguro?',
+        text: "No volveras a tener acceso a este Discipulo",
+        html: '<spam id="idDiscipuloE"></spam>',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Si, Estoy seguro!',
+        cancelButtonText: 'No, cancelar!',
+        reverseButtons: true
+      }).then((result) => {
+        if (result.isConfirmed) {
+  
+  
+          document.getElementById('idDiscipuloE').textContent = datos.id;
+          let id = document.getElementById('idDiscipuloE').textContent;
+  
+  
+          $.ajax({
+            type: "POST",
+            url: "http://localhost/AppwebMVC/Discipulos/Listar",
+            data: {
+  
+              eliminar: 'eliminar',
+              id: id,
+            },
+            success: function (response) {
+  
+              let data = JSON.parse(response);
+              dataTable.ajax.reload();
+  
+              // Aquí puedes manejar una respuesta exitosa, por ejemplo:
+              console.log("Respuesta del servidor:", data);
+  
+              swalWithBootstrapButtons.fire(
+                'Eliminado!',
+                'el Discipulo fue eliminada.',
+                'success'
+              )
+  
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+              // Aquí puedes manejar errores, por ejemplo:
+              console.error("Error al enviar:", textStatus, errorThrown);
+              alert("Hubo un error al editar el registro. Por favor, inténtalo de nuevo.");
+            }
+          })
+        } else if (
+          /* Read more about handling dismissals below */
+          result.dismiss === Swal.DismissReason.cancel
+        ) {
+          swalWithBootstrapButtons.fire(
+            'Cancelado',
+            ':)',
+            'error'
+          )
+        }
+      });
+    });
+  
+  
+  
     let choices1;
     let choices2;
 
@@ -47,7 +187,7 @@ $(document).ready(function () {
         })
     }
 
-    Listar_Consolidador();
+
 
     function Listar_celulas() {
 
@@ -94,17 +234,17 @@ $(document).ready(function () {
 
 
     let validaciones = {
-        nombre: false,
-        apellido: false,
-        cedula: false,
-        telefono: false,
-        estadoCivil: false,
-        fechaNacimiento: false,
-        fechaConvercion: false,
-        idConsolidador: false,
-        idcelulaconsolidacion: false,
-        direccion: false,
-        motivo: false
+        nombre: true,
+        apellido: true,
+        cedula: true,
+        telefono: true,
+        estadoCivil: true,
+        fechaNacimiento: true,
+        fechaConvercion: true,
+        idConsolidador: true,
+        idcelulaconsolidacion: true,
+        direccion: true,
+        motivo: true
 
     };
 
@@ -303,6 +443,8 @@ $(document).ready(function () {
         if (Object.values(validaciones).every(val => val)) {
 
 
+
+            let id = $("#idDiscipulo").text();
             let asisFamiliar = $("#asisFamiliar").val();
             let asisCrecimiento = $("#asisCrecimiento").val();
             let nombre = $("#nombre").val();
@@ -319,10 +461,11 @@ $(document).ready(function () {
 
             $.ajax({
                 type: "POST",
-                url: "http://localhost/AppwebMVC/Discipulos/Registrar",
+                url: "http://localhost/AppwebMVC/Discipulos/Listar",
                 data: {
 
-                    registrar: 'registrar',
+                    editar: 'editar',
+                    id: id,
                     nombre: nombre,
                     apellido: apellido,
                     cedula: cedula,
@@ -340,6 +483,7 @@ $(document).ready(function () {
                 success: function (response) {
 
                     let data = JSON.parse(response);
+                    dataTable.ajax.reload(); 
 
                     Swal.fire({
                         icon: 'success',
@@ -348,19 +492,6 @@ $(document).ready(function () {
                         timer: 2000,
                     })
 
-                    document.getElementById('nombre').value = ''
-                    document.getElementById('apellido').value = ''
-                    document.getElementById('cedula').value = ''
-                    document.getElementById('telefono').value = ''
-                    document.getElementById('estadoCivil').value = ''
-                    document.getElementById('fechaNacimiento').value = ''
-                    document.getElementById('fechaConvercion').value = ''
-                    document.getElementById('direccion').value = ''
-                    document.getElementById('motivo').value = ''
-                    asisCrecimiento.checked = false
-                    asisFamiliar.checked = false
-                    choices1.setChoiceByValue('')
-                    choices2.setChoiceByValue('')
 
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -383,6 +514,11 @@ $(document).ready(function () {
 
 
     });
-
-});
-
+    
+  
+  
+  
+  });
+  
+  
+  

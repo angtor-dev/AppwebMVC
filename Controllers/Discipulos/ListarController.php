@@ -1,15 +1,11 @@
 <?php
-require_once "Models/Sede.php";
+require_once "Models/Discipulo.php";
 // Logica del controlador
 
 necesitaAutenticacion();
 
 $usuarioSesion = $_SESSION['usuario'];
 
-if (!$usuarioSesion->tienePermiso("listarDiscipulos")) {
-    $_SESSION['errores'][] = "No posee permiso para listar Discipulos.";
-    redirigir("/AppwebMVC/Home/");
-}
 
 $Discipulo = new Discipulo();
 
@@ -65,12 +61,25 @@ if (isset($_POST['editar'])) {
 
 
     $id = $_POST['id'];
-    $idPastor = $_POST['idPastor'];
+    $asisCrecimiento = $_POST['asisCrecimiento'];
+    $asisFamiliar = $_POST['asisFamiliar'];
+    $idConsolidador = $_POST['idConsolidador'];
+    $idcelulaconsolidacion = $_POST['idcelulaconsolidacion'];
+    $cedula = $_POST['cedula'];
     $nombre = $_POST['nombre'];
+    $apellido = $_POST['apellido'];
+    $telefono = $_POST['telefono'];
     $direccion = $_POST['direccion'];
-    $estado = $_POST['estado'];
- 
-   $Sede->editar_discipulo($id, $idPastor, $nombre, $direccion, $estado);
+    $estadoCivil = $_POST['estadoCivil'];
+    $motivo = $_POST['motivo'];
+    $fechaNacimiento = $_POST['fechaNacimiento'];
+    $fechaConvercion = $_POST['fechaConvercion'];
+
+
+
+    
+   $Discipulo->editar_discipulo($id, $asisCrecimiento, $asisFamiliar, $idConsolidador, $idcelulaconsolidacion, $cedula, $nombre,
+   $apellido, $telefono, $direccion, $estadoCivil, $motivo, $fechaNacimiento, $fechaConvercion);
 
    echo json_encode('Lo logramos!!');
    die(); 
@@ -79,14 +88,11 @@ if (isset($_POST['editar'])) {
 
 if (isset($_POST['eliminar'])) {   
 
-    if (!$usuarioSesion->tienePermiso("eliminarDiscipulos")) {
-        $_SESSION['errores'][] = "No posee permiso para eliminar Sede.";
-        redirigir("/AppwebMVC/Home/");
-    }
+    
 
     $id = $_POST['id'];
 
-   $Sede->eliminar_discipulo($id);
+   $Discipulo->eliminar_discipulo($id);
 
    echo json_encode('Lo logramos!!');
    die();

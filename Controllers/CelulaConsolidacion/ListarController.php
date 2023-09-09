@@ -8,10 +8,7 @@ $usuarioSesion = $_SESSION['usuario'];
 $CelulaConsolidacion = new CelulaConsolidacion();
 ///hola
 
-if (!$usuarioSesion->tienePermiso("listarCelulaConsolidacion")) {
-    $_SESSION['errores'][] = "No seposee permiso para registrar Sede.";
-    redirigir("/AppwebMVC/Home/");
-}
+
 
 if (isset($_GET['cargar_data'])) {  
     //Primero inicializamos las variables
@@ -80,8 +77,6 @@ if (isset($_POST['registroreunion'])) {
    die();
 
 }
-
-
 
 
 if (isset($_POST['eliminar'])) {   

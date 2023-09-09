@@ -122,7 +122,7 @@ $(document).ready(function () {
 
     $.ajax({
       type: "GET",
-      url: "http://localhost/AppwebMVC/Sedes/Registrar",
+      url: "http://localhost/AppwebMVC/Sedes/Listar",
       data: {
 
         listaPastores: 'listaPastores',

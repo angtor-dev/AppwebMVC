@@ -78,7 +78,7 @@ $viewScripts = ["CelulaConsolidacion-listar.js"];
                     <div class="mb-3">
                         <form id="formulario">
                             <div class="mb-3 col-12">
-                                <input type="hidden" id="idCelulaConsolidacion">
+                                <input type="text" id="idCelulaConsolidacion">
                                 <label for="nombre" class="form-label fw-bold">Nombre de la Celula</label>
                                 <input type="text" class="form-control" id="nombre" maxlength="20" name="nombre">
                                 <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_nombre" role="alert">
@@ -141,8 +141,10 @@ $viewScripts = ["CelulaConsolidacion-listar.js"];
                     <div class="mb-3">
                         <form id="formularioReunion">
 
-                            <input class="d-none" type="hidden" id="idCelulaConsolidacionR">
+                            
                             <div class="mb-3">
+                                
+                            <input class="d-none" type="hidden" id="idCelulaConsolidacionR">
 
                                 <label for="fecha" class="form-label fw-bold">Fecha</label>
                                 <input type="date" class="form-control" id="fecha" name="fecha">

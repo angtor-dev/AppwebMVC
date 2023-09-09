@@ -86,7 +86,7 @@ $(document).ready(function () {
 
                 $.ajax({
                     type: "POST",
-                    url: "http://localhost/AppwebMVC/CelulaCrecimiento/Reunion",
+                    url: "http://localhost/AppwebMVC/CelulaConsolidacion/Reunion",
                     data: {
 
                         eliminar: 'eliminar',

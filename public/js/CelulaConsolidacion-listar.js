@@ -38,7 +38,7 @@ $(document).ready(function () {
         let text = `${datos.cedulaLider} ${datos.nombreLider} ${datos.apellidoLider}`;
         let text2 = `${datos.cedulaCoLider} ${datos.nombreCoLider} ${datos.apellidoCoLider}`;
 
-        document.getElementById('inf_codigo').textContent = datos.codigo;
+        document.getElementById('inf_codigo').textContent = datos.id;
         document.getElementById('inf_nombre').textContent = datos.nombre;
         document.getElementById('inf_idLider').textContent = text;
         document.getElementById('inf_idCoLider').textContent = text2;
@@ -58,7 +58,7 @@ $(document).ready(function () {
 
     $('#celulaDatatables tbody').on('click', '#reunion', function () {
         const datos = dataTable.row($(this).parents()).data();
-        document.getElementById('idCelulaConsolidacionR').value = datos.id;
+        document.getElementById('idCelulaConsolidacionR').textContent = datos.id;
         Listar_discipulos_celula(datos.id) 
     })
 

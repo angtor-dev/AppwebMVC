@@ -142,6 +142,7 @@ $viewScripts = ["CelulaCrecimiento-listar.js"];
 
 
                         <input type="hidden" id="idCelulaCrecimientoR">   
+                        
                             <div class="mb-3">
                             
                                 <label for="fecha" class="form-label fw-bold">Fecha</label>

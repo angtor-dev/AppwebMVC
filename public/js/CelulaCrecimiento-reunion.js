@@ -218,7 +218,7 @@ $(document).ready(function () {
     form2.addEventListener("submit", (e) => {
         e.preventDefault();
 
-        const id = document.getElementById('idreunionfamiliar').textContent
+        const id = document.getElementById('idreunioncrecimiento').textContent;
 
 
 
