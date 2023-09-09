@@ -21,5 +21,5 @@ try {
     }
 }
 
-redirigir("AppwebMVC/NivelesCrecimiento");
+redirigir("/AppwebMVC/NivelesCrecimiento");
 ?>
