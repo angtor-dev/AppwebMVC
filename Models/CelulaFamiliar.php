@@ -391,7 +391,7 @@ class CelulaFamiliar extends Model
     }
 
 
-    public  function editar_reuniones($id, $idCelulaFamiliar, $fecha, $tematica, $semana, $generosidad, $infantil, $juvenil, $adulto, $actividad, $observaciones)
+    public function editar_reuniones($id, $idCelulaFamiliar, $fecha, $tematica, $semana, $generosidad, $infantil, $juvenil, $adulto, $actividad, $observaciones)
     {
 
         try {
@@ -488,6 +488,60 @@ class CelulaFamiliar extends Model
             //print_r($error_data);
             http_response_code(422);
             echo json_encode($error_data);
+            die();
+        }
+    }
+
+
+
+
+    /////////////////////////// VALIDACIONES ///////////////////////////////
+
+    public function validacion_existencia(string $nombre, $idTerritorio): void
+    {
+        try {
+            $sql = "SELECT * FROM territorio WHERE nombre = :nombre" . (!empty($idTerritorio) ? " AND id != $idTerritorio" : "");
+            $stmt = $this->db->pdo()->prepare($sql);
+            $stmt->bindValue(":nombre", $nombre);
+            $stmt->execute();
+            $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($resultado !== false) {
+                if ($resultado['nombre'] === $nombre) {
+                    // Lanzar una excepción si el dato existe en la BD
+                    throw new Exception("El territorio llamado " . $nombre . " ya existe", 422);
+                }
+            }
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+            die();
+        }
+    }
+
+    public function validacion_accion(int $idTerritorio, int $accion): void
+    {
+        try {
+            
+            $sql = "SELECT * FROM reunionfamiliar WHERE idCelulaFamiliar= :idCelulaFamiliar AND estatus = 1";
+
+            $stmt = $this->db->pdo()->prepare($sql);
+            $stmt->bindValue(":idTerritorio1", $idTerritorio);
+            $stmt->bindValue(":idTerritorio2", $idTerritorio);
+            $stmt->bindValue(":idTerritorio3", $idTerritorio);
+            $stmt->execute();
+
+            if ($stmt->rowCount() > 0) {
+                // Lanzar una excepción si el dato existe en la BD
+                if ($accion == 1) {
+                    throw new Exception("Este territorio esta asociado a celulas que estan en uso. Estos poseen datos asociados", 422);
+                }else{
+                    throw new Exception("No puedes cambiar la sede porque ya existen celulas asociadas al territorio y con codigos unicos generados. Esto podria destruir la integridad de los datos", 422);
+                }
+            }
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
             die();
         }
     }

@@ -44,6 +44,7 @@ class Sede extends Model
         "ZUL"   => "zulia"
     ];
 
+
     //Funcion para obtener el nombre completo del estado
     public function getNombreEstado($estadoCodigo)
     {

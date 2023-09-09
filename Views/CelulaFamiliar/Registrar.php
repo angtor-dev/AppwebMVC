@@ -22,7 +22,7 @@ $viewScripts = ["CelulaFamiliar-registrar.js"]; ?>
     </div>
 
     <div class="row my-2">
-      <div class="col-lg-5 col-md-5 col-sm-5">
+      <div class="col-lg-5 col-md-12 col-sm-12">
         <label for="idLider" class="form-label fw-bold">Lider Responsable</label>
         <select class="form-select" id="idLider" name="idLider">
           <option selected value="">Selecciona...</option>
@@ -31,7 +31,7 @@ $viewScripts = ["CelulaFamiliar-registrar.js"]; ?>
           Debe seleccionar un Lider.
         </div>
       </div>
-      <div class="col-lg-5 col-md-5 col-sm-5">
+      <div class="col-lg-5 col-md-12 col-sm-12">
         <label for="CoLider" class="form-label fw-bold">Co Lider Responsable</label>
         <select class="form-select" id="idCoLider" name="idCoLider">
           <option selected value="">Selecciona...</option>

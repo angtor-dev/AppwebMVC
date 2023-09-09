@@ -31,7 +31,7 @@ class Territorio extends Model
         }
     }
 
-    public  function registrar_territorio($idSede, $nombre, $idLider, $detalles)
+    public function registrar_territorio($idSede, $nombre, $idLider, $detalles)
     {
         try {
 
@@ -50,6 +50,7 @@ class Territorio extends Model
                 $territorio = 'T' . $id;
                 $identificador = $sede->codigo;
                 $codigo = $identificador . '-' . $territorio;
+                
             } else {
                 $territorios = Territorio::cargarRelaciones($idSede, "Sede");
 
