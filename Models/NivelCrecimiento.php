@@ -7,6 +7,7 @@ class NivelCrecimiento extends Model
     public int $idEscuela;
     public string $nombre;
     public int $nivel;
+    public int $estatus;
 
     public Escuela $escuela;
 

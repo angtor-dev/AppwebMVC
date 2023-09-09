@@ -143,6 +143,58 @@ class Usuario extends Model
         }
     }
 
+    public function actualizar() : void
+    {
+        $sql = "UPDATE usuario SET idSede = :idSede, cedula = :cedula, correo = :correo,
+            nombre = :nombre, apellido = :apellido, telefono = :telefono, direccion = :direccion,
+            estadoCivil = :estadoCivil, fechaNacimiento = :fechaNacimiento WHERE id = :id";
+
+        try {
+            $this->db->pdo()->beginTransaction();
+            
+            // Actualiza el usuario
+            $stmt = $this->prepare($sql);
+            $stmt->bindValue('idSede', $this->idSede);
+            $stmt->bindValue('cedula', $this->cedula);
+            $stmt->bindValue('correo', $this->correo);
+            $stmt->bindValue('nombre', $this->nombre);
+            $stmt->bindValue('apellido', $this->apellido);
+            $stmt->bindValue('telefono', $this->telefono);
+            $stmt->bindValue('direccion', $this->direccion);
+            $stmt->bindValue('estadoCivil', $this->estadoCivil);
+            $stmt->bindValue('fechaNacimiento', $this->fechaNacimiento);
+            $stmt->bindValue('id', $this->id);
+
+            $stmt->execute();
+
+            // Actualiza los roles del usuario
+            $this->query("DELETE FROM usuariorol WHERE idUsuario = $this->id");
+            $idRol = null;
+
+            $sql = "INSERT INTO usuariorol(idUsuario, idRol)
+                VALUES(:idUsuario, :idRol)";
+            
+            $stmt = $this->prepare($sql);
+            $stmt->bindParam('idUsuario', $this->id);
+            $stmt->bindParam('idRol', $idRol);
+
+            foreach ($this->roles as $rol) {
+                $idRol = $rol->id;
+                $stmt->execute();
+            }
+
+            // Guarda los cambios
+            $this->db->pdo()->commit();
+        } catch (\Throwable $th) {
+            // Revierte los cambios en la bd
+            if ($this->db->pdo()->inTransaction()) {
+                $this->db->pdo()->rollBack();
+            }
+            $_SESSION['errores'][] = "Ha ocurrido un error al actualizar el usuario.";
+            throw $th;
+        }
+    }
+
     public function esValido() : bool
     {
         if (empty($this->cedula) || empty($this->nombre) || empty($this->apellido)
