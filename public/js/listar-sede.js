@@ -40,39 +40,25 @@ $(document).ready(function () {
     document.getElementById('idSede').textContent = datos.id;
     document.getElementById('nombre').value = datos.nombre;
     document.getElementById('direccion').value = datos.direccion;
-    document.getElementById('estado').value = datos.estado;
+    document.getElementById('estado').value = datos.estadoCodigo;
 
     Listar_Pastores(datos.idPastor);
-
   })
 
   $('#sedeDatatables tbody').on('click', '#eliminar', function () {
     const datos = dataTable.row($(this).parents()).data();
 
-    const swalWithBootstrapButtons = Swal.mixin({
-      customClass: {
-        confirmButton: 'btn btn-success',
-        cancelButton: 'btn btn-danger'
-      },
-      buttonsStyling: false
-    })
-
-    swalWithBootstrapButtons.fire({
+    Swal.fire({
       title: '¿Estas Seguro?',
-      text: "No volveras a tener acceso a esta Sede",
-      html: '<spam id="idSedeE"></spam>',
+      text: "No podras acceder a esta sede otra vez!",
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Si, Estoy seguro!',
-      cancelButtonText: 'No, cancelar!',
+      confirmButtonText: '¡Si, estoy seguro!',
+      confirmButtonColor: '#007bff',
+      cancelButtonText: '¡No, cancelar!',
       reverseButtons: true
     }).then((result) => {
       if (result.isConfirmed) {
-
-
-        document.getElementById('idSedeE').textContent = datos.id;
-        let id = document.getElementById('idSedeE').textContent;
-
 
         $.ajax({
           type: "POST",
@@ -80,38 +66,47 @@ $(document).ready(function () {
           data: {
 
             eliminar: 'eliminar',
-            id: id,
+            id: datos.id,
           },
           success: function (response) {
-
+            console.log(response);
             let data = JSON.parse(response);
             dataTable.ajax.reload();
 
-            // Aquí puedes manejar una respuesta exitosa, por ejemplo:
-            console.log("Respuesta del servidor:", data);
-
-            swalWithBootstrapButtons.fire(
-              'Eliminado!',
-              'La Sede fue eliminada.',
-              'success'
-            )
+            Swal.fire({
+              icon: 'success',
+              title: '¡Borrado!',
+              text: 'La sede ha sido borrada',
+              showConfirmButton: false,
+              timer: 2000,
+            })
 
           },
           error: function (jqXHR, textStatus, errorThrown) {
-            // Aquí puedes manejar errores, por ejemplo:
-            console.error("Error al enviar:", textStatus, errorThrown);
-            alert("Hubo un error al editar el registro. Por favor, inténtalo de nuevo.");
+            if (jqXHR.responseText) {
+              let jsonResponse = JSON.parse(jqXHR.responseText);
+  
+              if (jsonResponse.msj) {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Denegado',
+                  text: jsonResponse.msj,
+                  showConfirmButton: true,
+                })
+              } else {
+                const respuesta = JSON.stringify(jsonResponse, null, 2)
+                Swal.fire({
+                  background: 'red',
+                  color: '#fff',
+                  title: respuesta,
+                  showConfirmButton: true,
+                })
+              }
+            } else {
+              alert('Error desconocido: ' + textStatus);
+            }
           }
         })
-      } else if (
-        /* Read more about handling dismissals below */
-        result.dismiss === Swal.DismissReason.cancel
-      ) {
-        swalWithBootstrapButtons.fire(
-          'Cancelado',
-          ':)',
-          'error'
-        )
       }
     });
   });
@@ -172,6 +167,10 @@ $(document).ready(function () {
 
 
 
+
+
+  ////////////////////////////////////// ACTUALIZAR DATOS DE SEDE ///////////////////////////////////////
+
   let validaciones = {
     idPastor: false,
     nombre: false,
@@ -200,7 +199,7 @@ $(document).ready(function () {
 
     // Validación del nombre de la sede
     let nombre = $("#nombre").val();
-    if (/^[a-zA-Z\s]{1,30}$/.test(nombre)) {
+    if (/^[a-zA-Z0-9\s.,]{1,50}$/.test(nombre)) {
       validaciones.nombre = true;
       $("#nombre").removeClass("is-invalid");
       $("#msj_nombre").addClass("d-none");
@@ -257,9 +256,9 @@ $(document).ready(function () {
           let data = JSON.parse(response);
           dataTable.ajax.reload();
 
-
           // Aquí puedes manejar una respuesta exitosa, por ejemplo:
           console.log("Respuesta del servidor:", data);
+
           Swal.fire({
             icon: 'success',
             title: 'Actualizado correctamente',
@@ -269,15 +268,39 @@ $(document).ready(function () {
 
         },
         error: function (jqXHR, textStatus, errorThrown) {
-          // Aquí puedes manejar errores, por ejemplo:
-          console.error("Error al enviar:", textStatus, errorThrown);
-          alert("Hubo un error al realizar el registro. Por favor, inténtalo de nuevo.");
+          if (jqXHR.responseText) {
+            let jsonResponse = JSON.parse(jqXHR.responseText);
+
+            if (jsonResponse.msj) {
+              Swal.fire({
+                icon: 'error',
+                title: 'Denegado',
+                text: jsonResponse.msj,
+                showConfirmButton: true,
+              })
+            } else {
+              const respuesta = JSON.stringify(jsonResponse, null, 2)
+              Swal.fire({
+                background: 'red',
+                color: '#fff',
+                title: respuesta,
+                showConfirmButton: true,
+              })
+            }
+          } else {
+            alert('Error desconocido: ' + textStatus);
+          }
         }
       });
 
     } else {
 
-      alert('Llena el formulario correctamente');
+      Swal.fire({
+        icon: 'error',
+        title: 'Formulario invalido. Verifique sus datos',
+        showConfirmButton: false,
+        timer: 2000,
+      })
     }
   });
 

@@ -13,26 +13,27 @@ if (!$usuarioSesion->tienePermiso("registrarSede")) {
     redirigir("/AppwebMVC/Sede/");
 }
 
-if (isset($_POST['registrar'])) {   
+if (isset($_POST['registrar'])) {
 
     $idPastor = $_POST['idPastor'];
-    $nombre = $_POST['nombre'];
-    $direccion = $_POST['direccion'];
-    $estado = $_POST['estado'];
- 
-   $Sede->registrar_Sede($idPastor, $nombre, $direccion, $estado);
-   die();
+    $nombre = trim(strtolower($_POST['nombre']));
+    $direccion = trim(strtolower($_POST['direccion']));
+    $estado = trim(strtoupper($_POST['estado']));
+
+    $Sede->validacion_datos($idPastor, $nombre, $direccion, $estado);
+    $Sede->validacion_existencia($nombre, $idSede = '');
+    $Sede->registrar_Sede($idPastor, $nombre, $direccion, $estado);
+    die();
 }
 
 
-if (isset($_GET['listaPastores'])) {  
-    
+if (isset($_GET['listaPastores'])) {
+
     $ListaPastores = $Sede->listar_Pastores();
 
     echo json_encode($ListaPastores);
-   
+
     die();
 }
-   
+
 renderView();
-?>

@@ -34,7 +34,7 @@
         </div>
         <div class="col-sm-7">
             <label for="input-telefono">Teléfono</label>
-            <input class="form-control" type="text" name="telefono" id="input-telefono" required maxlength="20"
+            <input class="form-control" type="text" name="telefono" id="input-telefono" required maxlength="50"
                 value="<?= $usuario->telefono ?? "" ?>">
             <div class="invalid-feedback">
                 Ingresa un teléfono válido
@@ -110,14 +110,14 @@
         <?php if (empty($usuario->id)): ?>
             <div class="col-sm-6">
                 <label for="input-clave">Contraseña</label>
-                <input class="form-control" type="password" name="clave" id="input-clave" required maxlength="20">
+                <input class="form-control" type="password" name="clave" id="input-clave" required maxlength="50">
                 <div class="invalid-feedback">
                     Ingresa una contraseña válida
                 </div>
             </div>
             <div class="col-sm-6">
                 <label for="input-confirmacion">Repetir contraseña</label>
-                <input class="form-control" type="password" name="confirmacion" id="input-confirmacion" required maxlength="20">
+                <input class="form-control" type="password" name="confirmacion" id="input-confirmacion" required maxlength="50">
                 <div class="invalid-feedback">
                     Las contraseñas deben coincidir
                 </div>

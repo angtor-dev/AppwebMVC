@@ -1,5 +1,7 @@
 $(document).ready(function () {
 
+    let choices;
+
     const dataTable = $('#celulaDatatables').DataTable({
         responsive: true,
         ajax: {
@@ -24,7 +26,6 @@ $(document).ready(function () {
     $('#celulaDatatables tbody').on('click', '#ver_info', function () {
         const datos = dataTable.row($(this).parents()).data();
 
-
         document.getElementById('inf_codigocelulaconsolidacion').textContent = datos.codigo;
         document.getElementById('inf_fecha').textContent = datos.fecha;
         document.getElementById('inf_tematica').textContent = datos.tematica;
@@ -32,17 +33,13 @@ $(document).ready(function () {
         document.getElementById('inf_generosidad').textContent = datos.generosidad;
         document.getElementById('inf_actividad').textContent = datos.actividad;
         document.getElementById('inf_observaciones').textContent = datos.observaciones;
-        
-
 
     })
 
     $('#celulaDatatables tbody').on('click', '#editar', function () {
         const datos = dataTable.row($(this).parents()).data();
 
-        
         document.getElementById('idreunionconsolidacion').textContent = datos.id;
-        document.getElementById('idCelulaConsolidacion').value = datos.idcelulafamiliar;
         document.getElementById('fecha').value = datos.fecha;
         document.getElementById('tematica').value = datos.tematica;
         document.getElementById('semana').value= datos.semana;
@@ -50,8 +47,7 @@ $(document).ready(function () {
         document.getElementById('actividad').value = datos.actividad;
         document.getElementById('observaciones').value = datos.observaciones;
 
-
-
+        Listar_celulas(datos.idCelulaConsolidacion)
     })
 
     
@@ -59,30 +55,17 @@ $(document).ready(function () {
     $('#celulaDatatables tbody').on('click', '#eliminar', function () {
         const datos = dataTable.row($(this).parents()).data();
 
-        const swalWithBootstrapButtons = Swal.mixin({
-            customClass: {
-                confirmButton: 'btn btn-success',
-                cancelButton: 'btn btn-danger'
-            },
-            buttonsStyling: false
-        })
-
-        swalWithBootstrapButtons.fire({
+        Swal.fire({
             title: '¿Estas Seguro?',
-            text: "No podras acceder a este territorio otra vez!",
-            html: '<spam id="idreunionConsolidacionE"></spam>',
+            text: "No podras acceder a esta reunion otra vez!",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: '¡Si, estoy seguro!',
+            confirmButtonColor: '#007bff',
             cancelButtonText: '¡No, cancelar!',
             reverseButtons: true
         }).then((result) => {
             if (result.isConfirmed) {
-
-    
-                document.getElementById('idreunionConsolidacionE').textContent= datos.id;
-                let id = document.getElementById('idreunionConsolidacionE').textContent;
-
 
                 $.ajax({
                     type: "POST",
@@ -90,43 +73,52 @@ $(document).ready(function () {
                     data: {
 
                         eliminar: 'eliminar',
-                        id: id,
+                        id: datos.id,
                     },
                     success: function (response) {
-
+                        console.log(response);
                         let data = JSON.parse(response);
                         dataTable.ajax.reload();
 
-                        // Aquí puedes manejar una respuesta exitosa, por ejemplo:
-                        console.log("Respuesta del servidor:", data);
-
-                        swalWithBootstrapButtons.fire(
-                            'La reunion ha sido eliminada',
-                            'exitosamente'
-                        )
+                        Swal.fire({
+                            icon: 'success',
+                            title: '¡Borrado!',
+                            text: 'La reunion ha sido borrada',
+                            showConfirmButton: false,
+                            timer: 2000,
+                        })
 
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
-                        // Aquí puedes manejar errores, por ejemplo:
-                        console.error("Error al enviar:", textStatus, errorThrown);
-                        alert("Hubo un error al editar el registro. Por favor, inténtalo de nuevo.");
+                        if (jqXHR.responseText) {
+                            let jsonResponse = JSON.parse(jqXHR.responseText);
+                    
+                            if (jsonResponse.msj) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: jsonResponse.msj,
+                                    showConfirmButton: true,
+                                })
+                            } else {
+                                const respuesta = JSON.stringify(jsonResponse, null, 2)
+                                Swal.fire({
+                                    background: 'red',
+                                    color: '#fff',
+                                    title: respuesta,
+                                    showConfirmButton: true,
+                                })
+                            }
+                        } else {
+                            alert('Error desconocido: ' + textStatus);
+                        }
                     }
                 })
-            } else if (
-                /* Read more about handling dismissals below */
-                result.dismiss === Swal.DismissReason.cancel
-            ) {
-                swalWithBootstrapButtons.fire(
-                    'Cancelled',
-                    'Your imaginary file is safe :)',
-                    'error'
-                )
-            }
+            } 
         });
     });
 
 
-    function Listar_celulas() {
+    function Listar_celulas(idCelulaConsolidacion) {
 
         $.ajax({
             type: "GET",
@@ -137,8 +129,6 @@ $(document).ready(function () {
 
             },
             success: function (response) {
-
-                
 
                 let data = JSON.parse(response);
                 
@@ -156,16 +146,19 @@ $(document).ready(function () {
 
                 });
 
-    
-                const element = document.getElementById('idCelulaConsolidacion');
-                const choices = new Choices(element, {
+                // Destruir la instancia existente si la hay
+                if (choices) {
+                    choices.destroy();
+                }
+
+                choices = new Choices(selector, {
                     searchEnabled: true,  // Habilita la funcionalidad de búsqueda
                     removeItemButton: true,  // Habilita la posibilidad de remover items
                     placeholderValue: 'Selecciona una opción',  // Texto del placeholder
                 });
 
+                choices.setChoiceByValue(idCelulaConsolidacion.toString())
 
-                //console.log(data);
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 // Aquí puedes manejar errores, por ejemplo:
@@ -174,11 +167,13 @@ $(document).ready(function () {
         })
     }
 
-    Listar_celulas();
 
 
-    //Registro de Reuinion de celula      
 
+
+
+
+    ///////////////////////////// ACTUALIZAR DATOS DE REUNION /////////////////////////////// 
 
     const regexObj2 = {
 
@@ -325,20 +320,39 @@ $(document).ready(function () {
                         timer: 2000,
                     })
 
-                    document.getElementById("formularioReunion").reset();
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    // Aquí puedes manejar errores, por ejemplo:
-                    console.error("Error al enviar:", textStatus, errorThrown);
-                    alert("Hubo un error al realizar el registro. Por favor, inténtalo de nuevo.");
+                    if (jqXHR.responseText) {
+                        let jsonResponse = JSON.parse(jqXHR.responseText);
+
+                        if (jsonResponse.msj) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: jsonResponse.msj,
+                                showConfirmButton: true,
+                            })
+                        } else {
+                            const respuesta = JSON.stringify(jsonResponse, null, 2)
+                            Swal.fire({
+                                background: 'red',
+                                color: '#fff',
+                                title: respuesta,
+                                showConfirmButton: true,
+                            })
+                        }
+                    } else {
+                        alert('Error desconocido: ' + textStatus);
+                    }
                 }
             });
 
-
-
-
         } else {
-            alert("Formulario inválido. Por favor, corrija los errores.");
+            Swal.fire({
+                icon: 'error',
+                title: 'Formulario llenado incorrectamente. Por favor, verifique sus datos',
+                showConfirmButton: false,
+                timer: 2000,
+            })
         }
     });
 

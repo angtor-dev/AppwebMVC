@@ -1,6 +1,4 @@
 <?php
-
-
 require_once "Models/Territorio.php";
 
 necesitaAutenticacion();
@@ -16,20 +14,17 @@ if (!$usuarioSesion->tienePermiso("registrarTerritorio")) {
 
 if (isset($_POST['registrar'])) {   
 
+    $idSede = trim($_POST['idSede']);
+    $nombre = trim(strtolower($_POST['nombre']));
+    $idLider = trim($_POST['idLider']);
+    $detalles = trim(strtolower($_POST['detalles']));
+    
+    $Territorio->validacion_datos($idSede, $nombre, $idLider, $detalles);
+    $Territorio->validacion_existencia($nombre, $idTerritorio = '');
+    $Territorio->registrar_territorio($idSede, $nombre, $idLider, $detalles);
 
-
-    $idSede = $_POST['idSede'];
-    $nombre = $_POST['nombre'];
-    $idLider = $_POST['idLider'];
-    $detalles = $_POST['detalles'];
- 
-   $Territorio->registrar_territorio($idSede, $nombre, $idLider, $detalles);
-
-
-
-   echo json_encode('Lo logramos!!');
-   die();
-
+    echo json_encode('Lo logramos!!');
+    die();
 }
 
 
@@ -48,7 +43,6 @@ if (isset($_GET['listaLideres'])) {
     $ListaSedes = $Territorio->listar_Sedes();
 
     $data = json_encode($ListaSedes);
-
 
     echo $data; 
    

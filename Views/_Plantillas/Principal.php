@@ -8,6 +8,7 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -16,18 +17,19 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/lib/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/lib/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/lib/datatables/datatables.min.css">
-    <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/lib/datatables/choicesjs/choices.css"></script>
+    <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/lib/datatables/choicesjs/choices.css">
+    </script>
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/css/utilities.css">
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/css/site.css">
-    <?php if (!empty($viewStyles)): ?>
-        <?php foreach ($viewStyles as $css): ?>
+    <?php if (!empty($viewStyles)) : ?>
+        <?php foreach ($viewStyles as $css) : ?>
             <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/css/<?= $css ?>">
         <?php endforeach ?>
     <?php endif ?>
 
-    <?php if (!empty($title)): ?>
+    <?php if (!empty($title)) : ?>
         <title><?= $title ?> - <?= APP_NAME ?></title>
-    <?php else: ?>
+    <?php else : ?>
         <title><?= APP_NAME ?></title>
     <?php endif ?>
 </head>
@@ -69,7 +71,9 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
                                         Preferecias
                                     </a>
                                 </li>
-                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
                                 <li>
                                     <a class="dropdown-item text-danger" href="<?= LOCAL_DIR ?>login/logout">
                                         <i class="fa-solid fa-right-from-bracket fa-fw me-2"></i>
@@ -90,147 +94,146 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
     <aside id="sidebar" class="d-flex flex-column flex-shrink-0 py-3 px-2 bg-white
         position-fixed top-0 bottom-0 border-end">
         <div class="nav flex-column mb-auto">
-            <a href="<?= LOCAL_DIR ?>"
-                class="nav-link <?= empty($uriParts[0]) || strtolower($uriParts[0]) == "home" ? "active" : "" ?>">
+            <a href="<?= LOCAL_DIR ?>" class="nav-link <?= empty($uriParts[0]) || strtolower($uriParts[0]) == "home" ? "active" : "" ?>">
                 <i class="fa-solid fa-house-chimney fa-fw me-2"></i>
                 <span>Inicio</span>
             </a>
 
             <div class="nav-link py-0 mt-3 text-uppercase">Iglesia</div>
-            
+
             <!-- Anjhel -->
             <div class="acordeon">
-               <a href="#" class="nav-link acordeon-toggle">
-                   <i class="fa-solid fa-church fa-fw me-2"></i>    
-                   Sedes
-               </a>
-               <div class="acordeon-body">
-                   <div class="acordeon-items">
-                       <a href="<?= LOCAL_DIR ?>Sedes/Registrar" class="nav-link">
-                       <i class="fa-solid fa-pen-to-square"></i>
-                           Registrar
-                       </a>
-                       <a href="<?= LOCAL_DIR ?>Sedes/Listar" class="nav-link">
-                       <i class="fa-solid fa-rectangle-list"></i>
-                           Listar
-                       </a>
-                   </div>
-               </div>
+                <a href="#" class="nav-link acordeon-toggle">
+                    <i class="fa-solid fa-church fa-fw me-2"></i>
+                    Sedes
+                </a>
+                <div class="acordeon-body">
+                    <div class="acordeon-items">
+                        <a href="<?= LOCAL_DIR ?>Sedes/Registrar" class="nav-link">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                            Registrar
+                        </a>
+                        <a href="<?= LOCAL_DIR ?>Sedes/Listar" class="nav-link">
+                            <i class="fa-solid fa-rectangle-list"></i>
+                            Listar
+                        </a>
+                    </div>
+                </div>
             </div>
             <div class="acordeon">
-               <a href="#" class="nav-link acordeon-toggle">
-               <i class="fa-sharp fa-solid fa-earth-americas"></i> 
-                   Territorios
-               </a>
-               <div class="acordeon-body">
-                   <div class="acordeon-items">
-                       <a href="<?= LOCAL_DIR ?>Territorios/Registrar" class="nav-link">
-                       <i class="fa-solid fa-pen-to-square"></i>
-                           Registrar
-                       </a>
-                       <a href="<?= LOCAL_DIR ?>Territorios/Listar" class="nav-link">
-                       <i class="fa-solid fa-rectangle-list"></i>
-                           Listar
-                       </a>
-                   </div>
-               </div>
+                <a href="#" class="nav-link acordeon-toggle">
+                    <i class="fa-sharp fa-solid fa-earth-americas fa-fw me-2"></i>
+                    Territorios
+                </a>
+                <div class="acordeon-body">
+                    <div class="acordeon-items">
+                        <a href="<?= LOCAL_DIR ?>Territorios/Registrar" class="nav-link">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                            Registrar
+                        </a>
+                        <a href="<?= LOCAL_DIR ?>Territorios/Listar" class="nav-link">
+                            <i class="fa-solid fa-rectangle-list"></i>
+                            Listar
+                        </a>
+                    </div>
+                </div>
             </div>
             <a href="#" class="nav-link">
-               <i class="fa-solid fa-calendar fa-fw me-2"></i>
-               Calendario Anual
-           </a>
-          
+                <i class="fa-solid fa-calendar fa-fw me-2"></i>
+                Calendario Anual
+            </a>
 
-           <div class="acordeon">
-            <div class="nav-link py-0 mt-3 text-uppercase">Celulas</div>
-               <a href="#" class="nav-link acordeon-toggle">
 
-                   <i class="fa-solid fa-people-roof fa-fw me-2"></i>    
-                   Familiar
-               </a>
-               <div class="acordeon-body">
-                   <div class="acordeon-items">
-                       <a href="<?= LOCAL_DIR ?>CelulaFamiliar/Registrar" class="nav-link">
-                       <i class="fa-solid fa-pen-to-square"></i>
-                           Registrar
-                       </a>
-                       <a href="<?= LOCAL_DIR ?>CelulaFamiliar/Listar" class="nav-link">
-                       <i class="fa-solid fa-rectangle-list"></i>
-                           Listar
-                       </a>
-                       <a href="<?= LOCAL_DIR ?>CelulaFamiliar/Reunion" class="nav-link">
-                       <i class="fa-solid fa-clipboard-user"></i>
-                           Listar Reuniones
-                       </a>
-                   </div>
-               </div>
-           </div>
-           <div class="acordeon">
-               <a href="#" class="nav-link acordeon-toggle">
-                   <i class="fa-solid fa-seedling fa-fw me-2"></i>    
-                   Crecimiento
-               </a>
-               <div class="acordeon-body">
-                   <div class="acordeon-items">
-                       <a href="<?= LOCAL_DIR ?>CelulaCrecimiento/Registrar" class="nav-link">
-                       <i class="fa-solid fa-pen-to-square"></i>
-                           Registrar
-                       </a>
-                       <a href="<?= LOCAL_DIR ?>CelulaCrecimiento/Listar" class="nav-link">
-                       <i class="fa-solid fa-rectangle-list"></i>
-                           Listar
-                       </a>
-                       <a href="<?= LOCAL_DIR ?>CelulaCrecimiento/Reunion" class="nav-link">
-                       <i class="fa-solid fa-clipboard-user"></i>
-                       Listar Reuniones
-                       </a>
-                   </div>
-               </div>
-           </div>
-           <div class="acordeon">
-               <a href="#" class="nav-link acordeon-toggle">
-                   <i class="fa-solid fa-people-line fa-fw me-2"></i>    
-                   Consolidación
-               </a>
-               <div class="acordeon-body">
-                   <div class="acordeon-items">
-                       <a href="<?= LOCAL_DIR ?>CelulaConsolidacion/Registrar" class="nav-link">
-                       <i class="fa-solid fa-pen-to-square"></i>
-                           Registrar
-                       </a>
-                       <a href="<?= LOCAL_DIR ?>CelulaConsolidacion/Listar" class="nav-link">
-                       <i class="fa-solid fa-rectangle-list"></i>
-                           Listar
-                       </a>
-                       <a href="<?= LOCAL_DIR ?>CelulaConsolidacion/Reunion" class="nav-link">
-                       <i class="fa-solid fa-clipboard-user"></i>
-                       Listar Reuniones
-                       </a>
-                   </div>
-               </div>
-           </div>
-           <div class="acordeon">
-               <a href="#" class="nav-link acordeon-toggle">
+            <div class="acordeon">
+                <div class="nav-link py-0 mt-3 text-uppercase">Celulas</div>
+                <a href="#" class="nav-link acordeon-toggle">
 
-               <i class="fa-solid fa-clipboard-user"></i>                   
-                Discípulos
-               </a>
-               <div class="acordeon-body">
-                   <div class="acordeon-items">
-                       <a href="<?= LOCAL_DIR ?>Discipulos/Registrar" class="nav-link">
-                       <i class="fa-solid fa-pen-to-square"></i>
-                           Registrar
-                       </a>
-                       <a href="<?= LOCAL_DIR ?>Discipulos/Listar" class="nav-link">
-                       <i class="fa-solid fa-rectangle-list"></i>
-                           Listar
-                       </a>
-                   </div>
-               </div>
-           </div>
-            
+                    <i class="fa-solid fa-people-roof fa-fw me-2"></i>
+                    Familiar
+                </a>
+                <div class="acordeon-body">
+                    <div class="acordeon-items">
+                        <a href="<?= LOCAL_DIR ?>CelulaFamiliar/Registrar" class="nav-link">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                            Registrar
+                        </a>
+                        <a href="<?= LOCAL_DIR ?>CelulaFamiliar/Listar" class="nav-link">
+                            <i class="fa-solid fa-rectangle-list"></i>
+                            Listar
+                        </a>
+                        <a href="<?= LOCAL_DIR ?>CelulaFamiliar/Reunion" class="nav-link">
+                            <i class="fa-solid fa-clipboard-user"></i>
+                            Listar Reuniones
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="acordeon">
+                <a href="#" class="nav-link acordeon-toggle">
+                    <i class="fa-solid fa-seedling fa-fw me-2"></i>
+                    Crecimiento
+                </a>
+                <div class="acordeon-body">
+                    <div class="acordeon-items">
+                        <a href="<?= LOCAL_DIR ?>CelulaCrecimiento/Registrar" class="nav-link">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                            Registrar
+                        </a>
+                        <a href="<?= LOCAL_DIR ?>CelulaCrecimiento/Listar" class="nav-link">
+                            <i class="fa-solid fa-rectangle-list"></i>
+                            Listar
+                        </a>
+                        <a href="<?= LOCAL_DIR ?>CelulaCrecimiento/Reunion" class="nav-link">
+                            <i class="fa-solid fa-clipboard-user"></i>
+                            Listar Reuniones
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="acordeon">
+                <a href="#" class="nav-link acordeon-toggle">
+                    <i class="fa-solid fa-people-line fa-fw me-2"></i>
+                    Consolidación
+                </a>
+                <div class="acordeon-body">
+                    <div class="acordeon-items">
+                        <a href="<?= LOCAL_DIR ?>CelulaConsolidacion/Registrar" class="nav-link">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                            Registrar
+                        </a>
+                        <a href="<?= LOCAL_DIR ?>CelulaConsolidacion/Listar" class="nav-link">
+                            <i class="fa-solid fa-rectangle-list"></i>
+                            Listar
+                        </a>
+                        <a href="<?= LOCAL_DIR ?>CelulaConsolidacion/Reunion" class="nav-link">
+                            <i class="fa-solid fa-clipboard-user"></i>
+                            Listar Reuniones
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="acordeon">
+                <a href="#" class="nav-link acordeon-toggle">
+                    <i class="fa-solid fa-clipboard-user fa-fw me-2"></i>
+                    Discípulos
+                </a>
+                <div class="acordeon-body">
+                    <div class="acordeon-items">
+                        <a href="<?= LOCAL_DIR ?>Discipulos/Registrar" class="nav-link">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                            Registrar
+                        </a>
+                        <a href="<?= LOCAL_DIR ?>Discipulos/Listar" class="nav-link">
+                            <i class="fa-solid fa-rectangle-list"></i>
+                            Listar
+                        </a>
+                    </div>
+                </div>
+            </div>
+
             <div class="nav-link py-0 mt-3 text-uppercase">Escuela</div>
-            <a href="<?= LOCAL_DIR ?>NivelesCrecimiento" class="nav-link">
+            <a href="<?= LOCAL_DIR ?>NivelesCrecimiento"
+                class="nav-link <?= strtolower($uriParts[0]) == "nivelescrecimiento" ? "active" : "" ?>">
                 <i class="fa-solid fa-graduation-cap fa-fw me-2"></i>
                 Niveles de crecimiento
             </a>
@@ -242,22 +245,20 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
                 <i class="fa-solid fa-chalkboard-user fa-fw me-2"></i>
                 Mis clases
             </a>
-            
+
             <div class="nav-link py-0 mt-3 text-uppercase">Sistema</div>
-            <a href="<?= LOCAL_DIR ?>Usuarios"
-                class="nav-link <?= strtolower($uriParts[0]) == "usuarios" ? "active" : "" ?>">
+            <a href="<?= LOCAL_DIR ?>Usuarios" class="nav-link <?= strtolower($uriParts[0]) == "usuarios" ? "active" : "" ?>">
                 <i class="fa-solid fa-user fa-fw me-2"></i>
                 Usuarios
             </a>
             <div class="acordeon <?= strtolower($uriParts[0]) == "seguridad" ? "show" : "" ?>">
                 <a href="#" class="nav-link acordeon-toggle">
-                    <i class="fa-solid fa-lock fa-fw me-2"></i>    
+                    <i class="fa-solid fa-lock fa-fw me-2"></i>
                     Seguridad
                 </a>
                 <div class="acordeon-body">
                     <div class="acordeon-items">
-                        <a href="<?= LOCAL_DIR ?>Seguridad/Roles"
-                            class="nav-link <?= strtolower($uriParts[1]??"") == "roles" ? "active" : "" ?>">
+                        <a href="<?= LOCAL_DIR ?>Seguridad/Roles" class="nav-link <?= strtolower($uriParts[1] ?? "") == "roles" ? "active" : "" ?>">
                             <i class="fa-solid fa-key fa-fw me-2"></i>
                             Roles y permisos
                         </a>
@@ -275,8 +276,8 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
     <main id="main">
         <!-- Imprime alertas de exito o error -->
         <div id="alerts-section">
-            <?php if (!empty($_SESSION['exitos'])): ?>
-                <?php foreach ($_SESSION['exitos'] as $alerta): ?>
+            <?php if (!empty($_SESSION['exitos'])) : ?>
+                <?php foreach ($_SESSION['exitos'] as $alerta) : ?>
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         <?= $alerta ?>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -284,8 +285,8 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
                 <?php endforeach ?>
                 <?php unset($_SESSION['exitos']) ?>
             <?php endif ?>
-            <?php if (!empty($_SESSION['errores'])): ?>
-                <?php foreach ($_SESSION['errores'] as $alerta): ?>
+            <?php if (!empty($_SESSION['errores'])) : ?>
+                <?php foreach ($_SESSION['errores'] as $alerta) : ?>
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
                         <?= $alerta ?>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -305,10 +306,11 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
     <script src="<?= LOCAL_DIR ?>public/lib/datatables/choicesjs/choices.js"></script>
     <script src="<?= LOCAL_DIR ?>public/js/utilities.js"></script>
     <script src="<?= LOCAL_DIR ?>public/js/site.js"></script>
-    <?php if (!empty($viewScripts)): ?>
-        <?php foreach ($viewScripts as $script): ?>
+    <?php if (!empty($viewScripts)) : ?>
+        <?php foreach ($viewScripts as $script) : ?>
             <script src="<?= LOCAL_DIR ?>public/js/<?= $script ?>"></script>
         <?php endforeach ?>
     <?php endif ?>
 </body>
+
 </html>

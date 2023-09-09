@@ -1,5 +1,7 @@
 $(document).ready(function () {
 
+    let choices;
+
     const dataTable = $('#celulaDatatables').DataTable({
         responsive: true,
         ajax: {
@@ -21,6 +23,7 @@ $(document).ready(function () {
         ],
     })
 
+
     $('#celulaDatatables tbody').on('click', '#ver_info', function () {
         const datos = dataTable.row($(this).parents()).data();
 
@@ -35,60 +38,43 @@ $(document).ready(function () {
         document.getElementById('inf_adulto').textContent = datos.adulto;
         document.getElementById('inf_actividad').textContent = datos.actividad;
         document.getElementById('inf_observaciones').textContent = datos.observaciones;
-        
-
 
     })
+
 
     $('#celulaDatatables tbody').on('click', '#editar', function () {
         const datos = dataTable.row($(this).parents()).data();
 
-        
         document.getElementById('idreunionfamiliar').textContent = datos.id;
-        document.getElementById('idCelulaFamiliar').value = datos.idcelulafamiliar;
         document.getElementById('fecha').value = datos.fecha;
         document.getElementById('tematica').value = datos.tematica;
-        document.getElementById('semana').value= datos.semana;
+        document.getElementById('semana').value = datos.semana;
         document.getElementById('generosidad').value = datos.generosidad;
         document.getElementById('infantil').value = datos.infantil;
         document.getElementById('juvenil').value = datos.juvenil;
         document.getElementById('adulto').value = datos.adulto;
         document.getElementById('actividad').value = datos.actividad;
         document.getElementById('observaciones').value = datos.observaciones;
-
-
+        Listar_celulas(datos.idCelulaFamiliar);
 
     })
 
-    
+
 
     $('#celulaDatatables tbody').on('click', '#eliminar', function () {
         const datos = dataTable.row($(this).parents()).data();
 
-        const swalWithBootstrapButtons = Swal.mixin({
-            customClass: {
-                confirmButton: 'btn btn-success',
-                cancelButton: 'btn btn-danger'
-            },
-            buttonsStyling: false
-        })
-
-        swalWithBootstrapButtons.fire({
+        Swal.fire({
             title: '¿Estas Seguro?',
-            text: "No podras acceder a este territorio otra vez!",
-            html: '<spam id="idreunionFamiliarE"></spam>',
+            text: "No podras acceder a esta celula otra vez!",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: '¡Si, estoy seguro!',
+            confirmButtonColor: '#007bff',
             cancelButtonText: '¡No, cancelar!',
             reverseButtons: true
         }).then((result) => {
             if (result.isConfirmed) {
-
-    
-                document.getElementById('idreunionFamiliarE').textContent= datos.id;
-                let id = document.getElementById('idreunionFamiliarE').textContent;
-
 
                 $.ajax({
                     type: "POST",
@@ -96,43 +82,54 @@ $(document).ready(function () {
                     data: {
 
                         eliminar: 'eliminar',
-                        id: id,
+                        id: datos.id,
                     },
                     success: function (response) {
-
+                        console.log(response);
                         let data = JSON.parse(response);
                         dataTable.ajax.reload();
 
-                        // Aquí puedes manejar una respuesta exitosa, por ejemplo:
-                        console.log("Respuesta del servidor:", data);
-
-                        swalWithBootstrapButtons.fire(
-                            'La reunion ha sido eliminada',
-                            'exitosamente'
-                        )
+                        Swal.fire({
+                            icon: 'success',
+                            title: '¡Borrado!',
+                            text: 'La reunion ha sido borrada',
+                            showConfirmButton: false,
+                            timer: 2000,
+                        })
 
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
-                        // Aquí puedes manejar errores, por ejemplo:
-                        console.error("Error al enviar:", textStatus, errorThrown);
-                        alert("Hubo un error al editar el registro. Por favor, inténtalo de nuevo.");
+                        if (jqXHR.responseText) {
+                            let jsonResponse = JSON.parse(jqXHR.responseText);
+
+                            if (jsonResponse.msj) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: jsonResponse.msj,
+                                    showConfirmButton: true,
+                                })
+                            } else {
+                                const respuesta = JSON.stringify(jsonResponse, null, 2)
+                                Swal.fire({
+                                    background: 'red',
+                                    color: '#fff',
+                                    title: respuesta,
+                                    showConfirmButton: true,
+                                })
+                            }
+                        } else {
+                            alert('Error desconocido: ' + textStatus);
+                        }
                     }
                 })
-            } else if (
-                /* Read more about handling dismissals below */
-                result.dismiss === Swal.DismissReason.cancel
-            ) {
-                swalWithBootstrapButtons.fire(
-                    'Cancelled',
-                    'Your imaginary file is safe :)',
-                    'error'
-                )
             }
         });
     });
 
 
-    function Listar_celulas() {
+
+
+    function Listar_celulas(idCelulaFamiliar) {
 
         $.ajax({
             type: "GET",
@@ -144,10 +141,8 @@ $(document).ready(function () {
             },
             success: function (response) {
 
-                
-
                 let data = JSON.parse(response);
-                
+
                 console.log(data);
 
                 let selector = document.getElementById('idCelulaFamiliar');
@@ -162,16 +157,20 @@ $(document).ready(function () {
 
                 });
 
-    
-                const element = document.getElementById('idCelulaFamiliar');
-                const choices = new Choices(element, {
+                // Destruir la instancia existente si la hay
+                if (choices) {
+                    choices.destroy();
+                }
+
+                choices = new Choices(selector, {
+                    allowHTML: true,
                     searchEnabled: true,  // Habilita la funcionalidad de búsqueda
                     removeItemButton: true,  // Habilita la posibilidad de remover items
                     placeholderValue: 'Selecciona una opción',  // Texto del placeholder
                 });
 
+                choices.setChoiceByValue(idCelulaFamiliar.toString());
 
-                //console.log(data);
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 // Aquí puedes manejar errores, por ejemplo:
@@ -180,11 +179,13 @@ $(document).ready(function () {
         })
     }
 
-    Listar_celulas();
 
 
-    //Registro de Reuinion de celula      
 
+
+
+
+    /////////////////////////////////// ACTUALIZAR DATOS DE REUNION //////////////////////////////////      
 
     const regexObj2 = {
 
@@ -221,34 +222,33 @@ $(document).ready(function () {
         const id = document.getElementById('idreunionfamiliar').textContent
 
 
+        // Validar idCelulaFamiliar
+        const idCelulaFamiliar = document.getElementById("idCelulaFamiliar").value;
+        if (!regexObj2.idCelulaFamiliar.test(idCelulaFamiliar)) {
+            document.getElementById("msj_idCelulaFamiliar").classList.remove("d-none");
+            validationStatus2.idCelulaFamiliar = false;
+        } else {
+            document.getElementById("msj_idCelulaFamiliar").classList.add("d-none");
+            validationStatus2.idCelulaFamiliar = true;
+        }
 
-         // Validar idCelulaFamiliar
-         const idCelulaFamiliar = document.getElementById("idCelulaFamiliar").value;
-         if (!regexObj2.idCelulaFamiliar.test(idCelulaFamiliar)) {
-             document.getElementById("msj_idCelulaFamiliar").classList.remove("d-none");
-             validationStatus2.idCelulaFamiliar = false;
-         } else {
-             document.getElementById("msj_idCelulaFamiliar").classList.add("d-none");
-             validationStatus2.idCelulaFamiliar = true;
-         }
 
 
-        
         // Validar fecha
         const fecha = document.getElementById("fecha").value;
-       /* if (fecha === "") {
-            document.getElementById("msj_fecha").classList.remove("d-none");
-            validationStatus2.fecha = false;
-        } else {
-            // Comprobar que la fecha esté en un formato válido
-            if (!regexObj2.actividad.test(fecha)) {
-                document.getElementById("msj_fecha").classList.remove("d-none");
-                validationStatus2.fecha = false;
-            } else {
-                document.getElementById("msj_fecha").classList.add("d-none");
-                validationStatus2.fecha = true;
-            }
-        }*/
+        /* if (fecha === "") {
+             document.getElementById("msj_fecha").classList.remove("d-none");
+             validationStatus2.fecha = false;
+         } else {
+             // Comprobar que la fecha esté en un formato válido
+             if (!regexObj2.actividad.test(fecha)) {
+                 document.getElementById("msj_fecha").classList.remove("d-none");
+                 validationStatus2.fecha = false;
+             } else {
+                 document.getElementById("msj_fecha").classList.add("d-none");
+                 validationStatus2.fecha = true;
+             }
+         }*/
 
         // Validar tematica
         const tematica = document.getElementById("tematica").value;
@@ -340,7 +340,6 @@ $(document).ready(function () {
                 type: "POST",
                 url: "http://localhost/AppwebMVC/CelulaFamiliar/reunion",
                 data: {
-
                     editar: 'editar',
                     id: id,
                     idCelulaFamiliar: idCelulaFamiliar,
@@ -368,20 +367,38 @@ $(document).ready(function () {
                         timer: 2000,
                     })
 
-                    document.getElementById("#formularioReunion").reset();
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    // Aquí puedes manejar errores, por ejemplo:
-                    console.error("Error al enviar:", textStatus, errorThrown);
-                    alert("Hubo un error al realizar el registro. Por favor, inténtalo de nuevo.");
+                    if (jqXHR.responseText) {
+                        let jsonResponse = JSON.parse(jqXHR.responseText);
+
+                        if (jsonResponse.msj) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: jsonResponse.msj,
+                                showConfirmButton: true,
+                            })
+                        } else {
+                            const respuesta = JSON.stringify(jsonResponse, null, 2)
+                            Swal.fire({
+                                background: 'red',
+                                color: '#fff',
+                                title: respuesta,
+                                showConfirmButton: true,
+                            })
+                        }
+                    } else {
+                        alert('Error desconocido: ' + textStatus);
+                    }
                 }
             });
-
-
-
-
         } else {
-            alert("Formulario inválido. Por favor, corrija los errores.");
+            Swal.fire({
+                icon: 'error',
+                title: 'Formulario invalido. Verifique sus datos',
+                showConfirmButton: false,
+                timer: 2000,
+            });
         }
     });
 

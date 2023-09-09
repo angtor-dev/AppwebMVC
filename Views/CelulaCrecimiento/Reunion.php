@@ -29,6 +29,8 @@ $viewScripts = ["CelulaCrecimiento-reunion.js"];
     </div>
 
 
+
+
     <!-- MODAL PARA VER TODOS LOS DATOS DE LA Celula -->
     <div class="modal fade" id="modal_verInfo" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog">
@@ -45,7 +47,7 @@ $viewScripts = ["CelulaCrecimiento-reunion.js"];
                             <strong>Código:</strong>
                             <p id="inf_codigocelulacrecimiento"></p>
                         </li>
-                    
+
                         <li class="list-group-item col-4">
                             <strong>Fecha:</strong>
                             <p id="inf_fecha"></p>
@@ -56,7 +58,7 @@ $viewScripts = ["CelulaCrecimiento-reunion.js"];
                             <p id="inf_semana"></p>
                         </li>
                     </ul>
-            
+
                     <ul class="list-group">
                         <li class="list-group-item">
                             <strong>Asistencia:</strong>
@@ -80,7 +82,7 @@ $viewScripts = ["CelulaCrecimiento-reunion.js"];
                             <p id="inf_adulto"></p>
                         </li>
                     </ul>
-                    
+
                     <ul class="list-group">
                         <li class="list-group-item">
                             <strong>Tema:</strong>
@@ -103,17 +105,20 @@ $viewScripts = ["CelulaCrecimiento-reunion.js"];
                         </li>
 
                     </ul>
-                    
 
-                        
 
-                        <div class="d-flex justify-content-end">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        </div>
+
+
+                    <div class="d-flex justify-content-end">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+
+
 
 
     <!-- MODAL PARA EDITAR TODOS LOS DATOS DE LA Reunion -->
@@ -124,39 +129,35 @@ $viewScripts = ["CelulaCrecimiento-reunion.js"];
                     <h5 class="modal-title">Editar datos de la Reunion</h5>
                 </div>
                 <div class="modal-body">
-                    <div class="mb-3">
+                    <form id="formularioReunion">
 
-                        <form id="formularioReunion">
+                        <div class="mb-3">
 
-
-
-                           
-                            <div class="mb-3">
-
-                                <input type="hidden" id="idreunioncrecimiento">
-                                <label for="idCelulaCrecimiento" class="form-label fw-bold">Celula de Crecimiento</label>
-                                <select class="form-select" id="idCelulaCrecimiento" name="idCelulaCrecimiento">
-                                </select>
-                                <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_idCelulaCrecimiento" role="alert">
-                                    Debe seleccionar una Celula de Crecimiento.
-                                </div>
+                            <input type="hidden" id="idreunioncrecimiento">
+                            <label for="idCelulaCrecimiento" class="form-label fw-bold">Celula de Crecimiento</label>
+                            <select class="form-select" id="idCelulaCrecimiento" name="idCelulaCrecimiento">
+                            </select>
+                            <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_idCelulaCrecimiento" role="alert">
+                                Debe seleccionar una Celula de Crecimiento.
                             </div>
+                        </div>
 
+
+                        <div class="mb-3">
                             <label for="fecha" class="form-label fw-bold">Fecha</label>
                             <input type="date" class="form-control" id="fecha" name="fecha">
                             <div class="alert alert-danger d-none" id="msj_fecha" role="alert"> Debe seleccionar la fecha de la reunión</div>
-                    </div>
+                        </div>
 
 
-                    <div class="mb-3">
-                        <label for="tematica" class="form-label fw-bold">Tematica</label>
-                        <input type="text" class="form-control" id="tematica" name="tematica" maxlength="100">
-                        <div class="alert alert-danger d-none" id="msj_tematica" role="alert">Este campo no puede estar vacio</div>
-                    </div>
+                        <div class="mb-3">
+                            <label for="tematica" class="form-label fw-bold">Tematica</label>
+                            <input type="text" class="form-control" id="tematica" name="tematica" maxlength="100">
+                            <div class="alert alert-danger d-none" id="msj_tematica" role="alert">Este campo no puede estar vacio</div>
+                        </div>
 
 
-                    <div class="mb-3">
-                        <div class="row g-3">
+                        <div class="row mb-3">
                             <div class="col-4">
                                 <label for="tematica" class="form-label fw-bold">Semana del Ciclo</label>
                                 <input type="number" class="form-control" id="semana" name="tematica">
@@ -170,62 +171,57 @@ $viewScripts = ["CelulaCrecimiento-reunion.js"];
                                 <div class="alert alert-danger d-none" id="msj_generosidad" role="alert">Este campo no puede estar vacio</div>
                             </div>
                         </div>
-                    </div>
 
 
 
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">Asistencia:</label>
-                        <div class="row g-3">
-                            <div class="col-4">
-                                <label for="infantil" class="form-label fw-bold">Infantil:</label>
-                                <input type="number" class="form-control" id="infantil" name="infantil" placeholder="Infantil">
-                                <div class="alert alert-danger d-none" id="msj_infantil" role="alert"></div>
-                            </div>
+                        <div class="row mb-3">
+                            <label class="form-label fw-bold">Asistencia:</label>
+                            <div class="row g-3">
+                                <div class="col-lg-4">
+                                    <label for="infantil" class="form-label fw-bold">Infantil:</label>
+                                    <input type="number" class="form-control" id="infantil" name="infantil" placeholder="Infantil">
+                                    <div class="alert alert-danger d-none" id="msj_infantil" role="alert"></div>
+                                </div>
 
+                                <div class="col-lg-4">
+                                    <label for="juvenil" class="form-label fw-bold">Juvenil:</label>
+                                    <input type="number" class="form-control" id="juvenil" name="juvenil" placeholder="Juvenil">
+                                    <div class="alert alert-danger d-none" id="msj_juvenil" role="alert"></div>
+                                </div>
 
-                            <div class="col-4">
-                                <label for="juvenil" class="form-label fw-bold">Juvenil:</label>
-                                <input type="number" class="form-control" id="juvenil" name="juvenil" placeholder="Juvenil">
-                                <div class="alert alert-danger d-none" id="msj_juvenil" role="alert"></div>
-                            </div>
-
-                            <div class="col-4">
-                                <label for="adulto" class="form-label fw-bold">Adultos:</label>
-                                <input type="number" class="form-control" id="adulto" name="adulto" placeholder="Adulto">
-                                <div class="alert alert-danger d-none" id="msj_adulto" role="alert"></div>
+                                <div class="col-lg-4">
+                                    <label for="adulto" class="form-label fw-bold">Adultos:</label>
+                                    <input type="number" class="form-control" id="adulto" name="adulto" placeholder="Adulto">
+                                    <div class="alert alert-danger d-none" id="msj_adulto" role="alert"></div>
+                                </div>
                             </div>
                         </div>
-                    </div>
+
+
+                        <div class="mb-3">
+                            <label for="actividad" class="form-label fw-bold">Actividad</label>
+                            <input type="text" class="form-control" id="actividad" name="actividad" maxlength="100">
+
+                            <div class="alert alert-danger d-none" id="msj_actividad" role="alert">Este campo no puede estar vacio</div>
+                        </div>
+
+
+                        <div class="mb-3">
+                            <label for="observaciones" class="form-label fw-bold">Observaciones</label>
+                            <input type="100" class="form-control" id="observaciones" name="observaciones" rows="3"></textarea>
+
+                            <div class="alert alert-danger d-none" id="msj_observaciones" role="alert">Este campo no puede estar vacio</div>
+                        </div>
 
 
 
-
-                    <div class="mb-3">
-                        <label for="actividad" class="form-label fw-bold">Actividad</label>
-                        <input type="text" class="form-control" id="actividad" name="actividad" maxlength="100">
-
-                        <div class="alert alert-danger d-none" id="msj_actividad" role="alert">Este campo no puede estar vacio</div>
-                    </div>
-
-
-                    <div class="mb-3">
-                        <label for="observaciones" class="form-label fw-bold">Observaciones</label>
-                        <input type="100" class="form-control" id="observaciones" name="observaciones" rows="3"></textarea>
-
-                        <div class="alert alert-danger d-none" id="msj_observaciones" role="alert">Este campo no puede estar vacio</div>
-                    </div>
-
-
-
-                    <div class="d-flex justify-content-end">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-primary">Registrar</button>
-                    </div>
+                        <div class="d-flex justify-content-end gap-1">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Registrar</button>
+                        </div>
 
 
                     </form>
-
                 </div>
             </div>
         </div>

@@ -52,7 +52,9 @@ $(document).ready(function () {
 
 
 
+    
 
+    /////////////////////////////////// REGISTRAR SEDE /////////////////////////////////////
 
     let validaciones = {
         idPastor: false,
@@ -62,7 +64,7 @@ $(document).ready(function () {
     };
 
     const expresiones = {
-        nombre: /^[a-zA-Z\s]{1,30}$/,
+        nombre: /^[a-zA-Z0-9\s.,]{1,50}$/,
         id: /^\d{1,9}$/,
         direccion: /^[a-zA-Z0-9\s]{1,100}$/,
         estado: ["ANZ", "APUR", "ARA", "BAR", "BOL", "CAR", "COJ", "DELTA", "FAL", "GUA",
@@ -88,7 +90,7 @@ $(document).ready(function () {
 
         // Validación del nombre de la sede
         let nombre = $("#nombre").val();
-        if (/^[a-zA-Z\s]{1,30}$/.test(nombre)) {
+        if (/^[a-zA-Z0-9\s.,]{1,50}$/.test(nombre)) {
             validaciones.nombre = true;
             $("#nombre").removeClass("is-invalid");
             $("#msj_nombre").addClass("d-none");
@@ -140,6 +142,7 @@ $(document).ready(function () {
                     estado: estado
                 },
                 success: function (response) {
+                    console.log(response);
                     let data = JSON.parse(response);
 
                     Swal.fire({
@@ -155,9 +158,28 @@ $(document).ready(function () {
                     choices.setChoiceByValue('')
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    // Aquí puedes manejar errores, por ejemplo:
-                    console.error("Error al enviar:", textStatus, errorThrown);
-                    alert("Hubo un error al realizar el registro. Por favor, inténtalo de nuevo.");
+                    if (jqXHR.responseText) {
+                        let jsonResponse = JSON.parse(jqXHR.responseText);
+                
+                        if (jsonResponse.msj) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Denegado',
+                                text: jsonResponse.msj,
+                                showConfirmButton: true,
+                            })
+                        } else {
+                            const respuesta = JSON.stringify(jsonResponse, null, 2)
+                            Swal.fire({
+                                background: 'red',
+                                color: '#fff',
+                                title: respuesta,
+                                showConfirmButton: true,
+                            })
+                        }
+                    } else {
+                        alert('Error desconocido: ' + textStatus);
+                    }
                 }
             });
 
@@ -165,7 +187,7 @@ $(document).ready(function () {
 
             Swal.fire({
                 icon: 'error',
-                title: 'Llena el formulario correctamente',
+                title: 'Formulario invalido. Verifique sus datos',
                 showConfirmButton: false,
                 timer: 2000,
             })

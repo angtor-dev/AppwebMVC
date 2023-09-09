@@ -1,4 +1,5 @@
 <?php
+require_once "Models/Territorio.php";
 require_once "Models/CelulaConsolidacion.php";
 
 necesitaAutenticacion();

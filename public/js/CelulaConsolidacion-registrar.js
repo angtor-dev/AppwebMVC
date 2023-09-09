@@ -1,6 +1,8 @@
 $(document).ready(function () {
 
-
+    let choices1
+    let choices2
+    let choices3
 
     function Listar_Lideres() {
 
@@ -19,7 +21,6 @@ $(document).ready(function () {
 
 
                 let selector = document.getElementById('idLider');
-
                 let selector2 = document.getElementById('idCoLider');
 
                 data.forEach(item => {
@@ -41,24 +42,19 @@ $(document).ready(function () {
                 });
 
 
-
-                const element = document.getElementById('idLider');
-                const choices = new Choices(element, {
+                choices1 = new Choices(selector, {
+                    allowHTML: true,
                     searchEnabled: true,  // Habilita la funcionalidad de búsqueda
                     removeItemButton: true,  // Habilita la posibilidad de remover items
                     placeholderValue: 'Selecciona una opción',  // Texto del placeholder
                 });
 
-                const element2 = document.getElementById('idCoLider');
-                const choices2 = new Choices(element2, {
+                choices2 = new Choices(selector2, {
+                    allowHTML: true,
                     searchEnabled: true,  // Habilita la funcionalidad de búsqueda
                     removeItemButton: true,  // Habilita la posibilidad de remover items
                     placeholderValue: 'Selecciona una opción',  // Texto del placeholder
                 });
-
-                //console.log(data);
-
-
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -97,16 +93,12 @@ $(document).ready(function () {
                     selector.appendChild(option);
 
                 });
-                const element = document.getElementById('idTerritorio');
-                const choices = new Choices(element, {
+                choices3 = new Choices(selector, {
+                    allowHTML: true,
                     searchEnabled: true,  // Habilita la funcionalidad de búsqueda
                     removeItemButton: true,  // Habilita la posibilidad de remover items
                     placeholderValue: 'Selecciona una opción',  // Texto del placeholder
                 });
-
-                //console.log(data);
-
-
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -120,14 +112,9 @@ $(document).ready(function () {
     Listar_Territorio();
 
 
-
-
-
-
-
     const regexObj = {
         
-        nombre: /^[a-zA-Z0-9\s.,]{1,20}$/, // Letras, números, espacios, puntos y comas con un máximo de 20 caracteres
+        nombre: /^[a-zA-Z0-9\s.,]{1,50}$/, // Letras, números, espacios, puntos y comas con un máximo de 20 caracteres
         idLider: /^[1-9]\d*$/, // Números enteros mayores a 0
         idCoLider: /^[1-9]\d*$/, // Números enteros mayores a 0
         idTerritorio: /^[1-9]\d*$/, // Números enteros mayores a 0
@@ -146,8 +133,6 @@ $(document).ready(function () {
 
     form.addEventListener("submit", (e) => {
         e.preventDefault();
-
-
 
         // Validar nombre
         const nombre = document.getElementById("nombre").value;
@@ -192,7 +177,6 @@ $(document).ready(function () {
 
         // Verifica si todos los campos son válidos antes de enviar el formulario
         if (Object.values(validationStatus).every(status => status === true)) {
-            console.log("Formulario válido. Puedes enviar los datos al servidor");
             // Aquí puedes agregar el código para enviar el formulario
             $.ajax({
                 type: "POST",
@@ -206,11 +190,9 @@ $(document).ready(function () {
                     idTerritorio: idTerritorio
                 },
                 success: function (response) {
-
+                    console.log(response);
                     let data = JSON.parse(response);
 
-                    // Aquí puedes manejar una respuesta exitosa, por ejemplo:
-                    console.log("Respuesta del servidor:", data);
                     Swal.fire({
                         icon: 'success',
                         title: 'Registrado Correctamente',
@@ -218,20 +200,45 @@ $(document).ready(function () {
                         timer: 2000,
                     })
 
-                    document.getElementById("#formulario").reset();
+                    document.getElementById('nombre').value = '';
+                    choices1.setChoiceByValue('');
+                    choices2.setChoiceByValue('');
+                    choices3.setChoiceByValue('');
+
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    // Aquí puedes manejar errores, por ejemplo:
-                    console.error("Error al enviar:", textStatus, errorThrown);
-                    alert("Hubo un error al realizar el registro. Por favor, inténtalo de nuevo.");
+                    if (jqXHR.responseText) {
+                        let jsonResponse = JSON.parse(jqXHR.responseText);
+                
+                        if (jsonResponse.msj) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: jsonResponse.msj,
+                                showConfirmButton: true,
+                            })
+                        } else {
+                            const respuesta = JSON.stringify(jsonResponse, null, 2)
+                            Swal.fire({
+                                background: 'red',
+                                color: '#fff',
+                                title: respuesta,
+                                showConfirmButton: true,
+                            })
+                        }
+                    } else {
+                        alert('Error desconocido: ' + textStatus);
+                    }
                 }
             });
 
 
-
-
         } else {
-            console.log("Formulario inválido. Por favor, corrija los errores.");
+            Swal.fire({
+                icon: 'error',
+                title: 'Formulario invalido. Por favor, verifique sus datos',
+                showConfirmButton: false,
+                timer: 2000,
+            })
         }
     });
 

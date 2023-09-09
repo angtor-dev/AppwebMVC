@@ -2,7 +2,7 @@
 require_once "Models/Model.php";
 
 class CelulaConsolidacion extends Model
-{   
+{
     public int $id;
     public int $idLider;
     public int $idColider;
@@ -11,32 +11,94 @@ class CelulaConsolidacion extends Model
     public string $nombre;
     public int $estatus;
 
-    public  function registrar_CelulaConsolidacion($nombre, $idLider, $idCoLider, $idTerritorio){
+    public  function registrar_CelulaConsolidacion($nombre, $idLider, $idCoLider, $idTerritorio)
+    {
         try {
-            
-        $sql = "INSERT INTO celulaconsolidacion (nombre, idLider, idCoLider, idTerritorio) 
-        VALUES (:nombre, :idLider, :idCoLider, :idTerritorio)";
-      
-        $stmt = $this->db->pdo()->prepare($sql);
 
-        
-        $stmt->bindValue(':nombre', $nombre);
-        $stmt->bindValue(':idLider', $idLider);
-        $stmt->bindValue(':idCoLider', $idCoLider);
-        $stmt->bindValue(':idTerritorio', $idTerritorio);
-        
-        $stmt->execute();
-        } catch (Exception $e) {// Muestra el mensaje de error y detén la ejecución.
+            $sql = "SELECT MAX(id) AS celulaNumero FROM celulacrecimiento";
+            $consultaid = $this->db->pdo()->prepare($sql);
+            $consultaid->execute();
+            $datos = $consultaid->fetch(PDO::FETCH_ASSOC);
+
+            $id = '';
+            $codigo = '';
+            $territorio = Territorio::cargar($idTerritorio);
+
+            if ($datos['celulaNumero'] === null) {
+                $id = 1;
+                $identificador = 'CCO' . $id;
+                $codigo = $territorio->codigo . '-' . $identificador;
+            } else {
+                $celulas = CelulaConsolidacion::cargarRelaciones($idTerritorio, "Territorio");
+
+                if (count($celulas) > 0) {
+                    // Un array para almacenar solo los números de los identificadores
+                    $numeros = [];
+                    foreach ($celulas as $resultado) {
+                        // Extraer el número del identificador (eliminar la "CFA")
+                        $numero = (int) substr($resultado->identificador, 3);  // substr($resultado, 1) elimina el primer carácter ("T")
+                        $numeros[] = $numero;
+                    }
+                    // Encontrar el número más grande en el array
+                    $mayorNumero = max($numeros);
+
+                    $contador = $mayorNumero + 1;
+                    $identificador = 'CCO' . $contador;
+                    $codigo = $territorio->codigo . '-' . $identificador;
+                } else {
+                    $contador = 1;
+                    $identificador = 'CCO' . $contador;
+                    $codigo = $territorio->codigo . '-' . $identificador;
+                }
+            }
+
+            if ($id == 1) {
+
+                $sql = "INSERT INTO celulaconsolidacion (id, nombre, codigo, identificador, idLider, idCoLider, idTerritorio, fechaCreacion) 
+                VALUES (:id, :nombre, :codigo, :identificador, :idLider, :idCoLider, :idTerritorio, CURDATE())";
+
+                $stmt = $this->db->pdo()->prepare($sql);
+
+                $stmt->bindValue(':id', $id);
+                $stmt->bindValue(':nombre', $nombre);
+                $stmt->bindValue(':codigo', $codigo);
+                $stmt->bindValue(':identificador', $identificador);
+                $stmt->bindValue(':idLider', $idLider);
+                $stmt->bindValue(':idCoLider', $idCoLider);
+                $stmt->bindValue(':idTerritorio', $idTerritorio);
+
+                $stmt->execute();
+            } else {
+                $sql = "INSERT INTO celulaconsolidacion (nombre, codigo, identificador, idLider, idCoLider, idTerritorio, fechaCreacion) 
+                VALUES (:nombre, :codigo, :identificador, :idLider, :idCoLider, :idTerritorio, CURDATE())";
+
+                $stmt = $this->db->pdo()->prepare($sql);
+
+                $stmt->bindValue(':nombre', $nombre);
+                $stmt->bindValue(':codigo', $codigo);
+                $stmt->bindValue(':identificador', $identificador);
+                $stmt->bindValue(':idLider', $idLider);
+                $stmt->bindValue(':idCoLider', $idCoLider);
+                $stmt->bindValue(':idTerritorio', $idTerritorio);
+                $stmt->bindValue(':idTerritorio', $idTerritorio);
+
+                $stmt->execute();
+            }
+
+            http_response_code(200);
+            echo json_encode(array('msj' => 'Celula registrada exitosamente', 'status' => 200));
+            die();
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
-            
+
             echo json_encode($error_data);
             die();
         }
-    }  
-    
+    }
+
     public  function listar_CelulaConsolidacion()
     {
 
@@ -68,7 +130,6 @@ class CelulaConsolidacion extends Model
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $resultado;
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -83,23 +144,65 @@ class CelulaConsolidacion extends Model
 
     public  function editar_CelulaConsolidacion($id, $nombre, $idLider, $idCoLider, $idTerritorio)
     {
-
         try {
 
+            $consulta = CelulaConsolidacion::cargar($id);
 
+            if ($consulta->idTerritorio === $idTerritorio) {
 
-            $sql = "UPDATE celulaconsolidacion SET  nombre = :nombre, idLider = :idLider, idCoLider = :idCoLider, idTerritorio = :idTerritorio WHERE celulaconsolidacion.id = :id";
+                $sql = "UPDATE celulaconsolidacion SET  nombre = :nombre, idLider = :idLider, idCoLider = :idCoLider WHERE celulaconsolidacion.id = :id";
+                $stmt = $this->db->pdo()->prepare($sql);
 
+                $stmt->bindValue(':id', $id);
+                $stmt->bindValue(':nombre', $nombre);
+                $stmt->bindValue(':idLider', $idLider);
+                $stmt->bindValue(':idCoLider', $idCoLider);
 
-            $stmt = $this->db->pdo()->prepare($sql);
+                $stmt->execute();
+            } else {
 
-            $stmt->bindValue(':id', $id);
-            $stmt->bindValue(':nombre', $nombre);
-            $stmt->bindValue(':idLider', $idLider);
-            $stmt->bindValue(':idCoLider', $idCoLider);
-            $stmt->bindValue(':idTerritorio', $idTerritorio);
+                $territorio = Territorio::cargar($idTerritorio);
+                $celulas = CelulaConsolidacion::cargarRelaciones($idTerritorio, "Territorio");
 
-            $stmt->execute();
+                $identificador = '';
+                $codigo = '';
+
+                if (count($celulas) > 0) {
+                    // Un array para almacenar solo los números de los identificadores
+                    $numeros = [];
+                    foreach ($celulas as $resultado) {
+                        // Extraer el número del identificador (eliminar la "CFA")
+                        $numero = (int) substr($resultado->identificador, 3);  // substr($resultado, 1) elimina el primer carácter ("T")
+                        $numeros[] = $numero;
+                    }
+                    // Encontrar el número más grande en el array
+                    $mayorNumero = max($numeros);
+
+                    $contador = $mayorNumero + 1;
+                    $identificador = 'CCO' . $contador;
+                    $codigo = $territorio->codigo . '-' . $identificador;
+                } else {
+                    $contador = 1;
+                    $identificador = 'CCO' . $contador;
+                    $codigo = $territorio->codigo . '-' . $identificador;
+                }
+
+                $sql = "UPDATE celulaconsolidacion SET  nombre = :nombre, idLider = :idLider, idCoLider = :idCoLider, codigo = :codigo, identificador = :identificador WHERE celulaconsolidacion.id = :id";
+                $stmt = $this->db->pdo()->prepare($sql);
+
+                $stmt->bindValue(':id', $id);
+                $stmt->bindValue(':nombre', $nombre);
+                $stmt->bindValue(':idLider', $idLider);
+                $stmt->bindValue(':idCoLider', $idCoLider);
+                $stmt->bindValue(':identificador', $identificador);
+                $stmt->bindValue(':codigo', $codigo);
+
+                $stmt->execute();
+            }
+
+            http_response_code(200);
+            echo json_encode(array('msj' => 'Celula actualizada exitosamente', 'status' => 200));
+            die();
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -124,6 +227,9 @@ class CelulaConsolidacion extends Model
 
             $stmt->execute();
 
+            http_response_code(200);
+            echo json_encode(array('msj'=>'Celula eliminada correctamente'));
+            die();
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -135,37 +241,61 @@ class CelulaConsolidacion extends Model
         }
     }
 
-    public function registrar_reunion($idCelulaConsolidacion, $fecha, $tematica, $semana, $generosidad, $actividad, $observaciones)
+    public function registrar_reunion($idCelulaConsolidacion, $fecha, $tematica, $semana, $generosidad, $actividad, $observaciones, $arrayAsistencias)
     {
-       
-        try {
-            
-        $sql = "INSERT INTO reunionconsolidacion (idCelulaConsolidacion, fecha, tematica, semana, generosidad, actividad, observaciones) 
-        VALUES (:idCelulaConsolidacion, :fecha, :tematica, :semana, :generosidad, :actividad, :observaciones)";
-      
-        $stmt = $this->db->pdo()->prepare($sql);
 
-        
-        $stmt->bindValue(':idCelulaConsolidacion', $idCelulaConsolidacion);
-        $stmt->bindValue(':fecha', $fecha);
-        $stmt->bindValue(':tematica', $tematica);
-        $stmt->bindValue(':semana', $semana);
-        $stmt->bindValue(':generosidad', $generosidad);
-        $stmt->bindValue(':actividad', $actividad);
-        $stmt->bindValue(':observaciones', $observaciones);
-        
-        
-        $stmt->execute();
-        } catch (Exception $e) {// Muestra el mensaje de error y detén la ejecución.
+        try {
+
+            $sql = "INSERT INTO reunionconsolidacion (idCelulaConsolidacion, fecha, tematica, semana, generosidad, actividad, observaciones) 
+        VALUES (:idCelulaConsolidacion, :fecha, :tematica, :semana, :generosidad, :actividad, :observaciones)";
+
+            $stmt = $this->db->pdo()->prepare($sql);
+
+
+            $stmt->bindValue(':idCelulaConsolidacion', $idCelulaConsolidacion);
+            $stmt->bindValue(':fecha', $fecha);
+            $stmt->bindValue(':tematica', $tematica);
+            $stmt->bindValue(':semana', $semana);
+            $stmt->bindValue(':generosidad', $generosidad);
+            $stmt->bindValue(':actividad', $actividad);
+            $stmt->bindValue(':observaciones', $observaciones);
+
+            $stmt->execute();
+
+            //Registrando las asistencias
+            $consulta = "SELECT id FROM usuario ORDER BY id DESC LIMIT 1";
+            $stmt2 = $this->db->pdo()->prepare($consulta);
+            $stmt2->execute();
+
+            if ($stmt2->rowCount() > 0) {
+                $resultado = $stmt2->fetch(PDO::FETCH_ASSOC);
+                $idReunion = $resultado['id'];
+
+                foreach ($arrayAsistencias as $values) {
+                    $sql2 = "INSERT INTO `asistencia` (`idReunion`, `idDiscipulo`) VALUES (:idReunion, :idDiscipulo)";
+                    $stmt3 = $this->db->pdo()->prepare($sql2);
+
+                    $stmt3->bindValue(':idReunion', $idReunion);
+                    $stmt3->bindValue(':idDiscipulo', $values);
+
+                    $stmt3->execute();
+                }
+            }
+
+            http_response_code(200);
+            echo json_encode(array('msj'=>'Reunion registrada correctamente', 'status'=>200));
+            die();
+
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
-            
+
             echo json_encode($error_data);
             die();
         }
-    }  
+    }
 
 
     public  function listar_lideres()
@@ -184,7 +314,6 @@ class CelulaConsolidacion extends Model
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $resultado;
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -195,7 +324,7 @@ class CelulaConsolidacion extends Model
             die();
         }
     }
-      
+
     public  function listar_territorios()
     {
 
@@ -208,7 +337,6 @@ class CelulaConsolidacion extends Model
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $resultado;
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -219,9 +347,10 @@ class CelulaConsolidacion extends Model
             die();
         }
     }
-        
 
-    public  function listar_reuniones(){
+
+    public  function listar_reuniones()
+    {
 
         try {
 
@@ -247,7 +376,6 @@ class CelulaConsolidacion extends Model
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $resultado;
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -260,11 +388,12 @@ class CelulaConsolidacion extends Model
     }
 
 
-    public  function editar_reuniones($id, $idCelulaConsolidacion, $fecha, $tematica, $semana, $generosidad, $actividad, $observaciones){
-       
+    public  function editar_reuniones($id, $idCelulaConsolidacion, $fecha, $tematica, $semana, $generosidad, $actividad, $observaciones)
+    {
+
         try {
-            
-        $sql = "UPDATE reunionconsolidacion
+
+            $sql = "UPDATE reunionconsolidacion
                 SET
                 idCelulaConsolidacion = :idCelulaConsolidacion,
                 fecha = :fecha,
@@ -274,35 +403,36 @@ class CelulaConsolidacion extends Model
                 actividad = :actividad,
                 observaciones = :observaciones
                 WHERE id = :id";
-      
-        $stmt = $this->db->pdo()->prepare($sql);
 
-        $stmt->bindValue(':id', $id);
-        $stmt->bindValue(':idCelulaConsolidacion', $idCelulaConsolidacion);
-        $stmt->bindValue(':fecha', $fecha);
-        $stmt->bindValue(':tematica', $tematica);
-        $stmt->bindValue(':semana', $semana);
-        $stmt->bindValue(':generosidad', $generosidad);
-        $stmt->bindValue(':actividad', $actividad);
-        $stmt->bindValue(':observaciones', $observaciones);
-        
-        
-        $stmt->execute();
-        } catch (Exception $e) {// Muestra el mensaje de error y detén la ejecución.
+            $stmt = $this->db->pdo()->prepare($sql);
+
+            $stmt->bindValue(':id', $id);
+            $stmt->bindValue(':idCelulaConsolidacion', $idCelulaConsolidacion);
+            $stmt->bindValue(':fecha', $fecha);
+            $stmt->bindValue(':tematica', $tematica);
+            $stmt->bindValue(':semana', $semana);
+            $stmt->bindValue(':generosidad', $generosidad);
+            $stmt->bindValue(':actividad', $actividad);
+            $stmt->bindValue(':observaciones', $observaciones);
+
+
+            $stmt->execute();
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
-            
+
             echo json_encode($error_data);
             die();
         }
-    } 
+    }
 
 
 
 
-    public  function eliminar_reuniones($id){
+    public  function eliminar_reuniones($id)
+    {
 
         try {
 
@@ -314,6 +444,9 @@ class CelulaConsolidacion extends Model
 
             $stmt->execute();
 
+            http_response_code(200);
+            echo json_encode(array('msj'=>'Reunion eliminada correctamente'));
+            die();
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -326,7 +459,8 @@ class CelulaConsolidacion extends Model
     }
 
 
-    public  function listar_celulas(){
+    public  function listar_celulas()
+    {
 
         try {
 
@@ -337,7 +471,6 @@ class CelulaConsolidacion extends Model
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $resultado;
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -360,7 +493,6 @@ class CelulaConsolidacion extends Model
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $resultado;
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -371,9 +503,4 @@ class CelulaConsolidacion extends Model
             die();
         }
     }
-       
-
-
-
 }
-?>

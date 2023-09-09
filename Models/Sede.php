@@ -12,15 +12,51 @@ class Sede extends Model
     public int $estatus;
 
     //Expresiones regulares para validaciones
-    private $expresion_nombre = '/^[a-zA-Z\s]{1,30}$/';
+    private $expresion_nombre = '/^[a-zA-Z0-9\s.,]{1,50}$/';
     private $expresion_direccion = '/^[a-zA-Z0-9\s.,]{1,100}$/';
     private $expresion_id = '/^\d{1,9}$/';
     private $estados_venezuela = [
         "ANZ", "APUR", "ARA", "BAR", "BOL", "CAR", "COJ", "DELTA", "FAL", "GUA",
-        "LAR", "MER", "MIR", "MON", "ESP", "POR", "SUC", "TÁCH", "TRU", "VAR", "YAR", "ZUL"
+        "LAR", "MER", "MIR", "MON", "ESP", "POR", "SUC", "TACH", "TRU", "VAR", "YAR", "ZUL"
+    ];
+    private $estados_venezuela_valores = [
+        "ANZ"   => "anzoategui",
+        "APUR"  => "apure",
+        "ARA"   => "aragua",
+        "BAR"   => "barinas",
+        "BOL"   => "bolivar",
+        "CAR"   => "carabobo",
+        "COJ"   => "cojedes",
+        "DELTA" => "delta amacuro",
+        "FAL"   => "falcon",
+        "GUA"   => "guarico",
+        "LAR"   => "lara",
+        "MER"   => "merida",
+        "MIR"   => "miranda",
+        "MON"   => "monagas",
+        "ESP"   => "nueva esparta",
+        "POR"   => "portuguesa",
+        "SUC"   => "sucre",
+        "TACH"  => "tachira",
+        "TRU"   => "trujillo",
+        "VAR"   => "vargas", // Nota: El estado Vargas fue renombrado a "La Guaira"
+        "YAR"   => "yaracuy",
+        "ZUL"   => "zulia"
     ];
 
-    public  function registrar_Sede($idPastor, $nombre, $direccion, $estado)
+
+    //Funcion para obtener el nombre completo del estado
+    public function getNombreEstado($estadoCodigo)
+    {
+        if (isset($this->estados_venezuela_valores[$estadoCodigo])) {
+            return $this->estados_venezuela_valores[$estadoCodigo];
+        } else {
+            // Manejo del error si el código no existe en el array
+            return null; // o lanzar una excepción, según tu diseño
+        }
+    }
+
+    public  function registrar_Sede($idPastor, $nombre, $direccion, $estadoCodigo)
     {
         try {
 
@@ -36,19 +72,19 @@ class Sede extends Model
 
             if ($datos['sedeNumero'] === null) {
                 $id = 1;
-                $codigo = $estado . '-' . 'S' . $id;
-                $identificador = 'S'.$id;
-
+                $codigo = $estadoCodigo . '-' . 'S' . $id;
+                $identificador = 'S' . $id;
             } else {
                 $id = $datos['sedeNumero'] + 1;
-                $codigo = $estado . '-' . 'S' . $id;
-                $identificador = 'S'.$id;
+                $codigo = $estadoCodigo . '-' . 'S' . $id;
+                $identificador = 'S' . $id;
             }
 
+            $nombreEstado = $this->getNombreEstado($estadoCodigo);
             //Aqui puedes declarar una variable con el nombre que quieras. Puede ser $sql, $consulta, $query. Como desees
             //Lo unico que tienes que tomar en cuenta que hay nombras que si estan predefinidos, pero relah, ya el editor te avisa
-            $sql = "INSERT INTO sede (id, idpastor, codigo, identificador, nombre, estado, direccion, fechaCreacion) 
-                VALUES (:id, :idPastor, :codigo, :identificador, :nombre, :estado, :direccion, CURDATE())";
+            $sql = "INSERT INTO sede (id, idpastor, codigo, identificador, nombre, estado, estadoCodigo, direccion, fechaCreacion) 
+            VALUES (:id, :idPastor, :codigo, :identificador, :nombre, :estado, :estadoCodigo, :direccion, CURDATE())";
 
             //no se pueden enviar los valores por variables  parametrizacion y evita inyeccion de slq':nombrequetuquieres'
             //Todo lo que esta en VALUES() esta malo, preguntame el porque y despues quiero que escribas la respuesta aqui como comentario para que nunca se te olvide
@@ -62,21 +98,22 @@ class Sede extends Model
             $sentencia->bindValue(':codigo', $codigo);
             $sentencia->bindValue(':identificador', $identificador);
             $sentencia->bindValue(':nombre', $nombre);
-            $sentencia->bindValue(':estado', $estado);
+            $sentencia->bindValue(':estado', $nombreEstado);
+            $sentencia->bindValue(':estadoCodigo', $estadoCodigo);
             $sentencia->bindValue(':direccion', $direccion);
 
             //Ahora ejecutemos la consulta sql una vez ingresado todos los valores, es decir, los parametros que mencionamos arriba
             $sentencia->execute();
+
             http_response_code(200);
             echo json_encode(array('msj' => 'Sede registrada exitosamente', 'status' => 200));
             die();
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
-
+            http_response_code(422);
             echo json_encode($error_data);
             die();
         }
@@ -100,6 +137,7 @@ class Sede extends Model
                 "error_line" => "Linea del error: " . $e->getLine()
             );
             //print_r($error_data);
+            http_response_code(422);
             echo json_encode($error_data);
             die();
         }
@@ -127,7 +165,7 @@ class Sede extends Model
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
-            //print_r($error_data);
+            http_response_code(422);
             echo json_encode($error_data);
             die();
         }
@@ -145,12 +183,15 @@ class Sede extends Model
             $stmt->bindValue(":id", $id);
 
             $stmt->execute();
+            http_response_code(200);
+            echo json_encode(array('msj'=>'Sede eliminada correctamente', 'status'=>200));
+            die();
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
-            //print_r($error_data);
+            http_response_code(422);
             echo json_encode($error_data);
             die();
         }
@@ -174,12 +215,13 @@ class Sede extends Model
                 "error_line" => "Linea del error: " . $e->getLine()
             );
             //print_r($error_data);
+            http_response_code(422);
             echo json_encode($error_data);
             die();
         }
     }
 
-    public function validacion_nombre(string $nombre): void
+    public function validacion_datos(int $idPastor, string $nombre, string $direccion,  string $estado): void
     {
         try {
             // Utilizar preg_match para validar el string contra la expresión regular
@@ -187,35 +229,20 @@ class Sede extends Model
                 // Lanzar una excepción si el string no es válido
                 throw new Exception("El nombre que ingresaste no cumple con los requisitos. Ingrese nuevamente", 422);
             }
-        } catch (Exception $e) {
-            http_response_code($e->getCode());
-            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
-            die();
-        }
-    }
 
-    public function validacion_direccion(string $direccion): void
-    {
-        try {
-            // Utilizar preg_match para validar el string contra la expresión regular
             if (!preg_match($this->expresion_direccion, $direccion)) {
                 // Lanzar una excepción si el string no es válido
                 throw new Exception("La direccion que ingresaste no cumple con los requisitos. Ingrese nuevamente", 422);
             }
-        } catch (Exception $e) {
-            http_response_code($e->getCode());
-            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
-            die();
-        }
-    }
 
-    public function validacion_id(int $id): void
-    {
-        try {
-            // Utilizar preg_match para validar el string contra la expresión regular
-            if (!preg_match($this->expresion_id, $id)) {
+            if (!preg_match($this->expresion_id, $idPastor)) {
                 // Lanzar una excepción si el string no es válido
                 throw new Exception("El ID no cumple con los requisitos. Seleccione nuevamente", 422);
+            }
+
+            if (!in_array($estado, $this->estados_venezuela)) {
+                // Lanzar una excepción si el string no es válido
+                throw new Exception("El estado que ha seleccionado no existe. Seleccione nuevamente", 422);
             }
         } catch (Exception $e) {
             http_response_code($e->getCode());
@@ -224,13 +251,40 @@ class Sede extends Model
         }
     }
 
-    public function validacion_estado(string $estado): void
+    public function validacion_existencia($nombre, $idSede)
     {
         try {
-            // Utilizar preg_match para validar el string contra la expresión regular
-            if (!in_array($estado, $this->estados_venezuela)) {
-                // Lanzar una excepción si el string no es válido
-                throw new Exception("El estado que ha seleccionado no existe. Seleccione nuevamente", 422);
+            $sql = "SELECT * FROM sede WHERE nombre = :nombre" . (!empty($idSede) ? " AND id != $idSede" : "");
+            $stmt = $this->db->pdo()->prepare($sql);
+            $stmt->bindValue(":nombre", $nombre);
+            $stmt->execute();
+            $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($resultado !== false) {
+                if ($resultado['nombre'] === $nombre) {
+                    // Lanzar una excepción si el dato existe en la BD
+                    throw new Exception("La sede llamada " . $nombre . " ya existe", 422);
+                }
+            }
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+            die();
+        }
+    }
+
+    public function validacion_eliminar(int $idSede): void
+    {
+        try {
+            $sql = "SELECT * FROM territorio WHERE idSede = :idSede AND estatus = 1";
+            $stmt = $this->db->pdo()->prepare($sql);
+            $stmt->bindValue(":idSede", $idSede);
+            $stmt->execute();
+            //$resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($stmt->rowCount() > 0) {
+                // Lanzar una excepción si el dato existe en la BD
+                throw new Exception("Esta sede esta asociada a un territorio que esta en uso, la cual posee datos asociados", 422);
             }
         } catch (Exception $e) {
             http_response_code($e->getCode());
