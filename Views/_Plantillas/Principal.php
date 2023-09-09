@@ -18,7 +18,6 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/lib/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/lib/datatables/datatables.min.css">
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/lib/datatables/choicesjs/choices.css">
-    </script>
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/css/utilities.css">
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/css/site.css">
     <?php if (!empty($viewStyles)) : ?>
@@ -93,7 +92,7 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
     <!-- Menu lateral -->
     <aside id="sidebar" class="d-flex flex-column flex-shrink-0 py-3 px-2 bg-white
         position-fixed top-0 bottom-0 border-end">
-        <div class="nav flex-column mb-auto">
+        <div class="nav flex-column mb-auto pb-5">
             <a href="<?= LOCAL_DIR ?>" class="nav-link <?= empty($uriParts[0]) || strtolower($uriParts[0]) == "home" ? "active" : "" ?>">
                 <i class="fa-solid fa-house-chimney fa-fw me-2"></i>
                 <span>Inicio</span>
