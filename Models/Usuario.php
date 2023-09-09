@@ -241,7 +241,7 @@ class Usuario extends Model
         }
 
         foreach ($this->roles as $rol) {
-            if (property_exists($rol->permisos, $nombrePermiso) && $rol->permisos->$nombrePermiso) {
+            if ($rol->permisos->$nombrePermiso) {
                 return true;
             }
         }
