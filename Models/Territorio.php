@@ -16,7 +16,7 @@ class Territorio extends Model
     public Usuario $lider;
 
     //Expresiones regulares
-    private $expresion_nombre = '/^[a-zA-Z\s]{1,30}$/';
+    private $expresion_nombre = '/^[a-zA-Z0-9\s.,]{1,50}$/';
     private $expresion_detalles = '/^[a-zA-Z0-9\s.,]{1,100}$/';
     private $expresion_id = '/^[1-9]\d*$/';
 
@@ -99,7 +99,7 @@ class Territorio extends Model
 
                 //Ahora ejecutemos la consulta sql una vez ingresado todos los valores, es decir, los parametros que mencionamos arriba
                 $stmt->execute();
-            }else{
+            } else {
                 //Aqui puedes declarar una variable con el nombre que quieras. Puede ser $sql, $consulta, $query. Como desees
                 //Lo unico que tienes que tomar en cuenta que hay nombras que si estan predefinidos, pero relah, ya el editor te avisa
                 $sql = "INSERT INTO territorio (idSede, idLider, codigo, identificador, nombre, detalles, fechaCreacion) 
@@ -126,7 +126,6 @@ class Territorio extends Model
             http_response_code(200);
             echo json_encode(array('msj' => 'Territorio registrado exitosamente', 'status' => 200));
             die();
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -134,7 +133,7 @@ class Territorio extends Model
             );
 
             http_response_code(422);
-            print_r($error_data);
+            //print_r($error_data);
             echo json_encode($error_data);
             die();
         }
@@ -161,6 +160,7 @@ class Territorio extends Model
                 "error_line" => "Linea del error: " . $e->getLine()
             );
             //print_r($error_data);
+            http_response_code(422);
             echo json_encode($error_data);
             die();
         }
@@ -172,26 +172,73 @@ class Territorio extends Model
 
         try {
 
+            $consulta = Territorio::cargar($id);
 
+            if ($consulta->idSede === $idSede) {
 
-            $sql = "UPDATE territorio SET  idSede = :idSede, nombre = :nombre, idLider = :idLider, detalles = :detalles WHERE territorio.id = :id";
+                $sql = "UPDATE territorio SET nombre = :nombre, idLider = :idLider, detalles = :detalles WHERE territorio.id = :id";
+                $stmt = $this->db->pdo()->prepare($sql);
 
+                $stmt->bindValue(':id', $id);
+                $stmt->bindValue(':nombre', $nombre);
+                $stmt->bindValue(':idLider', $idLider);
+                $stmt->bindValue(':detalles', $detalles);
 
-            $stmt = $this->db->pdo()->prepare($sql);
+                $stmt->execute();
+            } else {
+                $this->validacion_accion($id, $accion = 2);
 
-            $stmt->bindValue(':id', $id);
-            $stmt->bindValue(':idSede', $idSede);
-            $stmt->bindValue(':nombre', $nombre);
-            $stmt->bindValue(':idLider', $idLider);
-            $stmt->bindValue(':detalles', $detalles);
+                $sede = Sede::cargar($idSede);
+                $territorios = Territorio::cargarRelaciones($idSede, "Sede");
 
-            $stmt->execute();
+                $identificador = '';
+                $codigo = '';
+
+                if (count($territorios) > 0) {
+                    // Un array para almacenar solo los números de los identificadores
+                    $numeros = [];
+                    foreach ($territorios as $resultado) {
+                        // Extraer el número del identificador (eliminar la "T")
+                        $numero = (int) substr($resultado->identificador, 1);  // substr($resultado, 1) elimina el primer carácter ("T")
+                        $numeros[] = $numero;
+                    }
+                    // Encontrar el número más grande en el array
+                    $mayorNumero = max($numeros);
+
+                    $contador = $mayorNumero + 1;
+                    $identificador = 'T' . $contador;
+                    $codigo = $sede->codigo . '-' . $identificador;
+                } else {
+                    $contador = 1;
+                    $identificador = 'T' . $contador;
+                    $codigo = $sede->codigo . '-' . $identificador;
+                }
+
+                $sql = "UPDATE territorio SET nombre = :nombre, idLider = :idLider, idSede = :idSede, detalles = :detalles, codigo = :codigo, identificador = :identificador WHERE territorio.id = :id";
+
+                $stmt = $this->db->pdo()->prepare($sql);
+
+                $stmt->bindValue(':id', $id);
+                $stmt->bindValue(':nombre', $nombre);
+                $stmt->bindValue(':idLider', $idLider);
+                $stmt->bindValue(':idSede', $idSede);
+                $stmt->bindValue(':detalles', $detalles);
+                $stmt->bindValue(':codigo', $codigo);
+                $stmt->bindValue(':identificador', $identificador);
+
+                $stmt->execute();
+            }
+
+            http_response_code(200);
+            echo json_encode(array('msj' => 'Territorio actualizado exitosamente', 'status' => 200));
+            die();
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
             //print_r($error_data);
+            http_response_code(422);
             echo json_encode($error_data);
             die();
         }
@@ -202,9 +249,7 @@ class Territorio extends Model
 
     public  function eliminar_territorio($id)
     {
-
         try {
-
             $sql = "UPDATE territorio SET estatus = '0' WHERE territorio.id = :id";
 
             $stmt = $this->db->pdo()->prepare($sql);
@@ -212,24 +257,29 @@ class Territorio extends Model
             $stmt->bindValue(":id", $id);
 
             $stmt->execute();
+
+            http_response_code(200);
+            echo json_encode(array('msj' => 'Eliminado correctamente'));
+            die();
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
             //print_r($error_data);
+            http_response_code(422);
             echo json_encode($error_data);
             die();
         }
     }
 
 
+
+
     public  function listar_lideres()
     {
 
         try {
-
-
             $sql = "SELECT usuario.id, usuario.cedula, usuario.nombre, usuario.apellido 
             FROM usuariorol INNER JOIN usuario ON usuario.id = usuariorol.idUsuario WHERE usuariorol.idRol IN (3, 4)";
 
@@ -244,6 +294,7 @@ class Territorio extends Model
                 "error_line" => "Linea del error: " . $e->getLine()
             );
             //print_r($error_data);
+            http_response_code(422);
             echo json_encode($error_data);
             die();
         }
@@ -251,10 +302,7 @@ class Territorio extends Model
 
     public  function listar_Sedes()
     {
-
         try {
-
-
 
             $sql = "SELECT * FROM sede WHERE sede.estatus = '1'";
 
@@ -269,14 +317,21 @@ class Territorio extends Model
                 "error_line" => "Linea del error: " . $e->getLine()
             );
             //print_r($error_data);
+            http_response_code(422);
             echo json_encode($error_data);
             die();
         }
     }
 
 
-    /////////////////// ESPACIO PARA VALIDACIONES //////////////////////
-    public function validacion_nombre(string $nombre): void
+
+
+
+
+    ///////////////////////////////// ESPACIO PARA VALIDACIONES //////////////////////////////////
+
+
+    public function validacion_datos(int $idSede, string $nombre, int $idLider, string $detalles): void
     {
         try {
             // Utilizar preg_match para validar el string contra la expresión regular
@@ -284,20 +339,20 @@ class Territorio extends Model
                 // Lanzar una excepción si el string no es válido
                 throw new Exception("El nombre que ingresaste no cumple con los requisitos. Ingrese nuevamente", 422);
             }
-        } catch (Exception $e) {
-            http_response_code($e->getCode());
-            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
-            die();
-        }
-    }
 
-    public function validacion_detalles(string $detalles): void
-    {
-        try {
-            // Utilizar preg_match para validar el string contra la expresión regular
             if (!preg_match($this->expresion_detalles, $detalles)) {
                 // Lanzar una excepción si el string no es válido
                 throw new Exception("La direccion que ingresaste no cumple con los requisitos. Ingrese nuevamente", 422);
+            }
+
+            if (!preg_match($this->expresion_id, $idSede)) {
+                // Lanzar una excepción si el string no es válido
+                throw new Exception("El ID no cumple con los requisitos. Seleccione nuevamente", 422);
+            }
+
+            if (!preg_match($this->expresion_id, $idLider)) {
+                // Lanzar una excepción si el string no es válido
+                throw new Exception("El ID no cumple con los requisitos. Seleccione nuevamente", 422);
             }
         } catch (Exception $e) {
             http_response_code($e->getCode());
@@ -306,13 +361,53 @@ class Territorio extends Model
         }
     }
 
-    public function validacion_id(int $id): void
+
+    public function validacion_existencia(string $nombre, $idTerritorio): void
     {
         try {
-            // Utilizar preg_match para validar el string contra la expresión regular
-            if (!preg_match($this->expresion_id, $id)) {
-                // Lanzar una excepción si el string no es válido
-                throw new Exception("El ID no cumple con los requisitos. Seleccione nuevamente", 422);
+            $sql = "SELECT * FROM territorio WHERE nombre = :nombre" . (!empty($idTerritorio) ? " AND id != $idTerritorio" : "");
+            $stmt = $this->db->pdo()->prepare($sql);
+            $stmt->bindValue(":nombre", $nombre);
+            $stmt->execute();
+            $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($resultado !== false) {
+                if ($resultado['nombre'] === $nombre) {
+                    // Lanzar una excepción si el dato existe en la BD
+                    throw new Exception("El territorio llamado " . $nombre . " ya existe", 422);
+                }
+            }
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+            die();
+        }
+    }
+
+    public function validacion_accion(int $idTerritorio, int $accion): void
+    {
+        try {
+            
+            $sql = "(SELECT 1 FROM celulafamiliar WHERE idTerritorio= :idTerritorio1 AND estatus = 1 LIMIT 1)
+                    UNION
+                    (SELECT 1 FROM celulaconsolidacion WHERE idTerritorio = :idTerritorio2 AND estatus = 1  LIMIT 1)
+                    UNION
+                    (SELECT 1 FROM celulacrecimiento WHERE idTerritorio = :idTerritorio3 AND estatus = 1  LIMIT 1)
+                    LIMIT 1";
+
+            $stmt = $this->db->pdo()->prepare($sql);
+            $stmt->bindValue(":idTerritorio1", $idTerritorio);
+            $stmt->bindValue(":idTerritorio2", $idTerritorio);
+            $stmt->bindValue(":idTerritorio3", $idTerritorio);
+            $stmt->execute();
+
+            if ($stmt->rowCount() > 0) {
+                // Lanzar una excepción si el dato existe en la BD
+                if ($accion == 1) {
+                    throw new Exception("Este territorio esta asociado a celulas que estan en uso. Estos poseen datos asociados", 422);
+                }else{
+                    throw new Exception("No puedes cambiar la sede porque ya existen celulas asociadas al territorio y con codigos unicos generados. Esto podria destruir la integridad de los datos", 422);
+                }
             }
         } catch (Exception $e) {
             http_response_code($e->getCode());

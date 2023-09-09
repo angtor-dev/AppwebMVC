@@ -1,6 +1,6 @@
 $(document).ready(function () {
 
-    let choices;
+    let choices1;
     let choices2;
 
     const dataTable = $('#territorioDatatables').DataTable({
@@ -87,16 +87,17 @@ $(document).ready(function () {
                             text: 'El territorio ha sido borrado',
                             showConfirmButton: false,
                             timer: 2000,
-                          })
+                        })
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         if (jqXHR.responseText) {
                             let jsonResponse = JSON.parse(jqXHR.responseText);
-                    
+
                             if (jsonResponse.msj) {
                                 Swal.fire({
                                     icon: 'error',
-                                    title: jsonResponse.msj,
+                                    title: 'Denegado',
+                                    text: jsonResponse.msj,
                                     showConfirmButton: true,
                                 })
                             } else {
@@ -113,9 +114,11 @@ $(document).ready(function () {
                         }
                     }
                 })
-            } 
+            }
         });
     });
+
+
 
 
     function Listar_Lideres(idLider) {
@@ -146,16 +149,17 @@ $(document).ready(function () {
                 });
 
                 // Destruir la instancia existente si la hay
-                if (choices) {
-                    choices.destroy();
+                if (choices1) {
+                    choices1.destroy();
                 }
-                choices = new Choices(selector, {
+                choices1 = new Choices(selector, {
                     allowHTML: true,
                     searchEnabled: true,  // Habilita la funcionalidad de búsqueda
                     removeItemButton: true,  // Habilita la posibilidad de remover items
                     placeholderValue: 'Selecciona una opción',  // Texto del placeholder
                 });
-                choices.setChoiceByValue(idLider.toString());
+
+                choices1.setChoiceByValue(idLider.toString());
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -165,6 +169,8 @@ $(document).ready(function () {
             }
         })
     }
+
+
 
 
     function Listar_Sedes(idSede) {
@@ -217,9 +223,15 @@ $(document).ready(function () {
 
 
 
+
+
+
+
+    ////////////////////////////// ACTUALIZAR DATOS DE TERRITORIO //////////////////////////////
+
     const regexObj = {
         idSede: /^[1-9]\d*$/, // Números enteros mayores a 0
-        nombre: /^[a-zA-Z0-9\s.,]{1,20}$/, // Letras, números, espacios, puntos y comas con un máximo de 20 caracteres
+        nombre: /^[a-zA-Z0-9\s.,]{1,50}$/, // Letras, números, espacios, puntos y comas con un máximo de 20 caracteres
         idLider: /^[1-9]\d*$/, // Números enteros mayores a 0
         detalles: /^[a-zA-Z0-9\s.,]{1,100}$/ // Letras, números, espacios, puntos y comas con un máximo de 100 caracteres
     };
@@ -306,30 +318,45 @@ $(document).ready(function () {
                     console.log("Respuesta del servidor:", data);
                     Swal.fire({
                         icon: 'success',
-                        title: 'Registrado Correctamente',
+                        title: 'Territorio actualizado correctamente',
                         showConfirmButton: false,
                         timer: 2000,
                     })
 
-                    document.getElementById("#formulario").reset();
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    // Aquí puedes manejar errores, por ejemplo:
-                    console.error("Error al enviar:", textStatus, errorThrown);
-                    alert("Hubo un error al realizar el registro. Por favor, inténtalo de nuevo.");
+                    if (jqXHR.responseText) {
+                        let jsonResponse = JSON.parse(jqXHR.responseText);
+
+                        if (jsonResponse.msj) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Denegado',
+                                text: jsonResponse.msj,
+                                showConfirmButton: true,
+                            })
+                        } else {
+                            const respuesta = JSON.stringify(jsonResponse, null, 2)
+                            Swal.fire({
+                                background: 'red',
+                                color: '#fff',
+                                title: respuesta,
+                                showConfirmButton: true,
+                            })
+                        }
+                    } else {
+                        alert('Error desconocido: ' + textStatus);
+                    }
                 }
             });
 
-
-
-
         } else {
             Swal.fire({
-                        icon: 'error',
-                        title: 'Formulario invalido. Verifique sus datos',
-                        showConfirmButton: false,
-                        timer: 2000,
-                    });
+                icon: 'error',
+                title: 'Formulario invalido. Verifique sus datos',
+                showConfirmButton: false,
+                timer: 2000,
+            });
         }
     });
 

@@ -2,7 +2,7 @@
 require_once "Models/Model.php";
 
 class CelulaFamiliar extends Model
-{   
+{
     public int $id;
     public int $idLider;
     public int $idColider;
@@ -11,31 +11,102 @@ class CelulaFamiliar extends Model
     public string $nombre;
     public int $estatus;
 
-    public  function registrar_CelulaFamiliar($nombre, $idLider, $idCoLider, $idTerritorio){
+    public Territorio $territorio;
+
+
+    public  function registrar_CelulaFamiliar($nombre, $idLider, $idCoLider, $idTerritorio)
+    {
         try {
-            
-        $sql = "INSERT INTO celulafamiliar (nombre, idLider, idCoLider, idTerritorio) 
-        VALUES (:nombre, :idLider, :idCoLider, :idTerritorio)";
-      
-        $stmt = $this->db->pdo()->prepare($sql);
-        
-        $stmt->bindValue(':nombre', $nombre);
-        $stmt->bindValue(':idLider', $idLider);
-        $stmt->bindValue(':idCoLider', $idCoLider);
-        $stmt->bindValue(':idTerritorio', $idTerritorio);
-        
-        $stmt->execute();
-        } catch (Exception $e) {// Muestra el mensaje de error y detén la ejecución.
+
+            $sql = "SELECT MAX(id) AS celulaNumero FROM celulafamiliar";
+            $consultaid = $this->db->pdo()->prepare($sql);
+            $consultaid->execute();
+            $datos = $consultaid->fetch(PDO::FETCH_ASSOC);
+
+            $id = '';
+            $codigo = '';
+            $territorio = Territorio::cargar($idTerritorio);
+
+            if ($datos['celulaNumero'] === null) {
+                $id = 1;
+                $identificador = 'CFA' . $id;
+                $codigo = $territorio->codigo . '-' . $identificador;
+            } else {
+                $celulas = CelulaFamiliar::cargarRelaciones($idTerritorio, "Territorio");
+
+                if (count($celulas) > 0) {
+                    // Un array para almacenar solo los números de los identificadores
+                    $numeros = [];
+                    foreach ($celulas as $resultado) {
+                        // Extraer el número del identificador (eliminar la "CFA")
+                        $numero = (int) substr($resultado->identificador, 3);  // substr($resultado, 1) elimina el primer carácter ("T")
+                        $numeros[] = $numero;
+                    }
+                    // Encontrar el número más grande en el array
+                    $mayorNumero = max($numeros);
+
+                    $contador = $mayorNumero + 1;
+                    $identificador = 'CFA' . $contador;
+                    $codigo = $territorio->codigo . '-' . $identificador;
+                } else {
+                    $contador = 1;
+                    $identificador = 'CFA' . $contador;
+                    $codigo = $territorio->codigo . '-' . $identificador;
+                }
+            }
+
+            if ($id == 1) {
+
+                $sql = "INSERT INTO celulafamiliar (id, nombre, codigo, identificador, idLider, idCoLider, idTerritorio, fechaCreacion) 
+                VALUES (:id, :nombre, :codigo, :identificador, :idLider, :idCoLider, :idTerritorio, CURDATE())";
+
+                $stmt = $this->db->pdo()->prepare($sql);
+
+                $stmt->bindValue(':id', $id);
+                $stmt->bindValue(':nombre', $nombre);
+                $stmt->bindValue(':codigo', $codigo);
+                $stmt->bindValue(':identificador', $identificador);
+                $stmt->bindValue(':idLider', $idLider);
+                $stmt->bindValue(':idCoLider', $idCoLider);
+                $stmt->bindValue(':idTerritorio', $idTerritorio);
+
+                $stmt->execute();
+            } else {
+                $sql = "INSERT INTO celulafamiliar (nombre, codigo, identificador, idLider, idCoLider, idTerritorio, fechaCreacion) 
+                VALUES (:nombre, :codigo, :identificador, :idLider, :idCoLider, :idTerritorio, CURDATE())";
+
+                $stmt = $this->db->pdo()->prepare($sql);
+
+                $stmt->bindValue(':nombre', $nombre);
+                $stmt->bindValue(':codigo', $codigo);
+                $stmt->bindValue(':identificador', $identificador);
+                $stmt->bindValue(':idLider', $idLider);
+                $stmt->bindValue(':idCoLider', $idCoLider);
+                $stmt->bindValue(':idTerritorio', $idTerritorio);
+                $stmt->bindValue(':idTerritorio', $idTerritorio);
+
+                $stmt->execute();
+            }
+
+            http_response_code(200);
+            echo json_encode(array('msj' => 'Celula registrada exitosamente', 'status' => 200));
+            die();
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
-            
+
+            http_response_code(422);
             echo json_encode($error_data);
             die();
         }
-    }  
-    
+    }
+
+
+
+
+
     public  function listar_CelulaFamiliar()
     {
 
@@ -67,12 +138,12 @@ class CelulaFamiliar extends Model
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $resultado;
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
+            http_response_code(422);
             print_r($error_data);
             echo json_encode($error_data);
             die();
@@ -80,31 +151,78 @@ class CelulaFamiliar extends Model
     }
 
 
+
+
+
+
     public  function editar_CelulaFamiliar($id, $nombre, $idLider, $idCoLider, $idTerritorio)
     {
-
         try {
+            $consulta = CelulaFamiliar::cargar($id);
 
+            if ($consulta->idTerritorio === $idTerritorio) {
 
+                $sql = "UPDATE celulafamiliar SET  nombre = :nombre, idLider = :idLider, idCoLider = :idCoLider WHERE celulafamiliar.id = :id";
+                $stmt = $this->db->pdo()->prepare($sql);
 
-            $sql = "UPDATE celulafamiliar SET  nombre = :nombre, idLider = :idLider, idCoLider = :idCoLider, idTerritorio = :idTerritorio WHERE celulafamiliar.id = :id";
+                $stmt->bindValue(':id', $id);
+                $stmt->bindValue(':nombre', $nombre);
+                $stmt->bindValue(':idLider', $idLider);
+                $stmt->bindValue(':idCoLider', $idCoLider);
 
+                $stmt->execute();
+            }else{
 
-            $stmt = $this->db->pdo()->prepare($sql);
+                $territorio = Territorio::cargar($idTerritorio);
+                $celulas = CelulaFamiliar::cargarRelaciones($idTerritorio, "Territorio");
 
-            $stmt->bindValue(':id', $id);
-            $stmt->bindValue(':nombre', $nombre);
-            $stmt->bindValue(':idLider', $idLider);
-            $stmt->bindValue(':idCoLider', $idCoLider);
-            $stmt->bindValue(':idTerritorio', $idTerritorio);
+                $identificador = '';
+                $codigo = '';
 
-            $stmt->execute();
+                if (count($celulas) > 0) {
+                    // Un array para almacenar solo los números de los identificadores
+                    $numeros = [];
+                    foreach ($celulas as $resultado) {
+                        // Extraer el número del identificador (eliminar la "CFA")
+                        $numero = (int) substr($resultado->identificador, 3);  // substr($resultado, 1) elimina el primer carácter ("T")
+                        $numeros[] = $numero;
+                    }
+                    // Encontrar el número más grande en el array
+                    $mayorNumero = max($numeros);
+
+                    $contador = $mayorNumero + 1;
+                    $identificador = 'CFA' . $contador;
+                    $codigo = $territorio->codigo . '-' . $identificador;
+                } else {
+                    $contador = 1;
+                    $identificador = 'CFA' . $contador;
+                    $codigo = $territorio->codigo . '-' . $identificador;
+                }
+
+                $sql = "UPDATE celulafamiliar SET  nombre = :nombre, idLider = :idLider, idCoLider = :idCoLider, codigo = :codigo, identificador = :identificador WHERE celulafamiliar.id = :id";
+                $stmt = $this->db->pdo()->prepare($sql);
+
+                $stmt->bindValue(':id', $id);
+                $stmt->bindValue(':nombre', $nombre);
+                $stmt->bindValue(':idLider', $idLider);
+                $stmt->bindValue(':idCoLider', $idCoLider);
+                $stmt->bindValue(':identificador', $identificador);
+                $stmt->bindValue(':codigo', $codigo);
+
+                $stmt->execute();
+            }
+
+            http_response_code(200);
+            echo json_encode(array('msj' => 'Celula actualizada exitosamente', 'status' => 200));
+            die();
+
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
             //print_r($error_data);
+            http_response_code(422);
             echo json_encode($error_data);
             die();
         }
@@ -126,12 +244,16 @@ class CelulaFamiliar extends Model
 
             $stmt->execute();
 
+            http_response_code(200);
+            echo json_encode(array('msj'=>'Celula eliminada correctamente'));
+            die();
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
             //print_r($error_data);
+            http_response_code(422);
             echo json_encode($error_data);
             die();
         }
@@ -139,45 +261,45 @@ class CelulaFamiliar extends Model
 
     public function registrar_reunion($idCelulaFamiliar, $fecha, $tematica, $semana, $generosidad, $infantil, $juvenil, $adulto, $actividad, $observaciones)
     {
-       
-        try {
-            
-        $sql = "INSERT INTO reunionfamiliar (idCelulaFamiliar, fecha, tematica, semana, generosidad, infantil, juvenil, adulto, actividad, observaciones) 
-        VALUES (:idCelulaFamiliar, :fecha, :tematica, :semana, :generosidad, :infantil, :juvenil, :adulto, :actividad, :observaciones)";
-      
-        $stmt = $this->db->pdo()->prepare($sql);
 
-        
-        $stmt->bindValue(':idCelulaFamiliar', $idCelulaFamiliar);
-        $stmt->bindValue(':fecha', $fecha);
-        $stmt->bindValue(':tematica', $tematica);
-        $stmt->bindValue(':semana', $semana);
-        $stmt->bindValue(':generosidad', $generosidad);
-        $stmt->bindValue(':infantil', $infantil);
-        $stmt->bindValue(':juvenil', $juvenil);
-        $stmt->bindValue(':adulto', $adulto);
-        $stmt->bindValue(':actividad', $actividad);
-        $stmt->bindValue(':observaciones', $observaciones);
-        
-        
-        $stmt->execute();
-        } catch (Exception $e) {// Muestra el mensaje de error y detén la ejecución.
+        try {
+
+            $sql = "INSERT INTO reunionfamiliar (idCelulaFamiliar, fecha, tematica, semana, generosidad, infantil, juvenil, adulto, actividad, observaciones) 
+        VALUES (:idCelulaFamiliar, :fecha, :tematica, :semana, :generosidad, :infantil, :juvenil, :adulto, :actividad, :observaciones)";
+
+            $stmt = $this->db->pdo()->prepare($sql);
+
+
+            $stmt->bindValue(':idCelulaFamiliar', $idCelulaFamiliar);
+            $stmt->bindValue(':fecha', $fecha);
+            $stmt->bindValue(':tematica', $tematica);
+            $stmt->bindValue(':semana', $semana);
+            $stmt->bindValue(':generosidad', $generosidad);
+            $stmt->bindValue(':infantil', $infantil);
+            $stmt->bindValue(':juvenil', $juvenil);
+            $stmt->bindValue(':adulto', $adulto);
+            $stmt->bindValue(':actividad', $actividad);
+            $stmt->bindValue(':observaciones', $observaciones);
+
+
+            $stmt->execute();
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
-            
+
+            http_response_code(422);
             echo json_encode($error_data);
             die();
         }
-    }  
+    }
 
 
     public  function listar_lideres()
     {
 
         try {
-
             //Esta consulta esta sujeto a cambios hasta que se consiga un mejor logica para traer los usuarios con el nivel requerido
 
             $sql = "SELECT usuario.id, usuario.cedula, usuario.nombre, usuario.apellido 
@@ -189,18 +311,18 @@ class CelulaFamiliar extends Model
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $resultado;
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
             //print_r($error_data);
+            http_response_code(422);
             echo json_encode($error_data);
             die();
         }
     }
-      
+
     public  function listar_territorios()
     {
 
@@ -213,20 +335,21 @@ class CelulaFamiliar extends Model
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $resultado;
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
             //print_r($error_data);
+            http_response_code(422);
             echo json_encode($error_data);
             die();
         }
     }
-        
 
-    public  function listar_reuniones(){
+
+    public  function listar_reuniones()
+    {
 
         try {
 
@@ -243,7 +366,7 @@ class CelulaFamiliar extends Model
                     reunionfamiliar.observaciones,
                     celulafamiliar.codigo,
                     celulafamiliar.nombre,
-                    celulafamiliar.id AS idcelulafamiliar
+                    celulafamiliar.id AS idCelulaFamiliar
                 FROM reunionfamiliar
                 INNER JOIN celulafamiliar
                 ON reunionfamiliar.idcelulafamiliar = celulafamiliar.id
@@ -255,24 +378,25 @@ class CelulaFamiliar extends Model
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $resultado;
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
             print_r($error_data);
+            http_response_code(422);
             echo json_encode($error_data);
             die();
         }
     }
 
 
-    public  function editar_reuniones($id, $idCelulaFamiliar, $fecha, $tematica, $semana, $generosidad, $infantil, $juvenil, $adulto, $actividad, $observaciones){
-       
+    public  function editar_reuniones($id, $idCelulaFamiliar, $fecha, $tematica, $semana, $generosidad, $infantil, $juvenil, $adulto, $actividad, $observaciones)
+    {
+
         try {
-            
-        $sql = "UPDATE reunionfamiliar
+
+            $sql = "UPDATE reunionfamiliar
                 SET
                 idCelulaFamiliar = :idCelulaFamiliar,
                 fecha = :fecha,
@@ -285,39 +409,40 @@ class CelulaFamiliar extends Model
                 actividad = :actividad,
                 observaciones = :observaciones
                 WHERE id = :id";
-      
-        $stmt = $this->db->pdo()->prepare($sql);
 
-        $stmt->bindValue(':id', $id);
-        $stmt->bindValue(':idCelulaFamiliar', $idCelulaFamiliar);
-        $stmt->bindValue(':fecha', $fecha);
-        $stmt->bindValue(':tematica', $tematica);
-        $stmt->bindValue(':semana', $semana);
-        $stmt->bindValue(':generosidad', $generosidad);
-        $stmt->bindValue(':infantil', $infantil);
-        $stmt->bindValue(':juvenil', $juvenil);
-        $stmt->bindValue(':adulto', $adulto);
-        $stmt->bindValue(':actividad', $actividad);
-        $stmt->bindValue(':observaciones', $observaciones);
-        
-        
-        $stmt->execute();
-        } catch (Exception $e) {// Muestra el mensaje de error y detén la ejecución.
+            $stmt = $this->db->pdo()->prepare($sql);
+
+            $stmt->bindValue(':id', $id);
+            $stmt->bindValue(':idCelulaFamiliar', $idCelulaFamiliar);
+            $stmt->bindValue(':fecha', $fecha);
+            $stmt->bindValue(':tematica', $tematica);
+            $stmt->bindValue(':semana', $semana);
+            $stmt->bindValue(':generosidad', $generosidad);
+            $stmt->bindValue(':infantil', $infantil);
+            $stmt->bindValue(':juvenil', $juvenil);
+            $stmt->bindValue(':adulto', $adulto);
+            $stmt->bindValue(':actividad', $actividad);
+            $stmt->bindValue(':observaciones', $observaciones);
+
+
+            $stmt->execute();
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
-            
+
+            http_response_code(422);
             echo json_encode($error_data);
             die();
         }
-    } 
+    }
 
 
 
 
-    public  function eliminar_reuniones($id){
-
+    public  function eliminar_reuniones($id)
+    {
         try {
 
             $sql = "DELETE FROM reunionfamiliar WHERE id = :id";
@@ -327,24 +452,26 @@ class CelulaFamiliar extends Model
             $stmt->bindValue(":id", $id);
 
             $stmt->execute();
-
+            
+            http_response_code(200);
+            echo json_encode(array('msj'=>'Reunion eliminada correctamente'));
+            die();
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
             //print_r($error_data);
+            http_response_code(422);
             echo json_encode($error_data);
             die();
         }
     }
 
 
-    public  function listar_celulas(){
-
+    public  function listar_celulas()
+    {
         try {
-
-
 
             $sql = "SELECT * FROM celulafamiliar WHERE celulafamiliar.estatus = '1'";
 
@@ -353,21 +480,15 @@ class CelulaFamiliar extends Model
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $resultado;
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
             //print_r($error_data);
+            http_response_code(422);
             echo json_encode($error_data);
             die();
         }
     }
-       
-
-
-
 }
-?>
-

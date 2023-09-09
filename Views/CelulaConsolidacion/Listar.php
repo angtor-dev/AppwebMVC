@@ -80,7 +80,7 @@ $viewScripts = ["CelulaConsolidacion-listar.js"];
                             <div class="mb-3 col-12">
                                 <input type="hidden" id="idCelulaConsolidacion">
                                 <label for="nombre" class="form-label fw-bold">Nombre de la Celula</label>
-                                <input type="text" class="form-control" id="nombre" maxlength="20" name="nombre">
+                                <input type="text" class="form-control" id="nombre" maxlength="50" name="nombre">
                                 <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_nombre" role="alert">
                                     Este campo no acepta numeros y no puede estar vacio.
                                 </div>

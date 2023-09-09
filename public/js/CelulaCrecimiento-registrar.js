@@ -1,6 +1,9 @@
 $(document).ready(function () {
 
 
+    let choices1
+    let choices2
+    let choices3
 
     function Listar_Lideres() {
 
@@ -40,17 +43,15 @@ $(document).ready(function () {
 
                 });
 
-
-
-                const element = document.getElementById('idLider');
-                const choices = new Choices(element, {
+                choices1 = new Choices(selector, {
+                    allowHTML: true,
                     searchEnabled: true,  // Habilita la funcionalidad de búsqueda
                     removeItemButton: true,  // Habilita la posibilidad de remover items
                     placeholderValue: 'Selecciona una opción',  // Texto del placeholder
                 });
 
-                const element2 = document.getElementById('idCoLider');
-                const choices2 = new Choices(element2, {
+                choices2 = new Choices(selector2, {
+                    allowHTML: true,
                     searchEnabled: true,  // Habilita la funcionalidad de búsqueda
                     removeItemButton: true,  // Habilita la posibilidad de remover items
                     placeholderValue: 'Selecciona una opción',  // Texto del placeholder
@@ -93,8 +94,9 @@ $(document).ready(function () {
                     selector.appendChild(option);
 
                 });
-                const element = document.getElementById('idTerritorio');
-                const choices = new Choices(element, {
+
+                choices3 = new Choices(selector, {
+                    allowHTML: true,
                     searchEnabled: true,  // Habilita la funcionalidad de búsqueda
                     removeItemButton: true,  // Habilita la posibilidad de remover items
                     placeholderValue: 'Selecciona una opción',  // Texto del placeholder
@@ -118,7 +120,7 @@ $(document).ready(function () {
     ////////////////// REGISTRAR CELULA ////////////////////
     const regexObj = {
         
-        nombre: /^[a-zA-Z0-9\s.,]{1,20}$/, // Letras, números, espacios, puntos y comas con un máximo de 20 caracteres
+        nombre: /^[a-zA-Z0-9\s.,]{1,50}$/, // Letras, números, espacios, puntos y comas con un máximo de 20 caracteres
         idLider: /^[1-9]\d*$/, // Números enteros mayores a 0
         idCoLider: /^[1-9]\d*$/, // Números enteros mayores a 0
         idTerritorio: /^[1-9]\d*$/, // Números enteros mayores a 0

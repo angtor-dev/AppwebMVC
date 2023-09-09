@@ -34,10 +34,6 @@ $(document).ready(function () {
                     removeItemButton: true,  // Habilita la posibilidad de remover items
                 });
 
-                // console.log(data);
-
-
-
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 // Aquí puedes manejar errores, por ejemplo:
@@ -48,6 +44,8 @@ $(document).ready(function () {
     }
 
     Listar_Consolidador();
+
+
 
     function Listar_celulas() {
 
@@ -80,8 +78,6 @@ $(document).ready(function () {
                     removeItemButton: true,  // Habilita la posibilidad de remover items
                 });
 
-
-                //console.log(data);
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 // Aquí puedes manejar errores, por ejemplo:

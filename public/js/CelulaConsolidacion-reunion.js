@@ -1,5 +1,7 @@
 $(document).ready(function () {
 
+    let choices;
+
     const dataTable = $('#celulaDatatables').DataTable({
         responsive: true,
         ajax: {
@@ -38,7 +40,6 @@ $(document).ready(function () {
         const datos = dataTable.row($(this).parents()).data();
 
         document.getElementById('idreunionconsolidacion').textContent = datos.id;
-        document.getElementById('idCelulaConsolidacion').value = datos.idcelulafamiliar;
         document.getElementById('fecha').value = datos.fecha;
         document.getElementById('tematica').value = datos.tematica;
         document.getElementById('semana').value= datos.semana;
@@ -46,6 +47,7 @@ $(document).ready(function () {
         document.getElementById('actividad').value = datos.actividad;
         document.getElementById('observaciones').value = datos.observaciones;
 
+        Listar_celulas(datos.idCelulaConsolidacion)
     })
 
     
@@ -116,7 +118,7 @@ $(document).ready(function () {
     });
 
 
-    function Listar_celulas() {
+    function Listar_celulas(idCelulaConsolidacion) {
 
         $.ajax({
             type: "GET",
@@ -144,16 +146,19 @@ $(document).ready(function () {
 
                 });
 
-    
-                const element = document.getElementById('idCelulaConsolidacion');
-                const choices = new Choices(element, {
+                // Destruir la instancia existente si la hay
+                if (choices) {
+                    choices.destroy();
+                }
+
+                choices = new Choices(selector, {
                     searchEnabled: true,  // Habilita la funcionalidad de búsqueda
                     removeItemButton: true,  // Habilita la posibilidad de remover items
                     placeholderValue: 'Selecciona una opción',  // Texto del placeholder
                 });
 
+                choices.setChoiceByValue(idCelulaConsolidacion.toString())
 
-                //console.log(data);
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 // Aquí puedes manejar errores, por ejemplo:
@@ -162,11 +167,13 @@ $(document).ready(function () {
         })
     }
 
-    Listar_celulas();
 
 
-    //Registro de Reuinion de celula      
 
+
+
+
+    ///////////////////////////// ACTUALIZAR DATOS DE REUNION /////////////////////////////// 
 
     const regexObj2 = {
 
@@ -313,17 +320,31 @@ $(document).ready(function () {
                         timer: 2000,
                     })
 
-                    document.getElementById("formularioReunion").reset();
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    // Aquí puedes manejar errores, por ejemplo:
-                    console.error("Error al enviar:", textStatus, errorThrown);
-                    alert("Hubo un error al realizar el registro. Por favor, inténtalo de nuevo.");
+                    if (jqXHR.responseText) {
+                        let jsonResponse = JSON.parse(jqXHR.responseText);
+
+                        if (jsonResponse.msj) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: jsonResponse.msj,
+                                showConfirmButton: true,
+                            })
+                        } else {
+                            const respuesta = JSON.stringify(jsonResponse, null, 2)
+                            Swal.fire({
+                                background: 'red',
+                                color: '#fff',
+                                title: respuesta,
+                                showConfirmButton: true,
+                            })
+                        }
+                    } else {
+                        alert('Error desconocido: ' + textStatus);
+                    }
                 }
             });
-
-
-
 
         } else {
             Swal.fire({

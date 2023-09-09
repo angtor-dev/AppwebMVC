@@ -1,4 +1,5 @@
 <?php
+require_once "Models/Territorio.php";
 require_once "Models/CelulaConsolidacion.php";
 
 necesitaAutenticacion();
@@ -30,7 +31,7 @@ if (isset($_GET['cargar_data'])) {
         //Si el listado esta vacio, hara esto
         //Aqui esta guardando en esa variable llamada json un arreglo vacio porque obvio no hay nada si cayo aqui ok?
         //Si esto no se hace, el datatables dara error porque no se le esta enviado nada. Esto es como un feedback para el datatables
-        $json['data']['codigo'] = null;
+        $json['data'] = array();
     }
     //Finalmente, aqui enviamos el listado
     echo json_encode($json);

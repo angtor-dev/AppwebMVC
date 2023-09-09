@@ -1,6 +1,8 @@
 $(document).ready(function () {
 
-
+    let choices1
+    let choices2
+    let choices3
 
     function Listar_Lideres() {
 
@@ -40,17 +42,15 @@ $(document).ready(function () {
 
                 });
 
-
-
-                const element = document.getElementById('idLider');
-                const choices = new Choices(element, {
+                choices1 = new Choices(selector, {
+                    allowHTML: true,
                     searchEnabled: true,  // Habilita la funcionalidad de búsqueda
                     removeItemButton: true,  // Habilita la posibilidad de remover items
                     placeholderValue: 'Selecciona una opción',  // Texto del placeholder
                 });
 
-                const element2 = document.getElementById('idCoLider');
-                const choices2 = new Choices(element2, {
+                choices2 = new Choices(selector2, {
+                    allowHTML: true,
                     searchEnabled: true,  // Habilita la funcionalidad de búsqueda
                     removeItemButton: true,  // Habilita la posibilidad de remover items
                     placeholderValue: 'Selecciona una opción',  // Texto del placeholder
@@ -80,7 +80,6 @@ $(document).ready(function () {
             },
             success: function (response) {
 
-
                 let data = JSON.parse(response);
 
                 let selector = document.getElementById('idTerritorio');
@@ -93,8 +92,9 @@ $(document).ready(function () {
                     selector.appendChild(option);
 
                 });
-                const element = document.getElementById('idTerritorio');
-                const choices = new Choices(element, {
+                
+                choices3 = new Choices(selector, {
+                    allowHTML: true,
                     searchEnabled: true,  // Habilita la funcionalidad de búsqueda
                     removeItemButton: true,  // Habilita la posibilidad de remover items
                     placeholderValue: 'Selecciona una opción',  // Texto del placeholder
@@ -120,7 +120,7 @@ $(document).ready(function () {
 
     const regexObj = {
         
-        nombre: /^[a-zA-Z0-9\s.,]{1,20}$/, // Letras, números, espacios, puntos y comas con un máximo de 20 caracteres
+        nombre: /^[a-zA-Z0-9\s.,]{1,50}$/, // Letras, números, espacios, puntos y comas con un máximo de 20 caracteres
         idLider: /^[1-9]\d*$/, // Números enteros mayores a 0
         idCoLider: /^[1-9]\d*$/, // Números enteros mayores a 0
         idTerritorio: /^[1-9]\d*$/, // Números enteros mayores a 0
@@ -139,8 +139,6 @@ $(document).ready(function () {
 
     form.addEventListener("submit", (e) => {
         e.preventDefault();
-
-
 
         // Validar nombre
         const nombre = document.getElementById("nombre").value;
@@ -199,11 +197,9 @@ $(document).ready(function () {
                     idTerritorio: idTerritorio
                 },
                 success: function (response) {
-
+                    console.log(response);
+                    
                     let data = JSON.parse(response);
-
-                    // Aquí puedes manejar una respuesta exitosa, por ejemplo:
-                    console.log("Respuesta del servidor:", data);
                     Swal.fire({
                         icon: 'success',
                         title: 'Registrado Correctamente',
@@ -211,7 +207,10 @@ $(document).ready(function () {
                         timer: 2000,
                     })
 
-                    document.getElementById("#formulario").reset();
+                    nombre.value = '';
+                    choices1.setChoiceByValue('');
+                    choices2.setChoiceByValue('');
+                    choices3.setChoiceByValue('');
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     if (jqXHR.responseText) {

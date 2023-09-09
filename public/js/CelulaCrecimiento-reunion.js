@@ -1,5 +1,7 @@
 $(document).ready(function () {
 
+    let choices;
+
     const dataTable = $('#celulaDatatables').DataTable({
         responsive: true,
         ajax: {
@@ -24,7 +26,6 @@ $(document).ready(function () {
     $('#celulaDatatables tbody').on('click', '#ver_info', function () {
         const datos = dataTable.row($(this).parents()).data();
 
-
         document.getElementById('inf_codigocelulacrecimiento').textContent = datos.codigo;
         document.getElementById('inf_fecha').textContent = datos.fecha;
         document.getElementById('inf_tematica').textContent = datos.tematica;
@@ -36,8 +37,6 @@ $(document).ready(function () {
         document.getElementById('inf_actividad').textContent = datos.actividad;
         document.getElementById('inf_observaciones').textContent = datos.observaciones;
 
-
-
     })
 
     $('#celulaDatatables tbody').on('click', '#editar', function () {
@@ -45,7 +44,6 @@ $(document).ready(function () {
 
 
         document.getElementById('idreunioncrecimiento').textContent = datos.id;
-        document.getElementById('idCelulaCrecimiento').value = datos.idcelulafamiliar;
         document.getElementById('fecha').value = datos.fecha;
         document.getElementById('tematica').value = datos.tematica;
         document.getElementById('semana').value = datos.semana;
@@ -55,8 +53,7 @@ $(document).ready(function () {
         document.getElementById('adulto').value = datos.adulto;
         document.getElementById('actividad').value = datos.actividad;
         document.getElementById('observaciones').value = datos.observaciones;
-
-
+        Listar_celulas(datos.idCelulaCrecimiento);
 
     })
 
@@ -90,9 +87,6 @@ $(document).ready(function () {
                         console.log(response);
                         let data = JSON.parse(response);
                         dataTable.ajax.reload();
-
-                        // Aquí puedes manejar una respuesta exitosa, por ejemplo:
-                        console.log("Respuesta del servidor:", data);
 
                         Swal.fire({
                             icon: 'success',
@@ -134,7 +128,7 @@ $(document).ready(function () {
 
 
 
-    function Listar_celulas() {
+    function Listar_celulas(idCelulaCrecimiento) {
 
         $.ajax({
             type: "GET",
@@ -145,8 +139,6 @@ $(document).ready(function () {
 
             },
             success: function (response) {
-
-
 
                 let data = JSON.parse(response);
 
@@ -164,13 +156,18 @@ $(document).ready(function () {
 
                 });
 
+                // Destruir la instancia existente si la hay
+                if (choices) {
+                    choices.destroy();
+                }
 
-                const element = document.getElementById('idCelulaCrecimiento');
-                const choices = new Choices(element, {
+                choices = new Choices(selector, {
                     searchEnabled: true,  // Habilita la funcionalidad de búsqueda
                     removeItemButton: true,  // Habilita la posibilidad de remover items
                     placeholderValue: 'Selecciona una opción',  // Texto del placeholder
                 });
+
+                choices.setChoiceByValue(idCelulaCrecimiento.toString());
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -199,12 +196,12 @@ $(document).ready(function () {
         })
     }
 
-    Listar_celulas();
+    
 
 
 
 
-    //////////////////////////// REGISTRO DE REUNION ////////////////////////////
+    //////////////////////////// ACTUALIZAR DATOS DE REUNION ////////////////////////////
 
     const regexObj2 = {
 
@@ -372,12 +369,10 @@ $(document).ready(function () {
                     observaciones: observaciones
                 },
                 success: function (response) {
-
+                    console.log(response);
                     let data = JSON.parse(response);
                     dataTable.ajax.reload();
 
-                    // Aquí puedes manejar una respuesta exitosa, por ejemplo:
-                    console.log("Respuesta del servidor:", data);
                     Swal.fire({
                         icon: 'success',
                         title: 'Se actualizo correctamente la Reunion',
@@ -385,7 +380,6 @@ $(document).ready(function () {
                         timer: 2000,
                     })
 
-                    document.getElementById("formularioReunion").reset();
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     if (jqXHR.responseText) {

@@ -121,7 +121,7 @@ $(document).ready(function () {
 
     const regexObj = {
         idSede: /^[1-9]\d*$/, // Números enteros mayores a 0
-        nombre: /^[a-zA-Z0-9\s.,]{1,20}$/, // Letras, números, espacios, puntos y comas con un máximo de 20 caracteres
+        nombre: /^[a-zA-Z0-9\s.,]{1,50}$/, // Letras, números, espacios, puntos y comas con un máximo de 20 caracteres
         idLider: /^[1-9]\d*$/, // Números enteros mayores a 0
         detalles: /^[a-zA-Z0-9\s.,]{1,100}$/ // Letras, números, espacios, puntos y comas con un máximo de 100 caracteres
     };

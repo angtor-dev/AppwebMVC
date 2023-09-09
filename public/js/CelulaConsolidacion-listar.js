@@ -282,11 +282,11 @@ $(document).ready(function () {
 
 
 
-    /////////////////// ACTUALIZAR DATOS DE LA CELULA /////////////////////
+    ///////////////////////////// ACTUALIZAR DATOS DE LA CELULA //////////////////////////////
 
     const regexObj = {
 
-        nombre: /^[a-zA-Z0-9\s.,]{1,20}$/, // Letras, números, espacios, puntos y comas con un máximo de 20 caracteres
+        nombre: /^[a-zA-Z0-9\s.,]{1,50}$/, // Letras, números, espacios, puntos y comas con un máximo de 20 caracteres
         idLider: /^[1-9]\d*$/, // Números enteros mayores a 0
         idCoLider: /^[1-9]\d*$/, // Números enteros mayores a 0
         idTerritorio: /^[1-9]\d*$/, // Números enteros mayores a 0
@@ -398,7 +398,11 @@ $(document).ready(function () {
 
 
 
-    /////////////// REGISTRO DE REUNION DE CELULA ////////////////////    
+
+
+
+
+    ///////////////////////////////// REGISTRO DE REUNION DE CELULA ////////////////////////////////  
 
     const regexObj2 = {
 

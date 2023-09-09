@@ -64,7 +64,7 @@ $(document).ready(function () {
     };
 
     const expresiones = {
-        nombre: /^[a-zA-Z\s]{1,30}$/,
+        nombre: /^[a-zA-Z0-9\s.,]{1,50}$/,
         id: /^\d{1,9}$/,
         direccion: /^[a-zA-Z0-9\s]{1,100}$/,
         estado: ["ANZ", "APUR", "ARA", "BAR", "BOL", "CAR", "COJ", "DELTA", "FAL", "GUA",
@@ -90,7 +90,7 @@ $(document).ready(function () {
 
         // Validación del nombre de la sede
         let nombre = $("#nombre").val();
-        if (/^[a-zA-Z\s]{1,30}$/.test(nombre)) {
+        if (/^[a-zA-Z0-9\s.,]{1,50}$/.test(nombre)) {
             validaciones.nombre = true;
             $("#nombre").removeClass("is-invalid");
             $("#msj_nombre").addClass("d-none");
@@ -142,6 +142,7 @@ $(document).ready(function () {
                     estado: estado
                 },
                 success: function (response) {
+                    console.log(response);
                     let data = JSON.parse(response);
 
                     Swal.fire({
@@ -163,7 +164,8 @@ $(document).ready(function () {
                         if (jsonResponse.msj) {
                             Swal.fire({
                                 icon: 'error',
-                                title: jsonResponse.msj,
+                                title: 'Denegado',
+                                text: jsonResponse.msj,
                                 showConfirmButton: true,
                             })
                         } else {
@@ -185,7 +187,7 @@ $(document).ready(function () {
 
             Swal.fire({
                 icon: 'error',
-                title: 'Llena el formulario correctamente',
+                title: 'Formulario invalido. Verifique sus datos',
                 showConfirmButton: false,
                 timer: 2000,
             })
