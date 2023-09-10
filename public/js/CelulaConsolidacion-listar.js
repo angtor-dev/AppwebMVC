@@ -297,7 +297,8 @@ $(document).ready(function () {
         nombre: false,
         idLider: false,
         idCoLider: false,
-        idTerritorio: false
+        idTerritorio: false,
+        asistencia: false
     };
 
 
@@ -354,6 +355,20 @@ $(document).ready(function () {
     })
 
 
+    const discipulos = document.getElementById('discipulos');
+    discipulos.addEventListener('change', (e) => {
+        const valoresSeleccionados = $("#discipulos").val();
+
+        if (!valoresSeleccionados || valoresSeleccionados.length == 0) {
+            document.getElementById("msj_asistencia").classList.remove("d-none");
+            validationStatus.asistencia = false;
+        } else {
+            document.getElementById("msj_asistencia").classList.add("d-none");
+            validationStatus.asistencia = true;
+        }
+    })
+
+
     const form = document.getElementById("formulario");
     form.addEventListener("submit", (e) => {
         e.preventDefault();
@@ -374,7 +389,7 @@ $(document).ready(function () {
                     nombre: nombre.value,
                     idLider: idLider.value,
                     idCoLider: idCoLider.value,
-                    idTerritorio: idTerritorio.value
+                    idTerritorio: idTerritorio.value,
                 },
                 success: function (response) {
                     console.log(response);
@@ -438,7 +453,7 @@ $(document).ready(function () {
     form2.addEventListener("submit", (e) => {
         e.preventDefault();
 
-        const idCelulaConsolidacion = document.getElementById('idCelulaConsolidacionR').textContent;
+        const idCelulaConsolidacion = document.getElementById('idCelulaConsolidacionR').value;
 
         // Validar fecha
         const fecha = document.getElementById("fecha").value;
@@ -446,14 +461,8 @@ $(document).ready(function () {
             document.getElementById("msj_fecha").classList.remove("d-none");
             validationStatus2.fecha = false;
         } else {
-            // Comprobar que la fecha esté en un formato válido
-            if (!regexObj2.actividad.test(fecha)) {
-                document.getElementById("msj_fecha").classList.remove("d-none");
-                validationStatus2.fecha = false;
-            } else {
-                document.getElementById("msj_fecha").classList.add("d-none");
-                validationStatus2.fecha = true;
-            }
+            document.getElementById("msj_fecha").classList.add("d-none");
+            validationStatus2.fecha = true;
         }
 
         // Validar tematica
@@ -537,7 +546,8 @@ $(document).ready(function () {
                     generosidad: generosidad,
                     asistencias: selectedValues,
                     actividad: actividad,
-                    observaciones: observaciones
+                    observaciones: observaciones,
+                    asistencias: $("#discipulos").val()
                 },
                 success: function (response) {
                     console.log(response);

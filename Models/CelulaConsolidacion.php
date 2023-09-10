@@ -22,7 +22,7 @@ class CelulaConsolidacion extends Model
     {
         try {
 
-            $sql = "SELECT MAX(id) AS celulaNumero FROM celulacrecimiento";
+            $sql = "SELECT MAX(id) AS celulaNumero FROM celulaconsolidacion";
             $consultaid = $this->db->pdo()->prepare($sql);
             $consultaid->execute();
             $datos = $consultaid->fetch(PDO::FETCH_ASSOC);
@@ -254,10 +254,9 @@ class CelulaConsolidacion extends Model
         try {
 
             $sql = "INSERT INTO reunionconsolidacion (idCelulaConsolidacion, fecha, tematica, semana, generosidad, actividad, observaciones) 
-        VALUES (:idCelulaConsolidacion, :fecha, :tematica, :semana, :generosidad, :actividad, :observaciones)";
+            VALUES (:idCelulaConsolidacion, :fecha, :tematica, :semana, :generosidad, :actividad, :observaciones)";
 
             $stmt = $this->db->pdo()->prepare($sql);
-
 
             $stmt->bindValue(':idCelulaConsolidacion', $idCelulaConsolidacion);
             $stmt->bindValue(':fecha', $fecha);
@@ -270,7 +269,7 @@ class CelulaConsolidacion extends Model
             $stmt->execute();
 
             //Registrando las asistencias
-            $consulta = "SELECT id FROM usuario ORDER BY id DESC LIMIT 1";
+            $consulta = "SELECT id FROM reunionconsolidacion ORDER BY id DESC LIMIT 1";
             $stmt2 = $this->db->pdo()->prepare($consulta);
             $stmt2->execute();
 
@@ -286,6 +285,7 @@ class CelulaConsolidacion extends Model
                     $stmt3->bindValue(':idDiscipulo', $values);
 
                     $stmt3->execute();
+
                 }
             }
 
