@@ -101,7 +101,13 @@ abstract class Model
         return $stmt->fetchAll();
     }
 
-    public function eliminar($eliminadoLogico = true) : void
+    /**
+     * Elimina u oculta la instancia actual en la BD
+     * 
+     * @param bool $eliminadoLogico Si es true oculta la instancia en la BD (UPDATE estatus = 0),
+     * caso contrario elimina la instancia de la BD (DELETE FROM)
+     */
+    public function eliminar(bool $eliminadoLogico = true) : void
     {
         $tabla = get_class($this);
         $query = $eliminadoLogico
