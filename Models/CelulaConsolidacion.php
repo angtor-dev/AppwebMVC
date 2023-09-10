@@ -22,7 +22,7 @@ class CelulaConsolidacion extends Model
     {
         try {
 
-            $sql = "SELECT MAX(id) AS celulaNumero FROM celulacrecimiento";
+            $sql = "SELECT MAX(id) AS celulaNumero FROM celulaconsolidacion";
             $consultaid = $this->db->pdo()->prepare($sql);
             $consultaid->execute();
             $datos = $consultaid->fetch(PDO::FETCH_ASSOC);
@@ -75,6 +75,7 @@ class CelulaConsolidacion extends Model
                 $stmt->bindValue(':idTerritorio', $idTerritorio);
 
                 $stmt->execute();
+
             } else {
                 $sql = "INSERT INTO celulaconsolidacion (nombre, codigo, identificador, idLider, idCoLider, idTerritorio, fechaCreacion) 
                 VALUES (:nombre, :codigo, :identificador, :idLider, :idCoLider, :idTerritorio, CURDATE())";
