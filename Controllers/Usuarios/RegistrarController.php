@@ -6,13 +6,14 @@ necesitaAutenticacion();
 if ($_SERVER['REQUEST_METHOD'] === 'GET')
 {
     $usuario = empty($_GET['id']) || $_GET['id'] == '0' ? new Usuario() : Usuario::cargar($_GET['id']);
-    $roles = Rol::listar();
+    $roles = Rol::listar(1);
     $sedes = Sede::listar(1);
 
     require_once "Views/Usuarios/_ModalUsuario.php";
 }
 elseif ($_SERVER['REQUEST_METHOD'] === 'POST')
 {
+    requierePermisos("registrarUsuarios");
     $usuario = new Usuario();
     $usuario->mapFromPost();
     $idRoles = $_POST['idRoles'];

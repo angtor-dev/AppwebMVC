@@ -44,10 +44,10 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
                 </a>
                 <div class="text-end">
                     <?php if (isset($_SESSION['usuario'])) : ?>
-                        <button class="btn btn-dark">
+                        <!-- <button class="btn btn-dark">
                             <i class="fa-solid fa-message"></i>
                             0
-                        </button>
+                        </button> -->
                         <button class="btn btn-dark me-2">
                             <i class="fa-solid fa-bell"></i>
                             0
@@ -229,45 +229,65 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
                     </div>
                 </div>
             </div>
-
-            <div class="nav-link py-0 mt-3 text-uppercase">Escuela</div>
-            <a href="<?= LOCAL_DIR ?>NivelesCrecimiento"
-                class="nav-link <?= strtolower($uriParts[0]) == "nivelescrecimiento" ? "active" : "" ?>">
-                <i class="fa-solid fa-graduation-cap fa-fw me-2"></i>
-                Niveles de crecimiento
-            </a>
-            <a href="#" class="nav-link">
-                <i class="fa-solid fa-users-rectangle fa-fw me-2"></i>
-                Mis grupos
-            </a>
-            <a href="#" class="nav-link">
-                <i class="fa-solid fa-chalkboard-user fa-fw me-2"></i>
-                Mis clases
-            </a>
-
-            <div class="nav-link py-0 mt-3 text-uppercase">Sistema</div>
-            <a href="<?= LOCAL_DIR ?>Usuarios" class="nav-link <?= strtolower($uriParts[0]) == "usuarios" ? "active" : "" ?>">
-                <i class="fa-solid fa-user fa-fw me-2"></i>
-                Usuarios
-            </a>
-            <div class="acordeon <?= strtolower($uriParts[0]) == "seguridad" ? "show" : "" ?>">
-                <a href="#" class="nav-link acordeon-toggle">
-                    <i class="fa-solid fa-lock fa-fw me-2"></i>
-                    Seguridad
-                </a>
-                <div class="acordeon-body">
-                    <div class="acordeon-items">
-                        <a href="<?= LOCAL_DIR ?>Seguridad/Roles" class="nav-link <?= strtolower($uriParts[1] ?? "") == "roles" ? "active" : "" ?>">
-                            <i class="fa-solid fa-key fa-fw me-2"></i>
-                            Roles y permisos
+            
+            <?php if ($usuario->tienePermiso("consultarNivelesCrecimiento") || $usuario->tieneRol("Docente")
+                || $usuario->tieneRol("Estudiante")): ?>
+                <div class="nav-link py-0 mt-3 text-uppercase">Escuela</div>
+                <?php if ($usuario->tienePermiso("consultarNivelesCrecimiento")): ?>
+                    <a href="<?= LOCAL_DIR ?>NivelesCrecimiento"
+                        class="nav-link <?= strtolower($uriParts[0]) == "nivelescrecimiento" ? "active" : "" ?>">
+                        <i class="fa-solid fa-graduation-cap fa-fw me-2"></i>
+                        Niveles de crecimiento
+                    </a>
+                <?php endif ?>
+                <?php if ($usuario->tieneRol("Docente") || $usuario->tieneRol("Administrador")): ?>
+                    <a href="#" class="nav-link">
+                        <i class="fa-solid fa-users-rectangle fa-fw me-2"></i>
+                        Mis grupos
+                    </a>
+                <?php endif ?>
+                <?php if ($usuario->tieneRol("Estudiante")): ?>
+                    <a href="#" class="nav-link">
+                        <i class="fa-solid fa-chalkboard-user fa-fw me-2"></i>
+                        Mis clases
+                    </a>
+                <?php endif ?>
+            <?php endif ?>
+            
+            <?php if ($usuario->tienePermiso("consultarUsuarios") || $usuario->tienePermiso("consultarRoles")
+                || $usuario->tienePermiso("consultarBitacora")): ?>
+                <div class="nav-link py-0 mt-3 text-uppercase">Sistema</div>
+                <?php if ($usuario->tienePermiso("consultarUsuarios")): ?>
+                    <a href="<?= LOCAL_DIR ?>Usuarios" class="nav-link <?= strtolower($uriParts[0]) == "usuarios" ? "active" : "" ?>">
+                        <i class="fa-solid fa-user fa-fw me-2"></i>
+                        Usuarios
+                    </a>
+                <?php endif ?>
+                <div class="acordeon <?= strtolower($uriParts[0]) == "seguridad" ? "show" : "" ?>">
+                    <?php if ($usuario->tienePermiso("consultarRoles") || $usuario->tienePermiso("consultarBitacora")): ?>
+                        <a href="#" class="nav-link acordeon-toggle">
+                            <i class="fa-solid fa-lock fa-fw me-2"></i>
+                            Seguridad
                         </a>
-                        <a href="#" class="nav-link">
-                            <i class="fa-solid fa-table-list fa-fw me-2"></i>
-                            Bitacora
-                        </a>
-                    </div>
+                        <div class="acordeon-body">
+                            <div class="acordeon-items">
+                                <?php if ($usuario->tienePermiso("consultarRoles")): ?>
+                                    <a href="<?= LOCAL_DIR ?>Seguridad/Roles" class="nav-link <?= strtolower($uriParts[1] ?? "") == "roles" ? "active" : "" ?>">
+                                        <i class="fa-solid fa-key fa-fw me-2"></i>
+                                        Roles y permisos
+                                    </a>
+                                <?php endif ?>
+                                <?php if ($usuario->tienePermiso("consultarBitacora")): ?>
+                                    <a href="#" class="nav-link">
+                                        <i class="fa-solid fa-table-list fa-fw me-2"></i>
+                                        Bitacora
+                                    </a>
+                                <?php endif ?>
+                            </div>
+                        </div>
+                    <?php endif ?>
                 </div>
-            </div>
+            <?php endif ?>
         </div>
     </aside>
 
@@ -277,7 +297,7 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
         <div id="alerts-section">
             <?php if (!empty($_SESSION['exitos'])) : ?>
                 <?php foreach ($_SESSION['exitos'] as $alerta) : ?>
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
                         <?= $alerta ?>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
@@ -286,7 +306,7 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
             <?php endif ?>
             <?php if (!empty($_SESSION['errores'])) : ?>
                 <?php foreach ($_SESSION['errores'] as $alerta) : ?>
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
                         <?= $alerta ?>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>

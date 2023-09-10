@@ -1,5 +1,6 @@
 <?php
 necesitaAutenticacion();
+requierePermisos("consultarUsuarios");
 
 $usuarios = Usuario::listar(1);
 

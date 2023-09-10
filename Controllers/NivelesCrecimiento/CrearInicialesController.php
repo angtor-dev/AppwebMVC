@@ -2,7 +2,7 @@
 require_once "Models/NivelCrecimiento.php";
 require_once "Models/Escuela.php";
 necesitaAutenticacion();
-// requierePermisos("registrarNivelesCrecimiento");
+requierePermisos("registrarNivelesCrecimiento");
 
 $idSede = $_SESSION['usuario']->idSede;
 $escuela = Escuela::cargarRelaciones($idSede, "Sede")[0];
