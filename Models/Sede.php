@@ -165,15 +165,17 @@ class Sede extends Model
                 $nombreEstado = $this->getNombreEstado($estado);
                 $codigo = $estado . '-' . $consulta->identificador;
 
-                $sql = "UPDATE sede SET idPastor = :idPastor, nombre = :nombre, estado = :estado, estadoCodigo = :estadoCodigo, direccion = :direccion WHERE sede.id = :id";
+                $sql = "UPDATE sede SET idPastor = :idPastor, nombre = :nombre, estado = :estado, estadoCodigo = :estadoCodigo, direccion = :direccion, codigo = :codigo WHERE sede.id = :id";
 
                 $stmt = $this->db->pdo()->prepare($sql);
 
+                $stmt->bindValue(':id', $id);
                 $stmt->bindValue(':idPastor', $idPastor);
                 $stmt->bindValue(':nombre', $nombre);
                 $stmt->bindValue(':estado', $nombreEstado);
                 $stmt->bindValue(':estadoCodigo', $estado);
                 $stmt->bindValue(':direccion', $direccion);
+                $stmt->bindValue(':codigo', $codigo);
 
                 $stmt->execute();
             }

@@ -475,4 +475,81 @@ class CelulaCrecimiento extends Model
             die();
         }
     }
+
+
+
+
+    ///////////////////////////////// ESPACIO PARA VALIDACIONES //////////////////////////////////
+
+    public function validacion_datos(string $nombre, array $idArray): void
+    {
+        try {
+            // Utilizar preg_match para validar el string contra la expresión regular
+            if (!preg_match($this->expresion_nombre, $nombre)) {
+                // Lanzar una excepción si el string no es válido
+                throw new Exception("El nombre que ingresaste no cumple con los requisitos. Ingrese nuevamente", 422);
+            }
+
+            foreach ($idArray as $key) {
+                if (!preg_match($this->expresion_id, $key)) {
+                    // Lanzar una excepción si el string no es válido
+                    throw new Exception("El ID no cumple con los requisitos. Seleccione nuevamente", 422);
+                }
+            }
+
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+            die();
+        }
+    }
+
+    public function validacion_existencia(string $nombre, $id): void
+    {
+        try {
+            $sql = "SELECT * FROM celulafamiliar WHERE nombre = :nombre" . (!empty($id) ? " AND id != $id" : "");
+            $stmt = $this->db->pdo()->prepare($sql);
+            $stmt->bindValue(":nombre", $nombre);
+            $stmt->execute();
+            $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($resultado !== false) {
+                if ($resultado['nombre'] === $nombre) {
+                    // Lanzar una excepción si el dato existe en la BD
+                    throw new Exception("La celula llamada " . $nombre . " ya existe", 422);
+                }
+            }
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+            die();
+        }
+    }
+
+
+    // VALIDAR ANTES DE ELIMINAR O EDITAR
+    public function validacion_accion(int $id, int $accion): void
+    {
+        try {
+            
+            $sql = "SELECT * FROM reunionfamiliar WHERE idCelulaFamiliar= :idCelulaFamiliar AND estatus = 1";
+
+            $stmt = $this->db->pdo()->prepare($sql);
+            $stmt->bindValue(":idCelulaFamiliar", $id);
+            $stmt->execute();
+
+            if ($stmt->rowCount() > 0) {
+                // Lanzar una excepción si el dato existe en la BD
+                if ($accion == 1) {
+                    throw new Exception("Esta celula esta asociada a reuniones y otro tipo de informacion que podria corromper la integridad de los datos.", 422);
+                }else{
+                    throw new Exception("No puedes cambiar el territorio porque la celula posee datos de reuniones e informacion adicional. Esto podria destruir la integridad de los datos", 422);
+                }
+            }
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+            die();
+        }
+    }
 }

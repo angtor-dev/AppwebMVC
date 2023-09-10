@@ -15,11 +15,13 @@ $CelulaFamiliar = new CelulaFamiliar();
 
 if (isset($_POST['registrar'])) {
 
-    $nombre = $_POST['nombre'];
-    $idLider = $_POST['idLider'];
-    $idCoLider = $_POST['idCoLider'];
-    $idTerritorio = $_POST['idTerritorio'];
+    $nombre = trim(strtolower($_POST['nombre']));
+    $idLider = trim($_POST['idLider']);
+    $idCoLider = trim($_POST['idCoLider']);
+    $idTerritorio = trim($_POST['idTerritorio']);
 
+    $CelulaFamiliar->validacion_datos($nombre, [$idLider, $idCoLider, $idTerritorio]);
+    $CelulaFamiliar->validacion_existencia($nombre, $id='');
     $CelulaFamiliar->registrar_CelulaFamiliar($nombre, $idLider, $idCoLider, $idTerritorio);
 
     die();

@@ -18,7 +18,7 @@ if (isset($_POST['registrar'])) {
     $idPastor = $_POST['idPastor'];
     $nombre = trim(strtolower($_POST['nombre']));
     $direccion = trim(strtolower($_POST['direccion']));
-    $estado = trim(strtoupper($_POST['estado']));
+    $estado = trim($_POST['estado']);
 
     $Sede->validacion_datos($idPastor, $nombre, $direccion, $estado);
     $Sede->validacion_existencia($nombre, $idSede = '');

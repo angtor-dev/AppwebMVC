@@ -252,12 +252,8 @@ $(document).ready(function () {
           estado: estado
         },
         success: function (response) {
-
-          let data = JSON.parse(response);
+          console.log(response);
           dataTable.ajax.reload();
-
-          // Aquí puedes manejar una respuesta exitosa, por ejemplo:
-          console.log("Respuesta del servidor:", data);
 
           Swal.fire({
             icon: 'success',

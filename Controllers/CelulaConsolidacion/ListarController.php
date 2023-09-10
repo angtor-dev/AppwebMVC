@@ -38,15 +38,16 @@ if (isset($_GET['cargar_data'])) {
 if (isset($_POST['editar'])) {
 
     $id = $_POST['id'];
-    $nombre = $_POST['nombre'];
-    $idLider = $_POST['idLider'];
-    $idCoLider = $_POST['idCoLider'];
-    $idTerritorio = $_POST['idTerritorio'];
+    $nombre = trim(strtolower($_POST['nombre']));
+    $idLider = trim($_POST['idLider']);
+    $idCoLider = trim($_POST['idCoLider']);
+    $idTerritorio = trim($_POST['idTerritorio']);
 
-
+    $CelulaConsolidacion->validacion_datos($nombre, [$idLider, $idCoLider, $idTerritorio]);
+    $CelulaConsolidacion->validacion_existencia($nombre, $id);
+    $CelulaConsolidacion->validacion_accion($id, $accion = 2);
     $CelulaConsolidacion->editar_CelulaConsolidacion($id, $nombre, $idLider, $idCoLider, $idTerritorio);
 
-    echo json_encode('Lo logramos!!');
     die();
 }
 
@@ -73,6 +74,7 @@ if (isset($_POST['eliminar'])) {
 
     $id = $_POST['id'];
 
+    $CelulaConsolidacion->validacion_accion($id, $accion = 1);
     $CelulaConsolidacion->eliminar_CelulaConsolidacion($id);
 
     echo json_encode('Lo logramos!!');
