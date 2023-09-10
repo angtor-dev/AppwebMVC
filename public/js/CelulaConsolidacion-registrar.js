@@ -189,6 +189,9 @@ $(document).ready(function () {
 
         // Verifica si todos los campos son válidos antes de enviar el formulario
         if (Object.values(validationStatus).every(status => status === true)) {
+
+
+
             // Aquí puedes agregar el código para enviar el formulario
             $.ajax({
                 type: "POST",

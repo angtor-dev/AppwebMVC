@@ -243,6 +243,11 @@ $(document).ready(function () {
             },
             success: function (response) {
 
+                // Destruir la instancia existente si la hay
+                if (choices4) {
+                    choices4.destroy();
+                }
+
                 console.log(response);
                 let data = JSON.parse(response);
 
@@ -257,10 +262,7 @@ $(document).ready(function () {
 
                 });
 
-                // Destruir la instancia existente si la hay
-                if (choices4) {
-                    choices4.destroy();
-                }
+                
                 choices4 = new Choices(selector, {
                     allowHTML: true,
                     searchEnabled: true,  // Habilita la funcionalidad de búsqueda

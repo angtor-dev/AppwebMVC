@@ -75,6 +75,7 @@ class CelulaConsolidacion extends Model
                 $stmt->bindValue(':idTerritorio', $idTerritorio);
 
                 $stmt->execute();
+
             } else {
                 $sql = "INSERT INTO celulaconsolidacion (nombre, codigo, identificador, idLider, idCoLider, idTerritorio, fechaCreacion) 
                 VALUES (:nombre, :codigo, :identificador, :idLider, :idCoLider, :idTerritorio, CURDATE())";
