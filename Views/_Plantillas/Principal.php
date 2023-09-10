@@ -137,7 +137,7 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
                     </div>
                 </div>
             </div>
-            <a href="<?= LOCAL_DIR ?>Agenda/Index.php" class="nav-link">
+            <a href="<?= LOCAL_DIR ?>Agenda/Index" class="nav-link">
                 <i class="fa-solid fa-calendar fa-fw me-2"></i>
                 Agenda
             </a>
