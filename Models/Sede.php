@@ -104,6 +104,7 @@ class Sede extends Model
 
             //Ahora ejecutemos la consulta sql una vez ingresado todos los valores, es decir, los parametros que mencionamos arriba
             $sentencia->execute();
+            
 
             http_response_code(200);
             echo json_encode(array('msj' => 'Sede registrada exitosamente', 'status' => 200));

@@ -429,6 +429,9 @@ class CelulaFamiliar extends Model
 
 
             $stmt->execute();
+            http_response_code(200);
+            echo json_encode(array('msj'=>'Reunion actualizada correctamente', 'status' => 200));
+            die();
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),

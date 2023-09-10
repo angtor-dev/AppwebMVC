@@ -138,6 +138,7 @@ class CelulaCrecimiento extends Model
             $error_data = array(
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
+                
             );
             print_r($error_data);
             echo json_encode($error_data);
@@ -269,6 +270,9 @@ class CelulaCrecimiento extends Model
 
 
             $stmt->execute();
+            http_response_code(200);
+            echo json_encode(array('msj' => 'Reunion registrada exitosamente', 'status' => 200));
+            die();
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -409,6 +413,9 @@ class CelulaCrecimiento extends Model
 
 
             $stmt->execute();
+            http_response_code(200);
+            echo json_encode(array('msj' => 'Reunion actualizada exitosamente', 'status' => 200));
+            die();
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
