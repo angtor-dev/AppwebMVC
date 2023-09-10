@@ -132,7 +132,7 @@ abstract class Model
         if (!empty($_POST)) {
             foreach ($_POST as $key => $value) {
                 if (property_exists($this, $key)) {
-                    $this->$key = $value;
+                    $this->$key = trim($value);
                 }
             }
             return true;
