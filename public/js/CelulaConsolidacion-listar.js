@@ -286,7 +286,7 @@ $(document).ready(function () {
 
     const regexObj = {
 
-        nombre: /^[a-zA-Z0-9\s.,]{1,50}$/, // Letras, números, espacios, puntos y comas con un máximo de 20 caracteres
+        nombre: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]{5,50}$/, // Letras, números, espacios, puntos y comas con un máximo de 20 caracteres
         idLider: /^[1-9]\d*$/, // Números enteros mayores a 0
         idCoLider: /^[1-9]\d*$/, // Números enteros mayores a 0
         idTerritorio: /^[1-9]\d*$/, // Números enteros mayores a 0
@@ -301,53 +301,65 @@ $(document).ready(function () {
     };
 
 
-    const form = document.getElementById("formulario");
-    form.addEventListener("submit", (e) => {
-        e.preventDefault();
-
-
-        const id = document.getElementById('idCelulaConsolidacion').textContent;
+    //Validar nombre
+    const nombre = document.getElementById("nombre");
+    nombre.addEventListener('keyup', (e) => {
         // Validar nombre
-        const nombre = document.getElementById("nombre").value;
-        if (!regexObj.nombre.test(nombre)) {
+        if (!regexObj.nombre.test(e.target.value)) {
             document.getElementById("msj_nombre").classList.remove("d-none");
             validationStatus.nombre = false;
         } else {
             document.getElementById("msj_nombre").classList.add("d-none");
             validationStatus.nombre = true;
         }
+    })
 
-        // Validar idLider
-        const idLider = document.getElementById("idLider").value;
-        if (!regexObj.idLider.test(idLider)) {
+
+    // Validacion de idLider y idCoLider
+
+    const idLider = document.getElementById("idLider");
+    const idCoLider = document.getElementById("idCoLider");
+
+    idLider.addEventListener('change', (e) => {
+        if (!regexObj.idLider.test(e.target.value) || e.target.value === idCoLider.value) {
             document.getElementById("msj_idLider").classList.remove("d-none");
             validationStatus.idLider = false;
         } else {
             document.getElementById("msj_idLider").classList.add("d-none");
             validationStatus.idLider = true;
         }
+    })
 
-        // Validar idCoLider
-        const idCoLider = document.getElementById("idCoLider").value;
-        if (!regexObj.idCoLider.test(idCoLider)) {
+    idCoLider.addEventListener('change', (e) => {
+        if (!regexObj.idCoLider.test(e.target.value) || e.target.value === idLider.value) {
             document.getElementById("msj_idCoLider").classList.remove("d-none");
             validationStatus.idCoLider = false;
         } else {
             document.getElementById("msj_idCoLider").classList.add("d-none");
             validationStatus.idCoLider = true;
         }
+    })
 
-        // Validar idTerritorio
-        const idTerritorio = document.getElementById("idTerritorio").value;
-        if (!regexObj.idTerritorio.test(idTerritorio)) {
+
+    // Validar idTerritorio
+    const idTerritorio = document.getElementById("idTerritorio");
+    idTerritorio.addEventListener('change', (e) => {
+        if (!regexObj.idTerritorio.test(e.target.value)) {
             document.getElementById("msj_idTerritorio").classList.remove("d-none");
             validationStatus.idSede = false;
         } else {
             document.getElementById("msj_idTerritorio").classList.add("d-none");
             validationStatus.idTerritorio = true;
         }
+    })
 
 
+    const form = document.getElementById("formulario");
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const id = document.getElementById('idCelulaConsolidacion').textContent;
+        
         // Verifica si todos los campos son válidos antes de enviar el formulario
         if (Object.values(validationStatus).every(status => status === true)) {
             console.log("Formulario válido. Puedes enviar los datos al servidor");
@@ -359,10 +371,10 @@ $(document).ready(function () {
 
                     editar: 'editar',
                     id: id,
-                    nombre: nombre,
-                    idLider: idLider,
-                    idCoLider: idCoLider,
-                    idTerritorio: idTerritorio
+                    nombre: nombre.value,
+                    idLider: idLider.value,
+                    idCoLider: idCoLider.value,
+                    idTerritorio: idTerritorio.value
                 },
                 success: function (response) {
                     console.log(response);
@@ -406,11 +418,11 @@ $(document).ready(function () {
 
     const regexObj2 = {
 
-        tematica: /^[a-zA-Z0-9\s.,]{1,100}$/, // Letras, números, espacios, puntos y comas con un máximo de 100 caracteres
+        tematica: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/, // Letras, números, espacios, puntos y comas con un máximo de 100 caracteres
         semana: /^[1-9]\d*$/, // Números enteros mayores a 0
         generosidad: /^[0-9]+(\.[0-9]{2})?$/,
-        actividad: /^[a-zA-Z0-9\s.,]{1,100}$/, // Letras, números, espacios, puntos y comas con un máximo de 100 caracteres
-        observaciones: /^[a-zA-Z0-9\s.,]{1,100}$/ // Letras, números, espacios, puntos y comas con un máximo de 100 caracteres
+        actividad: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/, // Letras, números, espacios, puntos y comas con un máximo de 100 caracteres
+        observaciones: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/ // Letras, números, espacios, puntos y comas con un máximo de 100 caracteres
     };
 
     const validationStatus2 = {

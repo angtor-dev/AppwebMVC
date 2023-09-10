@@ -28,7 +28,7 @@ $viewScripts = ["CelulaCrecimiento-registrar.js"]; ?>
           <option selected value="">Selecciona...</option>
         </select>
         <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_idLider" role="alert">
-          Debe seleccionar un Lider.
+          Debe seleccionar un Lider. Ademas, no puede ser el mismo lider en ambos seleccionadores
         </div>
       </div>
       <div class="col-lg-5 col-md-12 col-sm-12">
@@ -37,7 +37,7 @@ $viewScripts = ["CelulaCrecimiento-registrar.js"]; ?>
           <option selected value="">Selecciona...</option>
         </select>
         <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_idCoLider" role="alert">
-          Debe seleccionar un Lider.
+          Debe seleccionar un Lider. Ademas, no puede ser el mismo lider en ambos seleccionadores
         </div>
       </div>
     </div>

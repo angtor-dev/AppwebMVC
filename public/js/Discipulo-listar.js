@@ -296,7 +296,7 @@ $(document).ready(function () {
 
     $("#direccion").on("keyup", function (event) {
         let direccion = $("#direccion").val();
-        if (/^[a-zA-Z0-9\s]{1,100}$/.test(direccion)) {
+        if (/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/.test(direccion)) {
             validaciones.direccion = true;
             $("#direccion").removeClass("is-invalid");
             $("#direccion").addClass("is-valid");
@@ -309,7 +309,7 @@ $(document).ready(function () {
 
     $("#motivo").on("keyup", function (event) {
         let motivo = $("#motivo").val();
-        if (/^[a-zA-Z0-9\s]{1,100}$/.test(motivo)) {
+        if (/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/.test(motivo)) {
             validaciones.motivo = true;
             $("#motivo").removeClass("is-invalid");
             $("#motivo").addClass("is-valid");

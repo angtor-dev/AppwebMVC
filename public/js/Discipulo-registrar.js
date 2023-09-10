@@ -104,10 +104,18 @@ $(document).ready(function () {
 
     };
 
+    const expresiones = {
+        nombrePersona: /^[a-zA-ZñÑ]{1,50}$/,
+        apellidoPersona: /^[a-zA-ZñÑ]{1,50}$/,
+        texto: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/,
+        telefono: /^(0414|0424|0416|0426|0412)[0-9]{7}/,
+        cedula: /^[0-9]{7,8}$/
+    }
+
 
     $("#nombre").on("keyup", function (event) {
         let nombre = $("#nombre").val();
-        if (/^[a-zA-ZñÑ\s]{1,30}$/.test(nombre)) {
+        if (expresiones.nombrePersona.test(nombre)) {
             validaciones.nombre = true;
             $("#nombre").removeClass("is-invalid");
             $("#nombre").addClass("is-valid");
@@ -122,7 +130,7 @@ $(document).ready(function () {
 
     $("#apellido").on("keyup", function (event) {
         let apellido = $("#apellido").val();
-        if (/^[a-zA-ZñÑ\s]{1,30}$/.test(apellido)) {
+        if (expresiones.apellidoPersona.test(apellido)) {
             validaciones.apellido = true;
             $("#apellido").removeClass("is-invalid");
             $("#apellido").addClass("is-valid");
@@ -137,7 +145,7 @@ $(document).ready(function () {
 
     $("#cedula").on("keyup", function (event) {
         let cedula = $("#cedula").val();
-        if (/^[0-9]{7,8}$/.test(cedula)) {
+        if (expresiones.cedula.test(cedula)) {
             validaciones.cedula = true;
             $("#cedula").removeClass("is-invalid");
             $("#cedula").addClass("is-valid");
@@ -152,7 +160,7 @@ $(document).ready(function () {
 
     $("#direccion").on("keyup", function (event) {
         let direccion = $("#direccion").val();
-        if (/^[a-zA-Z0-9\s]{1,100}$/.test(direccion)) {
+        if (expresiones.texto.test(direccion)) {
             validaciones.direccion = true;
             $("#direccion").removeClass("is-invalid");
             $("#direccion").addClass("is-valid");
@@ -165,7 +173,7 @@ $(document).ready(function () {
 
     $("#motivo").on("keyup", function (event) {
         let motivo = $("#motivo").val();
-        if (/^[a-zA-Z0-9\s]{1,100}$/.test(motivo)) {
+        if (expresiones.texto.test(motivo)) {
             validaciones.motivo = true;
             $("#motivo").removeClass("is-invalid");
             $("#motivo").addClass("is-valid");
@@ -178,7 +186,7 @@ $(document).ready(function () {
 
     $("#telefono").on("keyup", function (event) {
         let telefono = $("#telefono").val();
-        if (/^(0414|0424|0416|0426|0412)[0-9]{7}/.test(telefono)) {
+        if (expresiones.telefono.test(telefono)) {
             validaciones.telefono = true;
             $("#telefono").removeClass("is-invalid");
             $("#telefono").addClass("is-valid");
@@ -206,8 +214,13 @@ $(document).ready(function () {
 
 
     $("#fechaNacimiento").on("change", function (event) {
-        let fechaNacimiento = $("#fechaNacimiento").val();
-        if (/^.+$/.test(fechaNacimiento)) {
+
+        const fechaNacimiento = $("#fechaNacimiento").val();
+        const hoy = new Date();
+        const cumpleanos18 = new Date(fechaNacimiento);
+        cumpleanos18.setFullYear(cumpleanos18.getFullYear() + 18);
+
+        if (hoy >= cumpleanos18) {
             validaciones.fechaNacimiento = true;
             $("#fechaNacimiento").removeClass("is-invalid");
             $("#fechaNacimiento").addClass("is-valid");
@@ -221,7 +234,7 @@ $(document).ready(function () {
 
     $("#fechaConvercion").on("change", function (event) {
         let fechaConvercion = $("#fechaConvercion").val();
-        if (/^.+$/.test(fechaConvercion)) {
+        if (fechaConvercion.value !== '') {
             validaciones.fechaConvercion = true;
             $("#fechaConvercion").removeClass("is-invalid");
             $("#fechaConvercion").addClass("is-valid");

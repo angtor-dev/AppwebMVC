@@ -12,8 +12,8 @@ class CelulaFamiliar extends Model
     public int $estatus;
 
     //Expresiones regulares
-    private $expresion_nombre = '/^[a-zA-Z0-9\s.,]{1,50}$/';
-    private $expresion_detalles = '/^[a-zA-Z0-9\s.,]{1,100}$/';
+    private $expresion_nombre = '/^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]{5,50}$/';
+    private $expresion_texto = '/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/';
     private $expresion_id = '/^[1-9]\d*$/';
 
 

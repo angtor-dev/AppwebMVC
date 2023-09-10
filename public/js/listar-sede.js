@@ -85,7 +85,7 @@ $(document).ready(function () {
           error: function (jqXHR, textStatus, errorThrown) {
             if (jqXHR.responseText) {
               let jsonResponse = JSON.parse(jqXHR.responseText);
-  
+
               if (jsonResponse.msj) {
                 Swal.fire({
                   icon: 'error',
@@ -172,22 +172,24 @@ $(document).ready(function () {
   ////////////////////////////////////// ACTUALIZAR DATOS DE SEDE ///////////////////////////////////////
 
   let validaciones = {
-    idPastor: false,
-    nombre: false,
-    direccion: false,
-    estado: false
+    idPastor: true,
+    nombre: true,
+    direccion: true,
+    estado: true
   };
 
+  const expresiones = {
+    nombre: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]{5,50}$/,
+    id: /^\d{1,9}$/,
+    texto: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/,
+    estado: ["ANZ", "APUR", "ARA", "BAR", "BOL", "CAR", "COJ", "DELTA", "FAL", "GUA",
+      "LAR", "MER", "MIR", "MON", "ESP", "POR", "SUC", "TÁCH", "TRU", "VAR", "YAR", "ZUL"]
+  }
 
-  $("#formulario").submit(function (event) {
-    // Previene el comportamiento predeterminado del formulario
-    event.preventDefault();
-
-    let id = document.getElementById('idSede').textContent;
-    // Validaciones
-    // Validación de la cédula del pastor
-    let idPastor = $("#idPastor").val();
-    if (/^\d{1,8}$/.test(idPastor)) {
+  // Validación del ID del pastor
+  const idPastor = document.getElementById('idPastor');
+  idPastor.addEventListener('change', (e) => {
+    if (expresiones.id.test(idPastor.value)) {
       validaciones.idPastor = true;
       $("#idPastor").removeClass("is-invalid");
       $("#msj_idPastor").addClass("d-none");
@@ -196,10 +198,13 @@ $(document).ready(function () {
       $("#idPastor").addClass("is-invalid");
       $("#msj_idPastor").removeClass("d-none");
     }
+  })
 
-    // Validación del nombre de la sede
-    let nombre = $("#nombre").val();
-    if (/^[a-zA-Z0-9\s.,]{1,50}$/.test(nombre)) {
+
+  // Validación del nombre de la sede
+  const nombre = document.getElementById('nombre');
+  nombre.addEventListener('keyup', (e) => {
+    if (expresiones.nombre.test(nombre.value)) {
       validaciones.nombre = true;
       $("#nombre").removeClass("is-invalid");
       $("#msj_nombre").addClass("d-none");
@@ -208,10 +213,13 @@ $(document).ready(function () {
       $("#nombre").addClass("is-invalid");
       $("#msj_nombre").removeClass("d-none");
     }
+  })
 
-    // Validación de la dirección
-    let direccion = $("#direccion").val();
-    if (/^[a-zA-Z0-9\s]{1,100}$/.test(direccion)) {
+
+  // Validación de la dirección
+  const direccion = document.getElementById('direccion');
+  direccion.addEventListener('keyup', (e) => {
+    if (expresiones.texto.test(direccion.value)) {
       validaciones.direccion = true;
       $("#direccion").removeClass("is-invalid");
       $("#msj_direccion").addClass("d-none");
@@ -220,12 +228,13 @@ $(document).ready(function () {
       $("#direccion").addClass("is-invalid");
       $("#msj_direccion").removeClass("d-none");
     }
+  })
 
-    // Validación del estado
-    let estado = $("#estado").val();
-    let estadosPermitidos = ["ANZ", "APUR", "ARA", "BAR", "BOL", "CAR", "COJ", "DELTA", "FAL", "GUA",
-      "LAR", "MER", "MIR", "MON", "ESP", "POR", "SUC", "TÁCH", "TRU", "VAR", "YAR", "ZUL"];
-    if (estadosPermitidos.includes(estado)) {
+
+  // Validación del estado
+  const estado = document.getElementById('estado');
+  estado.addEventListener('change', (e) => {
+    if (expresiones.estado.includes(estado.value)) {
       validaciones.estado = true;
       $("#estado").removeClass("is-invalid");
       $("#msj_estado").addClass("d-none");
@@ -234,6 +243,14 @@ $(document).ready(function () {
       $("#estado").addClass("is-invalid");
       $("#msj_estado").removeClass("d-none");
     }
+  })
+
+
+  $("#formulario").submit(function (event) {
+    // Previene el comportamiento predeterminado del formulario
+    event.preventDefault();
+
+    let id = document.getElementById('idSede').textContent;
 
     // Verificar si todas las validaciones son correctas
     if (Object.values(validaciones).every(val => val)) {
@@ -246,10 +263,10 @@ $(document).ready(function () {
 
           editar: 'editar',
           id: id,
-          idPastor: idPastor,
-          nombre: nombre,
-          direccion: direccion,
-          estado: estado
+          idPastor: idPastor.value,
+          nombre: nombre.value,
+          direccion: direccion.value,
+          estado: estado.value
         },
         success: function (response) {
           console.log(response);

@@ -11,6 +11,13 @@ class CelulaConsolidacion extends Model
     public string $nombre;
     public int $estatus;
 
+    //Expresiones regulares
+    private $expresion_nombre = '/^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]{5,50}$/';
+    private $expresion_texto = '/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/';
+    private $expresion_id = '/^[1-9]\d*$/';
+
+    
+
     public  function registrar_CelulaConsolidacion($nombre, $idLider, $idCoLider, $idTerritorio)
     {
         try {

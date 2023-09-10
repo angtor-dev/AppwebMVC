@@ -93,7 +93,7 @@ $viewScripts = ["CelulaConsolidacion-listar.js"];
                                     <option selected value="">Seleciona...</option>
                                 </select>
                                 <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_idLider" role="alert">
-                                    Debe seleccionar un Lider.
+                                    Debe seleccionar un Lider. Ademas, no puede ser el mismo lider en ambos seleccionadores
                                 </div>
                             </div>
 
@@ -103,7 +103,7 @@ $viewScripts = ["CelulaConsolidacion-listar.js"];
                                     <option selected value="">Selecciona...</option>
                                 </select>
                                 <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_idCoLider" role="alert">
-                                    Debe seleccionar un Lider.
+                                    Debe seleccionar un Lider. Ademas, no puede ser el mismo lider en ambos seleccionadores Ademas, no puede ser el mismo lider en ambos seleccionadores
                                 </div>
                             </div>
 
@@ -141,10 +141,10 @@ $viewScripts = ["CelulaConsolidacion-listar.js"];
                     <div class="mb-3">
                         <form id="formularioReunion">
 
-                            
+
                             <div class="mb-3">
-                                
-                            <input class="d-none" type="hidden" id="idCelulaConsolidacionR">
+
+                                <input class="d-none" type="hidden" id="idCelulaConsolidacionR">
 
                                 <label for="fecha" class="form-label fw-bold">Fecha</label>
                                 <input type="date" class="form-control" id="fecha" name="fecha">
@@ -179,7 +179,7 @@ $viewScripts = ["CelulaConsolidacion-listar.js"];
 
                             <div class="mb-3">
                                 <label for="discipulos" class="form-label fw-bold">Asistencia:</label>
-                                <select id="discipulos" multiple> 
+                                <select id="discipulos" multiple>
                                     <option value="">asdasd</option>
                                     <option value="s">asdasd</option>
                                     <option value="w">asdasd</option>
