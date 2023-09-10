@@ -46,12 +46,14 @@ if (isset($_POST['editar'])) {
     }
 
     $id = $_POST['id'];
-    $nombre = $_POST['nombre'];
-    $idLider = $_POST['idLider'];
-    $idCoLider = $_POST['idCoLider'];
-    $idTerritorio = $_POST['idTerritorio'];
+    $nombre = trim(strtolower($_POST['nombre']));
+    $idLider = trim($_POST['idLider']);
+    $idCoLider = trim($_POST['idCoLider']);
+    $idTerritorio = trim($_POST['idTerritorio']);
 
-
+    $CelulaFamiliar->validacion_datos($nombre, [$idLider, $idCoLider, $idTerritorio]);
+    $CelulaFamiliar->validacion_existencia($nombre, $id);
+    $CelulaFamiliar->validacion_accion($id, $accion = 2);
     $CelulaFamiliar->editar_CelulaFamiliar($id, $nombre, $idLider, $idCoLider, $idTerritorio);
 
     die();
@@ -72,7 +74,6 @@ if (isset($_POST['registroreunion'])) {
     $actividad = $_POST['actividad'];
     $observaciones = $_POST['observaciones'];
 
-
     $CelulaFamiliar->registrar_reunion($idCelulaFamiliar, $fecha, $tematica, $semana, $generosidad, $infantil, $juvenil, $adulto, $actividad, $observaciones);
 
     echo json_encode('Lo logramos!!');
@@ -91,6 +92,7 @@ if (isset($_POST['eliminar'])) {
 
     $id = $_POST['id'];
 
+    $CelulaFamiliar->validacion_accion($id, $accion = 1);
     $CelulaFamiliar->eliminar_CelulaFamiliar($id);
 
     echo json_encode('Lo logramos!!');

@@ -37,18 +37,17 @@ if (isset($_GET['cargar_data'])) {
 
 if (isset($_POST['editar'])) {
 
-
-
     $id = $_POST['id'];
-    $nombre = $_POST['nombre'];
-    $idLider = $_POST['idLider'];
-    $idCoLider = $_POST['idCoLider'];
-    $idTerritorio = $_POST['idTerritorio'];
+    $nombre = trim(strtolower($_POST['nombre']));
+    $idLider = trim($_POST['idLider']);
+    $idCoLider = trim($_POST['idCoLider']);
+    $idTerritorio = trim($_POST['idTerritorio']);
 
-
+    $CelulaCrecimiento->validacion_datos($nombre, [$idLider, $idCoLider, $idTerritorio]);
+    $CelulaCrecimiento->validacion_existencia($nombre, $id);
+    $CelulaCrecimiento->validacion_accion($id, $accion = 2);
     $CelulaCrecimiento->editar_CelulaCrecimiento($id, $nombre, $idLider, $idCoLider, $idTerritorio);
 
-    echo json_encode('Lo logramos!!');
     die();
 }
 
@@ -80,13 +79,11 @@ if (isset($_POST['registroreunion'])) {
 
 if (isset($_POST['eliminar'])) {
 
-
-
     $id = $_POST['id'];
 
+    $CelulaCrecimiento->validacion_accion($id, $accion = 1);
     $CelulaCrecimiento->eliminar_CelulaCrecimiento($id);
 
-    echo json_encode('Lo logramos!!');
     die();
 }
 

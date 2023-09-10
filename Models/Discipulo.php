@@ -57,6 +57,9 @@ class Discipulo extends Model
     
         //Ahora ejecutemos la consulta sql una vez ingresado todos los valores, es decir, los parametros que mencionamos arriba
         $stmt->execute();
+        http_response_code(200);
+            echo json_encode(array('msj'=>'Se registro el Discipulo correctamente', 'status' => 200));
+            die();
         } catch (Exception $e) {// Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -214,6 +217,9 @@ class Discipulo extends Model
 
 
             $stmt->execute();
+            http_response_code(200);
+            echo json_encode(array('msj'=>'Discipulo actualizado correctamente', 'status' => 200));
+            die();
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -237,6 +243,9 @@ class Discipulo extends Model
             $stmt->bindValue(":id", $id);
 
             $stmt->execute();
+            http_response_code(200);
+            echo json_encode(array('msj'=>'Discipulo eliminado correctamente', 'status' => 200));
+            die();
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),

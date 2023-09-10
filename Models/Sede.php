@@ -104,6 +104,7 @@ class Sede extends Model
 
             //Ahora ejecutemos la consulta sql una vez ingresado todos los valores, es decir, los parametros que mencionamos arriba
             $sentencia->execute();
+            
 
             http_response_code(200);
             echo json_encode(array('msj' => 'Sede registrada exitosamente', 'status' => 200));
@@ -147,19 +148,42 @@ class Sede extends Model
     {
 
         try {
+            $consulta = Sede::cargar($id);
 
-            $sql = "UPDATE sede SET idPastor = :idPastor, nombre = :nombre, estado = :estado, direccion = :direccion WHERE sede.id = :id";
+            if ($consulta->estado === $estado) {
+                $sql = "UPDATE sede SET idPastor = :idPastor, nombre = :nombre, direccion = :direccion WHERE sede.id = :id";
 
+                $stmt = $this->db->pdo()->prepare($sql);
 
-            $stmt = $this->db->pdo()->prepare($sql);
+                $stmt->bindValue(':id', $id);
+                $stmt->bindValue(':idPastor', $idPastor);
+                $stmt->bindValue(':nombre', $nombre);
+                $stmt->bindValue(':direccion', $direccion);
 
-            $stmt->bindValue(':id', $id);
-            $stmt->bindValue(':idPastor', $idPastor);
-            $stmt->bindValue(':nombre', $nombre);
-            $stmt->bindValue(':estado', $estado);
-            $stmt->bindValue(':direccion', $direccion);
+                $stmt->execute();
+            } else {
 
-            $stmt->execute();
+                $nombreEstado = $this->getNombreEstado($estado);
+                $codigo = $estado . '-' . $consulta->identificador;
+
+                $sql = "UPDATE sede SET idPastor = :idPastor, nombre = :nombre, estado = :estado, estadoCodigo = :estadoCodigo, direccion = :direccion, codigo = :codigo WHERE sede.id = :id";
+
+                $stmt = $this->db->pdo()->prepare($sql);
+
+                $stmt->bindValue(':id', $id);
+                $stmt->bindValue(':idPastor', $idPastor);
+                $stmt->bindValue(':nombre', $nombre);
+                $stmt->bindValue(':estado', $nombreEstado);
+                $stmt->bindValue(':estadoCodigo', $estado);
+                $stmt->bindValue(':direccion', $direccion);
+                $stmt->bindValue(':codigo', $codigo);
+
+                $stmt->execute();
+            }
+
+            http_response_code(200);
+            echo json_encode(array('msj' => 'Actualizado correctamente'));
+            die();
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -184,7 +208,7 @@ class Sede extends Model
 
             $stmt->execute();
             http_response_code(200);
-            echo json_encode(array('msj'=>'Sede eliminada correctamente', 'status'=>200));
+            echo json_encode(array('msj' => 'Sede eliminada correctamente', 'status' => 200));
             die();
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(

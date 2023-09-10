@@ -11,7 +11,10 @@ class CelulaFamiliar extends Model
     public string $nombre;
     public int $estatus;
 
-    public Territorio $territorio;
+    //Expresiones regulares
+    private $expresion_nombre = '/^[a-zA-Z0-9\s.,]{1,50}$/';
+    private $expresion_detalles = '/^[a-zA-Z0-9\s.,]{1,100}$/';
+    private $expresion_id = '/^[1-9]\d*$/';
 
 
     public  function registrar_CelulaFamiliar($nombre, $idLider, $idCoLider, $idTerritorio)
@@ -426,6 +429,9 @@ class CelulaFamiliar extends Model
 
 
             $stmt->execute();
+            http_response_code(200);
+            echo json_encode(array('msj'=>'Reunion actualizada correctamente', 'status' => 200));
+            die();
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -495,12 +501,37 @@ class CelulaFamiliar extends Model
 
 
 
-    /////////////////////////// VALIDACIONES ///////////////////////////////
 
-    public function validacion_existencia(string $nombre, $idTerritorio): void
+    ///////////////////////////////// ESPACIO PARA VALIDACIONES //////////////////////////////////
+
+
+    public function validacion_datos(string $nombre, array $idArray): void
     {
         try {
-            $sql = "SELECT * FROM territorio WHERE nombre = :nombre" . (!empty($idTerritorio) ? " AND id != $idTerritorio" : "");
+            // Utilizar preg_match para validar el string contra la expresión regular
+            if (!preg_match($this->expresion_nombre, $nombre)) {
+                // Lanzar una excepción si el string no es válido
+                throw new Exception("El nombre que ingresaste no cumple con los requisitos. Ingrese nuevamente", 422);
+            }
+
+            foreach ($idArray as $key) {
+                if (!preg_match($this->expresion_id, $key)) {
+                    // Lanzar una excepción si el string no es válido
+                    throw new Exception("El ID no cumple con los requisitos. Seleccione nuevamente", 422);
+                }
+            }
+
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+            die();
+        }
+    }
+
+    public function validacion_existencia(string $nombre, $id): void
+    {
+        try {
+            $sql = "SELECT * FROM celulafamiliar WHERE nombre = :nombre" . (!empty($id) ? " AND id != $id" : "");
             $stmt = $this->db->pdo()->prepare($sql);
             $stmt->bindValue(":nombre", $nombre);
             $stmt->execute();
@@ -509,7 +540,7 @@ class CelulaFamiliar extends Model
             if ($resultado !== false) {
                 if ($resultado['nombre'] === $nombre) {
                     // Lanzar una excepción si el dato existe en la BD
-                    throw new Exception("El territorio llamado " . $nombre . " ya existe", 422);
+                    throw new Exception("La celula llamada " . $nombre . " ya existe", 422);
                 }
             }
         } catch (Exception $e) {
@@ -519,24 +550,24 @@ class CelulaFamiliar extends Model
         }
     }
 
-    public function validacion_accion(int $idTerritorio, int $accion): void
+
+    // VALIDAR ANTES DE ELIMINAR O EDITAR
+    public function validacion_accion(int $id, int $accion): void
     {
         try {
             
             $sql = "SELECT * FROM reunionfamiliar WHERE idCelulaFamiliar= :idCelulaFamiliar AND estatus = 1";
 
             $stmt = $this->db->pdo()->prepare($sql);
-            $stmt->bindValue(":idTerritorio1", $idTerritorio);
-            $stmt->bindValue(":idTerritorio2", $idTerritorio);
-            $stmt->bindValue(":idTerritorio3", $idTerritorio);
+            $stmt->bindValue(":idCelulaFamiliar", $id);
             $stmt->execute();
 
             if ($stmt->rowCount() > 0) {
                 // Lanzar una excepción si el dato existe en la BD
                 if ($accion == 1) {
-                    throw new Exception("Este territorio esta asociado a celulas que estan en uso. Estos poseen datos asociados", 422);
+                    throw new Exception("Esta celula esta asociada a reuniones y otro tipo de informacion que podria corromper la integridad de los datos.", 422);
                 }else{
-                    throw new Exception("No puedes cambiar la sede porque ya existen celulas asociadas al territorio y con codigos unicos generados. Esto podria destruir la integridad de los datos", 422);
+                    throw new Exception("No puedes cambiar el territorio porque la celula posee datos de reuniones e informacion adicional. Esto podria destruir la integridad de los datos", 422);
                 }
             }
         } catch (Exception $e) {
