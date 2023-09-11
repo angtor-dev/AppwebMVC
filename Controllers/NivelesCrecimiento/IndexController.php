@@ -21,7 +21,7 @@ if (count($escuelas) == 0) {
 }
 $escuela = $escuelas[0];
 
-$nivelesCrecimiento = NivelCrecimiento::cargarRelaciones($escuela->id, "Escuela");
+$nivelesCrecimiento = NivelCrecimiento::cargarRelaciones($escuela->id, "Escuela", 1);
 
 renderView();
 ?>

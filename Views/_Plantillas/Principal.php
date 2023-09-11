@@ -65,10 +65,12 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="fa-regular fa-heart fa-fw me-2"></i>
-                                        Preferecias
-                                    </a>
+                                    <?php if ($usuario->tienePermiso("cambiarSede")): ?>
+                                        <a class="dropdown-item" href="#">
+                                            <i class="fa-solid fa-arrows-rotate fa-fw me-2"></i>
+                                            Cambiar sede
+                                        </a>
+                                    <?php endif ?>
                                 </li>
                                 <li>
                                     <hr class="dropdown-divider">

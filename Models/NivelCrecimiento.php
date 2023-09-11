@@ -1,5 +1,6 @@
 <?php
 require_once "Models/Model.php";
+require_once "Models/Escuela.php";
 
 class NivelCrecimiento extends Model
 {
@@ -10,6 +11,7 @@ class NivelCrecimiento extends Model
     public int $estatus;
 
     public Escuela $escuela;
+    public array $subnivelesArray;
 
     private const NIVELES_INICIALES = [
         "Consolidacion" => ["Escuela para la consolidacion"],
@@ -23,6 +25,9 @@ class NivelCrecimiento extends Model
         parent::__construct();
         if (!empty($this->idEscuela)) {
             $this->escuela = Escuela::cargar($this->idEscuela);
+        }
+        if (!empty($this->id)) {
+            $this->subnivelesArray = $this->getSubniveles();
         }
     }
 
@@ -71,6 +76,67 @@ class NivelCrecimiento extends Model
             $_SESSION['errores'][] = "Ha ocurrido un error al crear los niveles iniciales";
             throw $th;
         }
+    }
+
+    public function registrar() : void
+    {
+        $query = "INSERT INTO nivelcrecimiento(idEscuela, nombre, nivel) VALUES(:idEscuela, :nombre, :nivel)";
+
+        try {
+            $stmt = $this->prepare($query);
+            $stmt->bindValue("idEscuela", $this->idEscuela);
+            $stmt->bindValue("nombre", $this->nombre);
+            $stmt->bindValue("nivel", $this->nivel);
+
+            $stmt->execute();
+        } catch (\Throwable $th) {
+            $_SESSION['errores'][] = "Ha ocurrido un error al crear el nivel.";
+            throw $th;
+        }
+    }
+
+    public function esValido() : bool
+    {
+        $errores = 0;
+
+        if (empty($this->nombre)) {
+            $_SESSION['errores'][] = "Se debe especificar un nombre.";
+            $errores++;
+        }
+        if (!preg_match(REG_ALFABETICO, $this->nombre)) {
+            $_SESSION['errores'][] = "El nombre solo puede contener caracteres alfabeticos.";
+            $errores++;
+        }
+        if (empty($this->nivel)) {
+            $_SESSION['errores'][] = "Se debe especificar un nivel.";
+            $errores++;
+        }
+        if ($this->query("SELECT id FROM nivelcrecimiento WHERE nivel = $this->nivel AND estatus = 1")->rowCount() > 0) {
+            $_SESSION['errores'][] = "Ya existe otro Nivel de Crecimiento con el nivel de grado <b>$this->nivel</b>.";
+            $errores++;
+        }
+
+        if ($errores > 0) {
+            return false;
+        }
+        return true;
+    }
+
+    public function getSubniveles() : array
+    {
+        $query = "SELECT nivelcrecimiento.id, GROUP_CONCAT(subnivel.id SEPARATOR ',') AS 'ids',
+            GROUP_CONCAT(subnivel.nombre SEPARATOR ',') AS 'nombres',
+            GROUP_CONCAT(subnivel.nivel SEPARATOR ',') AS 'niveles'
+            FROM nivelcrecimiento INNER JOIN subnivel ON nivelcrecimiento.id = subnivel.idNivelCrecimiento
+            WHERE nivelcrecimiento.id = $this->id
+            GROUP BY nivelcrecimiento.id
+            LIMIT 1";
+        
+        $subniveles = $this->query($query)->fetch();
+        if ($subniveles) {
+            return $subniveles;
+        }
+        return ["id" => null, "ids" => null, "nombres" => null, "niveles" => null];
     }
 }
 ?>

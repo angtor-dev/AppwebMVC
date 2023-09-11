@@ -34,6 +34,7 @@ function renderView(?string $viewName = null, ?string $viewPath = null) : void
     }
 
     require "Views/_Plantillas/".$_layout.".php";
+    exit;
 }
 
 /** 

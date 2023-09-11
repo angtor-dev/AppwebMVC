@@ -56,13 +56,14 @@ abstract class Model
      * 
      * @param int $id El id del modelo actual
      * @param string $tablaForanea El nombre de la tabla con la que se relaciona el modelo
+     * @param int|null $estatus Si se especifica, retorna las filas donde el estatus sea igual al indicado.
      * @return array<Model>
      */
-    public static function cargarRelaciones(int $id, string $tablaForanea) : array
+    public static function cargarRelaciones(int $id, string $tablaForanea, int $estatus = null) : array
     {
         $bd = Database::getInstance();
         $table = static::class;
-        $query = "SELECT * FROM $table WHERE id$tablaForanea = $id";
+        $query = "SELECT * FROM $table WHERE id$tablaForanea = $id" . (isset($estatus) ? " AND estatus = $estatus" : "");
 
         $stmt = $bd->pdo()->query($query);
         $stmt->setFetchMode(PDO::FETCH_CLASS, $table);
