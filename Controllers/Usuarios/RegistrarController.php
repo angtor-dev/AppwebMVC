@@ -37,6 +37,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST')
     }
 
     $_SESSION['exitos'][] = "Usuario registrado con exito.";
+    Bitacora::registrar("Registro al usuario $usuario->nombre $usuario->apellido");
     header("Location: /AppwebMVC/Usuarios/");
 }
 else {

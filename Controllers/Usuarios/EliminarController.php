@@ -17,5 +17,6 @@ try {
 }
 
 $_SESSION['exitos'][] = "Se ha eliminado al usuario correctamente.";
+Bitacora::registrar("Elimino al usuario $usuario->nombre $usuario->apellido");
 redirigir("/AppwebMVC/Usuarios/");
 ?>

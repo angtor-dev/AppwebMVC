@@ -8,6 +8,7 @@ if (!empty($_POST)) {
     if ($usuario->login($_POST['cedula'], $_POST['clave'])) {
         session_start();
         $_SESSION['usuario'] = $usuario;
+        Bitacora::registrar("Inicio de sesión");
 
         header('location:'.LOCAL_DIR);
         exit();
