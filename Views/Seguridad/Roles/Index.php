@@ -53,6 +53,9 @@ $usuario = $_SESSION['usuario'];
                                 <i class="fa-solid fa-key" title="Gestionar permisos" data-bs-toggle="tooltip"></i>
                             </a>
                         <?php endif ?>
+                        <?php if ($rol->nombre == "Administrador"): ?>
+                            <em>Rol integrado</em>
+                        <?php endif ?>
                     </div>
                 </td>
             </tr>
