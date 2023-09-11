@@ -280,7 +280,7 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
                                     </a>
                                 <?php endif ?>
                                 <?php if ($usuario->tienePermiso("consultarBitacora")): ?>
-                                    <a href="<?= LOCAL_DIR ?>Seguridad/Bitacora" class="nav-link">
+                                    <a href="<?= LOCAL_DIR ?>Seguridad/Bitacora" class="nav-link <?= strtolower($uriParts[1] ?? "") == "bitacora" ? "active" : "" ?>">
                                         <i class="fa-solid fa-table-list fa-fw me-2"></i>
                                         Bitacora
                                     </a>
