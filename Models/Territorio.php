@@ -16,8 +16,8 @@ class Territorio extends Model
     public Usuario $lider;
 
     //Expresiones regulares
-    private $expresion_nombre = '/^[a-zA-Z0-9\s.,]{1,50}$/';
-    private $expresion_detalles = '/^[a-zA-Z0-9\s.,]{1,100}$/';
+    private $expresion_nombre = '/^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]{5,50}$/';
+    private $expresion_texto = '/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/';
     private $expresion_id = '/^[1-9]\d*$/';
 
     public function __construct()
@@ -341,7 +341,7 @@ class Territorio extends Model
                 throw new Exception("El nombre que ingresaste no cumple con los requisitos. Ingrese nuevamente", 422);
             }
 
-            if (!preg_match($this->expresion_detalles, $detalles)) {
+            if (!preg_match($this->expresion_texto, $detalles)) {
                 // Lanzar una excepción si el string no es válido
                 throw new Exception("La direccion que ingresaste no cumple con los requisitos. Ingrese nuevamente", 422);
             }

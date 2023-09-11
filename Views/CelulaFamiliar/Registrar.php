@@ -14,8 +14,7 @@ $viewScripts = ["CelulaFamiliar-registrar.js"]; ?>
       <div class="col-lg-10 col-md-12 col-sm-12">
         <label for="nombre" class="form-label fw-bold">Nombre de la Celula</label>
         <input type="text" class="form-control" id="nombre" maxlength="50" name="nombre">
-
-        <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_nombre" role="alert">
+        <div class="alert alert-danger d-flex align-items-center d-none mt-2" id="msj_nombre" role="alert">
           Este campo no acepta numeros y no puede estar vacio.
         </div>
       </div>
@@ -27,8 +26,8 @@ $viewScripts = ["CelulaFamiliar-registrar.js"]; ?>
         <select class="form-select" id="idLider" name="idLider">
           <option selected value="">Selecciona...</option>
         </select>
-        <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_idLider" role="alert">
-          Debe seleccionar un Lider.
+        <div class="alert alert-danger d-flex align-items-center d-none" id="msj_idLider" role="alert">
+          Debe seleccionar un Lider. Ademas, no puede ser el mismo lider en ambos seleccionadores
         </div>
       </div>
       <div class="col-lg-5 col-md-12 col-sm-12">
@@ -36,8 +35,8 @@ $viewScripts = ["CelulaFamiliar-registrar.js"]; ?>
         <select class="form-select" id="idCoLider" name="idCoLider">
           <option selected value="">Selecciona...</option>
         </select>
-        <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_idCoLider" role="alert">
-          Debe seleccionar un Lider.
+        <div class="alert alert-danger d-flex align-items-center d-none" id="msj_idCoLider" role="alert">
+          Debe seleccionar un Lider. Ademas, no puede ser el mismo lider en ambos seleccionadores
         </div>
       </div>
     </div>
@@ -48,7 +47,7 @@ $viewScripts = ["CelulaFamiliar-registrar.js"]; ?>
         <select class="form-select" id="idTerritorio" name="idTerritorio" placeholder="hola">
         <option selected value="">Selecciona...</option>
         </select>
-        <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_idTerritorio" role="alert">
+        <div class="alert alert-danger d-flex align-items-center d-none" id="msj_idTerritorio" role="alert">
           Debe seleccionar un Territorio.
         </div>
       </div>

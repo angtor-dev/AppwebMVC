@@ -93,7 +93,7 @@ $viewScripts = ["CelulaFamiliar-listar.js"];
                                 <select class="form-select" id="idLider" name="idLider">
                                 </select>
                                 <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_idLider" role="alert">
-                                    Debe seleccionar un Lider.
+                                    Debe seleccionar un Lider. Ademas, no puede ser el mismo lider en ambos seleccionadores
                                 </div>
                             </div>
 
@@ -102,7 +102,7 @@ $viewScripts = ["CelulaFamiliar-listar.js"];
                                 <select class="form-select" id="idCoLider" name="idCoLider">
                                 </select>
                                 <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_idCoLider" role="alert">
-                                    Debe seleccionar un Lider.
+                                    Debe seleccionar un Lider. Ademas, no puede ser el mismo lider en ambos seleccionadores
                                 </div>
                             </div>
 

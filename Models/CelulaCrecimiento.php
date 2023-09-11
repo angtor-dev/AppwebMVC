@@ -11,6 +11,13 @@ class CelulaCrecimiento extends Model
     public string $nombre;
     public int $estatus;
 
+    //Expresiones regulares
+    private $expresion_nombre = '/^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]{5,50}$/';
+    private $expresion_texto = '/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/';
+    private $expresion_id = '/^[1-9]\d*$/';
+
+
+
     public  function registrar_CelulaCrecimiento($nombre, $idLider, $idCoLider, $idTerritorio)
     {
         try {
@@ -26,7 +33,7 @@ class CelulaCrecimiento extends Model
 
             if ($datos['celulaNumero'] === null) {
                 $id = 1;
-                $identificador = 'CCE' . $id;
+                $identificador = 'CCR' . $id;
                 $codigo = $territorio->codigo . '-' . $identificador;
             } else {
                 $celulas = CelulaCrecimiento::cargarRelaciones($idTerritorio, "Territorio");
@@ -43,11 +50,11 @@ class CelulaCrecimiento extends Model
                     $mayorNumero = max($numeros);
 
                     $contador = $mayorNumero + 1;
-                    $identificador = 'CCE' . $contador;
+                    $identificador = 'CCR' . $contador;
                     $codigo = $territorio->codigo . '-' . $identificador;
                 } else {
                     $contador = 1;
-                    $identificador = 'CCE' . $contador;
+                    $identificador = 'CCR' . $contador;
                     $codigo = $territorio->codigo . '-' . $identificador;
                 }
             }
@@ -140,7 +147,7 @@ class CelulaCrecimiento extends Model
                 "error_line" => "Linea del error: " . $e->getLine()
                 
             );
-            print_r($error_data);
+            //print_r($error_data);
             echo json_encode($error_data);
             die();
         }
@@ -184,11 +191,11 @@ class CelulaCrecimiento extends Model
                     $mayorNumero = max($numeros);
 
                     $contador = $mayorNumero + 1;
-                    $identificador = 'CCE' . $contador;
+                    $identificador = 'CCR' . $contador;
                     $codigo = $territorio->codigo . '-' . $identificador;
                 } else {
                     $contador = 1;
-                    $identificador = 'CCE' . $contador;
+                    $identificador = 'CCR' . $contador;
                     $codigo = $territorio->codigo . '-' . $identificador;
                 }
 

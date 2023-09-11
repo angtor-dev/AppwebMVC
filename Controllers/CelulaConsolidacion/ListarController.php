@@ -55,13 +55,13 @@ if (isset($_POST['editar'])) {
 
 if (isset($_POST['registroreunion'])) {
 
-    $idCelulaConsolidacion = $_POST['idCelulaConsolidacion'];
+    $idCelulaConsolidacion = trim($_POST['idCelulaConsolidacion']);
     $fecha = $_POST['fecha'];
-    $tematica = $_POST['tematica'];
-    $semana = $_POST['semana'];
-    $generosidad = $_POST['generosidad'];
-    $actividad = $_POST['actividad'];
-    $observaciones = $_POST['observaciones'];
+    $tematica = trim(strtolower($_POST['tematica']));
+    $semana = trim($_POST['semana']);
+    $generosidad = trim($_POST['generosidad']);
+    $actividad = trim(strtolower($_POST['actividad']));
+    $observaciones = trim(strtolower($_POST['observaciones']));
     $asistencias = $_POST['asistencias'];
 
 

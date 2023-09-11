@@ -258,4 +258,13 @@ class Discipulo extends Model
     }
 
 
+    public function esMayorDeEdad($fechaNacimiento) {
+        $hoy = new DateTime();
+        $fecha = DateTime::createFromFormat('Y-m-d', $fechaNacimiento);
+        $fecha->modify('+18 years');
+    
+        return $hoy >= $fecha;
+    }
+
+
 }

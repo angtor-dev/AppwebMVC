@@ -206,14 +206,14 @@ $(document).ready(function () {
     const regexObj2 = {
 
         idCelulaCrecimiento: /^[1-9]\d*$/, // Números enteros mayores a 0
-        tematica: /^[a-zA-Z0-9\s.,]{1,100}$/, // Letras, números, espacios, puntos y comas con un máximo de 100 caracteres
+        tematica: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/, // Letras, números, espacios, puntos y comas con un máximo de 100 caracteres
         semana: /^[1-9]\d*$/, // Números enteros mayores a 0
         generosidad: /^[0-9]+(\.[0-9]{2})?$/,
         infantil: /^[0-9]\d*$/,
         juvenil: /^[0-9]\d*$/,
         adulto: /^[0-9]\d*$/,
-        actividad: /^[a-zA-Z0-9\s.,]{1,100}$/, // Letras, números, espacios, puntos y comas con un máximo de 100 caracteres
-        observaciones: /^[a-zA-Z0-9\s.,]{1,100}$/ // Letras, números, espacios, puntos y comas con un máximo de 100 caracteres
+        actividad: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/, // Letras, números, espacios, puntos y comas con un máximo de 100 caracteres
+        observaciones: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/ // Letras, números, espacios, puntos y comas con un máximo de 100 caracteres
     };
 
     const validationStatus2 = {
