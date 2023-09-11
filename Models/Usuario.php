@@ -54,7 +54,7 @@ class Usuario extends Model
             return false;
         }
 
-        $query = "SELECT * FROM usuario WHERE cedula = :cedula";
+        $query = "SELECT * FROM usuario WHERE cedula = :cedula LIMIT 1";
         
         try {
             $stmt = $this->prepare($query);
@@ -72,15 +72,9 @@ class Usuario extends Model
                 return false;
             }
 
-            foreach ($usuario as $key => $value) {
-                if (property_exists($this, $key)) {
-                    $this->$key = $value;
-                }
-            }
-            // Carga roles del usuario
-            if (!empty($this->id)) {
-                $this->roles = Rol::cargarMultiplesRelaciones($this->id, get_class($this), "UsuarioRol");
-            }
+            // Almacena usuario en sesion
+            session_start();
+            $_SESSION['usuario'] = Usuario::cargar($usuario['id']);
 
             return true;
         } catch (\Throwable $th) {
