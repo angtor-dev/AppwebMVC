@@ -18,6 +18,7 @@ $viewScripts = ["Discipulo-listar.js"];
                             <th>Nombre</th>
                             <th>Apellido</th>
                             <th>Celula de Consolidacion </th>
+                            <th>Asistencias</th>
                             <th>Opciones</th>
                         </tr>
                     </thead>

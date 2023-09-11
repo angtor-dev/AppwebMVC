@@ -589,4 +589,67 @@ class CelulaConsolidacion extends Model
             die();
         }
     }
+
+
+
+public function listar_asistencia($idReunion)
+{
+
+    try {
+
+        $sql = "SELECT
+                discipulo.id 
+                discipulo.nombre,
+                discipulo.apellido,
+                asistencia.id AS idAsistencia,
+                asistencia.idReunion,
+                asistencia.idDiscipulo
+            FROM asistencia
+            INNER JOIN discipulo ON  asistencia.idDiscipulo = discipulo.id WHERE asistencia.idReunion = :idReunion";
+        
+        $stmt = $this->db->pdo()->prepare($sql);
+
+        $stmt->bindValue(':idReunion', $idReunion);
+
+        $stmt->execute();
+        $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $resultado;
+    } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
+        $error_data = array(
+            "error_message" => $e->getMessage(),
+            "error_line" => "Linea del error: " . $e->getLine()
+        );
+        print_r($error_data);
+        echo json_encode($error_data);
+        die();
+    }
+}
+
+public function listarAsistencia_reunion($idCelulaConsolidacion, $idReunion)
+    {
+        try {
+
+            $sql = "SELECT * FROM discipulo
+            WHERE id NOT IN (SELECT idDiscipulo FROM asistencia WHERE idReunion = :idReunion) AND discipulo.idCelulaConsolidacion = 
+            :idCelulaConsolidacion";
+            
+            $stmt = $this->db->pdo()->prepare($sql);
+
+            $stmt->bindValue(":idCelulaConsolidacion", $idCelulaConsolidacion);
+            $stmt->bindValue(":idReunion", $idReunion);
+
+            $stmt->execute();
+
+            $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $resultado;
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
+            $error_data = array(
+                "error_message" => $e->getMessage(),
+                "error_line" => "Linea del error: " . $e->getLine()
+            );
+            //print_r($error_data);
+            echo json_encode($error_data);
+            die();
+        }
+    }
 }

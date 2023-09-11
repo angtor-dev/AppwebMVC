@@ -17,6 +17,7 @@ $(document).ready(function () {
                 defaultContent: `
             <button type="button" id="ver_info" data-bs-toggle="modal" data-bs-target="#modal_verInfo" class="btn btn-light">Info</button>
             <button type="button" id="editar" data-bs-toggle="modal" data-bs-target="#modal_editarInfo" class="btn btn-primary">Editar</button>
+            <button type="button" id="asistencia" class="btn btn-danger delete-btn">Asistencia</button>
             <button type="button" id="eliminar" class="btn btn-danger delete-btn">Eliminar</button>
             `}
 
@@ -48,6 +49,17 @@ $(document).ready(function () {
         document.getElementById('observaciones').value = datos.observaciones;
 
         Listar_celulas(datos.idCelulaConsolidacion)
+    })
+
+
+    $('#celulaDatatables tbody').on('click', '#asistencia', function () {
+        const datos = dataTable.row($(this).parents()).data();
+
+        Listar_asistencia(datos.id);
+        Listar_discipulos_reunion(datos.idCelulaConsolidacion, datos.id)
+       
+
+
     })
 
     
@@ -131,6 +143,11 @@ $(document).ready(function () {
             success: function (response) {
 
                 let data = JSON.parse(response);
+
+                // Destruir la instancia existente si la hay
+                if (choices) {
+                    choices.destroy();
+                }
                 
                 console.log(data);
 
@@ -146,10 +163,7 @@ $(document).ready(function () {
 
                 });
 
-                // Destruir la instancia existente si la hay
-                if (choices) {
-                    choices.destroy();
-                }
+                
 
                 choices = new Choices(selector, {
                     searchEnabled: true,  // Habilita la funcionalidad de búsqueda
@@ -168,12 +182,83 @@ $(document).ready(function () {
     }
 
 
+    function Listar_discipulos_reunion(idCelulaConsolidacion, idReunion) {
+
+        $.ajax({
+            type: "GET",
+            url: "http://localhost/AppwebMVC/CelulaConsolidacion/Listar",
+            data: {
+                cargar_discipulos_reunion: 'cargar_discipulos_reunion',
+                idCelulaConsolidacion: idCelulaConsolidacion,
+                idReunion: idReunion
+            },
+            success: function (response) {
+
+                // Destruir la instancia existente si la hay
+                if (choices4) {
+                    choices4.destroy();
+                }
+
+                console.log(response);
+                let data = JSON.parse(response);
+
+                let selector = document.getElementById('discipulos');
+
+                data.forEach(item => {
+
+                    const option = document.createElement('option');
+                    option.value = item.id;
+                    option.text = `${item.cedula} ${item.nombre} ${item.apellido}`;
+                    selector.appendChild(option);
+
+                });
+
+                
+                choices4 = new Choices(selector, {
+                    allowHTML: true,
+                    searchEnabled: true,  // Habilita la funcionalidad de búsqueda
+                    removeItemButton: true,  // Habilita la posibilidad de remover items
+                    placeholderValue: 'Selecciona una opción',  // Texto del placeholder
+                });
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                // Aquí puedes manejar errores, por ejemplo:
+                console.error("Error al enviar:", textStatus, errorThrown);
+                alert("Hubo un error al realizar el registro. Por favor, inténtalo de nuevo.");
+            }
+        })
+    }
+
+   function Listar_asistencia(idReunion){
+
+        const dataTable = $('#asistenciaDatatables').DataTable({
+            responsive: true,
+            ajax: {
+                method: "GET",
+                url: 'http://localhost/AppwebMVC/CelulaConsolidacion/Reunion',
+                data: { cargar_data_asistencia: 'cargar_data_asistencia',
+            idReunion: idReunion }
+            },
+            columns: [
+                { data: 'nombre' },
+                { data: 'apellido' },
+                {
+                    defaultContent: `
+                <button type="button" id="eliminar" class="btn btn-danger delete-btn">Eliminar</button>
+                `}
+    
+            ],
+        })
+    }
 
 
 
 
 
-    ///////////////////////////// ACTUALIZAR DATOS DE REUNION /////////////////////////////// 
+
+
+     ///////////////////////////// ACTUALIZAR DATOS DE REUNION /////////////////////////////// 
 
     const regexObj2 = {
 

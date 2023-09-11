@@ -3,6 +3,7 @@ $(document).ready(function () {
     let choices;
 
     const dataTable = $('#sedeDatatables').DataTable({
+<<<<<<< Updated upstream
         responsive: true,
         ajax: {
             method: "GET",
@@ -16,6 +17,22 @@ $(document).ready(function () {
             { data: 'codigo' },
             {
                 defaultContent: `
+=======
+      responsive: true,
+      ajax: {
+        method: "GET",
+        url: 'http://localhost/AppwebMVC/Discipulos/Listar',
+        data: { cargar_data: 'cargar_data' }
+      },
+      columns: [
+        { data: 'cedula' },
+        { data: 'nombre' },
+        { data: 'apellido' },
+        { data: 'codigo' },
+        { data: 'asistencias'},
+        {
+          defaultContent: `
+>>>>>>> Stashed changes
               <button type="button" id="ver_info" data-bs-toggle="modal" data-bs-target="#modal_verInfo" class="btn btn-light">Info</button>
               <button type="button" id="editar" data-bs-toggle="modal" data-bs-target="#modal_editarInfo" class="btn btn-primary">Editar</button>
               <button type="button" id="eliminar" class="btn btn-danger delete-btn">Eliminar</button>
