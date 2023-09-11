@@ -149,10 +149,12 @@ class Discipulo extends Model
             discipulo.estadoCivil,
             discipulo.motivo,
             discipulo.fechaNacimiento,
-            discipulo.fechaConvercion
+            discipulo.fechaConvercion,
+            COUNT(asistencia.id) AS asistencias
           FROM
             discipulo
             INNER JOIN usuario AS Consolidador ON discipulo.idConsolidador = Consolidador.id
+            INNER JOIN asistencia ON discipulo.id = asistencia.idDiscipulo
             INNER JOIN celulaconsolidacion ON discipulo.idcelulaconsolidacion = celulaconsolidacion.id";
 
             $stmt = $this->db->pdo()->prepare($sql);
