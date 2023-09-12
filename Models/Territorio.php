@@ -187,7 +187,8 @@ class Territorio extends Model
 
                 $stmt->execute();
             } else {
-                $this->validacion_accion($id, $accion = 2);
+                //Validando si existen celulas antes de cambiar Sede del territorio
+                $this->validacion_accion($id, $accion = 'actualizar');
 
                 $sede = Sede::cargar($idSede);
                 $territorios = Territorio::cargarRelaciones($idSede, "Sede");
@@ -385,7 +386,7 @@ class Territorio extends Model
         }
     }
 
-    public function validacion_accion(int $idTerritorio, int $accion): void
+    public function validacion_accion(int $idTerritorio, string $accion): void
     {
         try {
             
@@ -404,9 +405,10 @@ class Territorio extends Model
 
             if ($stmt->rowCount() > 0) {
                 // Lanzar una excepción si el dato existe en la BD
-                if ($accion == 1) {
+                if ($accion == 'eliminar') {
                     throw new Exception("Este territorio esta asociado a celulas que estan en uso. Estos poseen datos asociados", 422);
-                }else{
+                }
+                if($accion == 'actualizar'){
                     throw new Exception("No puedes cambiar la sede porque ya existen celulas asociadas al territorio y con codigos unicos generados. Esto podria destruir la integridad de los datos", 422);
                 }
             }

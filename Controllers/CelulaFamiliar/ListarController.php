@@ -53,7 +53,7 @@ if (isset($_POST['editar'])) {
 
     $CelulaFamiliar->validacion_datos($nombre, [$idLider, $idCoLider, $idTerritorio]);
     $CelulaFamiliar->validacion_existencia($nombre, $id);
-    $CelulaFamiliar->validacion_accion($id, $accion = 2);
+    $CelulaFamiliar->validacion_accion($id, $accion = 'actualizar');
     $CelulaFamiliar->editar_CelulaFamiliar($id, $nombre, $idLider, $idCoLider, $idTerritorio);
 
     die();
@@ -92,7 +92,7 @@ if (isset($_POST['eliminar'])) {
 
     $id = $_POST['id'];
 
-    $CelulaFamiliar->validacion_accion($id, $accion = 1);
+    $CelulaFamiliar->validacion_accion($id, $accion = 'eliminar');
     $CelulaFamiliar->eliminar_CelulaFamiliar($id);
 
     echo json_encode('Lo logramos!!');

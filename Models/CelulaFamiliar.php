@@ -174,7 +174,7 @@ class CelulaFamiliar extends Model
                 $stmt->bindValue(':idCoLider', $idCoLider);
 
                 $stmt->execute();
-            }else{
+            } else {
 
                 $territorio = Territorio::cargar($idTerritorio);
                 $celulas = CelulaFamiliar::cargarRelaciones($idTerritorio, "Territorio");
@@ -218,7 +218,6 @@ class CelulaFamiliar extends Model
             http_response_code(200);
             echo json_encode(array('msj' => 'Celula actualizada exitosamente', 'status' => 200));
             die();
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -248,7 +247,7 @@ class CelulaFamiliar extends Model
             $stmt->execute();
 
             http_response_code(200);
-            echo json_encode(array('msj'=>'Celula eliminada correctamente'));
+            echo json_encode(array('msj' => 'Celula eliminada correctamente'));
             die();
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
@@ -430,7 +429,7 @@ class CelulaFamiliar extends Model
 
             $stmt->execute();
             http_response_code(200);
-            echo json_encode(array('msj'=>'Reunion actualizada correctamente', 'status' => 200));
+            echo json_encode(array('msj' => 'Reunion actualizada correctamente', 'status' => 200));
             die();
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
@@ -458,9 +457,9 @@ class CelulaFamiliar extends Model
             $stmt->bindValue(":id", $id);
 
             $stmt->execute();
-            
+
             http_response_code(200);
-            echo json_encode(array('msj'=>'Reunion eliminada correctamente'));
+            echo json_encode(array('msj' => 'Reunion eliminada correctamente'));
             die();
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
@@ -520,7 +519,6 @@ class CelulaFamiliar extends Model
                     throw new Exception("El ID no cumple con los requisitos. Seleccione nuevamente", 422);
                 }
             }
-
         } catch (Exception $e) {
             http_response_code($e->getCode());
             echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
@@ -552,10 +550,10 @@ class CelulaFamiliar extends Model
 
 
     // VALIDAR ANTES DE ELIMINAR O EDITAR
-    public function validacion_accion(int $id, int $accion): void
+    public function validacion_accion(int $id, string $accion): void
     {
         try {
-            
+
             $sql = "SELECT * FROM reunionfamiliar WHERE idCelulaFamiliar= :idCelulaFamiliar AND estatus = 1";
 
             $stmt = $this->db->pdo()->prepare($sql);
@@ -564,9 +562,10 @@ class CelulaFamiliar extends Model
 
             if ($stmt->rowCount() > 0) {
                 // Lanzar una excepción si el dato existe en la BD
-                if ($accion == 1) {
+                if ($accion == 'eliminar') {
                     throw new Exception("Esta celula esta asociada a reuniones y otro tipo de informacion que podria corromper la integridad de los datos.", 422);
-                }else{
+                }
+                if ($accion == 'actualizar') {
                     throw new Exception("No puedes cambiar el territorio porque la celula posee datos de reuniones e informacion adicional. Esto podria destruir la integridad de los datos", 422);
                 }
             }

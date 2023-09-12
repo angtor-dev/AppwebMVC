@@ -43,7 +43,7 @@ if (isset($_POST['editar'])) {
 
     $CelulaConsolidacion->validacion_datos($nombre, [$idLider, $idCoLider, $idTerritorio]);
     $CelulaConsolidacion->validacion_existencia($nombre, $id);
-    $CelulaConsolidacion->validacion_accion($id, $accion = 2);
+    $CelulaConsolidacion->validacion_accion($id, $accion = 'actualizar');
     $CelulaConsolidacion->editar_CelulaConsolidacion($id, $nombre, $idLider, $idCoLider, $idTerritorio);
 
     die();
@@ -73,7 +73,7 @@ if (isset($_POST['eliminar'])) {
 
     $id = $_POST['id'];
 
-    $CelulaConsolidacion->validacion_accion($id, $accion = 1);
+    $CelulaConsolidacion->validacion_accion($id, $accion = 'eliminar');
     $CelulaConsolidacion->eliminar_CelulaConsolidacion($id);
 
     echo json_encode('Lo logramos!!');

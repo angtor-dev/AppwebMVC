@@ -708,7 +708,7 @@ class CelulaConsolidacion extends Model
 
 
     // VALIDAR ANTES DE ELIMINAR O EDITAR
-    public function validacion_accion(int $id, int $accion): void
+    public function validacion_accion(int $id, string $accion): void
     {
         try {
 
@@ -720,9 +720,10 @@ class CelulaConsolidacion extends Model
 
             if ($stmt->rowCount() > 0) {
                 // Lanzar una excepción si el dato existe en la BD
-                if ($accion == 1) {
+                if ($accion == 'eliminar') {
                     throw new Exception("Esta celula esta asociada a reuniones y otro tipo de informacion que podria corromper la integridad de los datos.", 422);
-                } else {
+                } 
+                if($accion == 'actualizar') {
                     throw new Exception("No puedes cambiar el territorio porque la celula posee datos de reuniones e informacion adicional. Esto podria destruir la integridad de los datos", 422);
                 }
             }
