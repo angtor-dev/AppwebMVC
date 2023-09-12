@@ -17,7 +17,7 @@ $(document).ready(function () {
                 defaultContent: `
             <button type="button" id="ver_info" data-bs-toggle="modal" data-bs-target="#modal_verInfo" class="btn btn-light">Info</button>
             <button type="button" id="editar" data-bs-toggle="modal" data-bs-target="#modal_editarInfo" class="btn btn-primary">Editar</button>
-            <button type="button" id="asistencia" class="btn btn-danger delete-btn">Asistencia</button>
+            <button type="button" id="asistencia" data-bs-toggle="modal" data-bs-target="#modal_asistencia" class="btn btn-secondary">Asistencia</button>
             <button type="button" id="eliminar" class="btn btn-danger delete-btn">Eliminar</button>
             `}
 
@@ -241,6 +241,7 @@ $(document).ready(function () {
             idReunion: idReunion }
             },
             columns: [
+                { data: 'cedula' },
                 { data: 'nombre' },
                 { data: 'apellido' },
                 {

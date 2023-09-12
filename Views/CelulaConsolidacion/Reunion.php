@@ -212,4 +212,63 @@ $viewScripts = ["CelulaConsolidacion-reunion.js"];
             </div>
         </div>
     </div>
+
+
+
+<!-- MODAL PARA EDITAR ASISTENCIA -->
+<div class="modal fade" id="modal_editarInfo" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Editar Asistencia</h5>
+                </div>
+                <div class="modal-body">
+
+
+
+                <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12">
+            <div class="table-responsive">
+                <table id="asistenciaDatatables" class="table table-light table-hover">
+                    <thead>
+                        
+                    </thead>
+                    <tbody>
+                        
+                        <tr>
+                            <th>Cedula</th>
+                            <th>Nombre</th>
+                            <th>Apellido/th>
+                            <th>Opciones</th>
+                        </tr>
+                        
+                        <form action="asistenciaActualizar">
+
+                        <div class="mb-3">
+                                <label for="discipulos" class="form-label fw-bold">Asistencia:</label>
+                                <select id="discipulos" multiple>
+                                    
+                                </select>
+                                <div class="text-danger d-none" id="msj_asistencia">
+                                    <p>Debes seleccionar discipulos para la asistencia</p>
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-end">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Actualizar</button>
+                    </div>
+                        </form>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+                    
+
+            </div>
+        </div>
+    </div>
+</div>
+
 </div>
