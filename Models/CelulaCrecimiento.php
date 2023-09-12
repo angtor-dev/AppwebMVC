@@ -596,4 +596,6 @@ if($accion == 'actualizar'){
             die();
         }
     }
+
+    
 }
