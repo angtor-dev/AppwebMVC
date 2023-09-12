@@ -240,6 +240,7 @@ $(document).ready(function () {
                 }
             },
             columns: [
+                { data: 'cedula' },
                 { data: 'nombre' },
                 { data: 'apellido' },
                 {
