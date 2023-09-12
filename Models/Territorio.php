@@ -45,7 +45,7 @@ class Territorio extends Model
             $territorio = '';
             $sede = Sede::cargar($idSede);
 
-            if ($datos['territorioNumero'] === null) {
+            if ($datos['territorioNumero'] == null) {
                 $id = 1;
                 $territorio = 'T' . $id;
                 $identificador = $sede->codigo;
@@ -175,7 +175,7 @@ class Territorio extends Model
 
             $consulta = Territorio::cargar($id);
 
-            if ($consulta->idSede === $idSede) {
+            if ($consulta->idSede == $idSede) {
 
                 $sql = "UPDATE territorio SET nombre = :nombre, idLider = :idLider, detalles = :detalles WHERE territorio.id = :id";
                 $stmt = $this->db->pdo()->prepare($sql);
@@ -374,7 +374,7 @@ class Territorio extends Model
             $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($resultado !== false) {
-                if ($resultado['nombre'] === $nombre) {
+                if ($resultado['nombre'] == $nombre) {
                     // Lanzar una excepción si el dato existe en la BD
                     throw new Exception("El territorio llamado " . $nombre . " ya existe", 422);
                 }

@@ -32,7 +32,7 @@ class CelulaConsolidacion extends Model
             $codigo = '';
             $territorio = Territorio::cargar($idTerritorio);
 
-            if ($datos['celulaNumero'] === null) {
+            if ($datos['celulaNumero'] == null) {
                 $id = 1;
                 $identificador = 'CCO' . $id;
                 $codigo = $territorio->codigo . '-' . $identificador;
@@ -156,7 +156,7 @@ class CelulaConsolidacion extends Model
 
             $consulta = CelulaConsolidacion::cargar($id);
 
-            if ($consulta->idTerritorio === $idTerritorio) {
+            if ($consulta->idTerritorio == $idTerritorio) {
 
                 $sql = "UPDATE celulaconsolidacion SET  nombre = :nombre, idLider = :idLider, idCoLider = :idCoLider WHERE celulaconsolidacion.id = :id";
                 $stmt = $this->db->pdo()->prepare($sql);
@@ -694,7 +694,7 @@ class CelulaConsolidacion extends Model
             $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($resultado !== false) {
-                if ($resultado['nombre'] === $nombre) {
+                if ($resultado['nombre'] == $nombre) {
                     // Lanzar una excepción si el dato existe en la BD
                     throw new Exception("La celula llamada " . $nombre . " ya existe", 422);
                 }

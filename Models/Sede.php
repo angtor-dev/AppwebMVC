@@ -70,7 +70,7 @@ class Sede extends Model
             $codigo = '';
             $identificador = '';
 
-            if ($datos['sedeNumero'] === null) {
+            if ($datos['sedeNumero'] == null) {
                 $id = 1;
                 $codigo = $estadoCodigo . '-' . 'S' . $id;
                 $identificador = 'S' . $id;
@@ -104,7 +104,7 @@ class Sede extends Model
 
             //Ahora ejecutemos la consulta sql una vez ingresado todos los valores, es decir, los parametros que mencionamos arriba
             $sentencia->execute();
-            
+
 
             http_response_code(200);
             echo json_encode(array('msj' => 'Sede registrada exitosamente', 'status' => 200));
@@ -150,7 +150,7 @@ class Sede extends Model
         try {
             $consulta = Sede::cargar($id);
 
-            if ($consulta->estado === $estado) {
+            if ($consulta->estado == $estado) {
                 $sql = "UPDATE sede SET idPastor = :idPastor, nombre = :nombre, direccion = :direccion WHERE sede.id = :id";
 
                 $stmt = $this->db->pdo()->prepare($sql);
@@ -245,6 +245,12 @@ class Sede extends Model
         }
     }
 
+
+
+
+
+    /////////////////////// ESPACIO PARA VALIDACIONES //////////////////////////
+
     public function validacion_datos(int $idPastor, string $nombre, string $direccion,  string $estado): void
     {
         try {
@@ -285,7 +291,7 @@ class Sede extends Model
             $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($resultado !== false) {
-                if ($resultado['nombre'] === $nombre) {
+                if ($resultado['nombre'] == $nombre) {
                     // Lanzar una excepción si el dato existe en la BD
                     throw new Exception("La sede llamada " . $nombre . " ya existe", 422);
                 }
@@ -309,6 +315,30 @@ class Sede extends Model
             if ($stmt->rowCount() > 0) {
                 // Lanzar una excepción si el dato existe en la BD
                 throw new Exception("Esta sede esta asociada a un territorio que esta en uso, la cual posee datos asociados", 422);
+            }
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+            die();
+        }
+    }
+
+    public function validacion_editar_estado(int $idSede, string $estado): void
+    {
+        try {
+            $resultado = Sede::cargar($idSede);
+
+            if ($resultado->estadoCodigo !== $estado) {
+                $sql = "SELECT * FROM territorio WHERE idSede = :idSede AND estatus = 1";
+                $stmt = $this->db->pdo()->prepare($sql);
+                $stmt->bindValue(":idSede", $idSede);
+                $stmt->execute();
+                //$resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                if ($stmt->rowCount() > 0) {
+                    // Lanzar una excepción si el dato existe en la BD
+                    throw new Exception("No puedes cambiar el estado de esta Sede. Recuerde que su codigo esta asociado a todos los datos relacionados con el mismo.", 422);
+                }
             }
         } catch (Exception $e) {
             http_response_code($e->getCode());

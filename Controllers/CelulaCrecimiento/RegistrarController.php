@@ -4,12 +4,9 @@ require_once "Models/CelulaCrecimiento.php";
 
 necesitaAutenticacion();
 
-$usuarioSesion = $_SESSION['usuario'];
+requierePermisos("registrarCelulaCrecimiento");
 
-if (!$usuarioSesion->tienePermiso("registrarCelulaCrecimiento")) {
-    $_SESSION['errores'][] = "No posee permiso para registrar Celula de Crecimiento.";
-    redirigir("/AppwebMVC/Home/");
-}
+$usuarioSesion = $_SESSION['usuario'];
 
 $CelulaCrecimiento = new CelulaCrecimiento();
 

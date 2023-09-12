@@ -313,11 +313,11 @@ $(document).ready(function () {
     };
 
     const validationStatus = {
-        nombre: false,
-        idLider: false,
-        idCoLider: false,
-        idTerritorio: false,
-        asistencia: false
+        nombre: true,
+        idLider: true,
+        idCoLider: true,
+        idTerritorio: true,
+        asistencia: true
     };
 
 
@@ -428,9 +428,10 @@ $(document).ready(function () {
                         let jsonResponse = JSON.parse(jqXHR.responseText);
                 
                         if (jsonResponse.msj) {
-                            Swal.fire({
+                             Swal.fire({
                                 icon: 'error',
-                                title: jsonResponse.msj,
+                                title: 'Denegado',
+                                text: jsonResponse.msj,
                                 showConfirmButton: true,
                             })
                         } else {
@@ -468,7 +469,7 @@ $(document).ready(function () {
 
     ///////////////////////////////// REGISTRO DE REUNION DE CELULA ////////////////////////////////  
 
-    const regexObj2 = {
+    const expresiones_regulares2 = {
 
         tematica: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/, // Letras, números, espacios, puntos y comas con un máximo de 100 caracteres
         semana: /^[1-9]\d*$/, // Números enteros mayores a 0
@@ -504,7 +505,7 @@ $(document).ready(function () {
 
         // Validar tematica
         const tematica = document.getElementById("tematica").value;
-        if (!regexObj2.tematica.test(tematica)) {
+        if (!expresiones_regulares2.tematica.test(tematica)) {
             document.getElementById("msj_tematica").classList.remove("d-none");
             validationStatus2.tematica = false;
         } else {
@@ -514,7 +515,7 @@ $(document).ready(function () {
 
         // Validar semana
         const semana = document.getElementById("semana").value;
-        if (!regexObj2.semana.test(semana)) {
+        if (!expresiones_regulares2.semana.test(semana)) {
             document.getElementById("msj_semana").classList.remove("d-none");
             validationStatus2.semana = false;
         } else {
@@ -524,7 +525,7 @@ $(document).ready(function () {
 
         // Validar generosidad
         const generosidad = document.getElementById("generosidad").value;
-        if (!regexObj2.generosidad.test(generosidad)) {
+        if (!expresiones_regulares2.generosidad.test(generosidad)) {
             document.getElementById("msj_generosidad").classList.remove("d-none");
             validationStatus2.generosidad = false;
         } else {
@@ -546,7 +547,7 @@ $(document).ready(function () {
 
         // Validar actividad
         const actividad = document.getElementById("actividad").value;
-        if (!regexObj2.actividad.test(actividad)) {
+        if (!expresiones_regulares2.actividad.test(actividad)) {
             document.getElementById("msj_actividad").classList.remove("d-none");
             validationStatus2.actividad = false;
         } else {
@@ -556,7 +557,7 @@ $(document).ready(function () {
 
         // Validar observaciones
         const observaciones = document.getElementById("observaciones").value;
-        if (!regexObj2.observaciones.test(observaciones)) {
+        if (!expresiones_regulares2.observaciones.test(observaciones)) {
             document.getElementById("msj_observaciones").classList.remove("d-none");
             validationStatus2.observaciones = false;
         } else {
@@ -617,9 +618,10 @@ $(document).ready(function () {
                         let jsonResponse = JSON.parse(jqXHR.responseText);
                 
                         if (jsonResponse.msj) {
-                            Swal.fire({
+                             Swal.fire({
                                 icon: 'error',
-                                title: jsonResponse.msj,
+                                title: 'Denegado',
+                                text: jsonResponse.msj,
                                 showConfirmButton: true,
                             })
                         } else {

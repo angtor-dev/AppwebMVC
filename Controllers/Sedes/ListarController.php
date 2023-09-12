@@ -4,12 +4,9 @@ require_once "Models/Sede.php";
 
 necesitaAutenticacion();
 
-$usuarioSesion = $_SESSION['usuario'];
+requierePermisos("listarSede");
 
-if (!$usuarioSesion->tienePermiso("listarSede")) {
-    $_SESSION['errores'][] = "No posee permiso para listar Sede.";
-    redirigir("/AppwebMVC/Home/");
-}
+$usuarioSesion = $_SESSION['usuario'];
 
 $Sede = new Sede();
 
@@ -39,6 +36,7 @@ if (isset($_GET['cargar_data'])) {
 
 
 if (isset($_GET['listaPastores'])) {
+    requierePermisos("actualizarSede");
 
     $ListaPastores = $Sede->listar_Pastores();
 
@@ -48,6 +46,7 @@ if (isset($_GET['listaPastores'])) {
 }
 
 if (isset($_POST['editar'])) {
+    requierePermisos("actualizarSede");
 
     $idSede = $_POST['id'];
     $idPastor = $_POST['idPastor'];
@@ -57,17 +56,14 @@ if (isset($_POST['editar'])) {
 
     $Sede->validacion_datos($idPastor, $nombre, $direccion, $estado);
     $Sede->validacion_existencia($nombre, $idSede);
+    $Sede->validacion_editar_estado($idSede, $estado);
     $Sede->editar_Sede($idSede, $idPastor, $nombre, $direccion, $estado);
 
     die();
 }
 
 if (isset($_POST['eliminar'])) {
-
-    if (!$usuarioSesion->tienePermiso("eliminarSede")) {
-        $_SESSION['errores'][] = "No seposee permiso para eliminar Sede.";
-        redirigir("/AppwebMVC/Home/");
-    }
+    requierePermisos("eliminarSede");
 
     $id = $_POST['id'];
     $Sede->validacion_eliminar($id);

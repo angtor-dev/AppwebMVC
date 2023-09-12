@@ -226,9 +226,10 @@ $(document).ready(function () {
                         let jsonResponse = JSON.parse(jqXHR.responseText);
                 
                         if (jsonResponse.msj) {
-                            Swal.fire({
+                             Swal.fire({
                                 icon: 'error',
-                                title: jsonResponse.msj,
+                                title: 'Denegado',
+                                text: jsonResponse.msj,
                                 showConfirmButton: true,
                             })
                         } else {

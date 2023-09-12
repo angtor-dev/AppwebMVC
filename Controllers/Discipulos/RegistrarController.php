@@ -1,15 +1,14 @@
 <?php
-
 require_once "Models/Discipulo.php";
 
+necesitaAutenticacion();
+
+requierePermisos("registrarDiscipulos");
 
 $Discipulo = new Discipulo();
 
+if (isset($_POST['registrar'])) {
 
-
-
-if (isset($_POST['registrar'])) {   
-    
     $asisCrecimiento = $_POST['asisCrecimiento'];
     $asisFamiliar = $_POST['asisFamiliar'];
     $idConsolidador = $_POST['idConsolidador'];
@@ -25,46 +24,45 @@ if (isset($_POST['registrar'])) {
     $fechaConvercion = $_POST['fechaConvercion'];
 
 
+    $Discipulo->registrar_discipulo(
+        $asisCrecimiento,
+        $asisFamiliar,
+        $idConsolidador,
+        $idcelulaconsolidacion,
+        $cedula,
+        $nombre,
+        $apellido,
+        $telefono,
+        $direccion,
+        $estadoCivil,
+        $motivo,
+        $fechaNacimiento,
+        $fechaConvercion
+    );
 
-    
-   $Discipulo->registrar_discipulo($asisCrecimiento, $asisFamiliar, $idConsolidador, $idcelulaconsolidacion, $cedula, $nombre,
-   $apellido, $telefono, $direccion, $estadoCivil, $motivo, $fechaNacimiento, $fechaConvercion);
-
-
-
-   echo json_encode('Lo logramos!!');
-
-   die();
-
+    die();
 }
 
 
-if (isset($_GET['listaConsolidador'])) {  
-    
-     $ListaConsolidador = $Discipulo->listar_consolidador();
+if (isset($_GET['listaConsolidador'])) {
 
-     echo json_encode($ListaConsolidador);
-    
-     die();
- }
+    $ListaConsolidador = $Discipulo->listar_consolidador();
 
+    echo json_encode($ListaConsolidador);
 
-
-if (isset($_GET['listarcelulas'])) {  
-    
-    $listacelulas = $Discipulo->listar_celulas();
-
-
-    echo json_encode($listacelulas);
-   
     die();
 }
 
 
 
+if (isset($_GET['listarcelulas'])) {
 
-   
+    $listacelulas = $Discipulo->listar_celulas();
+
+    echo json_encode($listacelulas);
+
+    die();
+}
+
 
 renderView();
-?>
-

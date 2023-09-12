@@ -5,9 +5,9 @@ require_once "Models/CelulaCrecimiento.php";
 
 necesitaAutenticacion();
 
+requierePermisos("listarrCelulaCrecimiento");
+
 $usuarioSesion = $_SESSION['usuario'];
-
-
 
 $CelulaCrecimiento = new CelulaCrecimiento();
 
@@ -39,11 +39,7 @@ if (isset($_GET['cargar_data'])) {
 
 if (isset($_POST['editar'])) {
 
-    if (!$usuarioSesion->tienePermiso("actualizarCelulaCrecimiento")) {
-        $_SESSION['errores'][] = "No posee permiso para editar reunion.";
-        redirigir("/AppwebMVC/Home/");
-    }
-
+    requierePermisos("actualizarCelulaCrecimiento");
 
     $id = $_POST['id'];
     $idCelulaCrecimiento = $_POST['idCelulaCrecimiento'];
@@ -66,6 +62,8 @@ if (isset($_POST['editar'])) {
 
 if (isset($_POST['eliminar'])) {
 
+    requierePermisos("actualizarCelulaCrecimiento");
+
     if (!$usuarioSesion->tienePermiso("eliminarCelulaConsolidacion")) {
         $_SESSION['errores'][] = "No seposee permiso para eliminar reuinion.";
         redirigir("/AppwebMVC/Home/");
@@ -81,6 +79,8 @@ if (isset($_POST['eliminar'])) {
 
 if (isset($_GET['listarcelulas'])) {
 
+    requierePermisos("actualizarCelulaCrecimiento");
+
     $listaCelulas = $CelulaCrecimiento->listar_celulas();
 
 
@@ -88,8 +88,6 @@ if (isset($_GET['listarcelulas'])) {
 
     die();
 }
-
-
 
 
 

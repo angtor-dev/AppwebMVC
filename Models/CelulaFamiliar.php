@@ -15,6 +15,7 @@ class CelulaFamiliar extends Model
     private $expresion_nombre = '/^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]{5,50}$/';
     private $expresion_texto = '/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/';
     private $expresion_id = '/^[1-9]\d*$/';
+    private $expresion_fecha = '/^\d{4}-\d{2}-\d{2}$/';
 
 
     public  function registrar_CelulaFamiliar($nombre, $idLider, $idCoLider, $idTerritorio)
@@ -30,7 +31,7 @@ class CelulaFamiliar extends Model
             $codigo = '';
             $territorio = Territorio::cargar($idTerritorio);
 
-            if ($datos['celulaNumero'] === null) {
+            if ($datos['celulaNumero'] == null) {
                 $id = 1;
                 $identificador = 'CFA' . $id;
                 $codigo = $territorio->codigo . '-' . $identificador;
@@ -163,7 +164,7 @@ class CelulaFamiliar extends Model
         try {
             $consulta = CelulaFamiliar::cargar($id);
 
-            if ($consulta->idTerritorio === $idTerritorio) {
+            if ($consulta->idTerritorio == $idTerritorio) {
 
                 $sql = "UPDATE celulafamiliar SET  nombre = :nombre, idLider = :idLider, idCoLider = :idCoLider WHERE celulafamiliar.id = :id";
                 $stmt = $this->db->pdo()->prepare($sql);
@@ -536,7 +537,7 @@ class CelulaFamiliar extends Model
             $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($resultado !== false) {
-                if ($resultado['nombre'] === $nombre) {
+                if ($resultado['nombre'] == $nombre) {
                     // Lanzar una excepción si el dato existe en la BD
                     throw new Exception("La celula llamada " . $nombre . " ya existe", 422);
                 }
@@ -569,6 +570,35 @@ class CelulaFamiliar extends Model
                     throw new Exception("No puedes cambiar el territorio porque la celula posee datos de reuniones e informacion adicional. Esto podria destruir la integridad de los datos", 422);
                 }
             }
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+            die();
+        }
+    }
+
+
+    //Validacion de datos REUNION
+    public function validacion_datos_reunion($arrayNumeros, $arrayTexto, $fecha)
+    {
+        try {
+            foreach ($arrayNumeros as $valor) {
+                if (!is_numeric($valor)) {
+                    throw new Exception("Los datos numericos que has enviado son invalidos. Ingrese nuevamente", 422);
+                }
+            }
+
+            foreach ($arrayTexto as $valor) {
+                if (!preg_match($this->expresion_texto, $valor)) {
+                    // Lanzar una excepción si el string no es válido
+                    throw new Exception("Has ingresado datos invalidos en algun campo textual. Ingrese nuevamente", 422);
+                }
+            }
+
+            if (!preg_match($this->expresion_fecha, $fecha) || !checkdate(substr($fecha, 5, 2), substr($fecha, 8, 2), substr($fecha, 0, 4))) {
+                throw new Exception("La fecha no tiene el formato correcto o no es válida.", 422);
+            }
+
         } catch (Exception $e) {
             http_response_code($e->getCode());
             echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));

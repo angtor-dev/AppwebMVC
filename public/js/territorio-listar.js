@@ -237,10 +237,10 @@ $(document).ready(function () {
     };
 
     const validationStatus = {
-        idSede: false,
-        nombre: false,
-        idLider: false,
-        detalles: false
+        idSede: true,
+        nombre: true,
+        idLider: true,
+        detalles: true
     };
 
 

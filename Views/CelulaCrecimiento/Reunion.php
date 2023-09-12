@@ -8,7 +8,7 @@ $viewScripts = ["CelulaCrecimiento-reunion.js"];
 
 <div class="container-fluid">
 
-    <div class="row">
+    <div class="row mt-4">
         <div class="col-sm-12 col-md-12 col-lg-12">
             <div class="table-responsive">
                 <table id="celulaDatatables" class="table table-light table-hover">
@@ -31,12 +31,12 @@ $viewScripts = ["CelulaCrecimiento-reunion.js"];
 
 
 
-    <!-- MODAL PARA VER TODOS LOS DATOS DE LA Celula -->
+    <!-- MODAL PARA VER TODA LA Informacion de la reunion REUNION -->
     <div class="modal fade" id="modal_verInfo" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Informacion de la Celula de Crecimiento</h5>
+                    <h5 class="modal-title">Informacion de la reunion</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -60,7 +60,7 @@ $viewScripts = ["CelulaCrecimiento-reunion.js"];
                     </ul>
 
                     <ul class="list-group">
-                        <li class="list-group-item">
+                        <li class="list-group-item text-center">
                             <strong>Asistencia:</strong>
                             <p id="inf_asistencia"></p>
                         </li>
@@ -106,9 +106,6 @@ $viewScripts = ["CelulaCrecimiento-reunion.js"];
 
                     </ul>
 
-
-
-
                     <div class="d-flex justify-content-end">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                     </div>
@@ -132,7 +129,6 @@ $viewScripts = ["CelulaCrecimiento-reunion.js"];
                     <form id="formularioReunion">
 
                         <div class="mb-3">
-
                             <input type="hidden" id="idreunioncrecimiento">
                             <label for="idCelulaCrecimiento" class="form-label fw-bold">Celula de Crecimiento</label>
                             <select class="form-select" id="idCelulaCrecimiento" name="idCelulaCrecimiento">

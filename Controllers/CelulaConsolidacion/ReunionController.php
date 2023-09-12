@@ -1,6 +1,9 @@
 <?php
 require_once "Models/CelulaConsolidacion.php";
 
+necesitaAutenticacion();
+
+requierePermisos("listarCelulaConsolidacion");
 
 $CelulaConsolidacion = new CelulaConsolidacion();
 
@@ -34,6 +37,8 @@ if (isset($_GET['cargar_data'])) {
 
 if (isset($_POST['editar'])) {
 
+    requierePermisos("actualizarCelulaConsolidacion");
+
     $id = $_POST['id'];
     $idCelulaConsolidacion = trim($_POST['idCelulaConsolidacion']);
     $fecha = $_POST['fecha'];
@@ -55,6 +60,8 @@ if (isset($_POST['editar'])) {
 
 if (isset($_POST['eliminar'])) {
 
+    requierePermisos("eliminarCelulaConsolidacion");
+
     $id = $_POST['id'];
 
     $arrayAccion = array('id'=>$id, 'idCelulaConsolidacion'=>'', 'accion'=>'eliminar');
@@ -67,6 +74,8 @@ if (isset($_POST['eliminar'])) {
 
 
 if (isset($_GET['listarcelulas'])) {
+
+    requierePermisos("actualizarCelulaConsolidacion");
     
     $listaCelulas = $CelulaConsolidacion->listar_celulas();
 
@@ -76,6 +85,9 @@ if (isset($_GET['listarcelulas'])) {
 }
 
 if (isset($_GET['cargar_discipulos_reunion'])) {
+
+    requierePermisos("actualizarCelulaConsolidacion");
+
     $idCelulaConsolidacion = $_GET['idCelulaConsolidacion'];
     $idReunion = $_GET['idReunion'];
     $resultado = $CelulaConsolidacion->listarAsistencia_reunion($idCelulaConsolidacion, $idReunion);
@@ -85,6 +97,9 @@ if (isset($_GET['cargar_discipulos_reunion'])) {
 }
 
 if (isset($_GET['cargar_data_asistencia'])) {
+
+    requierePermisos("actualizarCelulaConsolidacion");
+
     //Primero inicializamos las variablelistar_reunioness
     $Lista = $CelulaConsolidacion->listar_asistencia($idReunion);
     //Variable json solamente para guardar el array de datos

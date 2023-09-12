@@ -8,7 +8,7 @@ $viewScripts = ["CelulaConsolidacion-listar.js"];
 
 <div class="container-fluid">
 
-    <div class="row">
+    <div class="row mt-4">
         <div class="col-sm-12 col-md-12 col-lg-12">
             <div class="table-responsive">
                 <table id="celulaDatatables" class="table table-light table-hover">

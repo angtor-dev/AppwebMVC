@@ -283,10 +283,10 @@ $(document).ready(function () {
     };
 
     const validationStatus = {
-        nombre: false,
-        idLider: false,
-        idCoLider: false,
-        idTerritorio: false
+        nombre: true,
+        idLider: true,
+        idCoLider: true,
+        idTerritorio: true
     };
 
 
@@ -383,9 +383,10 @@ $(document).ready(function () {
                         let jsonResponse = JSON.parse(jqXHR.responseText);
                 
                         if (jsonResponse.msj) {
-                            Swal.fire({
+                             Swal.fire({
                                 icon: 'error',
-                                title: jsonResponse.msj,
+                                title: 'Denegado',
+                                text: jsonResponse.msj,
                                 showConfirmButton: true,
                             })
                         } else {
@@ -421,7 +422,7 @@ $(document).ready(function () {
     //////////////////////////// REGISTRO DE REUNION //////////////////////////////      
 
 
-    const regexObj2 = {
+    const expresiones_regulares2 = {
 
         tematica: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/, // Letras, números, espacios, puntos y comas con un máximo de 100 caracteres
         semana: /^[1-9]\d*$/, // Números enteros mayores a 0
@@ -461,7 +462,7 @@ $(document).ready(function () {
             validationStatus2.fecha = false;
         } else {
             // Comprobar que la fecha esté en un formato válido
-            if (!regexObj2.actividad.test(fecha)) {
+            if (!expresiones_regulares2.actividad.test(fecha)) {
                 document.getElementById("msj_fecha").classList.remove("d-none");
                 validationStatus2.fecha = false;
             } else {
@@ -472,7 +473,7 @@ $(document).ready(function () {
 
         // Validar tematica
         const tematica = document.getElementById("tematica").value;
-        if (!regexObj2.tematica.test(tematica)) {
+        if (!expresiones_regulares2.tematica.test(tematica)) {
             document.getElementById("msj_tematica").classList.remove("d-none");
             validationStatus2.tematica = false;
         } else {
@@ -482,7 +483,7 @@ $(document).ready(function () {
 
         // Validar semana
         const semana = document.getElementById("semana").value;
-        if (!regexObj2.semana.test(semana)) {
+        if (!expresiones_regulares2.semana.test(semana)) {
             document.getElementById("msj_semana").classList.remove("d-none");
             validationStatus2.semana = false;
         } else {
@@ -492,7 +493,7 @@ $(document).ready(function () {
 
         // Validar generosidad
         const generosidad = document.getElementById("generosidad").value;
-        if (!regexObj2.generosidad.test(generosidad)) {
+        if (!expresiones_regulares2.generosidad.test(generosidad)) {
             document.getElementById("msj_generosidad").classList.remove("d-none");
             validationStatus2.generosidad = false;
         } else {
@@ -502,7 +503,7 @@ $(document).ready(function () {
 
         // Validar infantil
         const infantil = document.getElementById("infantil").value;
-        if (!regexObj2.infantil.test(infantil)) {
+        if (!expresiones_regulares2.infantil.test(infantil)) {
             document.getElementById("msj_infantil").classList.remove("d-none");
             validationStatus2.infantil = false;
         } else {
@@ -512,7 +513,7 @@ $(document).ready(function () {
 
         // Validar juvenil
         const juvenil = document.getElementById("juvenil").value;
-        if (!regexObj2.juvenil.test(juvenil)) {
+        if (!expresiones_regulares2.juvenil.test(juvenil)) {
             document.getElementById("msj_juvenil").classList.remove("d-none");
             validationStatus2.juvenil = false;
         } else {
@@ -522,7 +523,7 @@ $(document).ready(function () {
 
         // Validar adulto
         const adulto = document.getElementById("adulto").value;
-        if (!regexObj2.adulto.test(adulto)) {
+        if (!expresiones_regulares2.adulto.test(adulto)) {
             document.getElementById("msj_adulto").classList.remove("d-none");
             validationStatus2.adulto = false;
         } else {
@@ -532,7 +533,7 @@ $(document).ready(function () {
 
         // Validar actividad
         const actividad = document.getElementById("actividad").value;
-        if (!regexObj2.actividad.test(actividad)) {
+        if (!expresiones_regulares2.actividad.test(actividad)) {
             document.getElementById("msj_actividad").classList.remove("d-none");
             validationStatus2.actividad = false;
         } else {
@@ -542,7 +543,7 @@ $(document).ready(function () {
 
         // Validar observaciones
         const observaciones = document.getElementById("observaciones").value;
-        if (!regexObj2.observaciones.test(observaciones)) {
+        if (!expresiones_regulares2.observaciones.test(observaciones)) {
             document.getElementById("msj_juvenil").classList.remove("d-none");
             validationStatus2.observaciones = false;
         } else {
@@ -592,9 +593,10 @@ $(document).ready(function () {
                         let jsonResponse = JSON.parse(jqXHR.responseText);
                 
                         if (jsonResponse.msj) {
-                            Swal.fire({
+                             Swal.fire({
                                 icon: 'error',
-                                title: jsonResponse.msj,
+                                title: 'Denegado',
+                                text: jsonResponse.msj,
                                 showConfirmButton: true,
                             })
                         } else {

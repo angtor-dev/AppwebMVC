@@ -4,15 +4,11 @@ require_once "Models/CelulaConsolidacion.php";
 
 necesitaAutenticacion();
 
+requierePermisos("registrarCelulaConsolidacion");
+
 $usuarioSesion = $_SESSION['usuario'];
 
 $CelulaConsolidacion = new CelulaConsolidacion();
-
-
-if (!$usuarioSesion->tienePermiso("registrarCelulaConsolidacion")) {
-    $_SESSION['errores'][] = "No seposee permiso para registrar Sede.";
-    redirigir("/AppwebMVC/Home/");
-}
 
 if (isset($_POST['registrar'])) {
 

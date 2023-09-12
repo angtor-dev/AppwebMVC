@@ -4,12 +4,10 @@ require_once "Models/CelulaFamiliar.php";
 
 necesitaAutenticacion();
 
+requierePermisos("registrarCelulaFamiliar");
+
 $usuarioSesion = $_SESSION['usuario'];
 
-if (!$usuarioSesion->tienePermiso("registrarCelulaFamiliar")) {
-    $_SESSION['errores'][] = "No posee permiso para registrar Celula Familiar.";
-    redirigir("/AppwebMVC/Home/");
-}
 
 $CelulaFamiliar = new CelulaFamiliar();
 

@@ -3,14 +3,11 @@ require_once "Models/Territorio.php";
 
 necesitaAutenticacion();
 
+requierePermisos("registrarTerritorio");
+
 $usuarioSesion = $_SESSION['usuario'];
 
 $Territorio = new Territorio();
-
-if (!$usuarioSesion->tienePermiso("registrarTerritorio")) {
-    $_SESSION['errores'][] = "No posee permiso para eliminar Territorio.";
-    redirigir("/AppwebMVC/Home/");
-}
 
 if (isset($_POST['registrar'])) {   
 

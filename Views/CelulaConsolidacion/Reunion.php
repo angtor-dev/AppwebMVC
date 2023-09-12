@@ -8,7 +8,7 @@ $viewScripts = ["CelulaConsolidacion-reunion.js"];
 
 <div class="container-fluid">
 
-    <div class="row">
+    <div class="row mt-4">
         <div class="col-sm-12 col-md-12 col-lg-12">
             <div class="table-responsive">
                 <table id="celulaDatatables" class="table table-light table-hover">
@@ -29,12 +29,12 @@ $viewScripts = ["CelulaConsolidacion-reunion.js"];
     </div>
 
 
-    <!-- MODAL PARA VER TODOS LOS DATOS DE LA Celula -->
+    <!-- MODAL PARA VER TODA LA Informacion de la reunion REUNION -->
     <div class="modal fade" id="modal_verInfo" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Informacion de la Celula de Consolidacion</h5>
+                    <h5 class="modal-title">Informacion de la reunion</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -54,23 +54,6 @@ $viewScripts = ["CelulaConsolidacion-reunion.js"];
                         <li class="list-group-item col-4">
                             <strong>Semana:</strong>
                             <p id="inf_semana"></p>
-                        </li>
-                    </ul>
-
-                    <ul class="list-group list-group-horizontal">
-                        <li class="list-group-item col-4">
-                            <strong>Infantil:</strong>
-                            <p id="inf_infantil"></p>
-                        </li>
-
-                        <li class="list-group-item col-4">
-                            <strong>Juvenil:</strong>
-                            <p id="inf_juvenil"></p>
-                        </li>
-
-                        <li class="list-group-item col-4">
-                            <strong>Adulto:</strong>
-                            <p id="inf_adulto"></p>
                         </li>
                     </ul>
 

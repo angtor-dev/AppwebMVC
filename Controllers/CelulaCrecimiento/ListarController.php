@@ -4,13 +4,14 @@ require_once "Models/CelulaCrecimiento.php";
 
 necesitaAutenticacion();
 
+requierePermisos("listarCelulaCrecimiento");
+
 $usuarioSesion = $_SESSION['usuario'];
 
 $CelulaCrecimiento = new CelulaCrecimiento();
 
 
 if (isset($_GET['cargar_data'])) {
-
 
     //Primero inicializamos las variables
     $Lista = $CelulaCrecimiento->listar_CelulaCrecimiento();
@@ -37,6 +38,8 @@ if (isset($_GET['cargar_data'])) {
 
 if (isset($_POST['editar'])) {
 
+    requierePermisos("actualizarCelulaCrecimiento");
+
     $id = $_POST['id'];
     $nombre = trim(strtolower($_POST['nombre']));
     $idLider = trim($_POST['idLider']);
@@ -54,6 +57,8 @@ if (isset($_POST['editar'])) {
 
 
 if (isset($_POST['registroreunion'])) {
+
+    requierePermisos("actualizarCelulaCrecimiento");
 
 
     $idCelulaCrecimiento = $_POST['idCelulaCrecimiento'];
@@ -78,6 +83,8 @@ if (isset($_POST['registroreunion'])) {
 
 if (isset($_POST['eliminar'])) {
 
+    requierePermisos("eliminarCelulaCrecimiento");
+
     $id = $_POST['id'];
 
     $CelulaCrecimiento->validacion_accion($id, $accion = 'eliminar');
@@ -89,6 +96,8 @@ if (isset($_POST['eliminar'])) {
 
 if (isset($_GET['listaLideres'])) {
 
+    requierePermisos("actualizarCelulaCrecimiento");
+
     $ListaLideres = $CelulaCrecimiento->listar_lideres();
 
     echo json_encode($ListaLideres);
@@ -97,6 +106,8 @@ if (isset($_GET['listaLideres'])) {
 }
 
 if (isset($_GET['listaTerritorio'])) {
+
+    requierePermisos("actualizarCelulaCrecimiento");
 
     $Listaterritorio = $CelulaCrecimiento->listar_territorios();
 

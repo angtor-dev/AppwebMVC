@@ -32,7 +32,7 @@ class CelulaCrecimiento extends Model
             $codigo = '';
             $territorio = Territorio::cargar($idTerritorio);
 
-            if ($datos['celulaNumero'] === null) {
+            if ($datos['celulaNumero'] == null) {
                 $id = 1;
                 $identificador = 'CCR' . $id;
                 $codigo = $territorio->codigo . '-' . $identificador;
@@ -161,7 +161,7 @@ class CelulaCrecimiento extends Model
 
             $consulta = CelulaCrecimiento::cargar($id);
 
-            if ($consulta->idTerritorio === $idTerritorio) {
+            if ($consulta->idTerritorio == $idTerritorio) {
 
                 $sql = "UPDATE celulacrecimiento SET  nombre = :nombre, idLider = :idLider, idCoLider = :idCoLider WHERE celulacrecimiento.id = :id";
                 $stmt = $this->db->pdo()->prepare($sql);
@@ -529,7 +529,7 @@ class CelulaCrecimiento extends Model
             $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($resultado !== false) {
-                if ($resultado['nombre'] === $nombre) {
+                if ($resultado['nombre'] == $nombre) {
                     // Lanzar una excepción si el dato existe en la BD
                     throw new Exception("La celula llamada " . $nombre . " ya existe", 422);
                 }
@@ -547,7 +547,7 @@ class CelulaCrecimiento extends Model
     {
         try {
             
-            $sql = "SELECT * FROM reunionfamiliar WHERE idCelulaFamiliar= :idCelulaFamiliar AND estatus = 1";
+            $sql = "SELECT * FROM reunioncrecimiento WHERE idCelulaCrecimiento= :idCelulaCrecimiento AND estatus = 1";
 
             $stmt = $this->db->pdo()->prepare($sql);
             $stmt->bindValue(":idCelulaFamiliar", $id);
@@ -558,7 +558,7 @@ class CelulaCrecimiento extends Model
                 if ($accion == 'eliminar') {
                     throw new Exception("Esta celula esta asociada a reuniones y otro tipo de informacion que podria corromper la integridad de los datos.", 422);
                 }
-if($accion == 'actualizar'){
+                if($accion == 'actualizar'){
                     throw new Exception("No puedes cambiar el territorio porque la celula posee datos de reuniones e informacion adicional. Esto podria destruir la integridad de los datos", 422);
                 }
             }

@@ -4,12 +4,9 @@ require_once "Models/Territorio.php";
 
 necesitaAutenticacion();
 
-$usuarioSesion = $_SESSION['usuario'];
+requierePermisos("listarTerritorio");
 
-if (!$usuarioSesion->tienePermiso("listarTerritorio")) {
-    $_SESSION['errores'][] = "No posee permiso para listar territorio.";
-    redirigir("/AppwebMVC/Home/");
-}
+$usuarioSesion = $_SESSION['usuario'];
 
 $Territorio = new Territorio();
 
@@ -40,6 +37,8 @@ if (isset($_GET['cargar_data'])) {
 
 if (isset($_GET['listaLideres'])) {
 
+    requierePermisos("actualizarTerritorio");
+
     $ListaLideres = $Territorio->listar_lideres();
 
     echo json_encode($ListaLideres);
@@ -50,6 +49,8 @@ if (isset($_GET['listaLideres'])) {
 
 if (isset($_GET['listaSedes'])) {
 
+    requierePermisos("actualizarTerritorio");
+
     $ListaSedes = $Territorio->listar_Sedes();
 
     echo json_encode($ListaSedes);
@@ -59,10 +60,7 @@ if (isset($_GET['listaSedes'])) {
 
 if (isset($_POST['editar'])) {
 
-    if (!$usuarioSesion->tienePermiso("actualizarTerritorio")) {
-        $_SESSION['errores'][] = "No posee permiso para actualizar Territorio.";
-        redirigir("/AppwebMVC/Home/");
-    }
+    requierePermisos("actualizarTerritorio");
 
     $id = trim($_POST['id']);
     $idSede = trim($_POST['idSede']);
@@ -79,10 +77,7 @@ if (isset($_POST['editar'])) {
 
 if (isset($_POST['eliminar'])) {
 
-    if (!$usuarioSesion->tienePermiso("eliminarTerritorio")) {
-        $_SESSION['errores'][] = "No posee permiso para eliminar Territorio.";
-        redirigir("/AppwebMVC/Home/");
-    }
+    requierePermisos("eliminarTerritorio");
 
     $id = $_POST['id'];
 
