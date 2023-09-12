@@ -158,6 +158,10 @@ table tbody .acciones i:hover {
 .page-link:hover {
     color: var(--color-acento-darker);
 }
+.dt-control {
+    font-family: Arial, Helvetica, sans-serif;
+    width: 30px;
+}
 
 /* Inputs dentro de offcanvas */
 .offcanvas .form-control,

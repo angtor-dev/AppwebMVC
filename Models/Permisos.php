@@ -47,7 +47,7 @@ class Permisos extends Model
     public bool $consultarEventos = false;
     public bool $registrarEventos = false;
     public bool $actualizarEventos = false;
-    public bool $EliminarEventos = false;
+    public bool $eliminarEventos = false;
     public bool $cambiarSede = false;
 
     public Rol $rol;
@@ -98,7 +98,7 @@ class Permisos extends Model
             consultarEventos = :consultarEventos,
             registrarEventos = :registrarEventos,
             actualizarEventos = :actualizarEventos,
-            EliminarEventos = :EliminarEventos,
+            eliminarEventos = :eliminarEventos,
             cambiarSede = :cambiarSede
             WHERE id = $this->id";
 
@@ -147,7 +147,7 @@ class Permisos extends Model
             $stmt->bindValue('consultarEventos', $this->consultarEventos);
             $stmt->bindValue('registrarEventos', $this->registrarEventos);
             $stmt->bindValue('actualizarEventos', $this->actualizarEventos);
-            $stmt->bindValue('EliminarEventos', $this->EliminarEventos);
+            $stmt->bindValue('eliminarEventos', $this->eliminarEventos);
             $stmt->bindValue('cambiarSede', $this->cambiarSede);
 
             $stmt->execute();
