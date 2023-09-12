@@ -8,7 +8,6 @@ class CelulaFamiliar extends Model
     public int $idColider;
     public int $idTerritorio;
     public string $codigo;
-    public string $idpentificador;
     public string $nombre;
     public int $estatus;
 

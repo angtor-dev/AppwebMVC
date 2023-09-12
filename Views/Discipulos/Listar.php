@@ -133,7 +133,7 @@ $viewScripts = ["Discipulo-listar.js"];
 
 
     <!-- MODAL PARA EDITAR TODOS LOS DATOS DEL DISCIPULO -->
-    <div class="modal fade" id="modal_editarAsistencia" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal fade" id="modal_editarInfo" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
