@@ -5,6 +5,11 @@ necesitaAutenticacion();
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET')
 {
+    /** @var Usuario */
+    $usuario = $_SESSION['usuario'];
+    $escuela = $usuario->sede->cargarEscuela()->escuela;
+    $niveles = NivelCrecimiento::cargarRelaciones($escuela->id, "Escuela");
+
     renderView();
 }
 elseif ($_SERVER['REQUEST_METHOD'] === 'POST')
