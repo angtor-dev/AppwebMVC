@@ -61,11 +61,11 @@ if (isset($_POST['registroreunion'])) {
 
     $idCelulaConsolidacion = trim($_POST['idCelulaConsolidacion']);
     $fecha = $_POST['fecha'];
-    $tematica = $_POST['tematica'];
-    $semana = $_POST['semana'];
+    $tematica = trim(strtolower($_POST['tematica']));
+    $semana = trim($_POST['semana']);
     $generosidad = $_POST['generosidad'];
-    $actividad = $_POST['actividad'];
-    $observaciones = $_POST['observaciones'];
+    $actividad = trim(strtolower($_POST['actividad']));
+    $observaciones = trim(strtolower($_POST['observaciones']));
     $asistencias = $_POST['asistencias'];
 
     $CelulaConsolidacion->validacion_datos_reunion([$idCelulaConsolidacion, $semana, $generosidad], [$tematica, $actividad, $observaciones], $fecha);
@@ -112,7 +112,7 @@ if (isset($_GET['listaTerritorio'])) {
 if (isset($_GET['cargar_discipulos_celula'])) {
 
     requierePermisos("actualizarCelulaConsolidacion");
-    
+
     $idCelulaConsolidacion = $_GET['idCelulaConsolidacion'];
     $resultado = $CelulaConsolidacion->listarDiscipulados_celula($idCelulaConsolidacion);
 
