@@ -11,7 +11,7 @@ $viewScripts = ["territorio-listar.js"];
     <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-12">
             <div class="table-responsive">
-                <table id="territorioDatatables" class="table table-light table-hover">
+                <table id="territorioDatatables" class="table table-hover">
                     <thead>
                         <tr>
                             <th>Codigo</th>

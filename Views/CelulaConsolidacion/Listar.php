@@ -11,7 +11,7 @@ $viewScripts = ["CelulaConsolidacion-listar.js"];
     <div class="row mt-4">
         <div class="col-sm-12 col-md-12 col-lg-12">
             <div class="table-responsive">
-                <table id="celulaDatatables" class="table table-light table-hover">
+                <table id="celulaDatatables" class="table table-hover">
                     <thead>
                         <tr>
                             <th>Codigo</th>

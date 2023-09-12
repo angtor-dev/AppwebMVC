@@ -1,6 +1,8 @@
 $(document).ready(function () {
 
+    let dataTable2;
     let choices;
+    let choices2;
 
     const dataTable = $('#celulaDatatables').DataTable({
         responsive: true,
@@ -54,9 +56,8 @@ $(document).ready(function () {
 
     $('#celulaDatatables tbody').on('click', '#asistencia', function () {
         const datos = dataTable.row($(this).parents()).data();
-
-        //Listar_asistencia(datos.id);
-        //Listar_discipulos_reunion(datos.idCelulaConsolidacion, datos.id)
+        Listar_asistencia(datos.id)
+        Listar_discipulos_reunion(datos.idCelulaConsolidacion, datos.id)
     })
 
 
@@ -105,7 +106,8 @@ $(document).ready(function () {
                             if (jsonResponse.msj) {
                                 Swal.fire({
                                     icon: 'error',
-                                    title: jsonResponse.msj,
+                                    title: 'Denegado',
+                                    text: jsonResponse.msj,
                                     showConfirmButton: true,
                                 })
                             } else {
@@ -183,7 +185,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "GET",
-            url: "http://localhost/AppwebMVC/CelulaConsolidacion/Listar",
+            url: "http://localhost/AppwebMVC/CelulaConsolidacion/Reunion",
             data: {
                 cargar_discipulos_reunion: 'cargar_discipulos_reunion',
                 idCelulaConsolidacion: idCelulaConsolidacion,
@@ -191,12 +193,7 @@ $(document).ready(function () {
             },
             success: function (response) {
 
-                // Destruir la instancia existente si la hay
-                if (choices4) {
-                    choices4.destroy();
-                }
-
-                console.log(response);
+                //console.log(response);
                 let data = JSON.parse(response);
 
                 let selector = document.getElementById('discipulos');
@@ -210,12 +207,16 @@ $(document).ready(function () {
 
                 });
 
+                // Destruir la instancia existente si la hay
+                if (choices2) {
+                    choices2.destroy();
+                }
 
-                choices4 = new Choices(selector, {
+                choices2 = new Choices(selector, {
                     allowHTML: true,
                     searchEnabled: true,  // Habilita la funcionalidad de búsqueda
                     removeItemButton: true,  // Habilita la posibilidad de remover items
-                    placeholderValue: 'Selecciona una opción',  // Texto del placeholder
+                    placeholderValue: 'Selecciona los discipulos',  // Texto del placeholder
                 });
 
             },
@@ -229,7 +230,17 @@ $(document).ready(function () {
 
     function Listar_asistencia(idReunion) {
 
-        const dataTable = $('#asistenciaDatatables').DataTable({
+        if (dataTable2) {
+            dataTable2.destroy();
+        }
+
+        dataTable2 = $('#asistenciasDatatables').DataTable({
+            language: {
+                info: "",         // para ocultar "Showing x to y of z entries"
+                infoEmpty: ""     // para ocultar "Showing 0 to 0 of 0 entries"
+            },
+            paging: false,
+            searching: false,
             responsive: true,
             ajax: {
                 method: "GET",
@@ -240,12 +251,15 @@ $(document).ready(function () {
                 }
             },
             columns: [
-                { data: 'cedula' },
-                { data: 'nombre' },
-                { data: 'apellido' },
+                {
+                    "data": null,
+                    "render": function (data, type, row) {
+                        return data.cedula + ' ' + data.nombre + ' ' + data.apellido;
+                    }
+                },
                 {
                     defaultContent: `
-                <button type="button" id="eliminar" class="btn btn-danger delete-btn">Eliminar</button>
+                <button type="button" id="eliminarAsistencia" class="btn btn-danger delete-btn">Eliminar</button>
                 `}
 
             ],

@@ -218,7 +218,7 @@ class Discipulo extends Model
 
             $resultado = Discipulo::cargar($id);
 
-            if ($resultado->idCelulaConsolidacion !== $idCelulaConsolidacion) {
+            if ($resultado->idCelulaConsolidacion != $idCelulaConsolidacion) {
 
                 $this->validacion_accion($id, $accion = 'actualizar');
 
@@ -299,7 +299,7 @@ class Discipulo extends Model
             http_response_code(200);
             echo json_encode(array('msj' => 'Discipulo actualizado correctamente', 'status' => 200));
             die();
-            
+
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -426,7 +426,7 @@ class Discipulo extends Model
 
             $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if ($resultado !== false) {
+            if ($resultado != false) {
                 if ($resultado['cedula'] == $cedula) {
                     // Lanzar una excepción si el dato existe en la BD
                     throw new Exception("La cedula " . $cedula . " ya existe en el sistema", 422);

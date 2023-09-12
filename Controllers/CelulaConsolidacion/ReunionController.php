@@ -101,6 +101,7 @@ if (isset($_GET['cargar_data_asistencia'])) {
     requierePermisos("actualizarCelulaConsolidacion");
 
     //Primero inicializamos las variablelistar_reunioness
+    $idReunion = $_GET['idReunion'];
     $Lista = $CelulaConsolidacion->listar_asistencia($idReunion);
     //Variable json solamente para guardar el array de datos
     $json = array();

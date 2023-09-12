@@ -520,7 +520,8 @@ class CelulaConsolidacion extends Model
         try {
 
             $sql = "SELECT
-                discipulo.id 
+                discipulo.id,
+                discipulo.cedula, 
                 discipulo.nombre,
                 discipulo.apellido,
                 asistencia.id AS idAsistencia,
@@ -563,7 +564,9 @@ class CelulaConsolidacion extends Model
             $stmt->execute();
 
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
             return $resultado;
+            
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -667,7 +670,7 @@ class CelulaConsolidacion extends Model
                 $stmt->execute();
                 $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
 
-                if ($resultado['idCelulaConsolidacion'] !== $arrayAccion['idCelulaConsolidacion']) {
+                if ($resultado['idCelulaConsolidacion'] != $arrayAccion['idCelulaConsolidacion']) {
                     $sql2 = "SELECT * FROM asistencia WHERE asistencia.idReunion = :id";
                     $stmt2 = $this->db->pdo()->prepare($sql2);
                     $stmt2->bindValue(":id", $arrayAccion['id']);
@@ -693,7 +696,7 @@ class CelulaConsolidacion extends Model
             $stmt->execute();
             $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if ($resultado !== false) {
+            if ($resultado != false) {
                 if ($resultado['nombre'] == $nombre) {
                     // Lanzar una excepción si el dato existe en la BD
                     throw new Exception("La celula llamada " . $nombre . " ya existe", 422);

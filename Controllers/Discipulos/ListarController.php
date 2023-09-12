@@ -80,24 +80,6 @@ if (isset($_POST['editar'])) {
     $fechaNacimiento = $_POST['fechaNacimiento'];
     $fechaConvercion = $_POST['fechaConvercion'];
 
-
-    $Discipulo->editar_discipulo(
-        $id,
-        $asisCrecimiento,
-        $asisFamiliar,
-        $idConsolidador,
-        $idCelulaConsolidacion,
-        $cedula,
-        $nombre,
-        $apellido,
-        $telefono,
-        $direccion,
-        $estadoCivil,
-        $motivo,
-        $fechaNacimiento,
-        $fechaConvercion
-    );
-
     $Discipulo->validacion_datos(
         [$idConsolidador, $idCelulaConsolidacion, $cedula, $telefono],
         [$direccion, $motivo],

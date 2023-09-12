@@ -108,7 +108,8 @@ $(document).ready(function () {
                             if (jsonResponse.msj) {
                                 Swal.fire({
                                     icon: 'error',
-                                    title: jsonResponse.msj,
+                                    title: 'Denegado',
+                                    text: jsonResponse.msj,
                                     showConfirmButton: true,
                                 })
                             } else {
@@ -417,7 +418,7 @@ $(document).ready(function () {
 
                     Swal.fire({
                         icon: 'success',
-                        title: 'Registrado Correctamente',
+                        title: 'Actualizado Correctamente',
                         showConfirmButton: false,
                         timer: 2000,
                     })

@@ -114,7 +114,8 @@ $(document).ready(function () {
                             if (jsonResponse.msj) {
                                 Swal.fire({
                                     icon: 'error',
-                                    title: jsonResponse.msj,
+                                    title: 'Denegado',
+                                    text: jsonResponse.msj,
                                     showConfirmButton: true,
                                 })
                             } else {
@@ -448,8 +449,18 @@ $(document).ready(function () {
         if (Object.values(validaciones).every(val => val)) {
 
             let id = $("#idDiscipulo").text();
-            let asisFamiliar = $("#asisFamiliar").val();
-            let asisCrecimiento = $("#asisCrecimiento").val();
+            let asisFamiliar
+            let asisCrecimiento
+            if (document.getElementById('asisFamiliar').checked == true) {
+                asisFamiliar = 'si'
+            }else{
+                asisFamiliar = 'no'
+            }
+            if (document.getElementById('asisCrecimiento').checked == true) {
+                asisCrecimiento = 'si'
+            }else{
+                asisCrecimiento = 'no'
+            }
             let nombre = $("#nombre").val();
             let apellido = $("#apellido").val();
             let cedula = $("#cedula").val();
@@ -490,7 +501,7 @@ $(document).ready(function () {
 
                     Swal.fire({
                         icon: 'success',
-                        title: 'Registrado Correctamente',
+                        title: 'Actualizado Correctamente',
                         showConfirmButton: false,
                         timer: 2000,
                     })

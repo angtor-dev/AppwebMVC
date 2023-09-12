@@ -290,7 +290,7 @@ class Sede extends Model
             $stmt->execute();
             $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if ($resultado !== false) {
+            if ($resultado != false) {
                 if ($resultado['nombre'] == $nombre) {
                     // Lanzar una excepción si el dato existe en la BD
                     throw new Exception("La sede llamada " . $nombre . " ya existe", 422);
@@ -328,7 +328,7 @@ class Sede extends Model
         try {
             $resultado = Sede::cargar($idSede);
 
-            if ($resultado->estadoCodigo !== $estado) {
+            if ($resultado->estadoCodigo != $estado) {
                 $sql = "SELECT * FROM territorio WHERE idSede = :idSede AND estatus = 1";
                 $stmt = $this->db->pdo()->prepare($sql);
                 $stmt->bindValue(":idSede", $idSede);

@@ -210,7 +210,7 @@ $(document).ready(function () {
 
                     Swal.fire({
                         icon: 'success',
-                        title: 'Registrado Correctamente',
+                        title: 'Actualizado Correctamente',
                         showConfirmButton: false,
                         timer: 2000,
                     })

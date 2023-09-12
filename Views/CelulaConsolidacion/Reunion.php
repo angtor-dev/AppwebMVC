@@ -11,7 +11,7 @@ $viewScripts = ["CelulaConsolidacion-reunion.js"];
     <div class="row mt-4">
         <div class="col-sm-12 col-md-12 col-lg-12">
             <div class="table-responsive">
-                <table id="celulaDatatables" class="table table-light table-hover">
+                <table id="celulaDatatables" class="table table-hover">
                     <thead>
                         <tr>
                             <th>Codigo Celula Consolidacion</th>
@@ -180,18 +180,31 @@ $viewScripts = ["CelulaConsolidacion-reunion.js"];
                     <h5 class="modal-title">Editar asistencias de la Reunion</h5>
                 </div>
                 <div class="modal-body">
-                    <div class="table-responsive">
-                        <table id="asistenciasDatatables" class="table table-light table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Discipulos</th>
-                                    <th>Opcion</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- AQUI MOSTRARA LA INFORMACION -->
-                            </tbody>
-                        </table>
+                    <div class="row">
+                        <div class="table-responsive">
+                            <table id="asistenciasDatatables" class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Discipulos</th>
+                                        <th>Opcion</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- AQUI MOSTRARA LA INFORMACION -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col">
+                            <select multiple name="discipulosAsistencia" id="discipulos">
+
+                            </select>
+                            <div class="alert alert-danger d-none" id="msj_discipulosAsistencia" role="alert">
+                                Debes seleccionar discipulos para actualizar.
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">

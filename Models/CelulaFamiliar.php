@@ -536,7 +536,7 @@ class CelulaFamiliar extends Model
             $stmt->execute();
             $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if ($resultado !== false) {
+            if ($resultado != false) {
                 if ($resultado['nombre'] == $nombre) {
                     // Lanzar una excepción si el dato existe en la BD
                     throw new Exception("La celula llamada " . $nombre . " ya existe", 422);
