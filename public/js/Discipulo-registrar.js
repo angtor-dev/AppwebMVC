@@ -342,7 +342,7 @@ $(document).ready(function () {
                     motivo: motivo
                 },
                 success: function (response) {
-
+                    console.log(response);
                     let data = JSON.parse(response);
 
                     Swal.fire({

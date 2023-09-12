@@ -86,7 +86,7 @@ if (isset($_POST['eliminar'])) {
 
     $id = $_POST['id'];
 
-    $Territorio->validacion_accion($id, $accion = 1);
+    $Territorio->validacion_accion($id, $accion = 'eliminar');
     $Territorio->eliminar_territorio($id);
 
     die();

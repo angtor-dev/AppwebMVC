@@ -45,7 +45,7 @@ if (isset($_POST['editar'])) {
 
     $CelulaCrecimiento->validacion_datos($nombre, [$idLider, $idCoLider, $idTerritorio]);
     $CelulaCrecimiento->validacion_existencia($nombre, $id);
-    $CelulaCrecimiento->validacion_accion($id, $accion = 2);
+    $CelulaCrecimiento->validacion_accion($id, $accion = 'actualizar');
     $CelulaCrecimiento->editar_CelulaCrecimiento($id, $nombre, $idLider, $idCoLider, $idTerritorio);
 
     die();
@@ -58,19 +58,18 @@ if (isset($_POST['registroreunion'])) {
 
     $idCelulaCrecimiento = $_POST['idCelulaCrecimiento'];
     $fecha = $_POST['fecha'];
-    $tematica = $_POST['tematica'];
-    $semana = $_POST['semana'];
+    $tematica = trim(strtolower($_POST['tematica']));
+    $semana = trim($_POST['semana']);
     $generosidad = $_POST['generosidad'];
-    $infantil = $_POST['infantil'];
-    $juvenil = $_POST['juvenil'];
-    $adulto = $_POST['adulto'];
-    $actividad = $_POST['actividad'];
-    $observaciones = $_POST['observaciones'];
+    $infantil = trim($_POST['infantil']);
+    $juvenil = trim($_POST['juvenil']);
+    $adulto = trim($_POST['adulto']);
+    $actividad = trim(strtolower($_POST['actividad']));
+    $observaciones = trim(strtolower($_POST['observaciones']));
 
-
+    $CelulaCrecimiento->validacion_datos_reunion([$idCelulaCrecimiento, $semana, $generosidad, $infantil, $juvenil, $adulto], [$tematica, $actividad, $observaciones], $fecha);
     $CelulaCrecimiento->registrar_reunion($idCelulaCrecimiento, $fecha, $tematica, $semana, $generosidad, $infantil, $juvenil, $adulto, $actividad, $observaciones);
 
-    echo json_encode('Lo logramos!!');
     die();
 }
 
@@ -81,7 +80,7 @@ if (isset($_POST['eliminar'])) {
 
     $id = $_POST['id'];
 
-    $CelulaCrecimiento->validacion_accion($id, $accion = 1);
+    $CelulaCrecimiento->validacion_accion($id, $accion = 'eliminar');
     $CelulaCrecimiento->eliminar_CelulaCrecimiento($id);
 
     die();

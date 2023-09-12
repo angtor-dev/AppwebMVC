@@ -15,6 +15,7 @@ class CelulaCrecimiento extends Model
     private $expresion_nombre = '/^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]{5,50}$/';
     private $expresion_texto = '/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/';
     private $expresion_id = '/^[1-9]\d*$/';
+    private $expresion_fecha = '/^\d{4}-\d{2}-\d{2}$/';
 
 
 
@@ -542,7 +543,7 @@ class CelulaCrecimiento extends Model
 
 
     // VALIDAR ANTES DE ELIMINAR O EDITAR
-    public function validacion_accion(int $id, int $accion): void
+    public function validacion_accion(int $id, string $accion): void
     {
         try {
             
@@ -554,9 +555,10 @@ class CelulaCrecimiento extends Model
 
             if ($stmt->rowCount() > 0) {
                 // Lanzar una excepción si el dato existe en la BD
-                if ($accion == 1) {
+                if ($accion == 'eliminar') {
                     throw new Exception("Esta celula esta asociada a reuniones y otro tipo de informacion que podria corromper la integridad de los datos.", 422);
-                }else{
+                }
+if($accion == 'actualizar'){
                     throw new Exception("No puedes cambiar el territorio porque la celula posee datos de reuniones e informacion adicional. Esto podria destruir la integridad de los datos", 422);
                 }
             }
@@ -566,4 +568,34 @@ class CelulaCrecimiento extends Model
             die();
         }
     }
+
+    //Validacion de datos REUNION
+    public function validacion_datos_reunion($arrayNumeros, $arrayTexto, $fecha)
+    {
+        try {
+            foreach ($arrayNumeros as $valor) {
+                if (!is_numeric($valor)) {
+                    throw new Exception("Los datos numericos que has enviado son invalidos. Ingrese nuevamente", 422);
+                }
+            }
+
+            foreach ($arrayTexto as $valor) {
+                if (!preg_match($this->expresion_texto, $valor)) {
+                    // Lanzar una excepción si el string no es válido
+                    throw new Exception("Has ingresado datos invalidos en algun campo textual. Ingrese nuevamente", 422);
+                }
+            }
+
+            if (!preg_match($this->expresion_fecha, $fecha) || !checkdate(substr($fecha, 5, 2), substr($fecha, 8, 2), substr($fecha, 0, 4))) {
+                throw new Exception("La fecha no tiene el formato correcto o no es válida.", 422);
+            }
+
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+            die();
+        }
+    }
+
+    
 }

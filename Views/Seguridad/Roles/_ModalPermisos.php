@@ -34,15 +34,191 @@
                         <div class="tab-content" id="nav-tabContent">
                             <!-- Permisos de Iglesia -->
                             <div class="tab-pane fade show active" id="tab-iglesia" role="tabpanel" tabindex="0">
-                                Permisos de iglesia aqui
+                                <h5>Sedes</h5>
+                                <div class="d-flex flex-wrap gap-3 mb-3">
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="listarSede" value="true"
+                                            <?= $rol->permisos->listarSede ? "checked" : null ?>>
+                                        Consultar
+                                    </label>
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="registrarSede" value="true"
+                                            <?= $rol->permisos->registrarSede ? "checked" : null ?>>
+                                        Registrar
+                                    </label>
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="actualizarSede" value="true"
+                                            <?= $rol->permisos->actualizarSede ? "checked" : null ?>>
+                                        Actualizar
+                                    </label>
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="eliminarSede" value="true"
+                                            <?= $rol->permisos->eliminarSede ? "checked" : null ?>>
+                                        Eliminar
+                                    </label>
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="cambiarSede" value="true"
+                                            <?= $rol->permisos->cambiarSede ? "checked" : null ?>>
+                                        Cambiar entre sedes
+                                    </label>
+                                </div>
+                                <h5>Territorios</h5>
+                                <div class="d-flex flex-wrap gap-3 mb-3">
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="listarTerritorio" value="true"
+                                            <?= $rol->permisos->listarTerritorio ? "checked" : null ?>>
+                                        Consultar
+                                    </label>
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="registrarTerritorio" value="true"
+                                            <?= $rol->permisos->registrarTerritorio ? "checked" : null ?>>
+                                        Registrar
+                                    </label>
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="actualizarTerritorio" value="true"
+                                            <?= $rol->permisos->actualizarTerritorio ? "checked" : null ?>>
+                                        Actualizar
+                                    </label>
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="eliminarTerritorio" value="true"
+                                            <?= $rol->permisos->eliminarTerritorio ? "checked" : null ?>>
+                                        Eliminar
+                                    </label>
+                                </div>
+                                <h5>Agenda</h5>
+                                <div class="d-flex flex-wrap gap-3 mb-3">
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="consultarEventos" value="true"
+                                            <?= $rol->permisos->consultarEventos ? "checked" : null ?>>
+                                        Consultar
+                                    </label>
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="registrarEventos" value="true"
+                                            <?= $rol->permisos->registrarEventos ? "checked" : null ?>>
+                                        Registrar
+                                    </label>
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="actualizarEventos" value="true"
+                                            <?= $rol->permisos->actualizarEventos ? "checked" : null ?>>
+                                        Actualizar
+                                    </label>
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="eliminarEventos" value="true"
+                                            <?= $rol->permisos->eliminarEventos ? "checked" : null ?>>
+                                        Eliminar
+                                    </label>
+                                </div>
                             </div>
                             <!-- Permisos de Celulas -->
                             <div class="tab-pane fade" id="tab-celulas" role="tabpanel" tabindex="0">
-                                Permisos de celulas aqui
+                                <h5>Células de Consolidación</h5>
+                                <div class="d-flex flex-wrap gap-3 mb-3">
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="listarCelulaConsolidacion" value="true"
+                                            <?= $rol->permisos->listarCelulaConsolidacion ? "checked" : null ?>>
+                                        Consultar
+                                    </label>
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="registrarCelulaConsolidacion" value="true"
+                                            <?= $rol->permisos->registrarCelulaConsolidacion ? "checked" : null ?>>
+                                        Registrar
+                                    </label>
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="actualizarCelulaConsolidacion" value="true"
+                                            <?= $rol->permisos->actualizarCelulaConsolidacion ? "checked" : null ?>>
+                                        Actualizar
+                                    </label>
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="eliminarCelulaConsolidacion" value="true"
+                                            <?= $rol->permisos->eliminarCelulaConsolidacion ? "checked" : null ?>>
+                                        Eliminar
+                                    </label>
+                                </div>
+                                <h5>Células de Crecimiento</h5>
+                                <div class="d-flex flex-wrap gap-3 mb-3">
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="listarCelulaCrecimiento" value="true"
+                                            <?= $rol->permisos->listarCelulaCrecimiento ? "checked" : null ?>>
+                                        Consultar
+                                    </label>
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="registrarCelulaCrecimiento" value="true"
+                                            <?= $rol->permisos->registrarCelulaCrecimiento ? "checked" : null ?>>
+                                        Registrar
+                                    </label>
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="actualizarCelulaCrecimiento" value="true"
+                                            <?= $rol->permisos->actualizarCelulaCrecimiento ? "checked" : null ?>>
+                                        Actualizar
+                                    </label>
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="eliminarCelulaCrecimiento" value="true"
+                                            <?= $rol->permisos->eliminarCelulaCrecimiento ? "checked" : null ?>>
+                                        Eliminar
+                                    </label>
+                                </div>
+                                <h5>Células Familiares</h5>
+                                <div class="d-flex flex-wrap gap-3 mb-3">
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="listarCelulaFamiliar" value="true"
+                                            <?= $rol->permisos->listarCelulaFamiliar ? "checked" : null ?>>
+                                        Consultar
+                                    </label>
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="registrarCelulaFamiliar" value="true"
+                                            <?= $rol->permisos->registrarCelulaFamiliar ? "checked" : null ?>>
+                                        Registrar
+                                    </label>
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="actualizarCelulaFamiliar" value="true"
+                                            <?= $rol->permisos->actualizarCelulaFamiliar ? "checked" : null ?>>
+                                        Actualizar
+                                    </label>
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="eliminarCelulaFamiliar" value="true"
+                                            <?= $rol->permisos->eliminarCelulaFamiliar ? "checked" : null ?>>
+                                        Eliminar
+                                    </label>
+                                </div>
                             </div>
                             <!-- Permisos de Escuela -->
                             <div class="tab-pane fade" id="tab-escuela" role="tabpanel" tabindex="0">
-                                Permisos de escuela aqui
+                                <h5>Niveles de Crecimiento</h5>
+                                <div class="d-flex flex-wrap gap-3 mb-3">
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="consultarNivelesCrecimiento" value="true"
+                                            <?= $rol->permisos->consultarNivelesCrecimiento ? "checked" : null ?>>
+                                        Consultar
+                                    </label>
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="registrarNivelesCrecimiento" value="true"
+                                            <?= $rol->permisos->registrarNivelesCrecimiento ? "checked" : null ?>>
+                                        Registrar
+                                    </label>
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="actualizarNivelesCrecimiento" value="true"
+                                            <?= $rol->permisos->actualizarNivelesCrecimiento ? "checked" : null ?>>
+                                        Actualizar
+                                    </label>
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="eliminarNivelesCrecimiento" value="true"
+                                            <?= $rol->permisos->eliminarNivelesCrecimiento ? "checked" : null ?>>
+                                        Eliminar
+                                    </label>
+                                </div>
+                                <h5>Notas</h5>
+                                <div class="d-flex flex-wrap gap-3 mb-3">
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="consultarNotas" value="true"
+                                            <?= $rol->permisos->consultarNotas ? "checked" : null ?>>
+                                        Consultar
+                                    </label>
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="gestionarNotas" value="true"
+                                            <?= $rol->permisos->gestionarNotas ? "checked" : null ?>>
+                                        Gestionar
+                                    </label>
+                                </div>
                             </div>
                             <!-- Permisos del Sistema -->
                             <div class="tab-pane fade" id="tab-sistema" role="tabpanel" tabindex="0">
