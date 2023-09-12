@@ -1,7 +1,4 @@
 <?php $title = "Inicio" ?>
 
-<h2>Esta es la vista Home/Index</h2>
-
-<?php if (isset($result)): ?>
-<p>resultado desde el controlador <b>/Home/SumarController.php</b> <?=$result?></p>
-<?php endif ?>
+<h2 class="fw-bold">Bienvenido al Llamas de Fuego</h2>
+<h3>Sede: <?= $sede->nombre ?></h3>

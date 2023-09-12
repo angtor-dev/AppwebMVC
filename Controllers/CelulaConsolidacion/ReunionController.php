@@ -35,18 +35,20 @@ if (isset($_GET['cargar_data'])) {
 if (isset($_POST['editar'])) {
 
     $id = $_POST['id'];
-    $idCelulaConsolidacion = $_POST['idCelulaConsolidacion'];
+    $idCelulaConsolidacion = trim($_POST['idCelulaConsolidacion']);
     $fecha = $_POST['fecha'];
-    $tematica = $_POST['tematica'];
-    $semana = $_POST['semana'];
-    $generosidad = $_POST['generosidad'];
-    $actividad = $_POST['actividad'];
-    $observaciones = $_POST['observaciones'];
+    $tematica = trim(strtolower($_POST['tematica']));
+    $semana = trim($_POST['semana']);
+    $generosidad = trim($_POST['generosidad']);
+    $actividad = trim(strtolower($_POST['actividad']));
+    $observaciones = trim(strtolower($_POST['observaciones']));
 
+    $arrayAccion = array('id'=>$id, 'idCelulaConsolidacion'=>$idCelulaConsolidacion, 'accion'=>'actualizar');
 
+    $CelulaConsolidacion->validacion_datos_reunion([$idCelulaConsolidacion, $semana, $generosidad, $id], [$tematica, $actividad, $observaciones], $fecha);
+    $CelulaConsolidacion->validacion_accion_reunion($arrayAccion);
     $CelulaConsolidacion->editar_reuniones($id, $idCelulaConsolidacion, $fecha, $tematica, $semana, $generosidad, $actividad, $observaciones);
 
-    echo json_encode('Lo logramos!!');
     die();
 }
 
@@ -55,9 +57,11 @@ if (isset($_POST['eliminar'])) {
 
     $id = $_POST['id'];
 
+    $arrayAccion = array('id'=>$id, 'idCelulaConsolidacion'=>'', 'accion'=>'eliminar');
+
+    $CelulaConsolidacion->validacion_accion_reunion($arrayAccion);
     $CelulaConsolidacion->eliminar_reuniones($id);
 
-    echo json_encode('Lo logramos!!');
     die();
 }
 

@@ -15,8 +15,9 @@ class CelulaConsolidacion extends Model
     private $expresion_nombre = '/^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]{5,50}$/';
     private $expresion_texto = '/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/';
     private $expresion_id = '/^[1-9]\d*$/';
+    private $expresion_fecha = '/^\d{4}-\d{2}-\d{2}$/';
 
-    
+
 
     public  function registrar_CelulaConsolidacion($nombre, $idLider, $idCoLider, $idTerritorio)
     {
@@ -75,7 +76,6 @@ class CelulaConsolidacion extends Model
                 $stmt->bindValue(':idTerritorio', $idTerritorio);
 
                 $stmt->execute();
-
             } else {
                 $sql = "INSERT INTO celulaconsolidacion (nombre, codigo, identificador, idLider, idCoLider, idTerritorio, fechaCreacion) 
                 VALUES (:nombre, :codigo, :identificador, :idLider, :idCoLider, :idTerritorio, CURDATE())";
@@ -236,7 +236,7 @@ class CelulaConsolidacion extends Model
             $stmt->execute();
 
             http_response_code(200);
-            echo json_encode(array('msj'=>'Celula eliminada correctamente'));
+            echo json_encode(array('msj' => 'Celula eliminada correctamente'));
             die();
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
@@ -286,14 +286,12 @@ class CelulaConsolidacion extends Model
                     $stmt3->bindValue(':idDiscipulo', $values);
 
                     $stmt3->execute();
-
                 }
             }
 
             http_response_code(200);
-            echo json_encode(array('msj'=>'Reunion registrada correctamente', 'status'=>200));
+            echo json_encode(array('msj' => 'Reunion registrada correctamente', 'status' => 200));
             die();
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -372,7 +370,7 @@ class CelulaConsolidacion extends Model
                     reunionconsolidacion.observaciones,
                     celulaconsolidacion.codigo,
                     celulaconsolidacion.nombre,
-                    celulaconsolidacion.id AS idcelulaconsolidacion
+                    celulaconsolidacion.id AS idCelulaConsolidacion
                 FROM reunionconsolidacion
                 INNER JOIN celulaconsolidacion
                 ON reunionconsolidacion.idCelulaConsolidacion = celulaconsolidacion.id
@@ -453,7 +451,7 @@ class CelulaConsolidacion extends Model
             $stmt->execute();
 
             http_response_code(200);
-            echo json_encode(array('msj'=>'Reunion eliminada correctamente'));
+            echo json_encode(array('msj' => 'Reunion eliminada correctamente'));
             die();
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
@@ -516,6 +514,71 @@ class CelulaConsolidacion extends Model
 
 
 
+    public function listar_asistencia($idReunion)
+    {
+
+        try {
+
+            $sql = "SELECT
+                discipulo.id 
+                discipulo.nombre,
+                discipulo.apellido,
+                asistencia.id AS idAsistencia,
+                asistencia.idReunion,
+                asistencia.idDiscipulo
+            FROM asistencia
+            INNER JOIN discipulo ON  asistencia.idDiscipulo = discipulo.id WHERE asistencia.idReunion = :idReunion";
+
+            $stmt = $this->db->pdo()->prepare($sql);
+
+            $stmt->bindValue(':idReunion', $idReunion);
+
+            $stmt->execute();
+            $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $resultado;
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
+            $error_data = array(
+                "error_message" => $e->getMessage(),
+                "error_line" => "Linea del error: " . $e->getLine()
+            );
+            print_r($error_data);
+            echo json_encode($error_data);
+            die();
+        }
+    }
+
+    public function listarAsistencia_reunion($idCelulaConsolidacion, $idReunion)
+    {
+        try {
+
+            $sql = "SELECT * FROM discipulo
+            WHERE id NOT IN (SELECT idDiscipulo FROM asistencia WHERE idReunion = :idReunion) AND discipulo.idCelulaConsolidacion = 
+            :idCelulaConsolidacion";
+
+            $stmt = $this->db->pdo()->prepare($sql);
+
+            $stmt->bindValue(":idCelulaConsolidacion", $idCelulaConsolidacion);
+            $stmt->bindValue(":idReunion", $idReunion);
+
+            $stmt->execute();
+
+            $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $resultado;
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
+            $error_data = array(
+                "error_message" => $e->getMessage(),
+                "error_line" => "Linea del error: " . $e->getLine()
+            );
+            //print_r($error_data);
+            echo json_encode($error_data);
+            die();
+        }
+    }
+
+
+
+
+
     ///////////////////////////////// ESPACIO PARA VALIDACIONES //////////////////////////////////
 
     public function validacion_datos(string $nombre, array $idArray): void
@@ -533,7 +596,87 @@ class CelulaConsolidacion extends Model
                     throw new Exception("El ID no cumple con los requisitos. Seleccione nuevamente", 422);
                 }
             }
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+            die();
+        }
+    }
 
+
+    //Validacion de datos REUNION
+    public function validacion_datos_reunion($arrayNumeros, $arrayTexto, $fecha)
+    {
+        try {
+            foreach ($arrayNumeros as $valor) {
+                if (!is_numeric($valor)) {
+                    throw new Exception("Los datos numericos que has enviado son invalidos. Ingrese nuevamente", 422);
+                }
+            }
+
+            foreach ($arrayTexto as $valor) {
+                if (!preg_match($this->expresion_texto, $valor)) {
+                    // Lanzar una excepción si el string no es válido
+                    throw new Exception("Has ingresado datos invalidos en algun campo textual. Ingrese nuevamente", 422);
+                }
+            }
+
+            if (!preg_match($this->expresion_fecha, $fecha) || !checkdate(substr($fecha, 5, 2), substr($fecha, 8, 2), substr($fecha, 0, 4))) {
+                throw new Exception("La fecha no tiene el formato correcto o no es válida.", 422);
+            }
+
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+            die();
+        }
+    }
+
+    //Validacion de array asistencias para registrar o actualizar
+    public function validacion_array_asistencias($arrayAsistencias)
+    {
+        try {
+            if (empty($arrayAsistencias)) {
+                throw new Exception("Debes agregar discipulos para las asistencia. Ingrese nuevamente.", 422);
+            }
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+            die();
+        }
+    }
+
+    //Validacion de accion para actualizar reunion o eliminar
+    public function validacion_accion_reunion($arrayAccion)
+    {
+        try {
+            if ($arrayAccion['accion'] == 'eliminar') {
+                $sql = "SELECT * FROM asistencia WHERE asistencia.idReunion = :id";
+                $stmt = $this->db->pdo()->prepare($sql);
+                    $stmt->bindValue(":id", $arrayAccion['id']);
+                    $stmt->execute();
+                    if ($stmt->rowCount() > 0) {
+                        throw new Exception("No puedes eliminar la reunion porque ya se encuentran asistencias registradas.", 422);
+                    }
+            }
+
+            if ($arrayAccion['accion'] == 'actualizar') {
+                $sql = "SELECT * FROM reunionconsolidacion WHERE reunionconsolidacion.id = :id";
+                $stmt = $this->db->pdo()->prepare($sql);
+                $stmt->bindValue(":id", $arrayAccion['id']);
+                $stmt->execute();
+                $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                if ($resultado['idCelulaConsolidacion'] !== $arrayAccion['idCelulaConsolidacion']) {
+                    $sql2 = "SELECT * FROM asistencia WHERE asistencia.idReunion = :id";
+                    $stmt2 = $this->db->pdo()->prepare($sql2);
+                    $stmt2->bindValue(":id", $arrayAccion['id']);
+                    $stmt2->execute();
+                    if ($stmt2->rowCount() > 0) {
+                        throw new Exception("No puedes cambiar la celula de consolidacion porque ya se encuentran datos de asistencias registradas en la reunion.", 422);
+                    }
+                }
+            }
         } catch (Exception $e) {
             http_response_code($e->getCode());
             echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
@@ -568,7 +711,7 @@ class CelulaConsolidacion extends Model
     public function validacion_accion(int $id, int $accion): void
     {
         try {
-            
+
             $sql = "SELECT * FROM reunionconsolidacion WHERE idCelulaConsolidacion= :idCelulaConsolidacion AND estatus = 1";
 
             $stmt = $this->db->pdo()->prepare($sql);
@@ -579,76 +722,13 @@ class CelulaConsolidacion extends Model
                 // Lanzar una excepción si el dato existe en la BD
                 if ($accion == 1) {
                     throw new Exception("Esta celula esta asociada a reuniones y otro tipo de informacion que podria corromper la integridad de los datos.", 422);
-                }else{
+                } else {
                     throw new Exception("No puedes cambiar el territorio porque la celula posee datos de reuniones e informacion adicional. Esto podria destruir la integridad de los datos", 422);
                 }
             }
         } catch (Exception $e) {
             http_response_code($e->getCode());
             echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
-            die();
-        }
-    }
-
-
-
-public function listar_asistencia($idReunion)
-{
-
-    try {
-
-        $sql = "SELECT
-                discipulo.id 
-                discipulo.nombre,
-                discipulo.apellido,
-                asistencia.id AS idAsistencia,
-                asistencia.idReunion,
-                asistencia.idDiscipulo
-            FROM asistencia
-            INNER JOIN discipulo ON  asistencia.idDiscipulo = discipulo.id WHERE asistencia.idReunion = :idReunion";
-        
-        $stmt = $this->db->pdo()->prepare($sql);
-
-        $stmt->bindValue(':idReunion', $idReunion);
-
-        $stmt->execute();
-        $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return $resultado;
-    } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
-        $error_data = array(
-            "error_message" => $e->getMessage(),
-            "error_line" => "Linea del error: " . $e->getLine()
-        );
-        print_r($error_data);
-        echo json_encode($error_data);
-        die();
-    }
-}
-
-public function listarAsistencia_reunion($idCelulaConsolidacion, $idReunion)
-    {
-        try {
-
-            $sql = "SELECT * FROM discipulo
-            WHERE id NOT IN (SELECT idDiscipulo FROM asistencia WHERE idReunion = :idReunion) AND discipulo.idCelulaConsolidacion = 
-            :idCelulaConsolidacion";
-            
-            $stmt = $this->db->pdo()->prepare($sql);
-
-            $stmt->bindValue(":idCelulaConsolidacion", $idCelulaConsolidacion);
-            $stmt->bindValue(":idReunion", $idReunion);
-
-            $stmt->execute();
-
-            $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $resultado;
-        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
-            $error_data = array(
-                "error_message" => $e->getMessage(),
-                "error_line" => "Linea del error: " . $e->getLine()
-            );
-            //print_r($error_data);
-            echo json_encode($error_data);
             die();
         }
     }

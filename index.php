@@ -5,6 +5,7 @@ if (file_exists("user_config.php"))
 require_once "user_config.default.php";
 require_once "utilities.php";
 require_once "Models/Usuario.php";
+require_once "Models/Bitacora.php";
 session_start();
 
 $defaultController = "Index";

@@ -8,6 +8,7 @@ if (empty($_GET['id']) || !is_numeric($_GET['id'])) {
 }
 
 try {
+    /** @var Rol $rol */
     $rol = Rol::cargar($_GET['id']);
 
     if ($rol == null) {
@@ -21,5 +22,6 @@ try {
 }
 
 $_SESSION['exitos'][] = "Se ha eliminado el rol correctamente.";
+Bitacora::registrar("Elimino el rol $rol->nombre");
 redirigir("/AppwebMVC/Seguridad/Roles/");
 ?>

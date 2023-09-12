@@ -13,18 +13,17 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST')
     $rol->mapFromPost();
     
     if (!$rol->esValido()) {
-        header("Location: /AppwebMVC/Seguridad/Roles/");
-        exit();
+        redirigir("/AppwebMVC/Seguridad/Roles/");
     }
 
     try {
         $rol->registrar();
     } catch (\Throwable $th) {
-        header("Location: /AppwebMVC/Seguridad/Roles/");
-        exit();
+        redirigir("/AppwebMVC/Seguridad/Roles/");
     }
 
     $_SESSION['exitos'][] = "Rol registrado con exito.";
+    Bitacora::registrar("Rigstro el rol $rol->nombre");
     header("Location: /AppwebMVC/Seguridad/Roles/");
 }
 else {

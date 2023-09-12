@@ -7,8 +7,6 @@ necesitaAutenticacion();
 $usuarioSesion = $_SESSION['usuario'];
 
 $CelulaConsolidacion = new CelulaConsolidacion();
-///hola
-
 
 
 if (isset($_GET['cargar_data'])) {
@@ -64,7 +62,8 @@ if (isset($_POST['registroreunion'])) {
     $observaciones = $_POST['observaciones'];
     $asistencias = $_POST['asistencias'];
 
-
+    $CelulaConsolidacion->validacion_datos_reunion([$idCelulaConsolidacion, $semana, $generosidad], [$tematica, $actividad, $observaciones], $fecha);
+    $CelulaConsolidacion->validacion_array_asistencias($asistencias);
     $CelulaConsolidacion->registrar_reunion($idCelulaConsolidacion, $fecha, $tematica, $semana, $generosidad, $actividad, $observaciones, $asistencias);
     die();
 }
