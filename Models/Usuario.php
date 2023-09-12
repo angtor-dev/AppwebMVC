@@ -209,6 +209,12 @@ class Usuario extends Model
             return false;
         }
 
+        if (!preg_match(REG_CLAVE, $this->clave)) {
+            $_SESSION['errores'][] = "La clave debe poseer al menos una letra,"
+                ." un número y 6 caracteres de longitud.";
+            return false;
+        }
+
         return true;
     }
 

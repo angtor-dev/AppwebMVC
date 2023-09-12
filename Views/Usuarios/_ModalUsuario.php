@@ -28,15 +28,15 @@
         <div class="col-sm-5">
             <label for="input-cedula">Cédula</label>
             <input class="form-control" type="text" name="cedula" id="input-cedula" required maxlength="15"
-                value="<?= $usuario->cedula ?? "" ?>">
+                pattern="[0-9]{7,9}" value="<?= $usuario->cedula ?? "" ?>">
             <div class="invalid-feedback">
                 Cédula inválida
             </div>
         </div>
         <div class="col-sm-7">
             <label for="input-telefono">Teléfono</label>
-            <input class="form-control" type="text" name="telefono" id="input-telefono" required maxlength="50"
-                value="<?= $usuario->telefono ?? "" ?>">
+            <input class="form-control" type="text" name="telefono" id="input-telefono" required maxlength="20"
+                pattern="[0-9-]{7,20}" value="<?= $usuario->telefono ?? "" ?>">
             <div class="invalid-feedback">
                 Ingresa un teléfono válido
             </div>
@@ -111,7 +111,8 @@
         <?php if (empty($usuario->id)): ?>
             <div class="col-sm-6">
                 <label for="input-clave">Contraseña</label>
-                <input class="form-control" type="password" name="clave" id="input-clave" required maxlength="50">
+                <input class="form-control" type="password" name="clave" id="input-clave" required maxlength="50"
+                    pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$">
                 <div class="invalid-feedback">
                     Ingresa una contraseña válida
                 </div>
