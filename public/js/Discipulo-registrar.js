@@ -105,8 +105,8 @@ $(document).ready(function () {
     };
 
     const expresiones = {
-        nombrePersona: /^[a-zA-ZñÑ]{1,50}$/,
-        apellidoPersona: /^[a-zA-ZñÑ]{1,50}$/,
+        nombrePersona: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ]{1,50}$/,
+        apellidoPersona: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ]{1,50}$/,
         texto: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/,
         telefono: /^(0414|0424|0416|0426|0412)[0-9]{7}/,
         cedula: /^[0-9]{7,8}$/
@@ -200,7 +200,7 @@ $(document).ready(function () {
 
     $("#estadoCivil").on("change", function (event) {
         let estadoCivil = $("#estadoCivil").val();
-        let estadosPermitido = ["casado", "soltero", "viudo"];
+        let estadosPermitido = ["casado/a", "soltero/a", "viudo/a"];
         if (estadosPermitido.includes(estadoCivil)) {
             validaciones.estadoCivil = true;
             $("#estadoCivil").removeClass("is-invalid");
@@ -307,8 +307,22 @@ $(document).ready(function () {
         if (Object.values(validaciones).every(val => val)) {
 
 
-            let asisFamiliar = $("#asisFamiliar").val();
-            let asisCrecimiento = $("#asisCrecimiento").val();
+            let asisFamiliar;
+            let asisCrecimiento;
+
+            if (document.getElementById('asisCrecimiento').checked) {
+                asisCrecimiento = 'si'
+            }else{
+                asisCrecimiento = 'no'
+            }
+
+            if (document.getElementById('asisFamiliar').checked) {
+                asisFamiliar = 'si'
+            }else{
+                asisFamiliar = 'no'
+            }
+
+
             let nombre = $("#nombre").val();
             let apellido = $("#apellido").val();
             let cedula = $("#cedula").val();

@@ -66,21 +66,19 @@ if (isset($_POST['editar'])) {
     requierePermisos("actualizarDiscipulos");
 
     $id = $_POST['id'];
-    $asisCrecimiento = $_POST['asisCrecimiento'];
-    $asisFamiliar = $_POST['asisFamiliar'];
+    $asisCrecimiento = trim(strtolower($_POST['asisCrecimiento']));
+    $asisFamiliar = trim(strtolower($_POST['asisFamiliar']));
     $idConsolidador = $_POST['idConsolidador'];
-    $idcelulaconsolidacion = $_POST['idcelulaconsolidacion'];
+    $idCelulaConsolidacion = $_POST['idCelulaConsolidacion'];
     $cedula = $_POST['cedula'];
-    $nombre = $_POST['nombre'];
-    $apellido = $_POST['apellido'];
+    $nombre = trim(strtolower($_POST['nombre']));
+    $apellido = trim(strtolower($_POST['apellido']));
     $telefono = $_POST['telefono'];
-    $direccion = $_POST['direccion'];
-    $estadoCivil = $_POST['estadoCivil'];
-    $motivo = $_POST['motivo'];
+    $direccion = trim(strtolower($_POST['direccion']));
+    $estadoCivil = trim(strtolower($_POST['estadoCivil']));
+    $motivo = trim(strtolower($_POST['motivo']));
     $fechaNacimiento = $_POST['fechaNacimiento'];
     $fechaConvercion = $_POST['fechaConvercion'];
-
-
 
 
     $Discipulo->editar_discipulo(
@@ -88,7 +86,7 @@ if (isset($_POST['editar'])) {
         $asisCrecimiento,
         $asisFamiliar,
         $idConsolidador,
-        $idcelulaconsolidacion,
+        $idCelulaConsolidacion,
         $cedula,
         $nombre,
         $apellido,
@@ -100,9 +98,35 @@ if (isset($_POST['editar'])) {
         $fechaConvercion
     );
 
-    $Sede->editar_discipulo($id, $idPastor, $nombre, $direccion, $estado);
+    $Discipulo->validacion_datos(
+        [$idConsolidador, $idCelulaConsolidacion, $cedula, $telefono],
+        [$direccion, $motivo],
+        [$nombre, $apellido],
+        [$fechaNacimiento, $fechaConvercion],
+        $fechaNacimiento,
+        [$asisCrecimiento, $asisFamiliar],
+        $cedula,
+        $estadoCivil,
+        $telefono
+    );
+    $Discipulo->validacion_existencia($cedula, $id);
 
-    echo json_encode('Lo logramos!!');
+    $Discipulo->editar_discipulo(
+        $id,
+        $asisCrecimiento,
+        $asisFamiliar,
+        $idConsolidador,
+        $idCelulaConsolidacion,
+        $cedula,
+        $nombre,
+        $apellido,
+        $telefono,
+        $direccion,
+        $estadoCivil,
+        $motivo,
+        $fechaNacimiento,
+        $fechaConvercion
+    );
     die();
 }
 
@@ -112,9 +136,8 @@ if (isset($_POST['eliminar'])) {
 
     $id = $_POST['id'];
 
+    $Discipulo->validacion_accion($id, $accion='eliminar');
     $Discipulo->eliminar_discipulo($id);
-
-    echo json_encode('Lo logramos!!');
     die();
 }
 

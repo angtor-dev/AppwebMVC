@@ -9,26 +9,38 @@ $Discipulo = new Discipulo();
 
 if (isset($_POST['registrar'])) {
 
-    $asisCrecimiento = $_POST['asisCrecimiento'];
-    $asisFamiliar = $_POST['asisFamiliar'];
+    $asisCrecimiento = trim(strtolower($_POST['asisCrecimiento']));
+    $asisFamiliar = trim(strtolower($_POST['asisFamiliar']));
     $idConsolidador = $_POST['idConsolidador'];
-    $idcelulaconsolidacion = $_POST['idcelulaconsolidacion'];
+    $idCelulaConsolidacion = $_POST['idcelulaconsolidacion'];
     $cedula = $_POST['cedula'];
-    $nombre = $_POST['nombre'];
-    $apellido = $_POST['apellido'];
+    $nombre = trim(strtolower($_POST['nombre']));
+    $apellido = trim(strtolower($_POST['apellido']));
     $telefono = $_POST['telefono'];
-    $direccion = $_POST['direccion'];
-    $estadoCivil = $_POST['estadoCivil'];
-    $motivo = $_POST['motivo'];
+    $direccion = trim(strtolower($_POST['direccion']));
+    $estadoCivil = trim(strtolower($_POST['estadoCivil']));
+    $motivo = trim(strtolower($_POST['motivo']));
     $fechaNacimiento = $_POST['fechaNacimiento'];
     $fechaConvercion = $_POST['fechaConvercion'];
 
 
+    $Discipulo->validacion_datos(
+        [$idConsolidador, $idCelulaConsolidacion, $cedula, $telefono],
+        [$direccion, $motivo],
+        [$nombre, $apellido],
+        [$fechaNacimiento, $fechaConvercion],
+        $fechaNacimiento,
+        [$asisCrecimiento, $asisFamiliar],
+        $cedula,
+        $estadoCivil,
+        $telefono
+    );
+    $Discipulo->validacion_existencia($cedula, $id='');
     $Discipulo->registrar_discipulo(
         $asisCrecimiento,
         $asisFamiliar,
         $idConsolidador,
-        $idcelulaconsolidacion,
+        $idCelulaConsolidacion,
         $cedula,
         $nombre,
         $apellido,

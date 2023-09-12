@@ -17,8 +17,7 @@ $(document).ready(function () {
         { data: 'asistencias'},
         {
           defaultContent: `
-              <button type="button" id="ver_info" data-bs-toggle="modal" data-bs-target="#modal_verInfo" class="btn btn-light">Info</button>
-              <button type="button" id="ver_info" data-bs-toggle="modal" data-bs-target="#modal_editarAsistencia" class="btn btn-secondary">Info</button>
+              <button type="button" id="ver_info" data-bs-toggle="modal" data-bs-target="#modal_verInfo" class="btn btn-secondary">Info</button>
               <button type="button" id="editar" data-bs-toggle="modal" data-bs-target="#modal_editarInfo" class="btn btn-primary">Editar</button>
               <button type="button" id="eliminar" class="btn btn-danger delete-btn">Eliminar</button>
               `}
@@ -58,9 +57,9 @@ $(document).ready(function () {
         document.getElementById('telefono').value = datos.telefono;
         document.getElementById('estadoCivil').value = datos.estadoCivil;
         document.getElementById('fechaNacimiento').value = datos.fechaNacimiento;
-        document.getElementById('fechaConvercion').value = datos.fechaNacimiento;
-        document.getElementById('asisFamiliar').value = datos.asisFamiliar;
-        document.getElementById('asisCrecimiento').value = datos.asisCrecimiento;
+        document.getElementById('fechaConvercion').value = datos.fechaConvercion;
+        document.getElementById('asisFamiliar').checked = datos.asisFamiliar == 'si' ? true : false;
+        document.getElementById('asisCrecimiento').checked = datos.asisCrecimiento == 'si' ? true : false;
         document.getElementById('direccion').value = datos.direccion;
         document.getElementById('motivo').value = datos.motivo;
 
@@ -448,8 +447,6 @@ $(document).ready(function () {
 
         if (Object.values(validaciones).every(val => val)) {
 
-
-
             let id = $("#idDiscipulo").text();
             let asisFamiliar = $("#asisFamiliar").val();
             let asisCrecimiento = $("#asisCrecimiento").val();
@@ -461,7 +458,7 @@ $(document).ready(function () {
             let fechaNacimiento = $("#fechaNacimiento").val();
             let fechaConvercion = $("#fechaConvercion").val();
             let idConsolidador = $("#idConsolidador").val();
-            let idcelulaconsolidacion = $("#idcelulaconsolidacion").val();
+            let idCelulaConsolidacion = $("#idcelulaconsolidacion").val();
             let direccion = $("#direccion").val();
             let motivo = $("#motivo").val();
 
@@ -482,7 +479,7 @@ $(document).ready(function () {
                     asisCrecimiento: asisCrecimiento,
                     asisFamiliar: asisFamiliar,
                     idConsolidador: idConsolidador,
-                    idcelulaconsolidacion: idcelulaconsolidacion,
+                    idCelulaConsolidacion: idCelulaConsolidacion,
                     direccion: direccion,
                     motivo: motivo
                 },
@@ -501,9 +498,29 @@ $(document).ready(function () {
 
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    // Aquí puedes manejar errores, por ejemplo:
-                    console.error("Error al enviar:", textStatus, errorThrown);
-                    alert("Hubo un error al realizar el registro. Por favor, inténtalo de nuevo.");
+                    console.log(jqXHR.responseText);
+                    if (jqXHR.responseText) {
+                        let jsonResponse = JSON.parse(jqXHR.responseText);
+
+                        if (jsonResponse.msj) {
+                             Swal.fire({
+                                icon: 'error',
+                                title: 'Denegado',
+                                text: jsonResponse.msj,
+                                showConfirmButton: true,
+                            })
+                        } else {
+                            const respuesta = JSON.stringify(jsonResponse, null, 2)
+                            Swal.fire({
+                                background: 'red',
+                                color: '#fff',
+                                title: respuesta,
+                                showConfirmButton: true,
+                            })
+                        }
+                    } else {
+                        alert('Error desconocido: ' + textStatus);
+                    }
                 }
             });
 

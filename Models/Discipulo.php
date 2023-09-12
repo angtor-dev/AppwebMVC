@@ -4,6 +4,14 @@ require_once "Models/Model.php";
 class Discipulo extends Model
 {
 
+    private $expresion_nombreApellido = '/^[a-zA-ZñÑáéíóúÁÉÍÓÚ]{1,50}$/';
+    private $expresion_fecha = '/^\d{4}-\d{2}-\d{2}$/';
+    private $expresion_texto = '/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/';
+    private $expresion_estadoCivil = ["casado/a", "soltero/a", "viudo/a"];
+    private $expresion_cedula = '/^[0-9]{7,8}$/';
+    private $expresion_asiste = ['si', 'no'];
+    private $expresion_telefono = '/^(0414|0424|0416|0426|0412)[0-9]{7}/';
+
 
     public  function registrar_discipulo(
         $asisCrecimiento,
@@ -71,7 +79,7 @@ class Discipulo extends Model
             //Ahora ejecutemos la consulta sql una vez ingresado todos los valores, es decir, los parametros que mencionamos arriba
             $stmt->execute();
             http_response_code(200);
-            echo json_encode(array('msj' => 'Se registro el Discipulo correctamente', 'status' => 200));
+            echo json_encode(array('msj' => 'Discipulo registrado correctamente', 'status' => 200));
             die();
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
@@ -194,7 +202,7 @@ class Discipulo extends Model
         $asisCrecimiento,
         $asisFamiliar,
         $idConsolidador,
-        $idcelulaconsolidacion,
+        $idCelulaConsolidacion,
         $cedula,
         $nombre,
         $apellido,
@@ -208,49 +216,90 @@ class Discipulo extends Model
 
         try {
 
+            $resultado = Discipulo::cargar($id);
+
+            if ($resultado->idCelulaConsolidacion !== $idCelulaConsolidacion) {
+
+                $this->validacion_accion($id, $accion = 'actualizar');
+
+                $sql = "UPDATE discipulo SET
+                        asisCrecimiento = :asisCrecimiento,
+                        asisFamiliar = :asisFamiliar,
+                        idConsolidador = :idConsolidador,
+                        idCelulaConsolidacion = :idCelulaConsolidacion,
+                        cedula = :cedula,
+                        nombre = :nombre,
+                        apellido = :apellido,
+                        telefono = :telefono,
+                        direccion = :direccion,
+                        estadoCivil = :estadoCivil,
+                        motivo = :motivo,
+                        fechaNacimiento = :fechaNacimiento,
+                        fechaConvercion = :fechaConvercion
+                        WHERE
+                        id = :id";
 
 
+                $stmt = $this->db->pdo()->prepare($sql);
 
-            $sql = "UPDATE discipulo SET
-            asisCrecimiento = :asisCrecimiento,
-            asisFamiliar = :asisFamiliar,
-            idConsolidador = :idConsolidador,
-            idcelulaconsolidacion = :idcelulaconsolidacion,
-            cedula = :cedula,
-            nombre = :nombre,
-            apellido = :apellido,
-            telefono = :telefono,
-            direccion = :direccion,
-            estadoCivil = :estadoCivil,
-            motivo = :motivo,
-            fechaNacimiento = :fechaNacimiento,
-            fechaConvercion = :fechaConvercion
-            WHERE
-            id = :id";
+                $stmt->bindValue(':id', $id);
+                $stmt->bindValue(':asisCrecimiento', $asisCrecimiento);
+                $stmt->bindValue(':asisFamiliar', $asisFamiliar);
+                $stmt->bindValue(':idConsolidador', $idConsolidador);
+                $stmt->bindValue(':idCelulaConsolidacion', $idCelulaConsolidacion);
+                $stmt->bindValue(':cedula', $cedula);
+                $stmt->bindValue(':nombre', $nombre);
+                $stmt->bindValue(':apellido', $apellido);
+                $stmt->bindValue(':telefono', $telefono);
+                $stmt->bindValue(':direccion', $direccion);
+                $stmt->bindValue(':estadoCivil', $estadoCivil);
+                $stmt->bindValue(':motivo', $motivo);
+                $stmt->bindValue(':fechaNacimiento', $fechaNacimiento);
+                $stmt->bindValue(':fechaConvercion', $fechaConvercion);
+
+                $stmt->execute();
+            }else{
+                $sql = "UPDATE discipulo SET
+                        asisCrecimiento = :asisCrecimiento,
+                        asisFamiliar = :asisFamiliar,
+                        idConsolidador = :idConsolidador,
+                        cedula = :cedula,
+                        nombre = :nombre,
+                        apellido = :apellido,
+                        telefono = :telefono,
+                        direccion = :direccion,
+                        estadoCivil = :estadoCivil,
+                        motivo = :motivo,
+                        fechaNacimiento = :fechaNacimiento,
+                        fechaConvercion = :fechaConvercion
+                        WHERE
+                        id = :id";
 
 
-            $stmt = $this->db->pdo()->prepare($sql);
+                $stmt = $this->db->pdo()->prepare($sql);
 
-            $stmt->bindValue(':id', $id);
-            $stmt->bindValue(':asisCrecimiento', $asisCrecimiento);
-            $stmt->bindValue(':asisFamiliar', $asisFamiliar);
-            $stmt->bindValue(':idConsolidador', $idConsolidador);
-            $stmt->bindValue(':idcelulaconsolidacion', $idcelulaconsolidacion);
-            $stmt->bindValue(':cedula', $cedula);
-            $stmt->bindValue(':nombre', $nombre);
-            $stmt->bindValue(':apellido', $apellido);
-            $stmt->bindValue(':telefono', $telefono);
-            $stmt->bindValue(':direccion', $direccion);
-            $stmt->bindValue(':estadoCivil', $estadoCivil);
-            $stmt->bindValue(':motivo', $motivo);
-            $stmt->bindValue(':fechaNacimiento', $fechaNacimiento);
-            $stmt->bindValue(':fechaConvercion', $fechaConvercion);
+                $stmt->bindValue(':id', $id);
+                $stmt->bindValue(':asisCrecimiento', $asisCrecimiento);
+                $stmt->bindValue(':asisFamiliar', $asisFamiliar);
+                $stmt->bindValue(':idConsolidador', $idConsolidador);
+                $stmt->bindValue(':cedula', $cedula);
+                $stmt->bindValue(':nombre', $nombre);
+                $stmt->bindValue(':apellido', $apellido);
+                $stmt->bindValue(':telefono', $telefono);
+                $stmt->bindValue(':direccion', $direccion);
+                $stmt->bindValue(':estadoCivil', $estadoCivil);
+                $stmt->bindValue(':motivo', $motivo);
+                $stmt->bindValue(':fechaNacimiento', $fechaNacimiento);
+                $stmt->bindValue(':fechaConvercion', $fechaConvercion);
+
+                $stmt->execute();
+            }
 
 
-            $stmt->execute();
             http_response_code(200);
             echo json_encode(array('msj' => 'Discipulo actualizado correctamente', 'status' => 200));
             die();
+            
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -289,12 +338,132 @@ class Discipulo extends Model
     }
 
 
-    public function esMayorDeEdad($fechaNacimiento)
-    {
-        $hoy = new DateTime();
-        $fecha = DateTime::createFromFormat('Y-m-d', $fechaNacimiento);
-        $fecha->modify('+18 years');
 
-        return $hoy >= $fecha;
+
+
+
+
+    ////////////////////////////////// ESPACIO PARA VALIDACIONES //////////////////////////////////
+
+    //Validacion de datos registro o actualizacion
+    public function validacion_datos($arrayNumeros, $arrayTexto, $arrayNombreApellido, $arrayFechas, $fechaNacimiento, $arrayAsiste, $cedula, $estadoCivil, $telefono)
+    {
+        try {
+            foreach ($arrayNumeros as $valor) {
+                if (!is_numeric($valor)) {
+                    throw new Exception("Los datos numericos que has enviado son invalidos. Ingrese nuevamente", 422);
+                }
+            }
+
+            foreach ($arrayTexto as $valor) {
+                if (!preg_match($this->expresion_texto, $valor)) {
+                    // Lanzar una excepción si el string no es válido
+                    throw new Exception("Has ingresado datos invalidos en direccion o motivo. Ingrese nuevamente", 422);
+                }
+            }
+
+            foreach ($arrayNombreApellido as $valor) {
+                if (!preg_match($this->expresion_nombreApellido, $valor)) {
+                    // Lanzar una excepción si el string no es válido
+                    throw new Exception("Has ingresado datos invalidos en el nombre o el apellido. Ingrese nuevamente", 422);
+                }
+            }
+
+            foreach ($arrayFechas as $valor) {
+                if (!preg_match($this->expresion_fecha, $valor) || !checkdate(substr($valor, 5, 2), substr($valor, 8, 2), substr($valor, 0, 4))) {
+                    throw new Exception("La fecha no tiene el formato correcto o no es válida.", 422);
+                }
+            }
+
+            //Validando que sea mayor de edad
+            $hoy = new DateTime();
+            $fecha = DateTime::createFromFormat('Y-m-d', $fechaNacimiento);
+            $fecha->modify('+18 years');
+
+            if ($hoy < $fecha) {
+                throw new Exception("La fecha que nacimiento es de una persona menor de 18 años. Ingrese una fecha valida", 422);
+            }
+
+            foreach ($arrayAsiste as $valor) {
+                if (!in_array($valor, $this->expresion_asiste)) {
+                    // Lanzar una excepción si el string no es válido
+                    throw new Exception("Dato desconocido para seleccion de asistencia a Celula Familiar o Celula de Crecimiento. Seleccione nuevamente", 422);
+                }
+            }
+
+            if (!preg_match($this->expresion_cedula, $cedula)) {
+                throw new Exception("Cedula invalida. Ingrese nuevamente", 422);
+            }
+
+            if (!in_array($estadoCivil, $this->expresion_estadoCivil)) {
+                // Lanzar una excepción si el string no es válido
+                throw new Exception("Estado civil invalido. Seleccione nuevamente", 422);
+            }
+
+            if (!preg_match($this->expresion_telefono, $telefono)) {
+                // Lanzar una excepción si el string no es válido
+                throw new Exception("Numero de telefono invalido, compruebe que cumple con los requisitos. Ingrese nuevamente", 422);
+            }
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+            die();
+        }
+    }
+
+
+    //Validando existencia de la cedula enviada
+    public function validacion_existencia($cedula, $id)
+    {
+        try {
+            $sql = "SELECT * FROM discipulo WHERE cedula = :cedula" . (!empty($id) ? " AND id != $id" : "");
+
+            $stmt = $this->db->pdo()->prepare($sql);
+
+            $stmt->bindValue(":cedula", $cedula);
+
+            $stmt->execute();
+
+            $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($resultado !== false) {
+                if ($resultado['cedula'] == $cedula) {
+                    // Lanzar una excepción si el dato existe en la BD
+                    throw new Exception("La cedula " . $cedula . " ya existe en el sistema", 422);
+                }
+            }
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+            die();
+        }
+    }
+
+
+    // VALIDAR ANTES DE ELIMINAR O EDITAR
+    public function validacion_accion(int $id, string $accion): void
+    {
+        try {
+
+            $sql = "SELECT * FROM asistencia WHERE idDiscipulo= :idDiscipulo";
+
+            $stmt = $this->db->pdo()->prepare($sql);
+            $stmt->bindValue(":idDiscipulo", $id);
+            $stmt->execute();
+
+            if ($stmt->rowCount() > 0) {
+                // Lanzar una excepción si el dato existe en la BD
+                if ($accion == 'eliminar') {
+                    throw new Exception("No puedes eliminar ese discipulo, ya que este se encuentra registrado en asistencias de reuniones. Esto podria corromper la integridad de los datos.", 422);
+                }
+                if ($accion == 'actualizar') {
+                    throw new Exception("No puedes cambiar la celula de consolidacion de este discipulo, ya que este se encuentra registrado en asistencias de reuniones de la celula definida. Esto podria corromper la integridad de los datos.", 422);
+                }
+            }
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+            die();
+        }
     }
 }

@@ -51,9 +51,9 @@ $viewScripts = ["Discipulo-registrar.js"];
                 <label for="estadoCivil" class="form-label fw-bold">Estado Civil</label>
                 <select class="form-select" id="estadoCivil" aria-describedby="msj_estadoCivil">
                     <option selected value="">Seleccione...</option>
-                    <option value="soltero">Soltero/a</option>
-                    <option value="casado">Casado/a</option>
-                    <option value="viudo">Viudo/a</option>
+                    <option value="soltero/a">Soltero/a</option>
+                    <option value="casado/a">Casado/a</option>
+                    <option value="viudo/a">Viudo/a</option>
                 </select>
                 <div id="msj_estadoCivil" class="invalid-feedback">
                     Este campo es obligatorio.
