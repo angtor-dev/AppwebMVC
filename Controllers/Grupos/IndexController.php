@@ -6,7 +6,7 @@ $usuario = $_SESSION['usuario'];
 /** @var array<Grupo> */
 $grupos = array();
 
-if ($usuario->tieneRol("Administrador")) {
+if ($usuario->tieneRol("Superusuario")) {
     $grupos = Grupo::listar(1);
 } elseif (true/*$usuario->tienePermiso("Solo sus grupos")*/) {
     $grupos = Grupo::cargarRelaciones();

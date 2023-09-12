@@ -37,23 +37,23 @@ $usuario = $_SESSION['usuario'];
                 <td><?= $rol->nivel ?></td>
                 <td>
                     <div class="acciones">
-                        <?php if ($usuario->tienePermiso("actualizarRoles") && $rol->nombre != "Administrador"): ?>
+                        <?php if ($usuario->tienePermiso("actualizarRoles") && $rol->nombre != "Superusuario"): ?>
                             <a role="button" onclick="abrirModalRol(<?= $rol->id ?>)">
                                 <i class="fa-solid fa-pen" title="Modificar" data-bs-toggle="tooltip"></i>
                             </a>
                         <?php endif ?>
-                        <?php if ($usuario->tienePermiso("eliminarRoles") && $rol->nombre != "Administrador"): ?>
+                        <?php if ($usuario->tienePermiso("eliminarRoles") && $rol->nombre != "Superusuario"): ?>
                             <a role="button" data-bs-toggle="modal" data-bs-target="#confirmar-eliminacion"
                                 data-id="<?= $rol->id ?>">
                                 <i class="fa-solid fa-trash" title="Eliminar" data-bs-toggle="tooltip"></i>
                             </a>
                         <?php endif ?>
-                        <?php if ($usuario->tienePermiso("gestionarPermisos") && $rol->nombre != "Administrador"): ?>
+                        <?php if ($usuario->tienePermiso("gestionarPermisos") && $rol->nombre != "Superusuario"): ?>
                             <a role="button" onclick="abrirModalPermisos(<?= $rol->id ?>)">
                                 <i class="fa-solid fa-key" title="Gestionar permisos" data-bs-toggle="tooltip"></i>
                             </a>
                         <?php endif ?>
-                        <?php if ($rol->nombre == "Administrador"): ?>
+                        <?php if ($rol->nombre == "Superusuario"): ?>
                             <em>Rol integrado</em>
                         <?php endif ?>
                     </div>

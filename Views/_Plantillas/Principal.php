@@ -242,7 +242,7 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
                         Niveles de crecimiento
                     </a>
                 <?php endif ?>
-                <?php if ($usuario->tieneRol("Docente") || $usuario->tieneRol("Administrador")): ?>
+                <?php if ($usuario->tieneRol("Docente") || $usuario->tieneRol("Superusuario")): ?>
                     <a href="#" class="nav-link">
                         <i class="fa-solid fa-users-rectangle fa-fw me-2"></i>
                         Mis grupos
