@@ -5,11 +5,27 @@ class Sede extends Model
 {
     public int $id;
     public ?int $idPastor;
-    public ?string $codigo;
+    public string $codigo;
+    public string $identificador;
     public string $nombre;
     public string $estado;
+    public string $estadoCodigo;
     public string $direccion;
     public int $estatus;
+    public string $fechaCreacion;
+
+
+    public Usuario $Pastor;
+    
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        if (!empty($this->idPastor)) {
+            $this->Pastor = Usuario::cargar($this->idPastor);
+        }
+    }
 
     //Expresiones regulares para validaciones
     private $expresion_nombre = '/^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]{5,50}$/';

@@ -4,6 +4,7 @@ require_once "Models/Model.php";
 class Discipulo extends Model
 {
 
+<<<<<<< Updated upstream
     private $expresion_nombreApellido = '/^[a-zA-ZñÑáéíóúÁÉÍÓÚ]{1,50}$/';
     private $expresion_fecha = '/^\d{4}-\d{2}-\d{2}$/';
     private $expresion_texto = '/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/';
@@ -11,6 +12,24 @@ class Discipulo extends Model
     private $expresion_cedula = '/^[0-9]{7,8}$/';
     private $expresion_asiste = ['si', 'no'];
     private $expresion_telefono = '/^(0414|0424|0416|0426|0412)[0-9]{7}/';
+=======
+    public int $id;
+    public int $asisFamiliar;
+    public int $asisCrecimiento;
+    public ?int $idConsolidador;
+    public ?int $idCelulaConsolidacion;
+    public string $cedula;
+    public string $nombre;
+    public string $apellido;
+    public string $telefono;
+    public string $direccion;
+    public string $estadoCivil;
+    public string $fechaNacimiento;
+    public ?string $fechaConversion;
+    public ?string $motivo;
+    public int $usuarioAprobado;
+    public int $estatus;
+>>>>>>> Stashed changes
 
 
     public  function registrar_discipulo(

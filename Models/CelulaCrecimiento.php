@@ -8,6 +8,7 @@ class CelulaCrecimiento extends Model
     public int $idColider;
     public int $idTerritorio;
     public string $codigo;
+    public string $identificador;
     public string $nombre;
     public int $estatus;
 
