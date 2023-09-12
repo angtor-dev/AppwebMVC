@@ -3,13 +3,26 @@ require_once "Models/Model.php";
 
 class Discipulo extends Model
 {
-   
 
-    public  function registrar_discipulo($asisCrecimiento, $asisFamiliar, $idConsolidador, $idcelulaconsolidacion, $cedula, $nombre,
-    $apellido, $telefono, $direccion, $estadoCivil, $motivo, $fechaNacimiento, $fechaConvercion){
+
+    public  function registrar_discipulo(
+        $asisCrecimiento,
+        $asisFamiliar,
+        $idConsolidador,
+        $idcelulaconsolidacion,
+        $cedula,
+        $nombre,
+        $apellido,
+        $telefono,
+        $direccion,
+        $estadoCivil,
+        $motivo,
+        $fechaNacimiento,
+        $fechaConvercion
+    ) {
         try {
-            
-        $sql = "INSERT INTO discipulo (
+
+            $sql = "INSERT INTO discipulo (
             asisCrecimiento,
             asisFamiliar,
             idConsolidador,
@@ -38,8 +51,8 @@ class Discipulo extends Model
             :fechaNacimiento,
             :fechaConvercion
           )";
-     
-        $stmt = $this->db->pdo()->prepare($sql);
+
+            $stmt = $this->db->pdo()->prepare($sql);
 
             $stmt->bindValue(':asisCrecimiento', $asisCrecimiento);
             $stmt->bindValue(':asisFamiliar', $asisFamiliar);
@@ -54,13 +67,13 @@ class Discipulo extends Model
             $stmt->bindValue(':motivo', $motivo);
             $stmt->bindValue(':fechaNacimiento', $fechaNacimiento);
             $stmt->bindValue(':fechaConvercion', $fechaConvercion);
-    
-        //Ahora ejecutemos la consulta sql una vez ingresado todos los valores, es decir, los parametros que mencionamos arriba
-        $stmt->execute();
-        http_response_code(200);
-            echo json_encode(array('msj'=>'Se registro el Discipulo correctamente', 'status' => 200));
+
+            //Ahora ejecutemos la consulta sql una vez ingresado todos los valores, es decir, los parametros que mencionamos arriba
+            $stmt->execute();
+            http_response_code(200);
+            echo json_encode(array('msj' => 'Se registro el Discipulo correctamente', 'status' => 200));
             die();
-        } catch (Exception $e) {// Muestra el mensaje de error y detén la ejecución.
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
@@ -69,7 +82,7 @@ class Discipulo extends Model
             echo json_encode($error_data);
             die();
         }
-    }  
+    }
 
 
     public  function listar_Consolidador()
@@ -86,7 +99,6 @@ class Discipulo extends Model
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $resultado;
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -100,7 +112,8 @@ class Discipulo extends Model
 
 
 
-    public  function listar_celulas(){
+    public  function listar_celulas()
+    {
 
         try {
 
@@ -113,7 +126,6 @@ class Discipulo extends Model
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $resultado;
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -124,17 +136,18 @@ class Discipulo extends Model
             die();
         }
     }
-    
+
     public  function listar_discipulo()
     {
 
         try {
 
-            $sql = "SELECT Consolidador.id AS idConsolidador,
+            $sql = "SELECT 
+            Consolidador.id AS idConsolidador,
             Consolidador.nombre AS nombreConsolidador,
             Consolidador.apellido AS apellidoConsolidador,
             Consolidador.cedula AS cedulaConsolidador,
-            celulaconsolidacion.id AS idcelulaconsolidacion,
+            celulaconsolidacion.id AS idCelulaConsolidacion,
             celulaconsolidacion.codigo,
             discipulo.id,
             discipulo.asisCrecimiento,
@@ -150,12 +163,15 @@ class Discipulo extends Model
             discipulo.motivo,
             discipulo.fechaNacimiento,
             discipulo.fechaConvercion,
-            COUNT(asistencia.id) AS asistencias
-          FROM
+            COALESCE(COUNT(asistencia.id), 0) AS asistencias
+        FROM
             discipulo
             INNER JOIN usuario AS Consolidador ON discipulo.idConsolidador = Consolidador.id
-            INNER JOIN asistencia ON discipulo.id = asistencia.idDiscipulo
-            INNER JOIN celulaconsolidacion ON discipulo.idcelulaconsolidacion = celulaconsolidacion.id";
+            LEFT JOIN asistencia ON discipulo.id = asistencia.idDiscipulo
+            INNER JOIN celulaconsolidacion ON discipulo.idcelulaconsolidacion = celulaconsolidacion.id
+        GROUP BY
+            discipulo.id";
+
 
             $stmt = $this->db->pdo()->prepare($sql);
 
@@ -173,13 +189,26 @@ class Discipulo extends Model
         }
     }
 
-    public  function editar_discipulo($id, $asisCrecimiento, $asisFamiliar, $idConsolidador, $idcelulaconsolidacion, $cedula, $nombre,
-    $apellido, $telefono, $direccion, $estadoCivil, $motivo, $fechaNacimiento, $fechaConvercion)
-    {
+    public  function editar_discipulo(
+        $id,
+        $asisCrecimiento,
+        $asisFamiliar,
+        $idConsolidador,
+        $idcelulaconsolidacion,
+        $cedula,
+        $nombre,
+        $apellido,
+        $telefono,
+        $direccion,
+        $estadoCivil,
+        $motivo,
+        $fechaNacimiento,
+        $fechaConvercion
+    ) {
 
         try {
 
-            
+
 
 
             $sql = "UPDATE discipulo SET
@@ -220,7 +249,7 @@ class Discipulo extends Model
 
             $stmt->execute();
             http_response_code(200);
-            echo json_encode(array('msj'=>'Discipulo actualizado correctamente', 'status' => 200));
+            echo json_encode(array('msj' => 'Discipulo actualizado correctamente', 'status' => 200));
             die();
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
@@ -246,7 +275,7 @@ class Discipulo extends Model
 
             $stmt->execute();
             http_response_code(200);
-            echo json_encode(array('msj'=>'Discipulo eliminado correctamente', 'status' => 200));
+            echo json_encode(array('msj' => 'Discipulo eliminado correctamente', 'status' => 200));
             die();
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
@@ -260,13 +289,12 @@ class Discipulo extends Model
     }
 
 
-    public function esMayorDeEdad($fechaNacimiento) {
+    public function esMayorDeEdad($fechaNacimiento)
+    {
         $hoy = new DateTime();
         $fecha = DateTime::createFromFormat('Y-m-d', $fechaNacimiento);
         $fecha->modify('+18 years');
-    
+
         return $hoy >= $fecha;
     }
-
-
 }

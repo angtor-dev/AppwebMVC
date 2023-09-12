@@ -3,21 +3,6 @@ $(document).ready(function () {
     let choices;
 
     const dataTable = $('#sedeDatatables').DataTable({
-<<<<<<< Updated upstream
-        responsive: true,
-        ajax: {
-            method: "GET",
-            url: 'http://localhost/AppwebMVC/Discipulos/Listar',
-            data: { cargar_data: 'cargar_data' }
-        },
-        columns: [
-            { data: 'cedula' },
-            { data: 'nombre' },
-            { data: 'apellido' },
-            { data: 'codigo' },
-            {
-                defaultContent: `
-=======
       responsive: true,
       ajax: {
         method: "GET",
@@ -32,12 +17,10 @@ $(document).ready(function () {
         { data: 'asistencias'},
         {
           defaultContent: `
->>>>>>> Stashed changes
-              <button type="button" id="ver_info" data-bs-toggle="modal" data-bs-target="#modal_verInfo" class="btn btn-light">Info</button>
+              <button type="button" id="ver_info" data-bs-toggle="modal" data-bs-target="#modal_verInfo" class="btn btn-secondary">Info</button>
               <button type="button" id="editar" data-bs-toggle="modal" data-bs-target="#modal_editarInfo" class="btn btn-primary">Editar</button>
               <button type="button" id="eliminar" class="btn btn-danger delete-btn">Eliminar</button>
               `}
-
         ],
     })
 
@@ -75,15 +58,13 @@ $(document).ready(function () {
         document.getElementById('estadoCivil').value = datos.estadoCivil;
         document.getElementById('fechaNacimiento').value = datos.fechaNacimiento;
         document.getElementById('fechaConvercion').value = datos.fechaNacimiento;
-        document.getElementById('idConsolidador').value = datos.idConsolidador;
-        document.getElementById('idcelulaconsolidacion').value = datos.idcelulaconsolidacion;
         document.getElementById('asisFamiliar').value = datos.asisFamiliar;
         document.getElementById('asisCrecimiento').value = datos.asisCrecimiento;
         document.getElementById('direccion').value = datos.direccion;
         document.getElementById('motivo').value = datos.motivo;
 
         Listar_Consolidador(datos.idConsolidador);
-
+        Listar_celulas(datos.idCelulaConsolidacion);
     })
 
     $('#sedeDatatables tbody').on('click', '#eliminar', function () {
@@ -159,7 +140,7 @@ $(document).ready(function () {
     let choices1;
     let choices2;
 
-    function Listar_Consolidador() {
+    function Listar_Consolidador(idConsolidador) {
 
         $.ajax({
             type: "GET",
@@ -183,15 +164,19 @@ $(document).ready(function () {
                     selector.appendChild(option);
 
                 });
+
+                // Destruir la instancia existente si la hay
+                if (choices1) {
+                    choices1.destroy();
+                }
+
                 choices1 = new Choices(selector, {
                     allowHTML: true,
                     searchEnabled: true,  // Habilita la funcionalidad de búsqueda
                     removeItemButton: true,  // Habilita la posibilidad de remover items
                 });
 
-                // console.log(data);
-
-
+                choices1.setChoiceByValue(idConsolidador.toString())
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -204,7 +189,7 @@ $(document).ready(function () {
 
 
 
-    function Listar_celulas() {
+    function Listar_celulas(idCelulaConsolidacion) {
 
         $.ajax({
             type: "GET",
@@ -229,14 +214,19 @@ $(document).ready(function () {
 
                 });
 
+                // Destruir la instancia existente si la hay
+                if (choices2) {
+                    choices2.destroy();
+                }
+
                 choices2 = new Choices(selector, {
                     allowHTML: true,
                     searchEnabled: true,  // Habilita la funcionalidad de búsqueda
                     removeItemButton: true,  // Habilita la posibilidad de remover items
                 });
 
+                choices2.setChoiceByValue(idCelulaConsolidacion.toString())
 
-                //console.log(data);
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 // Aquí puedes manejar errores, por ejemplo:
@@ -245,7 +235,11 @@ $(document).ready(function () {
         })
     }
 
-    Listar_celulas();
+
+
+
+
+
 
 
     let validaciones = {
