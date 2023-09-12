@@ -1,6 +1,7 @@
 <?php
 require_once "Models/Model.php";
-require_once "Models/NivelCrecimiento.php";
+require_once "Models/Grupo.php";
+require_once "Models/Enums/EstadosGrupo.php";
 
 class Grupo extends Model
 {
@@ -8,6 +9,7 @@ class Grupo extends Model
     public int $idNivelCrecimiento;
     public int $idProfesor;
     public string $nombre;
+    public int $estado;
     public int $estatus;
     
     public NivelCrecimiento $nivelCrecimiento;
@@ -57,6 +59,32 @@ class Grupo extends Model
             $_SESSION['errores'][] = "Ha ocurrido un error al actualizar el grupo.";
             throw $th;
         }
+    }
+
+    public function esValido() : bool
+    {
+        $errores = 0;
+        if (empty($this->idNivelCrecimiento)) {
+            $_SESSION['errores'][] = "Debe seleccionar un nivel de crecimiento.";
+            $errores++;
+        }
+        if (empty($this->idProfesor)) {
+            $_SESSION['errores'][] = "Se debe especificar un profesor.";
+            $errores++;
+        }
+        if (preg_match(REG_ALFANUMERICO, $this->nombre)) {
+            $_SESSION['errores'][] = "El nombre solo puede contener caracteres alfanúmericos.";
+            $errores++;
+        }
+        if (empty($this->estado) || is_null(EstadosGrupo::tryFrom($this->estado))) {
+            $_SESSION['errores'][] = "El estado ingresado es invalido.";
+            $errores++;
+        }
+
+        if ($errores > 0) {
+            return false;
+        }
+        return true;
     }
 }
 ?>

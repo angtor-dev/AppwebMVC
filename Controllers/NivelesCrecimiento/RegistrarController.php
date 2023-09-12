@@ -23,7 +23,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST')
     try {
         $nivelCrecimiento->registrar();
     } catch (\Throwable $th) {
-        redirigir("Location: /AppwebMVC/NivelesCrecimiento/Registrar");
+        redirigir("/AppwebMVC/NivelesCrecimiento/Registrar");
     }
 
     $_SESSION['exitos'][] = "Nivel de Crecimiento registrado con exito.";
