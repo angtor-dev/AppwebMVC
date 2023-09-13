@@ -318,7 +318,6 @@ $(document).ready(function () {
         idLider: true,
         idCoLider: true,
         idTerritorio: true,
-        asistencia: true
     };
 
 
