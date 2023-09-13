@@ -202,10 +202,10 @@ $(document).ready(function () {
                 data: {
 
                     registrar: 'registrar',
-                    nombre: nombre,
-                    idLider: idLider,
-                    idCoLider: idCoLider,
-                    idTerritorio: idTerritorio
+                    nombre: nombre.value,
+                    idLider: idLider.value,
+                    idCoLider: idCoLider.value,
+                    idTerritorio: idTerritorio.value
                 },
                 success: function (response) {
                     console.log(response);
