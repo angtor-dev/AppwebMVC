@@ -1,7 +1,7 @@
 <?php
-global $viewStyles;
-global $viewScripts;
-$viewScripts = ["Agenda-Index.js"]; ?>
+    $_layout = "Agenda";
+?>
 
+<div id="calendar"></div>
 
-<h2>Agenda</h2>
+<?php agregarScript("agenda.js") ?>

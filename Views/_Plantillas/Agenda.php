@@ -13,12 +13,13 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="<?= LOCAL_DIR ?>public/img/logo-32.png" type="image/x-icon">
-    <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/lib/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/lib/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/lib/datatables/datatables.min.css">
-    <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/lib/datatables/choicesjs/choices.css">
-    <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/lib/fullcalendar/fullcalendar.min.css">
+	<link rel="stylesheet" type="text/css" href="<?= LOCAL_DIR ?>public/lib/fullcalendar/fullcalendar.min.css">
+	<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/lib/fontawesome/css/all.min.css">
+	<link rel="stylesheet" type="text/css" href="<?= LOCAL_DIR ?>public/lib/fullcalendar/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="<?= LOCAL_DIR ?>public/lib/fullcalendar/home.css">
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/css/utilities.css">
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/css/site.css">
     <?php if (!empty($viewStyles)) : ?>
@@ -404,11 +405,14 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
         <?= $GLOBALS['view'] ?>
     </main>
 
-    <script src="<?= LOCAL_DIR ?>public/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="<?= LOCAL_DIR ?>public/lib/datatables/datatables.min.js"></script>
-    <script src="<?= LOCAL_DIR ?>public/lib/datatables/sweetalert2.js"></script>
-    <script src="<?= LOCAL_DIR ?>public/lib/datatables/choicesjs/choices.js"></script>
-    <script src="<?= LOCAL_DIR ?>public/lib/fullcalendar/fullcalendar.min.js"></script>
+    
+    <script src ="<?= LOCAL_DIR ?>public/lib/fullcalendar/jquery-3.0.0.min.js"> </script>
+    <script src="<?= LOCAL_DIR ?>public/lib/fullcalendar/popper.min.js"></script>
+    <script src="<?= LOCAL_DIR ?>public/lib/fullcalendar/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="<?= LOCAL_DIR ?>public/lib/fullcalendar/moment.min.js"></script>	
+    <script type="text/javascript" src="<?= LOCAL_DIR ?>public/lib/fullcalendar/fullcalendar.min.js"></script>
+    <script src='<?= LOCAL_DIR ?>public/lib/fullcalendar/es.js'></script>
     <script src="<?= LOCAL_DIR ?>public/js/utilities.js"></script>
     <script src="<?= LOCAL_DIR ?>public/js/site.js"></script>
     <?php if (!empty($viewScripts)) : ?>
