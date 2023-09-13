@@ -35,7 +35,7 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
 
 <body>
     <!-- Header -->
-    <header class="p-3 bg-dark text-white" id="header">
+    <header class="p-3 bg-dark text-white sticky-top" id="header">
         <div class="container-fluid">
             <div class="d-flex flex-wrap align-items-center justify-content-between">
                 <a class="d-flex gap-2 align-items-center navbar-brand" href="<?= LOCAL_DIR ?>">
