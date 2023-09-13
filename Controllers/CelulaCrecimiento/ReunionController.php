@@ -5,7 +5,7 @@ require_once "Models/CelulaCrecimiento.php";
 
 necesitaAutenticacion();
 
-requierePermisos("listarrCelulaCrecimiento");
+requierePermisos("listarCelulaCrecimiento");
 
 $usuarioSesion = $_SESSION['usuario'];
 

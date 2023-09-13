@@ -134,6 +134,15 @@ if (isset($_POST['eliminarAsistencia'])) {
     die();
 }
 
+if (isset($_POST['actualizarAsistencia'])) {
+    
+    $idReunion = $_POST['idReunion'];
+    $discipulos = $_POST['discipulos'];
+
+    $CelulaConsolidacion->actualizar_asistenciaReunion($idReunion, $discipulos);
+    die();
+}
+
 
 
 

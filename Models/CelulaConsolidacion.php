@@ -98,7 +98,6 @@ class CelulaConsolidacion extends Model
             http_response_code(200);
             echo json_encode(array('msj' => 'Celula registrada exitosamente', 'status' => 200));
             die();
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -143,7 +142,6 @@ class CelulaConsolidacion extends Model
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $resultado;
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -219,7 +217,6 @@ class CelulaConsolidacion extends Model
             http_response_code(200);
             echo json_encode(array('msj' => 'Celula actualizada exitosamente', 'status' => 200));
             die();
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -250,7 +247,6 @@ class CelulaConsolidacion extends Model
             http_response_code(200);
             echo json_encode(array('msj' => 'Celula eliminada correctamente'));
             die();
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -308,7 +304,6 @@ class CelulaConsolidacion extends Model
             http_response_code(200);
             echo json_encode(array('msj' => 'Reunion registrada correctamente', 'status' => 200));
             die();
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -339,7 +334,6 @@ class CelulaConsolidacion extends Model
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             return $resultado;
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -365,7 +359,6 @@ class CelulaConsolidacion extends Model
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             return $resultado;
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -409,7 +402,6 @@ class CelulaConsolidacion extends Model
             Bitacora::registrar("Consulta de reuniones de celula de consolidacion");
 
             return $resultado;
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -513,7 +505,6 @@ class CelulaConsolidacion extends Model
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             return $resultado;
-            
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -643,6 +634,43 @@ class CelulaConsolidacion extends Model
             die();
         }
     }
+
+
+    public function actualizar_asistenciaReunion($idReunion, $discipulos)
+    {
+        try {
+
+            foreach ($discipulos as $valor) {
+                $sql = "INSERT INTO `asistencia` (`idReunion`, `idDiscipulo`) VALUES (:idReunion, :discipulo)";
+
+                $stmt = $this->db->pdo()->prepare($sql);
+
+                $stmt->bindValue(":idReunion", $idReunion);
+                $stmt->bindValue(":discipulo", $valor);
+
+                $stmt->execute();
+            }
+
+            Bitacora::registrar("Eliminacion de asistencia en reunion de celula de consolidacion");
+
+            http_response_code(200);
+            echo json_encode(array('msj' => 'Asistencias actualizadas correctamente'));
+            die();
+            
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
+            $error_data = array(
+                "error_message" => $e->getMessage(),
+                "error_line" => "Linea del error: " . $e->getLine()
+            );
+            http_response_code(422);
+            echo json_encode($error_data);
+            die();
+        }
+    }
+
+
+
+
 
 
 
