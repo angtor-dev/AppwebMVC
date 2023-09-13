@@ -60,15 +60,15 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
                             <ul class="dropdown-menu">
                                 <li>
                                     <a class="dropdown-item" href="#">
-                                        <i class="fa-regular fa-circle-user fa-fw me-2"></i>
-                                        Cuenta
+                                        <i class="fa-solid fa-key fa-fw me-2"></i>
+                                        Cambiar clave
                                     </a>
                                 </li>
                                 <li>
                                     <?php if ($usuario->tienePermiso("cambiarSede")): ?>
                                         <a class="dropdown-item" href="#">
                                             <i class="fa-solid fa-arrows-rotate fa-fw me-2"></i>
-                                            Cambiar sede
+                                            Elegir sede
                                         </a>
                                     <?php endif ?>
                                 </li>
@@ -260,7 +260,7 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
                     <div class="acordeon <?= strtolower($uriParts[0]) == "grupos" ? "show" : "" ?>">
                         <a href="#" class="nav-link acordeon-toggle <?= strtolower($uriParts[0]) == "grupos" ? "active" : "" ?>">
                             <i class="fa-solid fa-users-rectangle fa-fw me-2"></i>
-                            Mis grupos
+                            Grupos
                         </a>
                         <div class="acordeon-body">
                             <div class="acordeon-items">
