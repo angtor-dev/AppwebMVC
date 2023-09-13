@@ -9,6 +9,7 @@ class CelulaCrecimiento extends Model
     public int $idTerritorio;
     public string $codigo;
     public string $nombre;
+    public string $identificador;
     public int $estatus;
 
     //Expresiones regulares
@@ -30,6 +31,7 @@ class CelulaCrecimiento extends Model
 
             $id = '';
             $codigo = '';
+            /** @var Territorio $territorio */
             $territorio = Territorio::cargar($idTerritorio);
 
             if ($datos['celulaNumero'] == null) {
@@ -37,6 +39,7 @@ class CelulaCrecimiento extends Model
                 $identificador = 'CCR' . $id;
                 $codigo = $territorio->codigo . '-' . $identificador;
             } else {
+                /** @var CelulaCrecimiento[] */
                 $celulas = CelulaCrecimiento::cargarRelaciones($idTerritorio, "Territorio");
 
                 if (count($celulas) > 0) {
@@ -164,7 +167,7 @@ class CelulaCrecimiento extends Model
     public  function editar_CelulaCrecimiento($id, $nombre, $idLider, $idCoLider, $idTerritorio)
     {
         try {
-
+            /** @var CelulaCrecimiento */
             $consulta = CelulaCrecimiento::cargar($id);
 
             if ($consulta->idTerritorio == $idTerritorio) {
@@ -179,8 +182,9 @@ class CelulaCrecimiento extends Model
 
                 $stmt->execute();
             } else {
-
+                /** @var Territorio */
                 $territorio = Territorio::cargar($idTerritorio);
+                /** @var CelulaCrecimiento[] */
                 $celulas = CelulaCrecimiento::cargarRelaciones($idTerritorio, "Territorio");
 
                 $identificador = '';
