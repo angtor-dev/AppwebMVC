@@ -247,5 +247,23 @@ class Usuario extends Model
         }
         return false;
     }
+
+    /** Retorna un arreglo con los usuarios que tengan alguno de los roles indicados */
+    public static function listarPorRoles(string ...$roles) : array
+    {
+        /** @var Usuario[] */
+        $usuarios = Usuario::listar(1);
+
+        foreach ($usuarios as $key => $usuario) {
+            foreach ($usuario->roles as $rol) {
+                if (!in_array($rol->nombre, $roles)) {
+                    unset($usuarios[$key]);
+                    break;
+                }
+            }
+        }
+
+        return $usuarios;
+    }
 }
 ?>
