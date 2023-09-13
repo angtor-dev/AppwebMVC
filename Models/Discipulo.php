@@ -4,6 +4,8 @@ require_once "Models/Model.php";
 class Discipulo extends Model
 {
 
+    public int $idCelulaConsolidacion;
+
     private $expresion_nombreApellido = '/^[a-zA-ZñÑáéíóúÁÉÍÓÚ]{1,50}$/';
     private $expresion_fecha = '/^\d{4}-\d{2}-\d{2}$/';
     private $expresion_texto = '/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/';
@@ -219,6 +221,7 @@ class Discipulo extends Model
 
         try {
 
+            /** @var Discipulo **/
             $resultado = Discipulo::cargar($id);
 
             if ($resultado->idCelulaConsolidacion != $idCelulaConsolidacion) {
