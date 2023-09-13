@@ -1,6 +1,6 @@
 <?php
 require_once "Models/Model.php";
-require_once "Models/Grupo.php";
+require_once "Models/NivelCrecimiento.php";
 require_once "Models/Enums/EstadosGrupo.php";
 
 class Grupo extends Model
@@ -72,11 +72,11 @@ class Grupo extends Model
             $_SESSION['errores'][] = "Se debe especificar un profesor.";
             $errores++;
         }
-        if (preg_match(REG_ALFANUMERICO, $this->nombre)) {
+        if (!preg_match(REG_ALFANUMERICO, $this->nombre)) {
             $_SESSION['errores'][] = "El nombre solo puede contener caracteres alfanúmericos.";
             $errores++;
         }
-        if (empty($this->estado) || is_null(EstadosGrupo::tryFrom($this->estado))) {
+        if (!isset($this->estado) || is_null(EstadosGrupo::tryFrom($this->estado))) {
             $_SESSION['errores'][] = "El estado ingresado es invalido.";
             $errores++;
         }

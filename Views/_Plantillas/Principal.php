@@ -35,7 +35,7 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
 
 <body>
     <!-- Header -->
-    <header class="p-3 bg-dark text-white" id="header">
+    <header class="p-3 bg-dark text-white sticky-top" id="header">
         <div class="container-fluid">
             <div class="d-flex flex-wrap align-items-center justify-content-between">
                 <a class="d-flex gap-2 align-items-center navbar-brand" href="<?= LOCAL_DIR ?>">
@@ -60,15 +60,15 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
                             <ul class="dropdown-menu">
                                 <li>
                                     <a class="dropdown-item" href="#">
-                                        <i class="fa-regular fa-circle-user fa-fw me-2"></i>
-                                        Cuenta
+                                        <i class="fa-solid fa-key fa-fw me-2"></i>
+                                        Cambiar clave
                                     </a>
                                 </li>
                                 <li>
                                     <?php if ($usuario->tienePermiso("cambiarSede")): ?>
                                         <a class="dropdown-item" href="#">
                                             <i class="fa-solid fa-arrows-rotate fa-fw me-2"></i>
-                                            Cambiar sede
+                                            Elegir sede
                                         </a>
                                     <?php endif ?>
                                 </li>
@@ -111,11 +111,11 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
                 <div class="acordeon-body">
                     <div class="acordeon-items">
                         <a href="<?= LOCAL_DIR ?>Sedes/Registrar" class="nav-link">
-                            <i class="fa-solid fa-pen-to-square"></i>
+                            <i class="fa-solid fa-pen-to-square fa-fw"></i>
                             Registrar
                         </a>
                         <a href="<?= LOCAL_DIR ?>Sedes/Listar" class="nav-link">
-                            <i class="fa-solid fa-rectangle-list"></i>
+                            <i class="fa-solid fa-rectangle-list fa-fw"></i>
                             Listar
                         </a>
                     </div>
@@ -129,11 +129,11 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
                 <div class="acordeon-body">
                     <div class="acordeon-items">
                         <a href="<?= LOCAL_DIR ?>Territorios/Registrar" class="nav-link">
-                            <i class="fa-solid fa-pen-to-square"></i>
+                            <i class="fa-solid fa-pen-to-square fa-fw"></i>
                             Registrar
                         </a>
                         <a href="<?= LOCAL_DIR ?>Territorios/Listar" class="nav-link">
-                            <i class="fa-solid fa-rectangle-list"></i>
+                            <i class="fa-solid fa-rectangle-list fa-fw"></i>
                             Listar
                         </a>
                     </div>
@@ -148,22 +148,21 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
             <div class="acordeon">
                 <div class="nav-link py-0 mt-3 text-uppercase">Celulas</div>
                 <a href="#" class="nav-link acordeon-toggle">
-
                     <i class="fa-solid fa-people-roof fa-fw me-2"></i>
                     Familiar
                 </a>
                 <div class="acordeon-body">
                     <div class="acordeon-items">
                         <a href="<?= LOCAL_DIR ?>CelulaFamiliar/Registrar" class="nav-link">
-                            <i class="fa-solid fa-pen-to-square"></i>
+                            <i class="fa-solid fa-pen-to-square fa-fw"></i>
                             Registrar
                         </a>
                         <a href="<?= LOCAL_DIR ?>CelulaFamiliar/Listar" class="nav-link">
-                            <i class="fa-solid fa-rectangle-list"></i>
+                            <i class="fa-solid fa-rectangle-list fa-fw"></i>
                             Listar
                         </a>
                         <a href="<?= LOCAL_DIR ?>CelulaFamiliar/Reunion" class="nav-link">
-                            <i class="fa-solid fa-clipboard-user"></i>
+                            <i class="fa-solid fa-clipboard-user fa-fw"></i>
                             Listar Reuniones
                         </a>
                     </div>
@@ -177,15 +176,15 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
                 <div class="acordeon-body">
                     <div class="acordeon-items">
                         <a href="<?= LOCAL_DIR ?>CelulaCrecimiento/Registrar" class="nav-link">
-                            <i class="fa-solid fa-pen-to-square"></i>
+                            <i class="fa-solid fa-pen-to-square fa-fw"></i>
                             Registrar
                         </a>
                         <a href="<?= LOCAL_DIR ?>CelulaCrecimiento/Listar" class="nav-link">
-                            <i class="fa-solid fa-rectangle-list"></i>
+                            <i class="fa-solid fa-rectangle-list fa-fw"></i>
                             Listar
                         </a>
                         <a href="<?= LOCAL_DIR ?>CelulaCrecimiento/Reunion" class="nav-link">
-                            <i class="fa-solid fa-clipboard-user"></i>
+                            <i class="fa-solid fa-clipboard-user fa-fw"></i>
                             Listar Reuniones
                         </a>
                     </div>
@@ -199,15 +198,15 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
                 <div class="acordeon-body">
                     <div class="acordeon-items">
                         <a href="<?= LOCAL_DIR ?>CelulaConsolidacion/Registrar" class="nav-link">
-                            <i class="fa-solid fa-pen-to-square"></i>
+                            <i class="fa-solid fa-pen-to-square fa-fw"></i>
                             Registrar
                         </a>
                         <a href="<?= LOCAL_DIR ?>CelulaConsolidacion/Listar" class="nav-link">
-                            <i class="fa-solid fa-rectangle-list"></i>
+                            <i class="fa-solid fa-rectangle-list fa-fw"></i>
                             Listar
                         </a>
                         <a href="<?= LOCAL_DIR ?>CelulaConsolidacion/Reunion" class="nav-link">
-                            <i class="fa-solid fa-clipboard-user"></i>
+                            <i class="fa-solid fa-clipboard-user fa-fw"></i>
                             Listar Reuniones
                         </a>
                     </div>
@@ -221,37 +220,112 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
                 <div class="acordeon-body">
                     <div class="acordeon-items">
                         <a href="<?= LOCAL_DIR ?>Discipulos/Registrar" class="nav-link">
-                            <i class="fa-solid fa-pen-to-square"></i>
+                            <i class="fa-solid fa-pen-to-square fa-fw"></i>
                             Registrar
                         </a>
                         <a href="<?= LOCAL_DIR ?>Discipulos/Listar" class="nav-link">
-                            <i class="fa-solid fa-rectangle-list"></i>
+                            <i class="fa-solid fa-rectangle-list fa-fw"></i>
                             Listar
                         </a>
                     </div>
                 </div>
             </div>
             
-            <?php if ($usuario->tienePermiso("consultarNivelesCrecimiento") || $usuario->tieneRol("Docente")
+            <?php if ($usuario->tienePermiso("consultarNivelesCrecimiento") || $usuario->tieneRol("Profesor")
                 || $usuario->tieneRol("Estudiante")): ?>
                 <div class="nav-link py-0 mt-3 text-uppercase">Escuela</div>
                 <?php if ($usuario->tienePermiso("consultarNivelesCrecimiento")): ?>
-                    <a href="<?= LOCAL_DIR ?>NivelesCrecimiento"
-                        class="nav-link <?= strtolower($uriParts[0]) == "nivelescrecimiento" ? "active" : "" ?>">
-                        <i class="fa-solid fa-graduation-cap fa-fw me-2"></i>
-                        Niveles de crecimiento
-                    </a>
+                    <div class="acordeon <?= strtolower($uriParts[0]) == "nivelescrecimiento" ? "show" : "" ?>">
+                        <a href="#" class="nav-link acordeon-toggle <?= strtolower($uriParts[0]) == "nivelescrecimiento" ? "active" : "" ?>">
+                            <i class="fa-solid fa-graduation-cap fa-fw me-2"></i>
+                            Niv. de crecimiento
+                        </a>
+                        <div class="acordeon-body">
+                            <div class="acordeon-items">
+                                <a href="<?= LOCAL_DIR ?>NivelesCrecimiento"
+                                    class="nav-link <?= strtolower($uriParts[0]) == "nivelescrecimiento" && empty($uriParts[1]) ? "active" : "" ?>">
+                                    <i class="fa-solid fa-rectangle-list fa-fw"></i>
+                                    Listar
+                                </a>
+                                <a href="<?= LOCAL_DIR ?>NivelesCrecimiento/Registrar"
+                                    class="nav-link <?= (strtolower($uriParts[0]) == "nivelescrecimiento" && strtolower($uriParts[1]) == "registrar") ? "active" : "" ?>">
+                                    <i class="fa-solid fa-pen-to-square fa-fw"></i>
+                                    Registrar
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 <?php endif ?>
-                <?php if ($usuario->tieneRol("Docente") || $usuario->tieneRol("Administrador")): ?>
-                    <a href="<?= LOCAL_DIR ?>Grupos" class="nav-link">
-                        <i class="fa-solid fa-users-rectangle fa-fw me-2"></i>
-                        Mis grupos
-                    </a>
+                <?php if ($usuario->tieneRol("Profesor") || $usuario->tieneRol("Superusuario")): ?>
+                    <div class="acordeon <?= strtolower($uriParts[0]) == "grupos" ? "show" : "" ?>">
+                        <a href="#" class="nav-link acordeon-toggle <?= strtolower($uriParts[0]) == "grupos" ? "active" : "" ?>">
+                            <i class="fa-solid fa-users-rectangle fa-fw me-2"></i>
+                            Grupos
+                        </a>
+                        <div class="acordeon-body">
+                            <div class="acordeon-items">
+                                <a href="<?= LOCAL_DIR ?>Grupos"
+                                    class="nav-link <?= strtolower($uriParts[0]) == "grupos" && empty($uriParts[1]) ? "active" : "" ?>">
+                                    <i class="fa-solid fa-rectangle-list fa-fw"></i>
+                                    Listar
+                                </a>
+                                <a href="<?= LOCAL_DIR ?>Grupos/Registrar"
+                                    class="nav-link <?= (strtolower($uriParts[0]) == "grupos" && strtolower($uriParts[1]) == "registrar") ? "active" : "" ?>">
+                                    <i class="fa-solid fa-pen-to-square fa-fw"></i>
+                                    Registrar
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 <?php endif ?>
-                <?php if ($usuario->tieneRol("Estudiante")): ?>
+                <?php if ($usuario->tieneRol("Superusuario")): ?>
+                    <div class="acordeon <?= strtolower($uriParts[0]) == "inscripciones" ? "show" : "" ?>">
+                        <a href="#" class="nav-link acordeon-toggle">
+                            <i class="fa-solid fa-clipboard-list fa-fw me-2"></i>
+                            Inscripciones
+                        </a>
+                        <div class="acordeon-body">
+                            <div class="acordeon-items">
+                                <a href="#"
+                                    class="nav-link <?= strtolower($uriParts[0]) == "inscripciones" && empty($uriParts[1]) ? "active" : "" ?>">
+                                    <i class="fa-solid fa-rectangle-list fa-fw"></i>
+                                    Listar
+                                </a>
+                                <a href="#"
+                                    class="nav-link <?= (strtolower($uriParts[0]) == "inscripciones" && strtolower($uriParts[1]) == "registrar") ? "active" : "" ?>">
+                                    <i class="fa-solid fa-pen-to-square fa-fw"></i>
+                                    Registrar
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif ?>
+                <?php if ($usuario->tieneRol("Superusuario") || $usuario->tieneRol("Estudiante")): ?>
+                    <div class="acordeon <?= strtolower($uriParts[0]) == "inscripciones" ? "show" : "" ?>">
+                        <a href="#" class="nav-link acordeon-toggle">
+                            <i class="fa-solid fa-chalkboard-user fa-fw me-2"></i>
+                            Clases
+                        </a>
+                        <div class="acordeon-body">
+                            <div class="acordeon-items">
+                                <a href="#"
+                                    class="nav-link <?= strtolower($uriParts[0]) == "inscripciones" && empty($uriParts[1]) ? "active" : "" ?>">
+                                    <i class="fa-solid fa-rectangle-list fa-fw"></i>
+                                    Listar
+                                </a>
+                                <a href="#"
+                                    class="nav-link <?= (strtolower($uriParts[0]) == "inscripciones" && strtolower($uriParts[1]) == "registrar") ? "active" : "" ?>">
+                                    <i class="fa-solid fa-pen-to-square fa-fw"></i>
+                                    Registrar
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif ?>
+                <?php if ($usuario->tieneRol("Superusuario")): ?>
                     <a href="#" class="nav-link">
-                        <i class="fa-solid fa-chalkboard-user fa-fw me-2"></i>
-                        Mis clases
+                        <i class="fa-solid fa-book fa-fw me-2"></i>
+                        Notas
                     </a>
                 <?php endif ?>
             <?php endif ?>
@@ -259,6 +333,14 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
             <?php if ($usuario->tienePermiso("consultarUsuarios") || $usuario->tienePermiso("consultarRoles")
                 || $usuario->tienePermiso("consultarBitacora")): ?>
                 <div class="nav-link py-0 mt-3 text-uppercase">Sistema</div>
+                <a href="#" class="nav-link">
+                    <i class="fa-solid fa-chart-pie fa-fw me-2"></i>
+                    Estadisticas
+                </a>
+                <a href="#" class="nav-link">
+                    <i class="fa-solid fa-file fa-fw me-2"></i>
+                    Reportes
+                </a>
                 <?php if ($usuario->tienePermiso("consultarUsuarios")): ?>
                     <a href="<?= LOCAL_DIR ?>Usuarios" class="nav-link <?= strtolower($uriParts[0]) == "usuarios" ? "active" : "" ?>">
                         <i class="fa-solid fa-user fa-fw me-2"></i>

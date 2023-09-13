@@ -1,5 +1,6 @@
 <?php
 require_once "Models/Grupo.php";
+require_once "Models/Enums/EstadosGrupo.php";
 necesitaAutenticacion();
 //requierePermisos("registrarGrupos");
 
@@ -7,18 +8,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET')
 {
     /** @var Usuario */
     $usuario = $_SESSION['usuario'];
-    $escuela = $usuario->sede->cargarEscuela()->escuela;
-    $niveles = NivelCrecimiento::cargarRelaciones($escuela->id, "Escuela");
+    $escuela = $usuario->sede->getEscuela();
+
+    $niveles = NivelCrecimiento::cargarRelaciones($escuela->id, "Escuela", 1);
+    $profesores = Usuario::listarPorRoles("Profesor");
 
     renderView();
 }
 elseif ($_SERVER['REQUEST_METHOD'] === 'POST')
 {
+
     $grupo = new Grupo();
 
     $grupo->mapFromPost();
+    $grupo->estado = EstadosGrupo::Activo->value;
     
     if (!$grupo->esValido()) {
+        /** @var Usuario */
+        $usuario = $_SESSION['usuario'];
+        $escuela = $usuario->sede->getEscuela();
+
+        $niveles = NivelCrecimiento::cargarRelaciones($escuela->id, "Escuela", 1);
+        $profesores = Usuario::listarPorRoles("Profesor");
+        
         renderView();
     }
     
