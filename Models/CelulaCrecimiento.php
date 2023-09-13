@@ -93,6 +93,8 @@ class CelulaCrecimiento extends Model
                 $stmt->execute();
             }
 
+            Bitacora::registrar("Registro de celula de crecimiento");
+
             http_response_code(200);
             echo json_encode(array('msj' => 'Celula registrada exitosamente', 'status' => 200));
             die();
@@ -101,7 +103,7 @@ class CelulaCrecimiento extends Model
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
-
+            http_response_code(422);
             echo json_encode($error_data);
             die();
         }
@@ -141,14 +143,18 @@ class CelulaCrecimiento extends Model
 
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            Bitacora::registrar("Consulta de celulas de crecimiento");
+
             return $resultado;
+
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
                 
             );
-            //print_r($error_data);
+            http_response_code(422);
             echo json_encode($error_data);
             die();
         }
@@ -213,15 +219,18 @@ class CelulaCrecimiento extends Model
                 $stmt->execute();
             }
 
+            Bitacora::registrar("Actualizacion de celula de crecimiento");
+
             http_response_code(200);
             echo json_encode(array('msj' => 'Celula actualizada exitosamente', 'status' => 200));
             die();
+
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
-            //print_r($error_data);
+            http_response_code(422);
             echo json_encode($error_data);
             die();
         }
@@ -240,15 +249,18 @@ class CelulaCrecimiento extends Model
 
             $stmt->execute();
 
+            Bitacora::registrar("Eliminacion de celula de crecimiento");
+
             http_response_code(200);
             echo json_encode(array('msj'=>'Celula eliminada correctamente'));
             die();
+
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
-            //print_r($error_data);
+            http_response_code(422);
             echo json_encode($error_data);
             die();
         }
@@ -276,17 +288,20 @@ class CelulaCrecimiento extends Model
             $stmt->bindValue(':actividad', $actividad);
             $stmt->bindValue(':observaciones', $observaciones);
 
-
             $stmt->execute();
+
+            Bitacora::registrar("Registro de reunion en celula de crecimiento");
+
             http_response_code(200);
             echo json_encode(array('msj' => 'Reunion registrada exitosamente', 'status' => 200));
             die();
+
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
-
+            http_response_code(422);
             echo json_encode($error_data);
             die();
         }
@@ -314,7 +329,7 @@ class CelulaCrecimiento extends Model
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
-            //print_r($error_data);
+            http_response_code(422);
             echo json_encode($error_data);
             die();
         }
@@ -337,7 +352,7 @@ class CelulaCrecimiento extends Model
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
-            //print_r($error_data);
+            http_response_code(422);
             echo json_encode($error_data);
             die();
         }
@@ -373,13 +388,17 @@ class CelulaCrecimiento extends Model
 
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            Bitacora::registrar("Consulta de reuniones de celula de crecimiento");
+
             return $resultado;
+
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
-            print_r($error_data);
+            http_response_code(422);
             echo json_encode($error_data);
             die();
         }
@@ -419,17 +438,20 @@ class CelulaCrecimiento extends Model
             $stmt->bindValue(':actividad', $actividad);
             $stmt->bindValue(':observaciones', $observaciones);
 
-
             $stmt->execute();
+
+            Bitacora::registrar("Actualizacion de reunion de celula de crecimiento");
+
             http_response_code(200);
             echo json_encode(array('msj' => 'Reunion actualizada exitosamente', 'status' => 200));
             die();
+
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
-
+            http_response_code(422);
             echo json_encode($error_data);
             die();
         }
@@ -451,15 +473,18 @@ class CelulaCrecimiento extends Model
 
             $stmt->execute();
 
+            Bitacora::registrar("Eliminacion de reunion de celula de crecimiento");
+
             http_response_code(200);
             echo json_encode(array('msj'=>'Reunion eliminada correctamente'));
             die();
+
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
-            //print_r($error_data);
+            http_response_code(422);
             echo json_encode($error_data);
             die();
         }
@@ -485,7 +510,7 @@ class CelulaCrecimiento extends Model
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
-            //print_r($error_data);
+            http_response_code(422);
             echo json_encode($error_data);
             die();
         }

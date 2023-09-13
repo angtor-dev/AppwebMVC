@@ -124,9 +124,12 @@ class Territorio extends Model
                 $stmt->execute();
             }
 
+            Bitacora::registrar("Registro de Territorio");
+
             http_response_code(200);
             echo json_encode(array('msj' => 'Territorio registrado exitosamente', 'status' => 200));
             die();
+
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -134,7 +137,6 @@ class Territorio extends Model
             );
 
             http_response_code(422);
-            //print_r($error_data);
             echo json_encode($error_data);
             die();
         }
@@ -154,13 +156,15 @@ class Territorio extends Model
 
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            Bitacora::registrar("Consulta de Territorios");
+
             return $resultado;
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
-            //print_r($error_data);
             http_response_code(422);
             echo json_encode($error_data);
             die();
@@ -231,6 +235,8 @@ class Territorio extends Model
                 $stmt->execute();
             }
 
+            Bitacora::registrar("Actualizacion de Territorio");
+
             http_response_code(200);
             echo json_encode(array('msj' => 'Territorio actualizado exitosamente', 'status' => 200));
             die();
@@ -259,6 +265,8 @@ class Territorio extends Model
             $stmt->bindValue(":id", $id);
 
             $stmt->execute();
+
+            Bitacora::registrar("Eliminacion de Territorio");
 
             http_response_code(200);
             echo json_encode(array('msj' => 'Eliminado correctamente'));

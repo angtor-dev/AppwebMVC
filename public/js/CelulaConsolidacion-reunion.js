@@ -267,6 +267,75 @@ $(document).ready(function () {
     }
 
 
+    $('#asistenciasDatatables tbody').on('click', '#eliminarAsistencia', function () {
+        const datos = dataTable2.row($(this).parents()).data();
+        
+        Swal.fire({
+            title: '¿Estas Seguro?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: '¡Si, estoy seguro!',
+            confirmButtonColor: '#007bff',
+            cancelButtonText: '¡No, cancelar!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                $.ajax({
+                    type: "POST",
+                    url: "http://localhost/AppwebMVC/CelulaConsolidacion/Reunion",
+                    data: {
+
+                        eliminarAsistencia: 'eliminarAsistencia',
+                        id: datos.idAsistencia,
+                    },
+                    success: function (response) {
+                        console.log(response);
+                        let data = JSON.parse(response);
+
+                        dataTable2.ajax.reload();
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: '¡Borrado!',
+                            text: data.msj,
+                            showConfirmButton: false,
+                            timer: 2000,
+                        })
+
+                        Listar_discipulos_reunion(datos.idCelulaConsolidacion, datos.idReunion)
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        if (jqXHR.responseText) {
+                            let jsonResponse = JSON.parse(jqXHR.responseText);
+
+                            if (jsonResponse.msj) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Denegado',
+                                    text: jsonResponse.msj,
+                                    showConfirmButton: true,
+                                })
+                            } else {
+                                const respuesta = JSON.stringify(jsonResponse, null, 2)
+                                Swal.fire({
+                                    background: 'red',
+                                    color: '#fff',
+                                    title: respuesta,
+                                    showConfirmButton: true,
+                                })
+                            }
+                        } else {
+                            alert('Error desconocido: ' + textStatus);
+                        }
+                    }
+                })
+            }
+        });
+    })
+
+
 
 
 

@@ -31,6 +31,7 @@ if (isset($_GET['cargar_data'])) {
         $json['data'] = array();
     }
     //Finalmente, aqui enviamos el listado
+
     echo json_encode($json);
     die();
 }

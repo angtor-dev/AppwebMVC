@@ -93,15 +93,18 @@ class CelulaConsolidacion extends Model
                 $stmt->execute();
             }
 
+            Bitacora::registrar("Registro de celula de consolidacion");
+
             http_response_code(200);
             echo json_encode(array('msj' => 'Celula registrada exitosamente', 'status' => 200));
             die();
+
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
-
+            http_response_code(422);
             echo json_encode($error_data);
             die();
         }
@@ -135,15 +138,18 @@ class CelulaConsolidacion extends Model
 
             $stmt = $this->db->pdo()->prepare($sql);
 
+            Bitacora::registrar("Consulta de celulas de consolidacion");
+
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $resultado;
+
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
-            print_r($error_data);
+            http_response_code(422);
             echo json_encode($error_data);
             die();
         }
@@ -208,15 +214,19 @@ class CelulaConsolidacion extends Model
                 $stmt->execute();
             }
 
+            Bitacora::registrar("Actualizacion de celula de consolidacion");
+
             http_response_code(200);
             echo json_encode(array('msj' => 'Celula actualizada exitosamente', 'status' => 200));
             die();
+
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
             //print_r($error_data);
+            http_response_code(422);
             echo json_encode($error_data);
             die();
         }
@@ -235,15 +245,19 @@ class CelulaConsolidacion extends Model
 
             $stmt->execute();
 
+            Bitacora::registrar("Eliminacion de celula de consolidacion");
+
             http_response_code(200);
             echo json_encode(array('msj' => 'Celula eliminada correctamente'));
             die();
+
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
             //print_r($error_data);
+            http_response_code(422);
             echo json_encode($error_data);
             die();
         }
@@ -289,15 +303,19 @@ class CelulaConsolidacion extends Model
                 }
             }
 
+            Bitacora::registrar("Registro de reunion en celula de consolidacion");
+
             http_response_code(200);
             echo json_encode(array('msj' => 'Reunion registrada correctamente', 'status' => 200));
             die();
+
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
 
+            http_response_code(422);
             echo json_encode($error_data);
             die();
         }
@@ -319,13 +337,16 @@ class CelulaConsolidacion extends Model
 
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
             return $resultado;
+
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
             //print_r($error_data);
+            http_response_code(422);
             echo json_encode($error_data);
             die();
         }
@@ -342,13 +363,16 @@ class CelulaConsolidacion extends Model
 
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
             return $resultado;
+
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
             //print_r($error_data);
+            http_response_code(422);
             echo json_encode($error_data);
             die();
         }
@@ -381,13 +405,17 @@ class CelulaConsolidacion extends Model
 
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            Bitacora::registrar("Consulta de reuniones de celula de consolidacion");
+
             return $resultado;
+
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
-            print_r($error_data);
+            http_response_code(422);
             echo json_encode($error_data);
             die();
         }
@@ -421,14 +449,19 @@ class CelulaConsolidacion extends Model
             $stmt->bindValue(':actividad', $actividad);
             $stmt->bindValue(':observaciones', $observaciones);
 
-
             $stmt->execute();
+
+            Bitacora::registrar("Actualizacion de reunion de celula de consolidacion");
+
+            http_response_code(200);
+            echo json_encode(array('msj' => 'Reunion actualizada correctamente'));
+            die();
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
-
+            http_response_code(422);
             echo json_encode($error_data);
             die();
         }
@@ -450,6 +483,8 @@ class CelulaConsolidacion extends Model
 
             $stmt->execute();
 
+            Bitacora::registrar("Eliminacion de reunion en celula de consolidacion");
+
             http_response_code(200);
             echo json_encode(array('msj' => 'Reunion eliminada correctamente'));
             die();
@@ -458,7 +493,7 @@ class CelulaConsolidacion extends Model
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
-            //print_r($error_data);
+            http_response_code(422);
             echo json_encode($error_data);
             die();
         }
@@ -476,13 +511,15 @@ class CelulaConsolidacion extends Model
 
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
             return $resultado;
+            
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
-            //print_r($error_data);
+            http_response_code(422);
             echo json_encode($error_data);
             die();
         }
@@ -504,7 +541,7 @@ class CelulaConsolidacion extends Model
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
-            //print_r($error_data);
+            http_response_code(422);
             echo json_encode($error_data);
             die();
         }
@@ -542,7 +579,7 @@ class CelulaConsolidacion extends Model
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
-            print_r($error_data);
+            http_response_code(422);
             echo json_encode($error_data);
             die();
         }
@@ -565,14 +602,43 @@ class CelulaConsolidacion extends Model
 
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+            Bitacora::registrar("Consulta de asistencias de reunion de celula de consolidacion");
+
             return $resultado;
-            
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
-            //print_r($error_data);
+            http_response_code(422);
+            echo json_encode($error_data);
+            die();
+        }
+    }
+
+
+    public function eliminar_asistenciaReunion($id)
+    {
+        try {
+            $sql = "DELETE FROM asistencia WHERE id = :id";
+
+            $stmt = $this->db->pdo()->prepare($sql);
+
+            $stmt->bindValue(":id", $id);
+
+            $stmt->execute();
+
+            Bitacora::registrar("Eliminacion de asistencia en reunion de celula de consolidacion");
+
+            http_response_code(200);
+            echo json_encode(array('msj' => 'Asistencia eliminada correctamente'));
+            die();
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
+            $error_data = array(
+                "error_message" => $e->getMessage(),
+                "error_line" => "Linea del error: " . $e->getLine()
+            );
+            http_response_code(422);
             echo json_encode($error_data);
             die();
         }
@@ -627,7 +693,6 @@ class CelulaConsolidacion extends Model
             if (!preg_match($this->expresion_fecha, $fecha) || !checkdate(substr($fecha, 5, 2), substr($fecha, 8, 2), substr($fecha, 0, 4))) {
                 throw new Exception("La fecha no tiene el formato correcto o no es válida.", 422);
             }
-
         } catch (Exception $e) {
             http_response_code($e->getCode());
             echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
@@ -656,11 +721,11 @@ class CelulaConsolidacion extends Model
             if ($arrayAccion['accion'] == 'eliminar') {
                 $sql = "SELECT * FROM asistencia WHERE asistencia.idReunion = :id";
                 $stmt = $this->db->pdo()->prepare($sql);
-                    $stmt->bindValue(":id", $arrayAccion['id']);
-                    $stmt->execute();
-                    if ($stmt->rowCount() > 0) {
-                        throw new Exception("No puedes eliminar la reunion porque ya se encuentran asistencias registradas.", 422);
-                    }
+                $stmt->bindValue(":id", $arrayAccion['id']);
+                $stmt->execute();
+                if ($stmt->rowCount() > 0) {
+                    throw new Exception("No puedes eliminar la reunion porque ya se encuentran asistencias registradas.", 422);
+                }
             }
 
             if ($arrayAccion['accion'] == 'actualizar') {
@@ -725,8 +790,8 @@ class CelulaConsolidacion extends Model
                 // Lanzar una excepción si el dato existe en la BD
                 if ($accion == 'eliminar') {
                     throw new Exception("Esta celula esta asociada a reuniones y otro tipo de informacion que podria corromper la integridad de los datos.", 422);
-                } 
-                if($accion == 'actualizar') {
+                }
+                if ($accion == 'actualizar') {
                     throw new Exception("No puedes cambiar el territorio porque la celula posee datos de reuniones e informacion adicional. Esto podria destruir la integridad de los datos", 422);
                 }
             }

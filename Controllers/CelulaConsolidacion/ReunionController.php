@@ -124,6 +124,16 @@ if (isset($_GET['cargar_data_asistencia'])) {
     die();
 }
 
+if (isset($_POST['eliminarAsistencia'])) {
+
+    requierePermisos("actualizarCelulaConsolidacion");
+
+    $id = $_POST['id'];
+    $CelulaConsolidacion->eliminar_asistenciaReunion($id);
+    
+    die();
+}
+
 
 
 

@@ -92,9 +92,12 @@ class CelulaFamiliar extends Model
                 $stmt->execute();
             }
 
+            Bitacora::registrar("Registro de celula familiar");
+
             http_response_code(200);
             echo json_encode(array('msj' => 'Celula registrada exitosamente', 'status' => 200));
             die();
+
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -141,14 +144,17 @@ class CelulaFamiliar extends Model
 
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            Bitacora::registrar("Consulta de celula familiar");
+
             return $resultado;
+
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
             http_response_code(422);
-            print_r($error_data);
             echo json_encode($error_data);
             die();
         }
@@ -216,9 +222,12 @@ class CelulaFamiliar extends Model
                 $stmt->execute();
             }
 
+            Bitacora::registrar("Actualizacion de celula familiar");
+
             http_response_code(200);
             echo json_encode(array('msj' => 'Celula actualizada exitosamente', 'status' => 200));
             die();
+
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -247,9 +256,12 @@ class CelulaFamiliar extends Model
 
             $stmt->execute();
 
+            Bitacora::registrar("Eliminacion de celula familiar");
+
             http_response_code(200);
             echo json_encode(array('msj' => 'Celula eliminada correctamente'));
             die();
+
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -284,8 +296,14 @@ class CelulaFamiliar extends Model
             $stmt->bindValue(':actividad', $actividad);
             $stmt->bindValue(':observaciones', $observaciones);
 
-
             $stmt->execute();
+
+            Bitacora::registrar("Registro de reunion de celula familiar");
+
+            http_response_code(200);
+            echo json_encode(array('msj' => 'Celula actualizada exitosamente', 'status' => 200));
+            die();
+
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -380,13 +398,16 @@ class CelulaFamiliar extends Model
 
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            Bitacora::registrar("Consulta de reuniones de celula familiar");
+
             return $resultado;
+
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()
             );
-            print_r($error_data);
             http_response_code(422);
             echo json_encode($error_data);
             die();
@@ -427,11 +448,14 @@ class CelulaFamiliar extends Model
             $stmt->bindValue(':actividad', $actividad);
             $stmt->bindValue(':observaciones', $observaciones);
 
-
             $stmt->execute();
+
+            Bitacora::registrar("Actualizacion de reunion de celula familiar");
+
             http_response_code(200);
             echo json_encode(array('msj' => 'Reunion actualizada correctamente', 'status' => 200));
             die();
+
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -458,6 +482,8 @@ class CelulaFamiliar extends Model
             $stmt->bindValue(":id", $id);
 
             $stmt->execute();
+
+            Bitacora::registrar("Eliminacion de reunion de celula familiar");
 
             http_response_code(200);
             echo json_encode(array('msj' => 'Reunion eliminada correctamente'));
