@@ -11,6 +11,8 @@ class Sede extends Model
     public string $direccion;
     public int $estatus;
 
+    public Escuela $escuela;
+
     //Expresiones regulares para validaciones
     private $expresion_nombre = '/^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]{5,50}$/';
     private $expresion_texto = '/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/';
@@ -345,5 +347,11 @@ class Sede extends Model
             echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
             die();
         }
+    }
+    
+    public function cargarEscuela() : Sede
+    {
+        $this->escuela = Escuela::cargarRelaciones($this->id, "Sede")[0];
+        return $this;
     }
 }

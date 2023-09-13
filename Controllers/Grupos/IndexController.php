@@ -9,6 +9,8 @@ $grupos = array();
 if ($usuario->tieneRol("Superusuario")) {
     $grupos = Grupo::listar(1);
 } elseif (true/*$usuario->tienePermiso("Solo sus grupos")*/) {
-    $grupos = Grupo::cargarRelaciones();
+    $grupos = Grupo::cargarRelaciones($usuario->id, "Profesor", 1);
 }
+
+renderView();
 ?>
