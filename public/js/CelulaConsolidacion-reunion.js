@@ -54,8 +54,13 @@ $(document).ready(function () {
     })
 
 
+    let idReunionAsistencia;
+    let idCelulaConsolidacionDatatable;
     $('#celulaDatatables tbody').on('click', '#asistencia', function () {
         const datos = dataTable.row($(this).parents()).data();
+
+        idReunionAsistencia = datos.id
+        idCelulaConsolidacionDatatable = datos.idCelulaConsolidacion
         Listar_asistencia(datos.id)
         Listar_discipulos_reunion(datos.idCelulaConsolidacion, datos.id)
     })
@@ -192,11 +197,18 @@ $(document).ready(function () {
                 idReunion: idReunion
             },
             success: function (response) {
-
-                //console.log(response);
+                console.log(response);
                 let data = JSON.parse(response);
 
                 let selector = document.getElementById('discipulos');
+
+                // Destruir la instancia existente si la hay
+                if (choices2) {
+                    choices2.destroy();
+                }
+
+                // Limpiar el select
+                selector.innerHTML = "";
 
                 data.forEach(item => {
 
@@ -206,11 +218,6 @@ $(document).ready(function () {
                     selector.appendChild(option);
 
                 });
-
-                // Destruir la instancia existente si la hay
-                if (choices2) {
-                    choices2.destroy();
-                }
 
                 choices2 = new Choices(selector, {
                     allowHTML: true,
@@ -269,7 +276,7 @@ $(document).ready(function () {
 
     $('#asistenciasDatatables tbody').on('click', '#eliminarAsistencia', function () {
         const datos = dataTable2.row($(this).parents()).data();
-        
+
         Swal.fire({
             title: '¿Estas Seguro?',
             icon: 'warning',
@@ -290,7 +297,7 @@ $(document).ready(function () {
                         id: datos.idAsistencia,
                     },
                     success: function (response) {
-                        console.log(response);
+                        //console.log(response);
                         let data = JSON.parse(response);
 
                         dataTable2.ajax.reload();
@@ -303,7 +310,7 @@ $(document).ready(function () {
                             timer: 2000,
                         })
 
-                        Listar_discipulos_reunion(datos.idCelulaConsolidacion, datos.idReunion)
+                        Listar_discipulos_reunion(idCelulaConsolidacionDatatable, datos.idReunion)
 
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
@@ -333,6 +340,87 @@ $(document).ready(function () {
                 })
             }
         });
+    })
+
+
+    let validation_selecteDiscipulos = false;
+
+    const selectorDiscipulos = document.getElementById('discipulos');
+    selectorDiscipulos.addEventListener('change', () => {
+
+        const valoresSeleccionados = $("#discipulos").val();
+
+        if (!valoresSeleccionados || valoresSeleccionados.length == 0) {
+            document.getElementById("msj_discipulosAsistencia").classList.remove("d-none");
+            validation_selecteDiscipulos = false;
+        } else {
+            document.getElementById("msj_discipulosAsistencia").classList.add("d-none");
+            validation_selecteDiscipulos = true;
+        }
+    })
+
+    let actualizarDiscipulos = document.getElementById('actualizarDiscipulos')
+    actualizarDiscipulos.addEventListener('click', () => {
+        if (validation_selecteDiscipulos) {
+            $.ajax({
+                type: "POST",
+                url: "http://localhost/AppwebMVC/CelulaConsolidacion/Reunion",
+                data: {
+
+                    actualizarAsistencia: 'actualizarAsistencia',
+                    idReunion: idReunionAsistencia,
+                    discipulos: $("#discipulos").val()
+                },
+                success: function (response) {
+
+                    let data = JSON.parse(response);
+                    dataTable2.ajax.reload();
+
+                    // Aquí puedes manejar una respuesta exitosa, por ejemplo:
+                    console.log("Respuesta del servidor:", data);
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Se actualizaron correctamente las asistencias',
+                        showConfirmButton: false,
+                        timer: 2000,
+                    })
+
+                    Listar_discipulos_reunion(idCelulaConsolidacionDatatable, idReunionAsistencia)
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    if (jqXHR.responseText) {
+                        let jsonResponse = JSON.parse(jqXHR.responseText);
+
+                        if (jsonResponse.msj) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Denegado',
+                                text: jsonResponse.msj,
+                                showConfirmButton: true,
+                            })
+                        } else {
+                            const respuesta = JSON.stringify(jsonResponse, null, 2)
+                            Swal.fire({
+                                background: 'red',
+                                color: '#fff',
+                                title: respuesta,
+                                showConfirmButton: true,
+                            })
+                        }
+                    } else {
+                        alert('Error desconocido: ' + textStatus);
+                    }
+                }
+            });
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Formulario invalido. Por favor, verifique sus datos',
+                showConfirmButton: false,
+                timer: 2000,
+            })
+        }
     })
 
 
@@ -385,7 +473,7 @@ $(document).ready(function () {
         if (!expresiones_regulares2.fecha.test(fecha.value)) {
             document.getElementById("msj_fecha").classList.remove("d-none");
             validationStatus2.fecha = false;
-        }else{
+        } else {
             document.getElementById("msj_fecha").classList.add("d-none");
             validationStatus2.fecha = true;
         }
@@ -402,7 +490,7 @@ $(document).ready(function () {
             validationStatus2.tematica = true;
         }
     })
-    
+
     // Validar semana
     const semana = document.getElementById("semana");
     semana.addEventListener('keyup', () => {
@@ -414,7 +502,7 @@ $(document).ready(function () {
             validationStatus2.semana = true;
         }
     })
-    
+
     // Validar generosidad
     const generosidad = document.getElementById("generosidad");
     generosidad.addEventListener('keyup', () => {
@@ -426,7 +514,7 @@ $(document).ready(function () {
             validationStatus2.generosidad = true;
         }
     })
-    
+
 
     // Validar actividad
     const actividad = document.getElementById("actividad");
@@ -439,7 +527,7 @@ $(document).ready(function () {
             validationStatus2.actividad = true;
         }
     })
-    
+
 
     // Validar observaciones
     const observaciones = document.getElementById("observaciones");
@@ -452,7 +540,7 @@ $(document).ready(function () {
             validationStatus2.observaciones = true;
         }
     })
-    
+
 
 
     const form2 = document.getElementById("formularioReunion");
@@ -525,7 +613,7 @@ $(document).ready(function () {
         } else {
             Swal.fire({
                 icon: 'error',
-                title: 'Formulario llenado incorrectamente. Por favor, verifique sus datos',
+                title: 'Formulario invalido. Por favor, verifique sus datos',
                 showConfirmButton: false,
                 timer: 2000,
             })
