@@ -7,6 +7,7 @@ class CelulaConsolidacion extends Model
     public int $idLider;
     public int $idColider;
     public int $idTerritorio;
+    public string $identificador;
     public string $codigo;
     public string $nombre;
     public int $estatus;
@@ -23,6 +24,9 @@ class CelulaConsolidacion extends Model
     {
         try {
 
+            
+            
+
             $sql = "SELECT MAX(id) AS celulaNumero FROM celulaconsolidacion";
             $consultaid = $this->db->pdo()->prepare($sql);
             $consultaid->execute();
@@ -30,6 +34,8 @@ class CelulaConsolidacion extends Model
 
             $id = '';
             $codigo = '';
+            
+            /** @var Territorio **/ 
             $territorio = Territorio::cargar($idTerritorio);
 
             if ($datos['celulaNumero'] == null) {
@@ -37,6 +43,8 @@ class CelulaConsolidacion extends Model
                 $identificador = 'CCO' . $id;
                 $codigo = $territorio->codigo . '-' . $identificador;
             } else {
+                
+                /** @var CelulaConsolidacion[] **/
                 $celulas = CelulaConsolidacion::cargarRelaciones($idTerritorio, "Territorio");
 
                 if (count($celulas) > 0) {
@@ -158,6 +166,7 @@ class CelulaConsolidacion extends Model
     {
         try {
 
+            /** @var CelulaConsolidacion **/
             $consulta = CelulaConsolidacion::cargar($id);
 
             if ($consulta->idTerritorio == $idTerritorio) {
@@ -172,8 +181,10 @@ class CelulaConsolidacion extends Model
 
                 $stmt->execute();
             } else {
-
+                /** @var territorio  **/
                 $territorio = Territorio::cargar($idTerritorio);
+
+                /** @var CelulaConsolidacion[]  **/
                 $celulas = CelulaConsolidacion::cargarRelaciones($idTerritorio, "Territorio");
 
                 $identificador = '';

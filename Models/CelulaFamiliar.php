@@ -7,6 +7,7 @@ class CelulaFamiliar extends Model
     public int $idLider;
     public int $idColider;
     public int $idTerritorio;
+    public string $identificador;
     public string $codigo;
     public string $nombre;
     public int $estatus;
@@ -29,6 +30,7 @@ class CelulaFamiliar extends Model
 
             $id = '';
             $codigo = '';
+            /**  @var Territorio **/
             $territorio = Territorio::cargar($idTerritorio);
 
             if ($datos['celulaNumero'] == null) {
@@ -36,6 +38,8 @@ class CelulaFamiliar extends Model
                 $identificador = 'CFA' . $id;
                 $codigo = $territorio->codigo . '-' . $identificador;
             } else {
+
+                /** @var CelulaFamiliar[] **/
                 $celulas = CelulaFamiliar::cargarRelaciones($idTerritorio, "Territorio");
 
                 if (count($celulas) > 0) {
@@ -91,7 +95,7 @@ class CelulaFamiliar extends Model
 
                 $stmt->execute();
             }
-
+            /** @var Bitacora **/
             Bitacora::registrar("Registro de celula familiar");
 
             http_response_code(200);
@@ -168,6 +172,8 @@ class CelulaFamiliar extends Model
     public  function editar_CelulaFamiliar($id, $nombre, $idLider, $idCoLider, $idTerritorio)
     {
         try {
+
+            /** @var CelulaFamiliar **/
             $consulta = CelulaFamiliar::cargar($id);
 
             if ($consulta->idTerritorio == $idTerritorio) {
@@ -183,7 +189,9 @@ class CelulaFamiliar extends Model
                 $stmt->execute();
             } else {
 
+                /** @var CelulaFamiliar **/
                 $territorio = Territorio::cargar($idTerritorio);
+                /** @var CelulaFamiliar[] **/
                 $celulas = CelulaFamiliar::cargarRelaciones($idTerritorio, "Territorio");
 
                 $identificador = '';
