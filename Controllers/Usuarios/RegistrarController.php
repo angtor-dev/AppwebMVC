@@ -28,8 +28,6 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST')
     }
     
     try {
-        $usuario->clave = password_hash($usuario->clave, PASSWORD_DEFAULT);
-
         $usuario->registrar();
     } catch (\Throwable $th) {
         header("Location: /AppwebMVC/Usuarios/");
@@ -37,7 +35,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST')
     }
 
     $_SESSION['exitos'][] = "Usuario registrado con exito.";
-    Bitacora::registrar("Registro al usuario $usuario->nombre $usuario->apellido");
+    Bitacora::registrar("Registro al usuario ".$usuario->getNombreCompleto());
     header("Location: /AppwebMVC/Usuarios/");
 }
 else {

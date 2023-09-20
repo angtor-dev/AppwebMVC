@@ -32,6 +32,6 @@ try {
 }
 
 $_SESSION['exitos'][] = "Usuario actualizado con exito.";
-Bitacora::registrar("Actualizo al usuario $usuario->nombre $usuario->apellido");
+Bitacora::registrar("Actualizo al usuario ".$usuario->getNombreCompleto());
 header("Location: /AppwebMVC/Usuarios/");
 ?>

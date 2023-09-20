@@ -7,21 +7,21 @@ class Usuario extends Model
 {
     public int $id;
     public int $idSede;
-    public ?int $idCelulaFamiliar;
-    public ?int $idCelulaCrecimiento;
-    public ?int $idConsolidador;
-    public string $cedula;
-    public ?string $correo;
-    public string $clave;
-    public string $nombre;
-    public string $apellido;
-    public string $telefono;
-    public string $direccion;
-    public string $estadoCivil;
-    public string $fechaNacimiento;
-    public ?string $fechaConversion;
-    public ?string $motivo;
-    public int $estatus;
+    private ?int $idCelulaFamiliar;
+    private ?int $idCelulaCrecimiento;
+    private ?int $idConsolidador;
+    private string $cedula;
+    private ?string $correo;
+    private string $clave;
+    private string $nombre;
+    private string $apellido;
+    private string $telefono;
+    private string $direccion;
+    private string $estadoCivil;
+    private string $fechaNacimiento;
+    private ?string $fechaConversion;
+    private ?string $motivo;
+    private int $estatus;
 
     /** @var ?array<Rol> */
     public ?array $roles;
@@ -36,16 +36,6 @@ class Usuario extends Model
         if (!empty($this->id)) {
             $this->roles = Rol::cargarMultiplesRelaciones($this->id, get_class($this), "UsuarioRol");
         }
-    }
-
-    public function getEdad() : int
-    {
-        if (empty($this->fechaNacimiento)) {
-            return 0;
-        }
-        $nacimiento = new DateTime($this->fechaNacimiento);
-        $edad = (new DateTime())->diff($nacimiento)->y;
-        return $edad;
     }
 
     public function login(string $cedula, string $clave) : bool
@@ -91,6 +81,8 @@ class Usuario extends Model
 
         try {
             $this->db->pdo()->beginTransaction();
+
+            $this->encriptarClave();
 
             // Registra al usuario
             $stmt = $this->prepare($sql);
@@ -188,6 +180,11 @@ class Usuario extends Model
             throw $th;
         }
     }
+    
+    private function encriptarClave() : void
+    {
+        $this->clave = password_hash($this->clave, PASSWORD_DEFAULT);
+    }
 
     public function esValido() : bool
     {
@@ -264,6 +261,45 @@ class Usuario extends Model
         }
 
         return $usuarios;
+    }
+
+    // Getters
+    public function getEdad() : int
+    {
+        if (empty($this->fechaNacimiento)) {
+            return 0;
+        }
+        $nacimiento = new DateTime($this->fechaNacimiento);
+        $edad = (new DateTime())->diff($nacimiento)->y;
+        return $edad;
+    }
+
+    public function getNombreCompleto() : string {
+        return $this->nombre." ".$this->apellido;
+    }
+    public function getNombre() : string {
+        return $this->nombre ?? "";
+    }
+    public function getApellido() : string {
+        return $this->apellido ?? "";
+    }
+    public function getCorreo() : ?string {
+        return $this->correo ?? null;
+    }
+    public function getCedula() : string {
+        return $this->cedula ?? "";
+    }
+    public function getTelefono() : string {
+        return $this->telefono ?? "";
+    }
+    public function getDireccion() : string {
+        return $this->direccion ?? "";
+    }
+    public function getEstadoCivil() : string {
+        return $this->estadoCivil ?? "";
+    }
+    public function getFechaNacimiento() : string {
+        return $this->fechaNacimiento ?? "";
     }
 }
 ?>

@@ -34,7 +34,7 @@ $title = "Registrar grupo";
                     <option value="0">Elige un profesor</option>
                     <?php foreach ($profesores as $profesor): ?>
                         <option value="<?= $profesor->id ?>" <?= $profesor->id == @$grupo?->idProfesor ? "selected" : ""  ?>>
-                            <?= $profesor->cedula." - ".$profesor->nombre." ".$profesor->apellido ?>
+                            <?= $profesor->getCedula()." - ".$profesor->getNombreCompleto() ?>
                         </option>
                     <?php endforeach ?>
                 </select>

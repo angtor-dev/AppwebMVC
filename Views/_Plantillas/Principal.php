@@ -56,7 +56,7 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
                         <div class="dropdown d-inline-block">
                             <button class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fa-solid fa-user-large me-1"></i>
-                                <?= $usuario->nombre ?>
+                                <?= $usuario->getNombre() ?>
                             </button>
                             <ul class="dropdown-menu">
                                 <li>

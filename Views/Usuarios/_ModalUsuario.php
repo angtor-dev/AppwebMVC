@@ -12,7 +12,7 @@
         <div class="col-sm-6">
             <label for="input-nombre">Nombre</label>
             <input class="form-control" type="text" name="nombre" id="input-nombre" required maxlength="50"
-                value="<?= $usuario->nombre ?? "" ?>">
+                value="<?= $usuario->getNombre() ?? "" ?>">
             <div class="invalid-feedback">
                 Ingresa un nombre válido
             </div>
@@ -20,7 +20,7 @@
         <div class="col-sm-6">
             <label for="input-apellido">Apellido</label>
             <input class="form-control" type="text" name="apellido" id="input-apellido" required maxlength="50"
-                value="<?= $usuario->apellido ?? "" ?>">
+                value="<?= $usuario->getApellido() ?? "" ?>">
             <div class="invalid-feedback">
                 Ingresa un apellido válido
             </div>
@@ -28,7 +28,7 @@
         <div class="col-sm-5">
             <label for="input-cedula">Cédula</label>
             <input class="form-control" type="text" name="cedula" id="input-cedula" required maxlength="15"
-                pattern="[0-9]{7,9}" value="<?= $usuario->cedula ?? "" ?>">
+                pattern="[0-9]{7,9}" value="<?= $usuario->getCedula() ?? "" ?>">
             <div class="invalid-feedback">
                 Cédula inválida
             </div>
@@ -36,7 +36,7 @@
         <div class="col-sm-7">
             <label for="input-telefono">Teléfono</label>
             <input class="form-control" type="text" name="telefono" id="input-telefono" required maxlength="20"
-                pattern="[0-9-]{7,20}" value="<?= $usuario->telefono ?? "" ?>">
+                pattern="[0-9-]{7,20}" value="<?= $usuario->getTelefono() ?? "" ?>">
             <div class="invalid-feedback">
                 Ingresa un teléfono válido
             </div>
@@ -44,7 +44,7 @@
         <div class="col-sm-12">
             <label for="input-correo">Correo</label>
             <input class="form-control" type="email" name="correo" id="input-correo" required maxlength="255"
-                value="<?= $usuario->correo ?? "" ?>">
+                value="<?= $usuario->getCorreo() ?? "" ?>">
             <div class="invalid-feedback">
                 Ingresa un correo válido
             </div>
@@ -52,7 +52,7 @@
         <div class="col-sm-12">
             <label for="input-direccion">Dirección</label>
             <input class="form-control" type="text" name="direccion" id="input-direccion" required maxlength="50"
-                value="<?= $usuario->direccion ?? "" ?>">
+                value="<?= $usuario->getDireccion() ?? "" ?>">
             <div class="invalid-feedback">
                 Ingresa una dirección válida
             </div>
@@ -60,18 +60,18 @@
         <div class="col-sm-6">
             <label for="input-fechaNacimiento">Nacimiento</label>
             <input class="form-control" type="date" name="fechaNacimiento" id="input-fechaNacimiento" required
-                value="<?= $usuario->fechaNacimiento ?? "" ?>">
+                value="<?= $usuario->getFechaNacimiento() ?? "" ?>">
             <div class="invalid-feedback">
                 Fecha invalida
             </div>
         </div>
         <div class="col-sm-6">
-            <label for="input-estadoCivil">Estado civil</label>
+            <label for="input-getEstadoCivil()">Estado civil</label>
             <select class="form-select" name="estadoCivil" id="estadoCivil" required>
                 <option value=""></option>
                 <?php foreach (EstadoCivil::cases() as $estado): ?>
                     <option value="<?= $estado->value ?>"
-                        <?= $estado->value == ($usuario->estadoCivil ?? null) ? "selected" : "" ?>>
+                        <?= $estado->value == ($usuario->getEstadoCivil() ?? null) ? "selected" : "" ?>>
                         <?= $estado->name ?>
                     </option>
                 <?php endforeach ?>

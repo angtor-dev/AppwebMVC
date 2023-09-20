@@ -42,9 +42,9 @@ $usuarioSesion = $_SESSION['usuario'];
     <tbody>
         <?php foreach ($usuarios as $usuario) : ?>
             <tr>
-                <td><?= $usuario->nombre . " " . $usuario->apellido ?></td>
-                <td><?= $usuario->cedula ?></td>
-                <td><?= $usuario->correo ?></td>
+                <td><?= $usuario->getNombreCompleto() ?></td>
+                <td><?= $usuario->getCedula() ?></td>
+                <td><?= $usuario->getCorreo() ?></td>
                 <td>
                     <?=
                     implode(", ", array_map(function(Rol $rol) {
