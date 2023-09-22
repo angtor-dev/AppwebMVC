@@ -4,7 +4,7 @@ require_once "Models/Territorio.php";
 
 necesitaAutenticacion();
 
-requierePermisos("listarTerritorio");
+requierePermiso("territorios", "registrar");
 
 $usuarioSesion = $_SESSION['usuario'];
 
@@ -37,7 +37,7 @@ if (isset($_GET['cargar_data'])) {
 
 if (isset($_GET['listaLideres'])) {
 
-    requierePermisos("actualizarTerritorio");
+    requierePermiso("territorios", "actualizar");
 
     $ListaLideres = $Territorio->listar_lideres();
 
@@ -49,7 +49,7 @@ if (isset($_GET['listaLideres'])) {
 
 if (isset($_GET['listaSedes'])) {
 
-    requierePermisos("actualizarTerritorio");
+    requierePermiso("territorios", "actualizar");
 
     $ListaSedes = $Territorio->listar_Sedes();
 
@@ -60,7 +60,7 @@ if (isset($_GET['listaSedes'])) {
 
 if (isset($_POST['editar'])) {
 
-    requierePermisos("actualizarTerritorio");
+    requierePermiso("territorios", "actualizar");
 
     $id = trim($_POST['id']);
     $idSede = trim($_POST['idSede']);
@@ -77,7 +77,7 @@ if (isset($_POST['editar'])) {
 
 if (isset($_POST['eliminar'])) {
 
-    requierePermisos("eliminarTerritorio");
+    requierePermiso("territorios", "eliminar");
 
     $id = $_POST['id'];
 

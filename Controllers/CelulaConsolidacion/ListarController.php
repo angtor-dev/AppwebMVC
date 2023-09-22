@@ -4,7 +4,7 @@ require_once "Models/CelulaConsolidacion.php";
 
 necesitaAutenticacion();
 
-requierePermisos("listarCelulaConsolidacion");
+requierePermiso("celulaConsolidacion", "registrar");
 
 $usuarioSesion = $_SESSION['usuario'];
 
@@ -38,7 +38,7 @@ if (isset($_GET['cargar_data'])) {
 
 if (isset($_POST['editar'])) {
 
-    requierePermisos("actualizarCelulaConsolidacion");
+    requierePermiso("celulaConsolidacion", "actualizar");
 
     $id = $_POST['id'];
     $nombre = trim(strtolower($_POST['nombre']));
@@ -58,7 +58,7 @@ if (isset($_POST['editar'])) {
 
 if (isset($_POST['registroreunion'])) {
 
-    requierePermisos("actualizarCelulaConsolidacion");
+    requierePermiso("celulaConsolidacion", "actualizar");
 
     $idCelulaConsolidacion = trim($_POST['idCelulaConsolidacion']);
     $fecha = $_POST['fecha'];
@@ -78,7 +78,7 @@ if (isset($_POST['registroreunion'])) {
 
 if (isset($_POST['eliminar'])) {
 
-    requierePermisos("eliminarCelulaConsolidacion");
+    requierePermiso("celulaConsolidacion", "eliminar");
 
     $id = $_POST['id'];
 
@@ -91,7 +91,7 @@ if (isset($_POST['eliminar'])) {
 
 if (isset($_GET['listaLideres'])) {
 
-    requierePermisos("actualizarCelulaConsolidacion");
+    requierePermiso("celulaConsolidacion", "actualizar");
 
     $ListaLideres = $CelulaConsolidacion->listar_lideres();
 
@@ -101,7 +101,7 @@ if (isset($_GET['listaLideres'])) {
 
 if (isset($_GET['listaTerritorio'])) {
 
-    requierePermisos("actualizarCelulaConsolidacion");
+    requierePermiso("celulaConsolidacion", "actualizar");
 
     $Listaterritorio = $CelulaConsolidacion->listar_territorios();
 
@@ -112,7 +112,7 @@ if (isset($_GET['listaTerritorio'])) {
 
 if (isset($_GET['cargar_discipulos_celula'])) {
 
-    requierePermisos("actualizarCelulaConsolidacion");
+    requierePermiso("celulaConsolidacion", "actualizar");
 
     $idCelulaConsolidacion = $_GET['idCelulaConsolidacion'];
     $resultado = $CelulaConsolidacion->listarDiscipulados_celula($idCelulaConsolidacion);

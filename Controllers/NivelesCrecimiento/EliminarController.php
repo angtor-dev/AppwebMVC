@@ -1,7 +1,7 @@
 <?php
 require_once "Models/NivelCrecimiento.php";
 necesitaAutenticacion();
-requierePermisos("eliminarNivelesCrecimiento");
+requierePermiso("nivelesCrecimiento", "eliminar");
 
 if (empty($_GET['id'])) {
     $_SESSION['errores'][] = "No se especificó ningún nivel de crecimiento para eliminar.";

@@ -4,7 +4,7 @@ require_once "Models/CelulaCrecimiento.php";
 
 necesitaAutenticacion();
 
-requierePermisos("registrarCelulaCrecimiento");
+requierePermiso("celulaCrecimiento", "registrar");
 
 $usuarioSesion = $_SESSION['usuario'];
 

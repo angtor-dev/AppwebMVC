@@ -1,6 +1,6 @@
 <?php
 necesitaAutenticacion();
-requierePermisos("consultarRoles");
+requierePermiso("roles", "consultar");
 
 $roles = Rol::listar(1);
 

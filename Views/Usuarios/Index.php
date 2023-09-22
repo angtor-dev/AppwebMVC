@@ -20,7 +20,7 @@ $usuarioSesion = $_SESSION['usuario'];
         <div class="buscador">
             <input type="text" id="tabla-usuarios_search" class="form-control" placeholder="Buscar usuario">
         </div>
-        <?php if ($usuarioSesion->tienePermiso("registrarUsuarios")): ?>
+        <?php if ($usuarioSesion->tienePermiso("usuarios", "registrar")): ?>
             <button class="btn btn-accent text-nowrap" onclick="abrirModalUsuario()">
                 <i class="fa-solid fa-plus"></i>
                 Nuevo usuario
@@ -57,12 +57,12 @@ $usuarioSesion = $_SESSION['usuario'];
                         <a role="button">
                             <i class="fa-solid fa-circle-info" title="Ver detalles" data-bs-toggle="tooltip"></i>
                         </a>
-                        <?php if ($usuarioSesion->tienePermiso("actualizarUsuarios")): ?>
+                        <?php if ($usuarioSesion->tienePermiso("usuarios", "actualizar")): ?>
                             <a role="button" onclick="abrirModalUsuario(<?= $usuario->id ?>)">
                                 <i class="fa-solid fa-pen" title="Modificar" data-bs-toggle="tooltip"></i>
                             </a>
                         <?php endif ?>
-                        <?php if ($usuarioSesion->tienePermiso("actualizarUsuarios") && $usuario->id != $usuarioSesion->id): ?>
+                        <?php if ($usuarioSesion->tienePermiso("usuarios", "eliminar") && $usuario->id != $usuarioSesion->id): ?>
                             <a role="button" data-bs-toggle="modal" data-bs-target="#confirmar-eliminacion"
                                 data-id="<?= $usuario->id ?>">
                                 <i class="fa-solid fa-trash" title="Eliminar" data-bs-toggle="tooltip"></i>

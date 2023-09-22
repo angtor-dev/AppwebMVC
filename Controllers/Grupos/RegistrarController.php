@@ -2,7 +2,7 @@
 require_once "Models/Grupo.php";
 require_once "Models/Enums/EstadosGrupo.php";
 necesitaAutenticacion();
-//requierePermisos("registrarGrupos");
+//requierePermiso("grupos", "registrar");
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET')
 {

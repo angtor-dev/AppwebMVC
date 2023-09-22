@@ -4,7 +4,7 @@ require_once "Models/CelulaCrecimiento.php";
 
 necesitaAutenticacion();
 
-requierePermisos("listarCelulaCrecimiento");
+requierePermiso("celulaCrecimiento", "registrar");
 
 $usuarioSesion = $_SESSION['usuario'];
 
@@ -38,7 +38,7 @@ if (isset($_GET['cargar_data'])) {
 
 if (isset($_POST['editar'])) {
 
-    requierePermisos("actualizarCelulaCrecimiento");
+    requierePermiso("celulaCrecimiento", "actualizar");
 
     $id = $_POST['id'];
     $nombre = trim(strtolower($_POST['nombre']));
@@ -58,7 +58,7 @@ if (isset($_POST['editar'])) {
 
 if (isset($_POST['registroreunion'])) {
 
-    requierePermisos("actualizarCelulaCrecimiento");
+    requierePermiso("celulaCrecimiento", "actualizar");
 
 
     $idCelulaCrecimiento = $_POST['idCelulaCrecimiento'];
@@ -83,7 +83,7 @@ if (isset($_POST['registroreunion'])) {
 
 if (isset($_POST['eliminar'])) {
 
-    requierePermisos("eliminarCelulaCrecimiento");
+    requierePermiso("celulaCrecimiento", "eliminar");
 
     $id = $_POST['id'];
 
@@ -96,7 +96,7 @@ if (isset($_POST['eliminar'])) {
 
 if (isset($_GET['listaLideres'])) {
 
-    requierePermisos("actualizarCelulaCrecimiento");
+    requierePermiso("celulaCrecimiento", "actualizar");
 
     $ListaLideres = $CelulaCrecimiento->listar_lideres();
 
@@ -107,7 +107,7 @@ if (isset($_GET['listaLideres'])) {
 
 if (isset($_GET['listaTerritorio'])) {
 
-    requierePermisos("actualizarCelulaCrecimiento");
+    requierePermiso("celulaCrecimiento", "actualizar");
 
     $Listaterritorio = $CelulaCrecimiento->listar_territorios();
 

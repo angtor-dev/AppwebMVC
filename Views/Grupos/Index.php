@@ -6,7 +6,7 @@ $title = "Grupos";
 <div class="d-flex align-items-end justify-content-between mb-3">
     <h4 class="mb-0 fw-bold">Grupos</h4>
     <div class="d-flex gap-3">
-        <?php if (true/*$usuario->tienePermiso("registrarGrupos")*/): ?>
+        <?php if (true/*$usuario->tienePermiso("grupos", "registrar")*/): ?>
             <a href="/AppwebMVC/Grupos/Registrar" class="btn btn-accent text-nowrap">
                 <i class="fa-solid fa-plus"></i>
                 Nuevo grupo
@@ -26,7 +26,7 @@ $title = "Grupos";
                     </div>
                     <div class="card-body">
                         <b>Nivel:</b> <?= $grupo->nivelCrecimiento->nombre ?> <br>
-                        <b>Profesor:</b> <?= $grupo->profesor->nombre." ".$grupo->profesor->apellido ?> <br>
+                        <b>Profesor:</b> <?= $grupo->profesor->getNombreCompleto() ?> <br>
                         <b>Participantes:</b> 0
                     </div>
                     <div class="card-footer text-end">

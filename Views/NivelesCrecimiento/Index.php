@@ -11,7 +11,7 @@ $title = "Niveles de Crecimiento";
             <div class="buscador">
                 <input type="text" id="tabla-niveles_search" class="form-control" placeholder="Buscar Nivel">
             </div>
-            <?php if ($usuario->tienePermiso("registrarNivelesCrecimiento")): ?>
+            <?php if ($usuario->tienePermiso("nivelesCrecimiento", "registrar")): ?>
                 <a href="/AppwebMVC/NivelesCrecimiento/Registrar" class="btn btn-accent text-nowrap">
                     <i class="fa-solid fa-plus"></i>
                     Nuevo nivel
@@ -26,7 +26,7 @@ $title = "Niveles de Crecimiento";
         <div class="d-flex flex-column align-items-center text-center">
             <h2>Sin niveles para mostrar</h2>
             <h6 class="mb-4">Parece que aun no se han registrado niveles de crecimiento para esta sede</h6>
-            <?php if ($usuario->tienePermiso('registrarNivelesCrecimiento')): ?>
+            <?php if ($usuario->tienePermiso("nivelesCrecimiento", "registrar")): ?>
                 <a href="/AppwebMVC/NivelesCrecimiento/CrearIniciales" class="btn btn-accent">
                     Crear niveles iniciales
                 </a>
@@ -56,12 +56,12 @@ $title = "Niveles de Crecimiento";
                             <a role="button">
                                 <i class="fa-solid fa-circle-info" title="Ver detalles" data-bs-toggle="tooltip"></i>
                             </a>
-                            <?php if ($usuario->tienePermiso("actualizarNivelesCrecimiento")): ?>
+                            <?php if ($usuario->tienePermiso("nivelesCrecimiento", "actualizar")): ?>
                                 <a role="button" onclick="abrirModalNivelCrecimiento(<?= $nivel->id ?>)">
                                     <i class="fa-solid fa-pen" title="Modificar" data-bs-toggle="tooltip"></i>
                                 </a>
                             <?php endif ?>
-                            <?php if ($usuario->tienePermiso("eliminarNivelesCrecimiento")): ?>
+                            <?php if ($usuario->tienePermiso("nivelesCrecimiento", "eliminar")): ?>
                                 <a role="button" data-bs-toggle="modal" data-bs-target="#confirmar-eliminacion"
                                     data-id="<?= $nivel->id ?>">
                                     <i class="fa-solid fa-trash" title="Eliminar" data-bs-toggle="tooltip"></i>
@@ -159,7 +159,7 @@ $title = "Niveles de Crecimiento";
                         <td>${nivel}</td>
                         <td>${nombre}</td>
                         <td class="d-flex justify-content-center gap-3 border-bottom-0" style="color: var(--color-terceario);">
-                            <?php if ($usuario->tienePermiso("actualizarNivelesCrecimiento")): ?>
+                            <?php if ($usuario->tienePermiso("nivelesCrecimiento", "actualizar")): ?>
                                 <a role="button" onclick="abrirModalSubnivel(${id})">
                                     <i class="fa-solid fa-pen" title="Modificar" data-bs-toggle="tooltip"></i>
                                 </a>

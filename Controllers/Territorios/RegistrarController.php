@@ -3,7 +3,7 @@ require_once "Models/Territorio.php";
 
 necesitaAutenticacion();
 
-requierePermisos("registrarTerritorio");
+requierePermiso("territorios", "registrar");
 
 $usuarioSesion = $_SESSION['usuario'];
 

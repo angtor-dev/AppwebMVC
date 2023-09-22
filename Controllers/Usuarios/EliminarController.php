@@ -1,6 +1,6 @@
 <?php
 necesitaAutenticacion();
-requierePermisos("eliminarUsuarios");
+requierePermiso("usuarios", "eliminar");
 
 if (empty($_GET['id'])) {
     $_SESSION['errores'][] = "No se especificó ningún usuario para eliminar.";

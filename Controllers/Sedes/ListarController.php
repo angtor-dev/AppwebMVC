@@ -4,7 +4,7 @@ require_once "Models/Sede.php";
 
 necesitaAutenticacion();
 
-requierePermisos("listarSede");
+requierePermiso("sedes", "registrar");
 
 $usuarioSesion = $_SESSION['usuario'];
 
@@ -36,7 +36,7 @@ if (isset($_GET['cargar_data'])) {
 
 
 if (isset($_GET['listaPastores'])) {
-    requierePermisos("actualizarSede");
+    requierePermiso("sedes", "actualizar");
 
     $ListaPastores = $Sede->listar_Pastores();
 
@@ -46,7 +46,7 @@ if (isset($_GET['listaPastores'])) {
 }
 
 if (isset($_POST['editar'])) {
-    requierePermisos("actualizarSede");
+    requierePermiso("sedes", "actualizar");
 
     $idSede = $_POST['id'];
     $idPastor = $_POST['idPastor'];
@@ -63,7 +63,7 @@ if (isset($_POST['editar'])) {
 }
 
 if (isset($_POST['eliminar'])) {
-    requierePermisos("eliminarSede");
+    requierePermiso("sedes", "eliminar");
 
     $id = $_POST['id'];
     $Sede->validacion_eliminar($id);

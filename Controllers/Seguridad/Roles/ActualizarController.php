@@ -1,6 +1,6 @@
 <?php
 necesitaAutenticacion();
-requierePermisos("actualizarRoles");
+requierePermiso("roles", "actualizar");
 
 if (!$_SERVER['REQUEST_METHOD'] === 'POST')
 {

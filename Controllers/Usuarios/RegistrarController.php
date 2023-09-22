@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET')
 }
 elseif ($_SERVER['REQUEST_METHOD'] === 'POST')
 {
-    requierePermisos("registrarUsuarios");
+    requierePermiso("usuarios", "registrar");
     $usuario = new Usuario();
     $usuario->mapFromPost();
     $idRoles = $_POST['idRoles'];

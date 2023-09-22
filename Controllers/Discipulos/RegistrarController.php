@@ -3,7 +3,7 @@ require_once "Models/Discipulo.php";
 
 necesitaAutenticacion();
 
-requierePermisos("registrarDiscipulos");
+requierePermiso("discipulos", "registrar");
 
 $Discipulo = new Discipulo();
 

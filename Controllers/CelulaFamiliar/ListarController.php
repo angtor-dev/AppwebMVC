@@ -4,7 +4,7 @@ require_once "Models/CelulaFamiliar.php";
 
 necesitaAutenticacion();
 
-requierePermisos("listarCelulaFamiliar");
+requierePermiso("celulaFamiliar", "registrar");
 
 $usuarioSesion = $_SESSION['usuario'];
 
@@ -37,7 +37,7 @@ if (isset($_GET['cargar_data'])) {
 
 if (isset($_POST['editar'])) {
 
-    requierePermisos("actualizarCelulaFamiliar");
+    requierePermiso("celulaFamiliar", "actualizar");
 
     $id = $_POST['id'];
     $nombre = trim(strtolower($_POST['nombre']));
@@ -57,7 +57,7 @@ if (isset($_POST['editar'])) {
 
 if (isset($_POST['registroreunion'])) {
 
-    requierePermisos("actualizarCelulaFamiliar");
+    requierePermiso("celulaFamiliar", "actualizar");
 
     $idCelulaFamiliar = $_POST['idCelulaFamiliar'];
     $fecha = $_POST['fecha'];
@@ -81,7 +81,7 @@ if (isset($_POST['registroreunion'])) {
 
 if (isset($_POST['eliminar'])) {
 
-    requierePermisos("eliminarCelulaFamiliar");
+    requierePermiso("celulaFamiliar", "eliminar");
 
     $id = $_POST['id'];
 
@@ -94,7 +94,7 @@ if (isset($_POST['eliminar'])) {
 
 if (isset($_GET['listaLideres'])) {
 
-    requierePermisos("actualizarCelulaFamiliar");
+    requierePermiso("celulaFamiliar", "actualizar");
 
     $ListaLideres = $CelulaFamiliar->listar_lideres();
 
@@ -105,7 +105,7 @@ if (isset($_GET['listaLideres'])) {
 
 if (isset($_GET['listaTerritorio'])) {
 
-    requierePermisos("actualizarCelulaFamiliar");
+    requierePermiso("celulaFamiliar", "actualizar");
 
     $Listaterritorio = $CelulaFamiliar->listar_territorios();
 

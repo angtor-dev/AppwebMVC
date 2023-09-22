@@ -1,6 +1,6 @@
 <?php
 necesitaAutenticacion();
-requierePermisos("consultarBitacora");
+requierePermiso("bitacora", "consultar");
 
 $bitacoras = Bitacora::listar();
 

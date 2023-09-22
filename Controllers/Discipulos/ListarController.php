@@ -4,7 +4,7 @@ require_once "Models/Discipulo.php";
 
 necesitaAutenticacion();
 
-requierePermisos("listarDiscipulos");
+requierePermiso("discipulos", "registrar");
 
 $usuarioSesion = $_SESSION['usuario'];
 
@@ -38,7 +38,7 @@ if (isset($_GET['cargar_data'])) {
 
 if (isset($_GET['listaConsolidador'])) {
 
-    requierePermisos("actualizarDiscipulos");
+    requierePermiso("discipulos", "actualizar");
 
     $ListaConsolidador = $Discipulo->listar_consolidador();
 
@@ -51,7 +51,7 @@ if (isset($_GET['listaConsolidador'])) {
 
 if (isset($_GET['listarcelulas'])) {
 
-    requierePermisos("actualizarDiscipulos");
+    requierePermiso("discipulos", "actualizar");
 
     $listacelulas = $Discipulo->listar_celulas();
 
@@ -63,7 +63,7 @@ if (isset($_GET['listarcelulas'])) {
 
 if (isset($_POST['editar'])) {
 
-    requierePermisos("actualizarDiscipulos");
+    requierePermiso("discipulos", "actualizar");
 
     $id = $_POST['id'];
     $asisCrecimiento = trim(strtolower($_POST['asisCrecimiento']));
@@ -114,7 +114,7 @@ if (isset($_POST['editar'])) {
 
 if (isset($_POST['eliminar'])) {
 
-    requierePermisos("eliminarDiscipulos");
+    requierePermiso("discipulos", "eliminar");
 
     $id = $_POST['id'];
 

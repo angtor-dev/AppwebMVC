@@ -1,6 +1,6 @@
 <?php
 necesitaAutenticacion();
-requierePermisos("eliminarRoles");
+requierePermiso("roles", "eliminar");
 
 if (empty($_GET['id']) || !is_numeric($_GET['id'])) {
     $_SESSION['errores'][] = "No se especificó ningún rol para eliminar.";

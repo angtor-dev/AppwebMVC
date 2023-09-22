@@ -11,7 +11,7 @@ $usuario = $_SESSION['usuario'];
         <div class="buscador">
             <input type="text" id="tabla-roles_search" class="form-control" placeholder="Buscar rol">
         </div>
-        <?php if ($usuario->tienePermiso("registrarRoles")): ?>
+        <?php if ($usuario->tienePermiso("roles", "registrar")): ?>
             <button class="btn btn-accent text-nowrap" onclick="abrirModalRol()">
                 <i class="fa-solid fa-plus"></i>
                 Nuevo Rol
@@ -37,18 +37,18 @@ $usuario = $_SESSION['usuario'];
                 <td><?= $rol->nivel ?></td>
                 <td>
                     <div class="acciones">
-                        <?php if ($usuario->tienePermiso("actualizarRoles") && $rol->nombre != "Superusuario"): ?>
+                        <?php if ($usuario->tienePermiso("roles", "actualizar") && $rol->nombre != "Superusuario"): ?>
                             <a role="button" onclick="abrirModalRol(<?= $rol->id ?>)">
                                 <i class="fa-solid fa-pen" title="Modificar" data-bs-toggle="tooltip"></i>
                             </a>
                         <?php endif ?>
-                        <?php if ($usuario->tienePermiso("eliminarRoles") && $rol->nombre != "Superusuario"): ?>
+                        <?php if ($usuario->tienePermiso("roles", "eliminar") && $rol->nombre != "Superusuario"): ?>
                             <a role="button" data-bs-toggle="modal" data-bs-target="#confirmar-eliminacion"
                                 data-id="<?= $rol->id ?>">
                                 <i class="fa-solid fa-trash" title="Eliminar" data-bs-toggle="tooltip"></i>
                             </a>
                         <?php endif ?>
-                        <?php if ($usuario->tienePermiso("gestionarPermisos") && $rol->nombre != "Superusuario"): ?>
+                        <?php if ($usuario->tienePermiso("Permisos", "actualizar") && $rol->nombre != "Superusuario"): ?>
                             <a role="button" onclick="abrirModalPermisos(<?= $rol->id ?>)">
                                 <i class="fa-solid fa-key" title="Gestionar permisos" data-bs-toggle="tooltip"></i>
                             </a>
@@ -84,14 +84,14 @@ $usuario = $_SESSION['usuario'];
     </div>
 </div>
 
-<?php if ($usuario->tienePermiso("registrarRoles") || $usuario->tienePermiso("actualizarRoles")): ?>
+<?php if ($usuario->tienePermiso("roles", "registrar") || $usuario->tienePermiso("roles", "actualizar")): ?>
     <!-- Registrar o actualizar rol -->
     <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvas-rol">
         <!-- Contenido cargado desde ajax -->
     </div>
 <?php endif ?>
 
-<?php if ($usuario->tienePermiso("gestionarPermisos")): ?>
+<?php if ($usuario->tienePermiso("permisos", "gestionar")): ?>
     <!-- Actualizar permisos -->
     <div class="modal fade" tabindex="-1" id="modal-permisos">
         <!-- Contenido cargado desde ajax -->

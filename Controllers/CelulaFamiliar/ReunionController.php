@@ -5,7 +5,7 @@ require_once "Models/CelulaFamiliar.php";
 
 necesitaAutenticacion();
 
-requierePermisos("listarCelulaFamiliar");
+requierePermiso("celulaFamiliar", "registrar");
 
 $usuarioSesion = $_SESSION['usuario'];
 
@@ -40,7 +40,7 @@ if (isset($_GET['cargar_data'])) {
 
 if (isset($_POST['editar'])) {
 
-    requierePermisos("actualizarCelulaFamiliar");
+    requierePermiso("celulaFamiliar", "actualizar");
 
     $id = $_POST['id'];
     $idCelulaFamiliar = $_POST['idCelulaFamiliar'];
@@ -63,7 +63,7 @@ if (isset($_POST['editar'])) {
 
 if (isset($_POST['eliminar'])) {
 
-    requierePermisos("actualizarCelulaFamiliar");
+    requierePermiso("celulaFamiliar", "actualizar");
 
     $id = $_POST['id'];
 
@@ -75,7 +75,7 @@ if (isset($_POST['eliminar'])) {
 
 if (isset($_GET['listarcelulas'])) {
 
-    requierePermisos("actualizarCelulaFamiliar");
+    requierePermiso("celulaFamiliar", "actualizar");
 
     $listaCelulas = $CelulaFamiliar->listar_celulas();
 
@@ -83,10 +83,6 @@ if (isset($_GET['listarcelulas'])) {
 
     die();
 }
-
-
-
-
 
 renderView();
 ?>

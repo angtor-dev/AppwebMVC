@@ -1,7 +1,7 @@
 <?php
 require_once "Models/NivelCrecimiento.php";
 necesitaAutenticacion();
-requierePermisos("registrarNivelesCrecimiento");
+requierePermiso("nivelesCrecimiento", "registrar");
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET')
 {

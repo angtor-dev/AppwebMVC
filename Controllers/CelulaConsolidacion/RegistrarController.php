@@ -4,7 +4,7 @@ require_once "Models/CelulaConsolidacion.php";
 
 necesitaAutenticacion();
 
-requierePermisos("registrarCelulaConsolidacion");
+requierePermiso("celulaConsolidacion", "registrar");
 
 $usuarioSesion = $_SESSION['usuario'];
 

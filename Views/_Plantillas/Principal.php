@@ -66,7 +66,7 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
                                     </a>
                                 </li>
                                 <li>
-                                    <?php if ($usuario->tienePermiso("cambiarSede")): ?>
+                                    <?php if (true): ?>
                                         <a class="dropdown-item" href="#">
                                             <i class="fa-solid fa-arrows-rotate fa-fw me-2"></i>
                                             Elegir sede
@@ -232,10 +232,10 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
                 </div>
             </div>
             
-            <?php if ($usuario->tienePermiso("consultarNivelesCrecimiento") || $usuario->tieneRol("Profesor")
+            <?php if ($usuario->tienePermiso("nivelesCrecimiento", "consultar") || $usuario->tieneRol("Profesor")
                 || $usuario->tieneRol("Estudiante")): ?>
                 <div class="nav-link py-0 mt-3 text-uppercase">Escuela</div>
-                <?php if ($usuario->tienePermiso("consultarNivelesCrecimiento")): ?>
+                <?php if ($usuario->tienePermiso("nivelesCrecimiento", "consultar")): ?>
                     <div class="acordeon <?= strtolower($uriParts[0]) == "nivelescrecimiento" ? "show" : "" ?>">
                         <a href="#" class="nav-link acordeon-toggle <?= strtolower($uriParts[0]) == "nivelescrecimiento" ? "active" : "" ?>">
                             <i class="fa-solid fa-graduation-cap fa-fw me-2"></i>
@@ -331,8 +331,8 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
                 <?php endif ?>
             <?php endif ?>
             
-            <?php if ($usuario->tienePermiso("consultarUsuarios") || $usuario->tienePermiso("consultarRoles")
-                || $usuario->tienePermiso("consultarBitacora")): ?>
+            <?php if ($usuario->tienePermiso("usuarios", "consultar") || $usuario->tienePermiso("roles", "consultar")
+                || $usuario->tienePermiso("bitacora", "consultar")): ?>
                 <div class="nav-link py-0 mt-3 text-uppercase">Sistema</div>
                 <a href="#" class="nav-link">
                     <i class="fa-solid fa-chart-pie fa-fw me-2"></i>
@@ -342,27 +342,27 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
                     <i class="fa-solid fa-file fa-fw me-2"></i>
                     Reportes
                 </a>
-                <?php if ($usuario->tienePermiso("consultarUsuarios")): ?>
+                <?php if ($usuario->tienePermiso("usuarios", "consultar")): ?>
                     <a href="<?= LOCAL_DIR ?>Usuarios" class="nav-link <?= strtolower($uriParts[0]) == "usuarios" ? "active" : "" ?>">
                         <i class="fa-solid fa-user fa-fw me-2"></i>
                         Usuarios
                     </a>
                 <?php endif ?>
                 <div class="acordeon <?= strtolower($uriParts[0]) == "seguridad" ? "show" : "" ?>">
-                    <?php if ($usuario->tienePermiso("consultarRoles") || $usuario->tienePermiso("consultarBitacora")): ?>
+                    <?php if ($usuario->tienePermiso("roles", "consultar") || $usuario->tienePermiso("bitacora", "consultar")): ?>
                         <a href="#" class="nav-link acordeon-toggle">
                             <i class="fa-solid fa-lock fa-fw me-2"></i>
                             Seguridad
                         </a>
                         <div class="acordeon-body">
                             <div class="acordeon-items">
-                                <?php if ($usuario->tienePermiso("consultarRoles")): ?>
+                                <?php if ($usuario->tienePermiso("roles", "consultar")): ?>
                                     <a href="<?= LOCAL_DIR ?>Seguridad/Roles" class="nav-link <?= strtolower($uriParts[1] ?? "") == "roles" ? "active" : "" ?>">
                                         <i class="fa-solid fa-key fa-fw me-2"></i>
                                         Roles y permisos
                                     </a>
                                 <?php endif ?>
-                                <?php if ($usuario->tienePermiso("consultarBitacora")): ?>
+                                <?php if ($usuario->tienePermiso("bitacora", "consultar")): ?>
                                     <a href="<?= LOCAL_DIR ?>Seguridad/Bitacora" class="nav-link <?= strtolower($uriParts[1] ?? "") == "bitacora" ? "active" : "" ?>">
                                         <i class="fa-solid fa-table-list fa-fw me-2"></i>
                                         Bitacora

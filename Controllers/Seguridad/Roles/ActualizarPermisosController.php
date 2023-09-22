@@ -1,17 +1,17 @@
 <?php
 necesitaAutenticacion();
-requierePermisos("gestionarPermisos");
+requierePermiso("permisos", "gestionar");
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
     die();
 }
 
-$permisos = new Permisos();
+$permiso = new Permiso();
 $permisos->mapFromPost();
 
 try {
-    $permisos->actualizar();
+    $permiso->actualizar();
 } catch (\Throwable $th) {
     redirigir("/AppwebMVC/Seguridad/Roles");
 }

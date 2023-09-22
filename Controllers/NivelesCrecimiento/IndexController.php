@@ -2,7 +2,7 @@
 require_once "Models/Escuela.php";
 require_once "Models/NivelCrecimiento.php";
 necesitaAutenticacion();
-requierePermisos('consultarNivelesCrecimiento');
+requierePermiso("nivelesCrecimiento", 'consultar');
 
 /** @var Usuario */
 $usuario = $_SESSION['usuario'];
