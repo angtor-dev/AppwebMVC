@@ -230,16 +230,24 @@ class Usuario extends Model
         return false;
     }
 
-    /** Valida si el usuario tiene un permiso especifico */
-    public function tienePermiso(string $nombrePermiso) : bool
+    /** 
+     * Valida si el usuario tiene un permiso especifico en un modulo
+     * 
+     * @param string $modulo El modulo a consultar (en minuscula y plural).
+     * @param string $permiso El permiso a validar. Los posibles valores son 
+     * consultar, registrar, actualizar y eliminar.
+     */
+    public function tienePermiso(string $modulo, string $permiso) : bool
     {
         if (empty($this->roles)) {
             return false;
         }
 
         foreach ($this->roles as $rol) {
-            if ($rol->permisos->$nombrePermiso) {
-                return true;
+            foreach ($rol->permisos as $p) {
+                if ($p->modulo->nombre == $modulo && $p->$permiso) {
+                    return true;
+                }
             }
         }
         return false;

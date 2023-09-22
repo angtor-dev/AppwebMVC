@@ -1,0 +1,47 @@
+<?php
+require_once "Models/Model.php";
+require_once "Models/Rol.php";
+require_once "Models/Modulo.php";
+
+class Permiso extends Model
+{
+    public int $id;
+    public int $idRol;
+    public int $idModulo;
+    public bool $consultar = false;
+    public bool $registrar = false;
+    public bool $actualizar = false;
+    public bool $eliminar = false;
+
+    public Modulo $modulo;
+
+    public function __construct()
+    {
+        if (!empty($this->idModulo)) {
+            $this->modulo = Modulo::cargar($this->idModulo);
+        }
+    }
+
+    public function actualizar() : void
+    {
+        $query = "UPDATE permiso
+            SET consultar = :consultar, registrar = :registrar, actualizar = :actualizar, eliminar = :eliminar
+            WHERE id = $this->id";
+
+        try {
+            $stmt = $this->prepare($query);
+            $stmt->bindValue('consultar', $this->consultar);
+            $stmt->bindValue('registrar', $this->registrar);
+            $stmt->bindValue('actualizar', $this->actualizar);
+            $stmt->bindValue('eliminar', $this->eliminar);
+
+            $stmt->execute();
+        } catch (\Throwable $th) {
+            if (DEVELOPER_MODE) echo $th->getMessage();
+            die;
+            $_SESSION['errores'][] = "Ha ocurrido un error al actualizar los permisos de rol.";
+            throw $th;
+        }
+    }
+}
+?>

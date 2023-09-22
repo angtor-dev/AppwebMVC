@@ -1,22 +1,22 @@
 <?php
 require_once "Models/Model.php";
-require_once "Models/Permisos.php";
+require_once "Models/Permiso.php";
 
 class Rol extends Model
 {
     public int $id;
-    public int $idPermisos;
     public string $nombre;
     public ?string $descripcion;
     public int $nivel;
 
-    public Permisos $permisos;
+    /** @var Permiso[] */
+    public array $permisos;
 
     public function __construct()
     {
         parent::__construct();
-        if (!empty($this->idPermisos)) {
-            $this->permisos = Permisos::cargar($this->idPermisos);
+        if (!empty($this->id)) {
+            $this->permisos = Permiso::cargarRelaciones($this->id, get_class());
         }
     }
 

@@ -60,17 +60,17 @@ function necesitaAutenticacion() : void {
 }
 
 /**
- * Valida si el usuario tiene los permisos especificados, de no ser asi muestra pantalla de acceso denegado y finaliza el script
- * @param string $permisos Los permisos a validar
+ * Valida si el usuario tiene el permiso especificado, de no ser asi muestra pantalla de acceso denegado y finaliza el script
+ * @param string $modulo El modulo a consultar (en minuscula y plural).
+ * @param string $permiso El permiso a validar. Los posibles valores son 
+ * consultar, registrar, actualizar y eliminar.
  */
-function requierePermisos(string ...$permisos) : void {
+function requierePermiso(string $modulo, string $permiso) : void {
     /** @var Usuario */
     $usuarioSesion = $_SESSION['usuario'];
-    foreach ($permisos as $permiso) {
-        if (!$usuarioSesion->tienePermiso($permiso)) {
-            renderView("AccesoDenegado", "Home/");
-            exit();
-        }
+    if (!$usuarioSesion->tienePermiso($modulo, $permiso)) {
+        renderView("AccesoDenegado", "Home/");
+        exit();
     }
 }
 
