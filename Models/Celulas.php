@@ -1,7 +1,7 @@
 <?php
 require_once "Models/Model.php";
 
-class Celula extends Model
+class Celulas extends Model
 {
     public int $id;
     public string $tipo;
@@ -24,7 +24,7 @@ class Celula extends Model
     {
         try {
 
-            $sql = "SELECT MAX(id) AS celulaNumero FROM celulafamiliar";
+            $sql = "SELECT MAX(id) AS celulaNumero FROM celulas";
             $consultaid = $this->db->pdo()->prepare($sql);
             $consultaid->execute();
             $datos = $consultaid->fetch(PDO::FETCH_ASSOC);
@@ -35,39 +35,94 @@ class Celula extends Model
             $territorio = Territorio::cargar($idTerritorio);
 
             if ($datos['celulaNumero'] == null) {
+
                 $id = 1;
-                $identificador = 'CFA' . $id;
+                $identificador = '';
+
+                switch ($tipo) {
+                    case 'consolidacion':
+                        $identificador = 'CCO' . $id;
+                        break;
+                    
+                    case 'crecimiento':
+                        $identificador = 'CCR' . $id;
+                        break;
+
+                    case 'familiar':
+                        $identificador = 'CFA' . $id;
+                        break;
+                }
+                
                 $codigo = $territorio->codigo . '-' . $identificador;
+                
             } else {
 
-                /** @var CelulaFamiliar[] **/
-                $celulas = CelulaFamiliar::cargarRelaciones($idTerritorio, "Territorio");
+
+                $sentencia = "SELECT * FROM celulas WHERE idTerrotorio = :idTerritorio AND tipo = :tipo";
+                $statement = $this->db->pdo()->prepare($sentencia);
+                $statement->bindValue(':idTerrotorio', $idTerritorio);
+                $statement->bindValue(':tipo', $tipo);
+                $statement->execute();
+
+                $celulas = $statement->fetchAll();
 
                 if (count($celulas) > 0) {
                     // Un array para almacenar solo los números de los identificadores
                     $numeros = [];
+
                     foreach ($celulas as $resultado) {
                         // Extraer el número del identificador (eliminar la "CFA")
-                        $numero = (int) substr($resultado->identificador, 3);  // substr($resultado, 1) elimina el primer carácter ("T")
+                        // Extraer el número del identificador (eliminar la "CCO")
+                        // Extraer el número del identificador (eliminar la "CCR")
+                        $numero = (int) substr($resultado['identificador'], 3);  // substr($resultado, 1) elimina el primer carácter ("T")
                         $numeros[] = $numero;
                     }
                     // Encontrar el número más grande en el array
                     $mayorNumero = max($numeros);
 
                     $contador = $mayorNumero + 1;
-                    $identificador = 'CFA' . $contador;
+
+                    switch ($tipo) {
+                        case 'consolidacion':
+                            $identificador = 'CCO' . $contador;
+                            break;
+                        
+                        case 'crecimiento':
+                            $identificador = 'CCR' . $contador;
+                            break;
+    
+                        case 'familiar':
+                            $identificador = 'CFA' . $contador;
+                            break;
+                    }
+                
                     $codigo = $territorio->codigo . '-' . $identificador;
+
                 } else {
                     $contador = 1;
-                    $identificador = 'CFA' . $contador;
+                    
+                    switch ($tipo) {
+                        case 'consolidacion':
+                            $identificador = 'CCO' . $contador;
+                            break;
+                        
+                        case 'crecimiento':
+                            $identificador = 'CCR' . $contador;
+                            break;
+    
+                        case 'familiar':
+                            $identificador = 'CFA' . $contador;
+                            break;
+                    }
+                    
                     $codigo = $territorio->codigo . '-' . $identificador;
                 }
             }
 
             if ($id == 1) {
 
-                $sql = "INSERT INTO celulafamiliar (id, nombre, codigo, identificador, idLider, idCoLider, idTerritorio, fechaCreacion) 
-                VALUES (:id, :nombre, :codigo, :identificador, :idLider, :idCoLider, :idTerritorio, CURDATE())";
+                $sql = "INSERT INTO celulas (id, nombre, codigo, identificador, tipo, idLider, idCoLider, idTerritorio, fechaCreacion) 
+                VALUES (:id, :nombre, :codigo, :identificador, :tipo, :idLider, :idCoLider, :idTerritorio, CURDATE())";
 
                 $stmt = $this->db->pdo()->prepare($sql);
 
@@ -75,13 +130,14 @@ class Celula extends Model
                 $stmt->bindValue(':nombre', $nombre);
                 $stmt->bindValue(':codigo', $codigo);
                 $stmt->bindValue(':identificador', $identificador);
+                $stmt->bindValue(':tipo', $tipo);
                 $stmt->bindValue(':idLider', $idLider);
                 $stmt->bindValue(':idCoLider', $idCoLider);
                 $stmt->bindValue(':idTerritorio', $idTerritorio);
 
                 $stmt->execute();
             } else {
-                $sql = "INSERT INTO celulafamiliar (nombre, codigo, identificador, idLider, idCoLider, idTerritorio, fechaCreacion) 
+                $sql = "INSERT INTO celulas (nombre, codigo, identificador, tipo, idLider, idCoLider, idTerritorio, fechaCreacion) 
                 VALUES (:nombre, :codigo, :identificador, :idLider, :idCoLider, :idTerritorio, CURDATE())";
 
                 $stmt = $this->db->pdo()->prepare($sql);
@@ -89,6 +145,7 @@ class Celula extends Model
                 $stmt->bindValue(':nombre', $nombre);
                 $stmt->bindValue(':codigo', $codigo);
                 $stmt->bindValue(':identificador', $identificador);
+                $stmt->bindValue(':tipo', $tipo);
                 $stmt->bindValue(':idLider', $idLider);
                 $stmt->bindValue(':idCoLider', $idCoLider);
                 $stmt->bindValue(':idTerritorio', $idTerritorio);
@@ -96,6 +153,7 @@ class Celula extends Model
 
                 $stmt->execute();
             }
+
             /** @var Bitacora **/
             Bitacora::registrar("Registro de celula familiar");
 

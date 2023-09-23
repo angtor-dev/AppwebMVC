@@ -15,7 +15,7 @@ $Celula = new Celula();
 
 if (isset($_GET['cargar_data'])) {
     //Primero inicializamos las variables
-    $Lista = $Celula->listar_reunionesFamiliar();
+    $Lista = $Celulas->listar_reunionesFamiliar();
     //Variable json solamente para guardar el array de datos
     $json = array();
 
@@ -54,8 +54,8 @@ if (isset($_POST['editar'])) {
     $actividad = trim(strtolower($_POST['actividad']));
     $observaciones = trim(strtolower($_POST['observaciones']));
 
-    $Celula->validacion_datos_reunion([$id, $idCelula, $semana, $generosidad, $infantil, $juvenil, $adulto], [$tematica, $actividad, $observaciones], $fecha);
-    $Celula->editar_reuniones($id, $idCelula, $fecha, $tematica, $semana, $generosidad, $infantil, $juvenil, $adulto, $actividad, $observaciones);
+    $Celulas->validacion_datos_reunion([$id, $idCelula, $semana, $generosidad, $infantil, $juvenil, $adulto], [$tematica, $actividad, $observaciones], $fecha);
+    $Celulas->editar_reuniones($id, $idCelula, $fecha, $tematica, $semana, $generosidad, $infantil, $juvenil, $adulto, $actividad, $observaciones);
 
     die();
 }
@@ -67,7 +67,7 @@ if (isset($_POST['eliminar'])) {
 
     $id = $_POST['id'];
 
-    $Celula->eliminar_reuniones($id);
+    $Celulas->eliminar_reuniones($id);
 
     die();
 }
@@ -77,7 +77,7 @@ if (isset($_GET['listarcelulas'])) {
 
     requierePermisos("actualizarCelulaFamiliar");
 
-    $listaCelulas = $Celula->listar_celulas();
+    $listaCelulas = $Celulas->listar_celulas();
 
     echo json_encode($listaCelulas);
 
