@@ -28,7 +28,7 @@ $(document).ready(function () {
         const datos = dataTable.row($(this).parents()).data();
 
 
-        document.getElementById('inf_codigocelulafamiliar').textContent = datos.codigo;
+        document.getElementById('inf_codigocelula').textContent = datos.codigo;
         document.getElementById('inf_fecha').textContent = datos.fecha;
         document.getElementById('inf_tematica').textContent = datos.tematica;
         document.getElementById('inf_semana').textContent = datos.semana;
@@ -45,7 +45,7 @@ $(document).ready(function () {
     $('#celulaDatatables tbody').on('click', '#editar', function () {
         const datos = dataTable.row($(this).parents()).data();
 
-        document.getElementById('idreunionfamiliar').textContent = datos.id;
+        document.getElementById('idreunion').textContent = datos.id;
         document.getElementById('fecha').value = datos.fecha;
         document.getElementById('tematica').value = datos.tematica;
         document.getElementById('semana').value = datos.semana;
@@ -130,7 +130,7 @@ $(document).ready(function () {
 
 
 
-    function Listar_celulas(idCelulaFamiliar) {
+    function Listar_celulas(idCelula) {
 
         $.ajax({
             type: "GET",
@@ -146,7 +146,7 @@ $(document).ready(function () {
 
                 console.log(data);
 
-                let selector = document.getElementById('idCelulaFamiliar');
+                let selector = document.getElementById('idCelula');
 
 
                 data.forEach(item => {
@@ -170,7 +170,7 @@ $(document).ready(function () {
                     placeholderValue: 'Selecciona una opción',  // Texto del placeholder
                 });
 
-                choices.setChoiceByValue(idCelulaFamiliar.toString());
+                choices.setChoiceByValue(idCelula.toString());
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -190,7 +190,7 @@ $(document).ready(function () {
 
     const expresiones_regulares2 = {
 
-        idCelulaFamiliar: /^[1-9]\d*$/, // Números enteros mayores a 0
+        idCelula: /^[1-9]\d*$/, // Números enteros mayores a 0
         tematica: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/, // Letras, números, espacios, puntos y comas con un máximo de 100 caracteres
         semana: /^[1-9]\d*$/, // Números enteros mayores a 0
         generosidad: /^[0-9]+(\.[0-9]{2})?$/,
@@ -204,7 +204,7 @@ $(document).ready(function () {
 
     const validationStatus2 = {
 
-        idCelulaFamiliar: true,
+        idCelula: true,
         tematica: true,
         semana: true,
         generosidad: true,
@@ -218,15 +218,15 @@ $(document).ready(function () {
 
 
 
-    // Validar idCelulaFamiliar
-    const idCelulaFamiliar = document.getElementById("idCelulaFamiliar");
-    idCelulaFamiliar.addEventListener('change', () => {
-        if (!expresiones_regulares2.idCelulaFamiliar.test(idCelulaFamiliar.value)) {
-            document.getElementById("msj_idCelulaFamiliar").classList.remove("d-none");
-            validationStatus2.idCelulaFamiliar = false;
+    // Validar idCelula
+    const idCelula = document.getElementById("idCelula");
+    idCelula.addEventListener('change', () => {
+        if (!expresiones_regulares2.idCelula.test(idCelula.value)) {
+            document.getElementById("msj_idCelula").classList.remove("d-none");
+            validationStatus2.idCelula = false;
         } else {
-            document.getElementById("msj_idCelulaFamiliar").classList.add("d-none");
-            validationStatus2.idCelulaFamiliar = true;
+            document.getElementById("msj_idCelula").classList.add("d-none");
+            validationStatus2.idCelula = true;
         }
     })
 
@@ -362,7 +362,7 @@ $(document).ready(function () {
                 data: {
                     editar: 'editar',
                     id: id,
-                    idCelulaFamiliar: idCelulaFamiliar.value,
+                    idCelula: idCelula.value,
                     fecha: fecha.value,
                     tematica: tematica.value,
                     semana: semana.value,

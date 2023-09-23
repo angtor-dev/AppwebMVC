@@ -1,10 +1,8 @@
 <?php
 global $viewStyles;
 global $viewScripts;
-$viewScripts = ["CelulaFamiliar-listar.js"];
+$viewScripts = ["CelulaConsolidacion-listar.js"];
 ?>
-
-<h2>Celulas Familiares:</h2>
 
 <div class="container-fluid">
 
@@ -13,6 +11,14 @@ $viewScripts = ["CelulaFamiliar-listar.js"];
             <div class="table-responsive">
                 <table id="celulaDatatables" class="table table-hover">
                     <thead>
+
+                        <div class="d-flex align-items-end justify-content-between mb-2">
+                            <h2><strong>Celulas de Consolidación:</strong></h2>
+                            <button class="btn btn-accent text-nowrap" id="registrar" data-bs-toggle="modal" data-bs-target="#modal_registrar">
+                                <i class="fa-solid fa-plus"></i>
+                                Nueva Celula
+                            </button>
+                        </div>
                         <tr>
                             <th>Codigo</th>
                             <th>Nombre de la Celula Familiar</th>
@@ -28,6 +34,65 @@ $viewScripts = ["CelulaFamiliar-listar.js"];
         </div>
     </div>
 
+    <!-- MODAL PARA REGISTRAR CELULA -->
+    <div class="modal fade" id="modal_registrar" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Registrar Celula</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <form id="formulario">
+                            <div class="mb-3 col-12">
+
+                                <label for="nombre" class="form-label fw-bold">Nombre de la Celula</label>
+                                <input type="text" class="form-control" id="nombre" maxlength="50" name="nombre">
+
+                                <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_nombre" role="alert">
+                                    Este campo no acepta numeros y no puede estar vacio.
+                                </div>
+                            </div>
+
+
+                            <div class="mb-3">
+                                <label for="idLider" class="form-label fw-bold">Lider Responsable</label>
+                                <select class="form-select" id="idLider" name="idLider">
+                                </select>
+                                <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_idLider" role="alert">
+                                    Debe seleccionar un Lider. Ademas, no puede ser el mismo lider en ambos seleccionadores
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="CoLider" class="form-label fw-bold">Co Lider Responsable</label>
+                                <select class="form-select" id="idCoLider" name="idCoLider">
+                                </select>
+                                <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_idCoLider" role="alert">
+                                    Debe seleccionar un Lider. Ademas, no puede ser el mismo lider en ambos seleccionadores
+                                </div>
+                            </div>
+
+
+                            <div class="mb-3">
+                                <label for="idTerritorio" class="form-label fw-bold">Territorio</label>
+                                <select class="form-select" id="idTerritorio" name="idTerritorio" placeholder="hola">
+                                </select>
+                                <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_idTerritorio" role="alert">
+                                    Debe seleccionar un Territorio.
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-end">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                <button type="submit" class="btn btn-primary">Registrar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- MODAL PARA VER TODOS LOS DATOS DE LA Celula -->
     <div class="modal fade" id="modal_verInfo" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
@@ -67,6 +132,7 @@ $viewScripts = ["CelulaFamiliar-listar.js"];
     </div>
 
 
+
     <!-- MODAL PARA EDITAR TODOS LOS DATOS DE LA CELULA -->
     <div class="modal fade" id="modal_editarInfo" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog">
@@ -76,42 +142,42 @@ $viewScripts = ["CelulaFamiliar-listar.js"];
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <form id="formulario">
+                        <form id="formulario2">
                             <div class="mb-3 col-12">
                                 <input type="hidden" id="idCelulaFamiliar">
-                                <label for="nombre" class="form-label fw-bold">Nombre de la Celula</label>
-                                <input type="text" class="form-control" id="nombre" maxlength="50" name="nombre">
+                                <label for="nombre2" class="form-label fw-bold">Nombre de la Celula</label>
+                                <input type="text" class="form-control" id="nombre2" maxlength="50" name="nombre2">
 
-                                <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_nombre" role="alert">
+                                <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_nombre2" role="alert">
                                     Este campo no acepta numeros y no puede estar vacio.
                                 </div>
                             </div>
 
 
                             <div class="mb-3">
-                                <label for="idLider" class="form-label fw-bold">Lider Responsable</label>
-                                <select class="form-select" id="idLider" name="idLider">
+                                <label for="idLider2" class="form-label fw-bold">Lider Responsable</label>
+                                <select class="form-select" id="idLider2" name="idLider2">
                                 </select>
-                                <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_idLider" role="alert">
+                                <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_idLider2" role="alert">
                                     Debe seleccionar un Lider. Ademas, no puede ser el mismo lider en ambos seleccionadores
                                 </div>
                             </div>
 
                             <div class="mb-3">
-                                <label for="CoLider" class="form-label fw-bold">Co Lider Responsable</label>
-                                <select class="form-select" id="idCoLider" name="idCoLider">
+                                <label for="CoLider2" class="form-label fw-bold">Co Lider Responsable</label>
+                                <select class="form-select" id="idCoLider2" name="idCoLider2">
                                 </select>
-                                <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_idCoLider" role="alert">
+                                <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_idCoLider2" role="alert">
                                     Debe seleccionar un Lider. Ademas, no puede ser el mismo lider en ambos seleccionadores
                                 </div>
                             </div>
 
 
                             <div class="mb-3">
-                                <label for="idTerritorio" class="form-label fw-bold">Territorio</label>
-                                <select class="form-select" id="idTerritorio" name="idTerritorio" placeholder="hola">
+                                <label for="idTerritorio2" class="form-label fw-bold">Territorio</label>
+                                <select class="form-select" id="idTerritorio2" name="idTerritorio2" placeholder="hola">
                                 </select>
-                                <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_idTerritorio" role="alert">
+                                <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_idTerritorio2" role="alert">
                                     Debe seleccionar un Territorio.
                                 </div>
                             </div>
