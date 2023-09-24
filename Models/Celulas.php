@@ -58,9 +58,9 @@ class Celulas extends Model
             } else {
 
 
-                $sentencia = "SELECT * FROM celulas WHERE idTerrotorio = :idTerritorio AND tipo = :tipo";
+                $sentencia = "SELECT * FROM celulas WHERE idTerritorio = :idTerritorio AND tipo = :tipo";
                 $statement = $this->db->pdo()->prepare($sentencia);
-                $statement->bindValue(':idTerrotorio', $idTerritorio);
+                $statement->bindValue(':idTerritorio', $idTerritorio);
                 $statement->bindValue(':tipo', $tipo);
                 $statement->execute();
 
@@ -114,7 +114,7 @@ class Celulas extends Model
                             $identificador = 'CFA' . $contador;
                             break;
                     }
-                    
+
                     $codigo = $territorio->codigo . '-' . $identificador;
                 }
             }
@@ -321,16 +321,16 @@ class Celulas extends Model
 
 
 
-    public  function editar_Celula($id, $nombre, $idLider, $idCoLider, $idTerritorio)
+    public  function editar_Celula($id, $tipo, $nombre, $idLider, $idCoLider, $idTerritorio)
     {
         try {
 
-            /** @var Celula**/
-            $consulta = Celula::cargar($id);
+            /** @var Celulas**/
+            $consulta = Celulas::cargar($id);
 
             if ($consulta->idTerritorio == $idTerritorio) {
 
-                $sql = "UPDATE celulafamiliar SET  nombre = :nombre, idLider = :idLider, idCoLider = :idCoLider WHERE celula.id = :id";
+                $sql = "UPDATE celulas SET  nombre = :nombre, idLider = :idLider, idCoLider = :idCoLider WHERE id = :id";
                 $stmt = $this->db->pdo()->prepare($sql);
 
                 $stmt->bindValue(':id', $id);
@@ -341,10 +341,16 @@ class Celulas extends Model
                 $stmt->execute();
             } else {
 
-                /** @var CelulaFamiliar **/
+                /** @var Territorio **/
                 $territorio = Territorio::cargar($idTerritorio);
-                /** @var CelulaFamiliar[] **/
-                $celulas = CelulaFamiliar::cargarRelaciones($idTerritorio, "Territorio");
+
+                $sentencia = "SELECT * FROM celulas WHERE idTerritorio = :idTerritorio AND tipo = :tipo";
+                $statement = $this->db->pdo()->prepare($sentencia);
+                $statement->bindValue(':idTerritorio', $idTerritorio);
+                $statement->bindValue(':tipo', $tipo);
+                $statement->execute();
+
+                $celulas = $statement->fetchAll();
 
                 $identificador = '';
                 $codigo = '';
@@ -354,22 +360,52 @@ class Celulas extends Model
                     $numeros = [];
                     foreach ($celulas as $resultado) {
                         // Extraer el número del identificador (eliminar la "CFA")
-                        $numero = (int) substr($resultado->identificador, 3);  // substr($resultado, 1) elimina el primer carácter ("T")
+                        // Extraer el número del identificador (eliminar la "CCO")
+                        // Extraer el número del identificador (eliminar la "CCR")
+                        $numero = (int) substr($resultado->identificador, 3);
                         $numeros[] = $numero;
                     }
                     // Encontrar el número más grande en el array
                     $mayorNumero = max($numeros);
 
                     $contador = $mayorNumero + 1;
-                    $identificador = 'CFA' . $contador;
+
+                    switch ($tipo) {
+                        case 'consolidacion':
+                            $identificador = 'CCO' . $contador;
+                            break;
+                        
+                        case 'crecimiento':
+                            $identificador = 'CCR' . $contador;
+                            break;
+    
+                        case 'familiar':
+                            $identificador = 'CFA' . $contador;
+                            break;
+                    }
+                    
                     $codigo = $territorio->codigo . '-' . $identificador;
                 } else {
                     $contador = 1;
-                    $identificador = 'CFA' . $contador;
+
+                    switch ($tipo) {
+                        case 'consolidacion':
+                            $identificador = 'CCO' . $contador;
+                            break;
+                        
+                        case 'crecimiento':
+                            $identificador = 'CCR' . $contador;
+                            break;
+    
+                        case 'familiar':
+                            $identificador = 'CFA' . $contador;
+                            break;
+                    }
+                    
                     $codigo = $territorio->codigo . '-' . $identificador;
                 }
 
-                $sql = "UPDATE celulafamiliar SET  nombre = :nombre, idLider = :idLider, idCoLider = :idCoLider, codigo = :codigo, identificador = :identificador WHERE celulafamiliar.id = :id";
+                $sql = "UPDATE celulas SET nombre = :nombre, idLider = :idLider, idCoLider = :idCoLider, codigo = :codigo, identificador = :identificador WHERE id = :id";
                 $stmt = $this->db->pdo()->prepare($sql);
 
                 $stmt->bindValue(':id', $id);
@@ -382,6 +418,7 @@ class Celulas extends Model
                 $stmt->execute();
             }
 
+            /** @var Bitacora **/
             Bitacora::registrar("Actualizacion de celula familiar");
 
             http_response_code(200);
