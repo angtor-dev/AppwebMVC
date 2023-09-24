@@ -407,7 +407,7 @@ class Celulas extends Model
                     $codigo = $territorio->codigo . '-' . $identificador;
                 }
 
-                $sql = "UPDATE celulas SET nombre = :nombre, idLider = :idLider, idCoLider = :idCoLider, codigo = :codigo, identificador = :identificador WHERE id = :id";
+                $sql = "UPDATE celulas SET nombre = :nombre, idLider = :idLider, idCoLider = :idCoLider, codigo = :codigo, identificador = :identificador, idTerritorio = :idTerritorio WHERE id = :id";
                 $stmt = $this->db->pdo()->prepare($sql);
 
                 $stmt->bindValue(':id', $id);
@@ -416,6 +416,7 @@ class Celulas extends Model
                 $stmt->bindValue(':idCoLider', $idCoLider);
                 $stmt->bindValue(':identificador', $identificador);
                 $stmt->bindValue(':codigo', $codigo);
+                $stmt->bindValue(':idTerritorio', $idTerritorio);
 
                 $stmt->execute();
             }
