@@ -1,7 +1,7 @@
 
 <?php
 
-require_once "Models/Celula.php";
+require_once "Models/Celulas.php";
 
 necesitaAutenticacion();
 
@@ -10,7 +10,7 @@ requierePermisos("listarCelulaFamiliar");
 $usuarioSesion = $_SESSION['usuario'];
 
 
-$Celula = new Celula();
+$Celulas = new Celulas();
 
 
 if (isset($_GET['cargar_data'])) {

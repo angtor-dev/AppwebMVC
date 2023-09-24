@@ -50,8 +50,8 @@ $(document).ready(function () {
 
   })
 
-  $('#sedeDatatables thead').on('click', '#registrar', function () {
-    const datos = dataTable.row($(this).parents()).data();
+  $('#registrar').on('click', function () {
+
 
     Listar_PastoresRegistrar();
 
@@ -129,11 +129,11 @@ $(document).ready(function () {
 
 
 
-  function Listar_PastoresEditar(idPastor) {
+  function Listar_PastoresRegistrar() {
 
     $.ajax({
       type: "GET",
-      url: "http://localhost/AppwebMVC/Sedes/Registrar",
+      url: "http://localhost/AppwebMVC/Sedes/Listar",
       data: {
 
         listaPastores: 'listaPastores',
@@ -145,7 +145,6 @@ $(document).ready(function () {
         let data = JSON.parse(response);
 
         let selector = document.getElementById('idPastor');
-        let selector2 = document.getElementById('idPastor2');
         // Crear y agregar la opción tipo "placeholder"
         const placeholderOption = document.createElement('option');
           placeholderOption.value = '';
@@ -163,27 +162,63 @@ $(document).ready(function () {
 
         });
 
+        if (choices) {
+          choices.destroy();
+        }
 
+
+        choices = new Choices(selector, {
+          allowHTML: true,
+          searchEnabled: true,  // Habilita la funcionalidad de búsqueda
+          removeItemButton: true,  // Habilita la posibilidad de remover items
+          placeholderValue: 'Selecciona una opción',
+        });
+
+
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        // Aquí puedes manejar errores, por ejemplo:
+        console.error("Error al enviar:", textStatus, errorThrown);
+        alert("Hubo un error al realizar el registro. Por favor, inténtalo de nuevo.");
+      }
+    })
+  }
+
+ 
+
+
+  function Listar_PastoresEditar(idPastor) {
+
+    $.ajax({
+      type: "GET",
+      url: "http://localhost/AppwebMVC/Sedes/Listar",
+      data: {
+
+        listaPastores: 'listaPastores',
+        
+
+      },
+      success: function (response) {
+
+        let data = JSON.parse(response);
+
+        let selector = document.getElementById('idPastor2');
+        // Crear y agregar la opción tipo "placeholder"
+          
         data.forEach(item => {
 
           const option = document.createElement('option');
           option.value = item.id;
           option.text = `${item.id} ${item.cedula} ${item.nombre} ${item.apellido}`;
-          selector2.appendChild(option);
+          selector.appendChild(option);
 
         });
-
         
-        choices = new Choices(selector, {
-          allowHTML: true,
-          searchEnabled: true,  // Habilita la funcionalidad de búsqueda
-          removeItemButton: true,  // Habilita la posibilidad de remover items
-        });
-
+   
         if (choices2) {
           choices2.destroy();
         }
-        choices2 = new Choices(selector2, {
+        choices2 = new Choices(selector, {
           allowHTML: true,
           searchEnabled: true,  // Habilita la funcionalidad de búsqueda
           removeItemButton: true,  // Habilita la posibilidad de remover items
@@ -199,6 +234,7 @@ $(document).ready(function () {
         console.error("Error al enviar:", textStatus, errorThrown);
         alert("Hubo un error al realizar el registro. Por favor, inténtalo de nuevo.");
       }
+      
     })
   }
 

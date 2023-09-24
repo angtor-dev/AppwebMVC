@@ -10,7 +10,7 @@ $viewScripts = ["CelulaFamiliar-listar.js"];
     <div class="row mt-4">
         <div class="col-sm-12 col-md-12 col-lg-12">
             <div class="table-responsive">
-                <table id="celulaDatatables" class="table table-hover">
+                <table id="celulaDatatables" class="table table-bordered table-hover">
                     <thead>
 
                         <div class="d-flex align-items-end justify-content-between mb-2">
