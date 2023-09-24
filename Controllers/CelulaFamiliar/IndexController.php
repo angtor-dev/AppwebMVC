@@ -1,14 +1,14 @@
 <?php
 require_once "Models/Territorio.php";
-require_once "Models/Celula.php";
+require_once "Models/Celulas.php";
 
 necesitaAutenticacion();
 
-requierePermisos("listarCelulaFamiliar");
+//requierePermisos("listarCelulaFamiliar");
 
 $usuarioSesion = $_SESSION['usuario'];
 
-$Celula = new Celula();
+$Celulas = new Celulas();
 
 
 if (isset($_GET['cargar_data'])) {
@@ -74,7 +74,7 @@ if (isset($_POST['editar'])) {
 
 if (isset($_POST['registroreunion'])) {
 
-    requierePermisos("actualizarCelula");
+   // requierePermisos("actualizarCelula");
 
     $idCelula = $_POST['idCelula'];
     $fecha = $_POST['fecha'];
@@ -98,7 +98,6 @@ if (isset($_POST['registroreunion'])) {
 
 if (isset($_POST['eliminar'])) {
 
-    requierePermisos("eliminarCelula");
 
     $id = $_POST['id'];
 
@@ -113,7 +112,7 @@ if (isset($_GET['listaLideres'])) {
 
     requierePermisos("actualizarCelulaFamiliar");
 
-    $ListaLideres = $CelulaFamiliar->listar_lideres();
+    $ListaLideres = $Celulas->listar_lideres();
 
     echo json_encode($ListaLideres);
 
@@ -122,7 +121,6 @@ if (isset($_GET['listaLideres'])) {
 
 if (isset($_GET['listaTerritorio'])) {
 
-    requierePermisos("actualizarCelula");
 
     $Listaterritorio = $Celulas->listar_territorios();
 

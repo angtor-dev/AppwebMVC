@@ -138,7 +138,7 @@ class Celulas extends Model
                 $stmt->execute();
             } else {
                 $sql = "INSERT INTO celulas (nombre, codigo, identificador, tipo, idLider, idCoLider, idTerritorio, fechaCreacion) 
-                VALUES (:nombre, :codigo, :identificador, :idLider, :idCoLider, :idTerritorio, CURDATE())";
+                VALUES (:nombre, :codigo, :identificador, :tipo, :idLider, :idCoLider, :idTerritorio, CURDATE())";
 
                 $stmt = $this->db->pdo()->prepare($sql);
 
@@ -190,24 +190,24 @@ class Celulas extends Model
             CoLider.apellido AS apellidoCoLider,
             Lider.cedula AS cedulaLider,
             CoLider.cedula AS cedulaCoLider,
-            celula.id,
-            celula.idLider,
-            celula.idCoLider
-            celula.idTerritorio,
-            celula.codigo,
-            celula.nombre,
-            celula.estatus
-            FROM celula
-            INNER JOIN usuario AS Lider ON celula.idLider = Lider.id
-            INNER JOIN usuario AS CoLider ON celula.idCoLider = CoLider.id
-            WHERE celula.estatus = '1' AND celula.tipo = 'familiar";
+            celulas.id,
+            celulas.idLider,
+            celulas.idCoLider,
+            celulas.idTerritorio,
+            celulas.codigo,
+            celulas.nombre,
+            celulas.estatus
+            FROM celulas
+            INNER JOIN usuario AS Lider ON celulas.idLider = Lider.id
+            INNER JOIN usuario AS CoLider ON celulas.idCoLider = CoLider.id
+            WHERE celulas.estatus = '1' AND celulas.tipo = 'familiar'";
 
 
             $stmt = $this->db->pdo()->prepare($sql);
 
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+            /** @var Bitacora **/
             Bitacora::registrar("Consulta de celula familiar");
 
             return $resultado;
@@ -237,17 +237,17 @@ class Celulas extends Model
             CoLider.apellido AS apellidoCoLider,
             Lider.cedula AS cedulaLider,
             CoLider.cedula AS cedulaCoLider,
-            celula.id,
-            celula.idLider,
-            celula.idCoLider
-            celula.idTerritorio,
-            celula.codigo,
-            celula.nombre,
-            celula.estatus
-            FROM celula
-            INNER JOIN usuario AS Lider ON celula.idLider = Lider.id
-            INNER JOIN usuario AS CoLider ON celula.idCoLider = CoLider.id
-            WHERE celula.estatus = '1' AND celula.tipo = 'crecimiento";
+            celulas.id,
+            celulas.idLider,
+            celulas.idCoLider
+            celulas.idTerritorio,
+            celulas.codigo,
+            celulas.nombre,
+            celulas.estatus
+            FROM celulas
+            INNER JOIN usuario AS Lider ON celulas.idLider = Lider.id
+            INNER JOIN usuario AS CoLider ON celulas.idCoLider = CoLider.id
+            WHERE celulas.estatus = '1' AND celulas.tipo = 'crecimiento'";
 
 
             $stmt = $this->db->pdo()->prepare($sql);
@@ -255,6 +255,7 @@ class Celulas extends Model
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+            /** @var Bitacora **/
             Bitacora::registrar("Consulta de celula de Crecimiento");
 
             return $resultado;
@@ -283,17 +284,17 @@ class Celulas extends Model
             CoLider.apellido AS apellidoCoLider,
             Lider.cedula AS cedulaLider,
             CoLider.cedula AS cedulaCoLider,
-            celula.id,
-            celula.idLider,
-            celula.idCoLider
-            celula.idTerritorio,
-            celula.codigo,
-            celula.nombre,
-            celula.estatus
-            FROM celula
-            INNER JOIN usuario AS Lider ON celula.idLider = Lider.id
-            INNER JOIN usuario AS CoLider ON celula.idCoLider = CoLider.id
-            WHERE celula.estatus = '1' AND celula.tipo = 'consolidacion";
+            celulas.id,
+            celulas.idLider,
+            celulas.idCoLider
+            celulas.idTerritorio,
+            celulas.codigo,
+            celulas.nombre,
+            celulas.estatus
+            FROM celulas
+            INNER JOIN usuario AS Lider ON celulas.idLider = Lider.id
+            INNER JOIN usuario AS CoLider ON celulas.idCoLider = CoLider.id
+            WHERE celulas.estatus = '1' AND celulas.tipo = 'consolidacion'";
 
 
             $stmt = $this->db->pdo()->prepare($sql);
@@ -301,6 +302,7 @@ class Celulas extends Model
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+            /** @var Bitacora **/
             Bitacora::registrar("Consulta de celula de Consolidacion");
 
             return $resultado;
@@ -417,7 +419,6 @@ class Celulas extends Model
 
                 $stmt->execute();
             }
-
             /** @var Bitacora **/
             Bitacora::registrar("Actualizacion de celula familiar");
 
@@ -445,7 +446,7 @@ class Celulas extends Model
 
         try {
 
-            $sql = "UPDATE celulafamiliar SET estatus = '0' WHERE celula.id = :id";
+            $sql = "UPDATE celulas SET estatus = '0' WHERE id = :id";
 
             $stmt = $this->db->pdo()->prepare($sql);
 
@@ -453,6 +454,7 @@ class Celulas extends Model
 
             $stmt->execute();
 
+            /** @var Bitacora **/
             Bitacora::registrar("Eliminacion de Celula");
 
             http_response_code(200);
@@ -476,25 +478,47 @@ class Celulas extends Model
 
         try {
 
-            $sql = "INSERT INTO reunion (idCelula, fecha, tematica, semana, generosidad, infantil, juvenil, adulto, actividad, observaciones) 
-        VALUES (:idCelula, :fecha, :tematica, :semana, :generosidad, :infantil, :juvenil, :adulto, :actividad, :observaciones)";
+        if (empty($infantil) && empty($juvenil) && empty($adulto)) {
+
+            $sql = "INSERT INTO reunioncelula (idCelula, fecha, tematica, semana, generosidad, actividad, observaciones) 
+        VALUES (:idCelula, :fecha, :tematica, :semana, :generosidad, :actividad, :observaciones)";
 
             $stmt = $this->db->pdo()->prepare($sql);
-
-
+        
             $stmt->bindValue(':idCelula', $idCelula);
             $stmt->bindValue(':fecha', $fecha);
             $stmt->bindValue(':tematica', $tematica);
             $stmt->bindValue(':semana', $semana);
             $stmt->bindValue(':generosidad', $generosidad);
-            $stmt->bindValue(':infantil', $infantil);
-            $stmt->bindValue(':juvenil', $juvenil);
-            $stmt->bindValue(':adulto', $adulto);
             $stmt->bindValue(':actividad', $actividad);
             $stmt->bindValue(':observaciones', $observaciones);
 
             $stmt->execute();
 
+        } else {
+
+
+            $sql = "INSERT INTO reunioncelula (idCelula, fecha, tematica, semana, generosidad, infantil, juvenil, adulto, actividad, observaciones) 
+            VALUES (:idCelula, :fecha, :tematica, :semana, :generosidad, :infantil, :juvenil, :adulto, :actividad, :observaciones)";
+    
+                $stmt = $this->db->pdo()->prepare($sql);        
+    
+                $stmt->bindValue(':idCelula', $idCelula);
+                $stmt->bindValue(':fecha', $fecha);
+                $stmt->bindValue(':tematica', $tematica);
+                $stmt->bindValue(':semana', $semana);
+                $stmt->bindValue(':generosidad', $generosidad);
+                $stmt->bindValue(':infantil', $infantil);
+                $stmt->bindValue(':juvenil', $juvenil);
+                $stmt->bindValue(':adulto', $adulto);
+                $stmt->bindValue(':actividad', $actividad);
+                $stmt->bindValue(':observaciones', $observaciones);
+    
+                $stmt->execute();
+
+        }
+
+            /** @var Bitacora **/
             Bitacora::registrar("Registro de reunion de celula");
 
             http_response_code(200);
@@ -572,23 +596,23 @@ class Celulas extends Model
         try {
 
             $sql = "SELECT
-                    reunion.id,
-                    reunion.fecha,
-                    reunion.tematica,
-                    reunion.semana,
-                    reunion.generosidad,
-                    reunion.infantil,
-                    reunion.juvenil,
-                    reunion.adulto,
-                    reunion.actividad,
-                    reunion.observaciones,
-                    celula.codigo,
-                    celula.nombre,
-                    celula.id AS idCelula
-                FROM reunion
-                INNER JOIN celula
-                ON reunion.idcelula = celula.id AND celula.tipo = 'familiar'
-                ORDER BY reunion.fecha DESC;";
+                    reunioncelula.id,
+                    reunioncelula.fecha,
+                    reunioncelula.tematica,
+                    reunioncelula.semana,
+                    reunioncelula.generosidad,
+                    reunioncelula.infantil,
+                    reunioncelula.juvenil,
+                    reunioncelula.adulto,
+                    reunioncelula.actividad,
+                    reunioncelula.observaciones,
+                    celulas.codigo,
+                    celulas.nombre,
+                    celulas.id AS idCelula
+                FROM reunioncelula
+                INNER JOIN celulas
+                ON reunioncelula.idcelula = celulas.id AND celulas.tipo = 'familiar'
+                ORDER BY reunioncelula.fecha DESC;";
 
 
             $stmt = $this->db->pdo()->prepare($sql);
@@ -596,6 +620,7 @@ class Celulas extends Model
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+            /** @var Bitacora **/
             Bitacora::registrar("Consulta de reuniones de celula familiar");
 
             return $resultado;
@@ -618,23 +643,23 @@ class Celulas extends Model
         try {
 
             $sql = "SELECT
-                    reunion.id,
-                    reunion.fecha,
-                    reunion.tematica,
-                    reunion.semana,
-                    reunion.generosidad,
-                    reunion.infantil,
-                    reunion.juvenil,
-                    reunion.adulto,
-                    reunion.actividad,
-                    reunion.observaciones,
-                    celula.codigo,
-                    celula.nombre,
-                    celula.id AS idCelula
-                FROM reunion
-                INNER JOIN celula
-                ON reunion.idcelula = celula.id AND celula.tipo = 'crecimiento'
-                ORDER BY reunion.fecha DESC;";
+            reunioncelula.id,
+            reunioncelula.fecha,
+            reunioncelula.tematica,
+            reunioncelula.semana,
+            reunioncelula.generosidad,
+            reunioncelula.infantil,
+            reunioncelula.juvenil,
+            reunioncelula.adulto,
+            reunioncelula.actividad,
+            reunioncelula.observaciones,
+            celulas.codigo,
+            celulas.nombre,
+            celulas.id AS idCelula
+        FROM reunioncelula
+        INNER JOIN celulas
+        ON reunioncelula.idcelula = celulas.id AND celulas.tipo = 'crecimiento'
+        ORDER BY reunioncelula.fecha DESC;";
 
 
             $stmt = $this->db->pdo()->prepare($sql);
@@ -642,6 +667,7 @@ class Celulas extends Model
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+            /** @var Bitacora **/
             Bitacora::registrar("Consulta de reuniones de celula Crecimiento");
 
             return $resultado;
@@ -663,23 +689,20 @@ class Celulas extends Model
         try {
 
             $sql = "SELECT
-                    reunion.id,
-                    reunion.fecha,
-                    reunion.tematica,
-                    reunion.semana,
-                    reunion.generosidad,
-                    reunion.infantil,
-                    reunion.juvenil,
-                    reunion.adulto,
-                    reunion.actividad,
-                    reunion.observaciones,
-                    celula.codigo,
-                    celula.nombre,
-                    celula.id AS idCelula
-                FROM reunion
-                INNER JOIN celula
-                ON reunion.idcelula = celula.id AND celula.tipo = 'consolidacion'
-                ORDER BY reunion.fecha DESC;";
+                    reunioncelula.id,
+                    reunioncelula.fecha,
+                    reunioncelula.tematica,
+                    reunioncelula.semana,
+                    reunioncelula.generosidad,
+                    reunioncelula.actividad,
+                    reunioncelula.observaciones,
+                    celulas.codigo,
+                    celulas.nombre,
+                    celulas.id AS idCelula
+                FROM reunioncelula
+                INNER JOIN celulas
+                ON reunioncelula.idcelula = celulas.id AND celulas.tipo = 'consolidacion'
+                ORDER BY reunioncelula.fecha DESC;";
 
 
             $stmt = $this->db->pdo()->prepare($sql);
@@ -687,6 +710,7 @@ class Celulas extends Model
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+            /** @var Bitacora **/
             Bitacora::registrar("Consulta de reuniones de celula Consolidacion");
 
             return $resultado;
@@ -710,7 +734,35 @@ class Celulas extends Model
 
         try {
 
-            $sql = "UPDATE reunion
+            if (empty($infantil) && empty($juvenil) && empty($adulto)) {
+
+            $sql = "UPDATE reunioncelula
+                SET
+                idCelula = :idCelula,
+                fecha = :fecha,
+                tematica = :tematica,
+                semana = :semana,
+                generosidad = :generosidad,
+                actividad = :actividad,
+                observaciones = :observaciones
+                WHERE id = :id";
+
+            $stmt = $this->db->pdo()->prepare($sql);
+
+            $stmt->bindValue(':id', $id);
+            $stmt->bindValue(':idCelula', $idCelula);
+            $stmt->bindValue(':fecha', $fecha);
+            $stmt->bindValue(':tematica', $tematica);
+            $stmt->bindValue(':semana', $semana);
+            $stmt->bindValue(':generosidad', $generosidad);
+            $stmt->bindValue(':actividad', $actividad);
+            $stmt->bindValue(':observaciones', $observaciones);
+
+            $stmt->execute();
+
+            } else {
+
+                sql = "UPDATE reunioncelula
                 SET
                 idCelula = :idCelula,
                 fecha = :fecha,
@@ -740,7 +792,11 @@ class Celulas extends Model
 
             $stmt->execute();
 
-            Bitacora::registrar("Actualizacion de reunion de celula familiar");
+
+            }
+
+            /** @var Bitacora **/
+            Bitacora::registrar("Actualizacion de reunion de Celula");
 
             http_response_code(200);
             echo json_encode(array('msj' => 'Reunion actualizada correctamente', 'status' => 200));
@@ -765,7 +821,7 @@ class Celulas extends Model
     {
         try {
 
-            $sql = "DELETE FROM reunion WHERE id = :id";
+            $sql = "DELETE FROM reunioncelula WHERE id = :id";
 
             $stmt = $this->db->pdo()->prepare($sql);
 
@@ -773,6 +829,7 @@ class Celulas extends Model
 
             $stmt->execute();
 
+            /** @var Bitacora **/
             Bitacora::registrar("Eliminacion de reunion de celula");
 
             http_response_code(200);
@@ -795,7 +852,7 @@ class Celulas extends Model
     {
         try {
 
-            $sql = "SELECT * FROM celula WHERE celula.estatus = '1'";
+            $sql = "SELECT * FROM celulas WHERE celulas.estatus = '1'";
 
             $stmt = $this->db->pdo()->prepare($sql);
 
@@ -846,7 +903,7 @@ class Celulas extends Model
     public function validacion_existencia(string $nombre, $id): void
     {
         try {
-            $sql = "SELECT * FROM celula WHERE nombre = :nombre" . (!empty($id) ? " AND id != $id" : "");
+            $sql = "SELECT * FROM celulas WHERE nombre = :nombre" . (!empty($id) ? " AND id != $id" : "");
             $stmt = $this->db->pdo()->prepare($sql);
             $stmt->bindValue(":nombre", $nombre);
             $stmt->execute();
@@ -929,7 +986,7 @@ class Celulas extends Model
     {
         try {
 
-            $sql = "SELECT * FROM reunion WHERE idCelular= :idCelula AND estatus = 1";
+            $sql = "SELECT * FROM reunioncelula WHERE idCelula= :idCelula AND estatus = 1";
 
             $stmt = $this->db->pdo()->prepare($sql);
             $stmt->bindValue(":idCelula", $id);
@@ -969,6 +1026,7 @@ class Celulas extends Model
 
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+            /** @var Bitacora **/
             Bitacora::registrar("Consulta de asistencias de reunion de celula de consolidacion");
 
             return $resultado;
@@ -995,6 +1053,7 @@ class Celulas extends Model
 
             $stmt->execute();
 
+            /** @var Bitacora **/
             Bitacora::registrar("Eliminacion de asistencia en reunion de celula de consolidacion");
 
             http_response_code(200);
@@ -1027,6 +1086,7 @@ class Celulas extends Model
                 $stmt->execute();
             }
 
+            /** @var Bitacora **/
             Bitacora::registrar("Eliminacion de asistencia en reunion de celula de consolidacion");
 
             http_response_code(200);

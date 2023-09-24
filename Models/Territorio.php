@@ -7,6 +7,7 @@ class Territorio extends Model
     public int $idSede;
     public int $idLider;
     public int $idTerritorio;
+    public string $identificador;
     public string $codigo;
     public string $nombre;
     public string $detalles;

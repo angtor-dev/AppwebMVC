@@ -1,19 +1,19 @@
 <?php
 require_once "Models/Territorio.php";
-require_once "Models/CelulaConsolidacion.php";
+require_once "Models/Celulas.php";
 
 necesitaAutenticacion();
 
-requierePermisos("listarCelulaConsolidacion");
+//requierePermisos("listarCelulaConsolidacion");
 
 $usuarioSesion = $_SESSION['usuario'];
 
-$CelulaConsolidacion = new CelulaConsolidacion();
+$Celulas = new Celulas();
 
 
 if (isset($_GET['cargar_data'])) {
     //Primero inicializamos las variables
-    $Lista = $CelulaConsolidacion->listar_CelulaConsolidacion();
+    $Lista = $Celulas->listar_CelulaConsolidacion();
     //Variable json solamente para guardar el array de datos
     $json = array();
 
@@ -31,25 +31,40 @@ if (isset($_GET['cargar_data'])) {
         $json['data'] = array();
     }
     //Finalmente, aqui enviamos el listado
-
     echo json_encode($json);
     die();
 }
 
-if (isset($_POST['editar'])) {
+if (isset($_POST['registrar'])) {
 
-    requierePermisos("actualizarCelulaConsolidacion");
-
-    $id = $_POST['id'];
+    $tipo =  trim(strtolower('familiar'));
     $nombre = trim(strtolower($_POST['nombre']));
     $idLider = trim($_POST['idLider']);
     $idCoLider = trim($_POST['idCoLider']);
     $idTerritorio = trim($_POST['idTerritorio']);
+    
+    $Celulas->validacion_datos($nombre, [$idLider, $idCoLider, $idTerritorio]);
+    $Celulas->validacion_existencia($nombre, $id='');
+    $Celulas->registrar_Celula($tipo, $nombre, $idLider, $idCoLider, $idTerritorio);
 
-    $CelulaConsolidacion->validacion_datos($nombre, [$idLider, $idCoLider, $idTerritorio]);
-    $CelulaConsolidacion->validacion_existencia($nombre, $id);
-    $CelulaConsolidacion->validacion_accion($id, $accion = 'actualizar');
-    $CelulaConsolidacion->editar_CelulaConsolidacion($id, $nombre, $idLider, $idCoLider, $idTerritorio);
+    die();
+}
+
+
+if (isset($_POST['editar'])) {
+
+    requierePermisos("actualizarCelula");
+
+    $id = $_POST['id2'];
+    $nombre = trim(strtolower($_POST['nombre2']));
+    $idLider = trim($_POST['idLider2']);
+    $idCoLider = trim($_POST['idCoLider2']);
+    $idTerritorio = trim($_POST['idTerritorio2']);
+
+    $Celulas->validacion_datos($nombre, [$idLider, $idCoLider, $idTerritorio]);
+    $Celulas->validacion_existencia($nombre, $id);
+    $Celulas->validacion_accion($id, $accion = 'actualizar');
+    $Celulas->editar_Celula($id, $nombre, $idLider, $idCoLider, $idTerritorio);
 
     die();
 }
@@ -58,32 +73,35 @@ if (isset($_POST['editar'])) {
 
 if (isset($_POST['registroreunion'])) {
 
-    requierePermisos("actualizarCelulaConsolidacion");
+   // requierePermisos("actualizarCelula");
 
-    $idCelulaConsolidacion = trim($_POST['idCelulaConsolidacion']);
+    $idCelula = $_POST['idCelula'];
     $fecha = $_POST['fecha'];
     $tematica = trim(strtolower($_POST['tematica']));
     $semana = trim($_POST['semana']);
     $generosidad = $_POST['generosidad'];
+    $infantil = '';
+    $juvenil = '';
+    $adulto = '';
     $actividad = trim(strtolower($_POST['actividad']));
     $observaciones = trim(strtolower($_POST['observaciones']));
-    $asistencias = $_POST['asistencias'];
 
-    $CelulaConsolidacion->validacion_datos_reunion([$idCelulaConsolidacion, $semana, $generosidad], [$tematica, $actividad, $observaciones], $fecha);
-    $CelulaConsolidacion->validacion_array_asistencias($asistencias);
-    $CelulaConsolidacion->registrar_reunion($idCelulaConsolidacion, $fecha, $tematica, $semana, $generosidad, $actividad, $observaciones, $asistencias);
+    $Celulas->validacion_datos_reunion([$idCelula, $semana, $generosidad], [$tematica, $actividad, $observaciones], $fecha);
+    $Celulas->registrar_reunion($idCelula, $fecha, $tematica, $semana, $generosidad, $infantil, $juvenil, $adulto, $actividad, $observaciones);
+
     die();
 }
 
 
+
+
 if (isset($_POST['eliminar'])) {
 
-    requierePermisos("eliminarCelulaConsolidacion");
 
     $id = $_POST['id'];
 
-    $CelulaConsolidacion->validacion_accion($id, $accion = 'eliminar');
-    $CelulaConsolidacion->eliminar_CelulaConsolidacion($id);
+    $Celulas->validacion_accion($id, $accion = 'eliminar');
+    $Celulas->eliminar_Celula($id);
 
     die();
 }
@@ -91,19 +109,19 @@ if (isset($_POST['eliminar'])) {
 
 if (isset($_GET['listaLideres'])) {
 
-    requierePermisos("actualizarCelulaConsolidacion");
+    requierePermisos("actualizarCelulaFamiliar");
 
-    $ListaLideres = $CelulaConsolidacion->listar_lideres();
+    $ListaLideres = $Celulas->listar_lideres();
 
     echo json_encode($ListaLideres);
+
     die();
 }
 
 if (isset($_GET['listaTerritorio'])) {
 
-    requierePermisos("actualizarCelulaConsolidacion");
 
-    $Listaterritorio = $CelulaConsolidacion->listar_territorios();
+    $Listaterritorio = $Celulas->listar_territorios();
 
     echo json_encode($Listaterritorio);
 
@@ -114,11 +132,13 @@ if (isset($_GET['cargar_discipulos_celula'])) {
 
     requierePermisos("actualizarCelulaConsolidacion");
 
-    $idCelulaConsolidacion = $_GET['idCelulaConsolidacion'];
-    $resultado = $CelulaConsolidacion->listarDiscipulados_celula($idCelulaConsolidacion);
+    $idCelula = $_GET['idCelula'];
+    $resultado = $Celulas->listarDiscipulados_celula($idCelula);
 
     echo json_encode($resultado);
     die();
 }
+
+
 
 renderView();

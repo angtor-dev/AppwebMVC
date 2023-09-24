@@ -5,12 +5,13 @@ $(document).ready(function () {
     let choices3;
     let choices4;
     let choices5;
+    let choices6;
 
     const dataTable = $('#celulaDatatables').DataTable({
         responsive: true,
         ajax: {
             method: "GET",
-            url: 'http://localhost/AppwebMVC/CelulaFamiliar/Listar',
+            url: 'http://localhost/AppwebMVC/CelulaFamiliar/Index',
             data: { cargar_data: 'cargar_data' }
         },
         columns: [
@@ -34,6 +35,7 @@ $(document).ready(function () {
     })
 
 
+
     $('#celulaDatatables tbody').on('click', '#ver_info', function () {
         const datos = dataTable.row($(this).parents()).data();
 
@@ -53,17 +55,17 @@ $(document).ready(function () {
         const datos = dataTable.row($(this).parents()).data();
 
         document.getElementById('idCelulaFamiliar').textContent = datos.id;
-        document.getElementById('nombre').value = datos.nombre;
+        document.getElementById('nombre2').value = datos.nombre;
 
-        
+        Listar_TerritorioEditar(datos.idTerritorio);
+        Listar_LideresEditar(datos.idLider, datos.idCoLider);
 
     })
 
-    $('#celulaDatatables thead').on('click', '#registrar', function () {
-        const datos = dataTable.row($(this).parents()).data();
+    $('#registrar').on('click', function () {
 
-        Listar_Territorio();
-        Listar_Lideres();
+        Listar_TerritorioRegistrar();
+        Listar_LideresRegistrar();
     })
 
 
@@ -91,7 +93,7 @@ $(document).ready(function () {
 
                 $.ajax({
                     type: "POST",
-                    url: "http://localhost/AppwebMVC/CelulaFamiliar/Listar",
+                    url: "http://localhost/AppwebMVC/CelulaFamiliar/Index",
                     data: {
 
                         eliminar: 'eliminar',
@@ -143,11 +145,11 @@ $(document).ready(function () {
 
 
 
-    function Listar_Lideres(idLider, idCoLider) {
+    function Listar_LideresEditar(idLider, idCoLider) {
 
         $.ajax({
             type: "GET",
-            url: "http://localhost/AppwebMVC/CelulaFamiliar/Listar",
+            url: "http://localhost/AppwebMVC/CelulaFamiliar/Index",
             data: {
 
                 listaLideres: 'listaLideres',
@@ -160,10 +162,6 @@ $(document).ready(function () {
                 let selector = document.getElementById('idLider2');
 
                 let selector2 = document.getElementById('idCoLider2');
-
-                let selector4 = document.getElementById('idLider');
-
-                let selector5 = document.getElementById('idCoLider');
 
                 data.forEach(item => {
 
@@ -221,11 +219,11 @@ $(document).ready(function () {
     
 
 
-    function Listar_Territorio(idTerritorio) {
+    function Listar_TerritorioEditar(idTerritorio) {
 
         $.ajax({
             type: "GET",
-            url: "http://localhost/AppwebMVC/CelulaFamiliar/Listar",
+            url: "http://localhost/AppwebMVC/CelulaFamiliar/Index",
             data: {
 
                 listaTerritorio: 'listaTerritorio',
@@ -236,7 +234,7 @@ $(document).ready(function () {
 
                 let data = JSON.parse(response);
 
-                let selector = document.getElementById('idTerritorio');
+                let selector = document.getElementById('idTerritorio2');
 
                 data.forEach(item => {
 
@@ -260,6 +258,147 @@ $(document).ready(function () {
                 });
 
                 choices3.setChoiceByValue(idTerritorio.toString());
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                // Aquí puedes manejar errores, por ejemplo:
+                console.error("Error al enviar:", textStatus, errorThrown);
+                alert("Hubo un error al realizar el registro. Por favor, inténtalo de nuevo.");
+            }
+        })
+    }
+
+
+
+    function Listar_LideresRegistrar() {
+
+        $.ajax({
+            type: "GET",
+            url: "http://localhost/AppwebMVC/CelulaFamiliar/Index",
+            data: {
+
+                listaLideres: 'listaLideres',
+
+            },
+            success: function (response) {
+
+                let data = JSON.parse(response);
+
+                let selector = document.getElementById('idLider');
+                const placeholderOption = document.createElement('option');
+                    placeholderOption.value = '';
+                    placeholderOption.text = 'Seleccione el Lider de Celula';
+                    placeholderOption.disabled = true;
+                    placeholderOption.selected = true;
+                    selector.appendChild(placeholderOption);
+
+                let selector2 = document.getElementById('idCoLider');
+
+                const placeholderOption2 = document.createElement('option');
+                        placeholderOption2.value = '';
+                        placeholderOption2.text = 'Seleccione el CoLider de las Celula';
+                        placeholderOption2.disabled = true;
+                        placeholderOption2.selected = true;
+                        selector2.appendChild(placeholderOption2);
+
+                data.forEach(item => {
+
+                    const option = document.createElement('option');
+                    option.value = item.id;
+                    option.text = `${item.cedula} ${item.nombre} ${item.apellido}`;
+                    selector.appendChild(option);
+
+                });
+
+                data.forEach(item => {
+
+                    const option = document.createElement('option');
+                    option.value = item.id;
+                    option.text = `${item.cedula} ${item.nombre} ${item.apellido}`;
+                    selector2.appendChild(option);
+
+                });
+
+                // Destruir la instancia existente si la hay
+                if (choices4) {
+                    choices4.destroy();
+                }
+
+                choices4 = new Choices(selector, {
+                    allowHTML: true,
+                    searchEnabled: true,  // Habilita la funcionalidad de búsqueda
+                    removeItemButton: true,  // Habilita la posibilidad de remover items
+                    placeholderValue: 'Selecciona una opción',  // Texto del placeholder
+                });
+
+                // Destruir la instancia existente si la hay
+                if (choices5) {
+                    choices5.destroy();
+                }
+
+                choices5 = new Choices(selector2, {
+                    allowHTML: true,
+                    searchEnabled: true,  // Habilita la funcionalidad de búsqueda
+                    removeItemButton: true,  // Habilita la posibilidad de remover items
+                    placeholderValue: 'Selecciona una opción',  // Texto del placeholder
+                });
+
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                // Aquí puedes manejar errores, por ejemplo:
+                console.error("Error al enviar:", textStatus, errorThrown);
+            }
+        })
+    }
+
+    
+
+
+    function Listar_TerritorioRegistrar() {
+
+        $.ajax({
+            type: "GET",
+            url: "http://localhost/AppwebMVC/CelulaFamiliar/Index",
+            data: {
+
+                listaTerritorio: 'listaTerritorio',
+
+            },
+            success: function (response) {
+
+                let data = JSON.parse(response);
+
+
+                let selector = document.getElementById('idTerritorio');
+
+                const placeholderOption = document.createElement('option');
+                    placeholderOption.value = '';
+                    placeholderOption.text = 'Selecciona el Territorio';
+                    placeholderOption.disabled = true;
+                    placeholderOption.selected = true;
+                    selector.appendChild(placeholderOption);
+
+                data.forEach(item => {
+
+                    const option = document.createElement('option');
+                    option.value = item.id;
+                    option.text = `${item.codigo} ${item.nombre}`;
+                    selector.appendChild(option);
+
+                });
+
+                // Destruir la instancia existente si la hay
+                if (choices6) {
+                    choices6.destroy();
+                }
+                
+                choices6 = new Choices(selector, {
+                    allowHTML: true,
+                    searchEnabled: true,  // Habilita la funcionalidad de búsqueda
+                    removeItemButton: true,  // Habilita la posibilidad de remover items
+                    placeholderValue: 'Selecciona una opción',  // Texto del placeholder
+                });
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -357,7 +496,7 @@ form.addEventListener("submit", (e) => {
         // Aquí puedes agregar el código para enviar el formulario
         $.ajax({
             type: "POST",
-            url: "http://localhost/AppwebMVC/CelulaFamiliar/Listar",
+            url: "http://localhost/AppwebMVC/CelulaFamiliar/Index",
             data: {
 
                 registrar: 'registrar',
@@ -368,6 +507,7 @@ form.addEventListener("submit", (e) => {
             },
             success: function (response) {
                 console.log(response);
+                dataTable.ajax.reload();
 
                 let data = JSON.parse(response);
                 Swal.fire({
@@ -378,9 +518,9 @@ form.addEventListener("submit", (e) => {
                 })
 
                 nombre.value = '';
-                choices1.setChoiceByValue('');
-                choices2.setChoiceByValue('');
-                choices3.setChoiceByValue('');
+                choices4.setChoiceByValue('');
+                choices5.setChoiceByValue('');
+                choices6.setChoiceByValue('');
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 if (jqXHR.responseText) {
@@ -502,7 +642,7 @@ form.addEventListener("submit", (e) => {
             // Aquí puedes agregar el código para enviar el formulario
             $.ajax({
                 type: "POST",
-                url: "http://localhost/AppwebMVC/CelulaFamiliar/Listar",
+                url: "http://localhost/AppwebMVC/CelulaFamiliar/Index",
                 data: {
 
                     editar: 'editar',
@@ -601,7 +741,7 @@ form.addEventListener("submit", (e) => {
     form3.addEventListener("submit", (e) => {
         e.preventDefault();
 
-        const idCelulaFamiliar = document.getElementById('idCelulaFamiliarR').textContent;
+        const idCelula = document.getElementById('idCelulaFamiliarR').textContent;
 
         // Validar fecha
         const fecha = document.getElementById("fecha").value;
@@ -706,11 +846,11 @@ form.addEventListener("submit", (e) => {
             // Aquí puedes agregar el código para enviar el formulario
             $.ajax({
                 type: "POST",
-                url: "http://localhost/AppwebMVC/CelulaFamiliar/Listar",
+                url: "http://localhost/AppwebMVC/CelulaFamiliar/Index",
                 data: {
 
                     registroreunion: 'registroreunion',
-                    idCelulaFamiliar: idCelulaFamiliar,
+                    idCelula: idCelula,
                     fecha: fecha,
                     tematica: tematica,
                     semana: semana,
