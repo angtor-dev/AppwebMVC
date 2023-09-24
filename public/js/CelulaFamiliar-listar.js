@@ -581,7 +581,7 @@ form.addEventListener("submit", (e) => {
     const nombre2 = document.getElementById("nombre2");
     nombre2.addEventListener('keyup', (e) => {
         // Validar nombre
-        if (!regexObj.nombre2.test(e.target.value)) {
+        if (!regexObj.nombre.test(e.target.value)) {
             document.getElementById("msj_nombre2").classList.remove("d-none");
             validationStatus2.nombre = false;
         } else {
@@ -597,7 +597,7 @@ form.addEventListener("submit", (e) => {
     const idCoLider2 = document.getElementById("idCoLider2");
 
     idLider2.addEventListener('change', (e) => {
-        if (!regexObj.idLider2.test(e.target.value) || e.target.value === idCoLider2.value) {
+        if (!regexObj.idLider.test(e.target.value) || e.target.value === idCoLider2.value) {
             document.getElementById("msj_idLider2").classList.remove("d-none");
             validationStatus2.idLider = false;
         } else {
@@ -607,7 +607,7 @@ form.addEventListener("submit", (e) => {
     })
 
     idCoLider2.addEventListener('change', (e) => {
-        if (!regexObj.idCoLider2.test(e.target.value) || e.target.value === idLider2.value) {
+        if (!regexObj.idCoLider.test(e.target.value) || e.target.value === idLider2.value) {
             document.getElementById("msj_idCoLider2").classList.remove("d-none");
             validationStatus2.idCoLider = false;
         } else {
@@ -620,7 +620,7 @@ form.addEventListener("submit", (e) => {
     // Validar idTerritorio
     const idTerritorio2 = document.getElementById("idTerritorio2");
     idTerritorio2.addEventListener('change', (e) => {
-        if (!regexObj.idTerritorio2.test(e.target.value)) {
+        if (!regexObj.idTerritorio.test(e.target.value)) {
             document.getElementById("msj_idTerritorio2").classList.remove("d-none");
             validationStatus2.idSede = false;
         } else {

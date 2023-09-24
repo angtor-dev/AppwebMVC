@@ -53,7 +53,7 @@ if (isset($_POST['registrar'])) {
 
 if (isset($_POST['editar'])) {
 
-    requierePermisos("actualizarCelula");
+    //requierePermisos("actualizarCelula");
 
     $id = $_POST['id2'];
     $tipo =  trim(strtolower('familiar'));
