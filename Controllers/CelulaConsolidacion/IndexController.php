@@ -37,7 +37,7 @@ if (isset($_GET['cargar_data'])) {
 
 if (isset($_POST['registrar'])) {
 
-    $tipo =  trim(strtolower('familiar'));
+    $tipo =  trim(strtolower('consolidacion'));
     $nombre = trim(strtolower($_POST['nombre']));
     $idLider = trim($_POST['idLider']);
     $idCoLider = trim($_POST['idCoLider']);
@@ -56,6 +56,7 @@ if (isset($_POST['editar'])) {
     requierePermisos("actualizarCelula");
 
     $id = $_POST['id2'];
+    $tipo =  trim(strtolower('consolidacion'));
     $nombre = trim(strtolower($_POST['nombre2']));
     $idLider = trim($_POST['idLider2']);
     $idCoLider = trim($_POST['idCoLider2']);
@@ -64,7 +65,7 @@ if (isset($_POST['editar'])) {
     $Celulas->validacion_datos($nombre, [$idLider, $idCoLider, $idTerritorio]);
     $Celulas->validacion_existencia($nombre, $id);
     $Celulas->validacion_accion($id, $accion = 'actualizar');
-    $Celulas->editar_Celula($id, $nombre, $idLider, $idCoLider, $idTerritorio);
+    $Celulas->editar_Celula($id, $tipo, $nombre, $idLider, $idCoLider, $idTerritorio);
 
     die();
 }

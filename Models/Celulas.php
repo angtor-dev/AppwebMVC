@@ -763,7 +763,7 @@ class Celulas extends Model
 
             } else {
 
-                sql = "UPDATE reunioncelula
+                $sql = "UPDATE reunioncelula
                 SET
                 idCelula = :idCelula,
                 fecha = :fecha,
