@@ -4,14 +4,14 @@ require_once "Models/Model.php";
 class Sede extends Model
 {
     public int $id;
-    public ?int $idPastor;
-    public ?string $codigo;
-    public string $identificador;
-    public string $nombre;
-    public string $estadoCodigo;
-    public string $estado;
-    public string $direccion;
-    public int $estatus;
+    private ?int $idPastor;
+    private ?string $codigo;
+    private string $identificador;
+    private string $nombre;
+    private string $estadoCodigo;
+    private string $estado;
+    private string $direccion;
+    private int $estatus;
 
     //Expresiones regulares para validaciones
     private $expresion_nombre = '/^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]{5,50}$/';
@@ -355,8 +355,25 @@ class Sede extends Model
     
     public function getEscuela() : Escuela
     {
-
-    
         return Escuela::cargarRelaciones($this->id, "Sede")[0];
+    }
+
+    public function getCodigo() : ?string {
+        return $this->codigo;
+    }
+    public function getIdentificador() : string {
+        return $this->identificador;
+    }
+    public function getNombre() : string {
+        return $this->nombre;
+    }
+    public function getEstadoCodigo() : string {
+        return $this->estadoCodigo;
+    }
+    public function getEstado() : string {
+        return $this->estado;
+    }
+    public function getDireccion() : string {
+        return $this->direccion;
     }
 }

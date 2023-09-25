@@ -4,13 +4,13 @@ require_once "Models/Model.php";
 class CelulaConsolidacion extends Model
 {
     public int $id;
-    public int $idLider;
-    public int $idColider;
-    public int $idTerritorio;
-    public string $identificador;
-    public string $codigo;
-    public string $nombre;
-    public int $estatus;
+    private int $idLider;
+    private int $idColider;
+    private int $idTerritorio;
+    private string $identificador;
+    private string $codigo;
+    private string $nombre;
+    private int $estatus;
 
     //Expresiones regulares
     private $expresion_nombre = '/^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]{5,50}$/';
@@ -41,7 +41,7 @@ class CelulaConsolidacion extends Model
             if ($datos['celulaNumero'] == null) {
                 $id = 1;
                 $identificador = 'CCO' . $id;
-                $codigo = $territorio->codigo . '-' . $identificador;
+                $codigo = $territorio->getCodigo() . '-' . $identificador;
             } else {
                 
                 /** @var CelulaConsolidacion[] **/
@@ -60,11 +60,11 @@ class CelulaConsolidacion extends Model
 
                     $contador = $mayorNumero + 1;
                     $identificador = 'CCO' . $contador;
-                    $codigo = $territorio->codigo . '-' . $identificador;
+                    $codigo = $territorio->getCodigo() . '-' . $identificador;
                 } else {
                     $contador = 1;
                     $identificador = 'CCO' . $contador;
-                    $codigo = $territorio->codigo . '-' . $identificador;
+                    $codigo = $territorio->getCodigo() . '-' . $identificador;
                 }
             }
 
@@ -203,11 +203,11 @@ class CelulaConsolidacion extends Model
 
                     $contador = $mayorNumero + 1;
                     $identificador = 'CCO' . $contador;
-                    $codigo = $territorio->codigo . '-' . $identificador;
+                    $codigo = $territorio->getCodigo() . '-' . $identificador;
                 } else {
                     $contador = 1;
                     $identificador = 'CCO' . $contador;
-                    $codigo = $territorio->codigo . '-' . $identificador;
+                    $codigo = $territorio->getCodigo() . '-' . $identificador;
                 }
 
                 $sql = "UPDATE celulaconsolidacion SET  nombre = :nombre, idLider = :idLider, idCoLider = :idCoLider, codigo = :codigo, identificador = :identificador WHERE celulaconsolidacion.id = :id";

@@ -6,12 +6,12 @@ class Territorio extends Model
     public int $id;
     public int $idSede;
     public int $idLider;
-    public int $idTerritorio;
-    public string $identificador;
-    public string $codigo;
-    public string $nombre;
-    public string $detalles;
-    public int $estatus;
+    private int $idTerritorio;
+    private string $identificador;
+    private string $codigo;
+    private string $nombre;
+    private string $detalles;
+    private int $estatus;
 
     public Sede $sede;
     public Usuario $lider;
@@ -44,15 +44,17 @@ class Territorio extends Model
             $id = '';
             $codigo = '';
             $territorio = '';
+            /** @var Sede */
             $sede = Sede::cargar($idSede);
 
             if ($datos['territorioNumero'] == null) {
                 $id = 1;
                 $territorio = 'T' . $id;
-                $identificador = $sede->codigo;
+                $identificador = $sede->getCodigo();
                 $codigo = $identificador . '-' . $territorio;
                 
             } else {
+                /** @var Territorio[] */
                 $territorios = Territorio::cargarRelaciones($idSede, "Sede");
 
                 if (count($territorios) > 0) {
@@ -60,7 +62,7 @@ class Territorio extends Model
                     $numeros = [];
                     foreach ($territorios as $resultado) {
                         // Extraer el número del identificador (eliminar la "T")
-                        $numero = (int) substr($resultado->identificador, 1);  // substr($resultado, 1) elimina el primer carácter ("T")
+                        $numero = (int) substr($resultado->getIdentificador(), 1);  // substr($resultado, 1) elimina el primer carácter ("T")
                         $numeros[] = $numero;
                     }
                     // Encontrar el número más grande en el array
@@ -69,14 +71,14 @@ class Territorio extends Model
                     $id = $datos['territorioNumero'] + 1;
                     $contador = $mayorNumero + 1;
                     $territorio = 'T' . $contador;
-                    $identificador = $sede->codigo;
+                    $identificador = $sede->getCodigo();
                     $codigo = $identificador . '-' . $territorio;
                 } else {
 
                     $id = $datos['territorioNumero'] + 1;
                     $contador = 1;
                     $territorio = 'T' . $contador;
-                    $identificador = $sede->codigo;
+                    $identificador = $sede->getCodigo();
                     $codigo = $identificador . '-' . $territorio;
                 }
             }
@@ -181,7 +183,7 @@ class Territorio extends Model
     {
 
         try {
-
+            /** @var Territorio */
             $consulta = Territorio::cargar($id);
 
             if ($consulta->idSede == $idSede) {
@@ -199,7 +201,9 @@ class Territorio extends Model
                 //Validando si existen celulas antes de cambiar Sede del territorio
                 $this->validacion_accion($id, $accion = 'actualizar');
 
+                /** @var Sede */
                 $sede = Sede::cargar($idSede);
+                /** @var Territorio[] */
                 $territorios = Territorio::cargarRelaciones($idSede, "Sede");
 
                 $identificador = '';
@@ -210,7 +214,7 @@ class Territorio extends Model
                     $numeros = [];
                     foreach ($territorios as $resultado) {
                         // Extraer el número del identificador (eliminar la "T")
-                        $numero = (int) substr($resultado->identificador, 1);  // substr($resultado, 1) elimina el primer carácter ("T")
+                        $numero = (int) substr($resultado->getIdentificador(), 1);  // substr($resultado, 1) elimina el primer carácter ("T")
                         $numeros[] = $numero;
                     }
                     // Encontrar el número más grande en el array
@@ -218,11 +222,11 @@ class Territorio extends Model
 
                     $contador = $mayorNumero + 1;
                     $identificador = 'T' . $contador;
-                    $codigo = $sede->codigo . '-' . $identificador;
+                    $codigo = $sede->getCodigo() . '-' . $identificador;
                 } else {
                     $contador = 1;
                     $identificador = 'T' . $contador;
-                    $codigo = $sede->codigo . '-' . $identificador;
+                    $codigo = $sede->getCodigo() . '-' . $identificador;
                 }
 
                 $sql = "UPDATE territorio SET nombre = :nombre, idLider = :idLider, idSede = :idSede, detalles = :detalles, codigo = :codigo, identificador = :identificador WHERE territorio.id = :id";
@@ -430,5 +434,19 @@ class Territorio extends Model
             echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
             die();
         }
+    }
+
+    // Getters
+    public function getIdentificador() : string {
+        return $this->identificador;
+    }
+    public function getCodigo() : string {
+        return $this->codigo;
+    }
+    public function getNombre() : string {
+        return $this->nombre;
+    }
+    public function getDetalles() : string {
+        return $this->detalles;
     }
 }

@@ -4,13 +4,13 @@ require_once "Models/Model.php";
 class CelulaCrecimiento extends Model
 {
     public int $id;
-    public int $idLider;
-    public int $idColider;
-    public int $idTerritorio;
-    public string $codigo;
-    public string $nombre;
-    public string $identificador;
-    public int $estatus;
+    private int $idLider;
+    private int $idColider;
+    private int $idTerritorio;
+    private string $codigo;
+    private string $nombre;
+    private string $identificador;
+    private int $estatus;
 
     //Expresiones regulares
     private $expresion_nombre = '/^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]{5,50}$/';
@@ -37,7 +37,7 @@ class CelulaCrecimiento extends Model
             if ($datos['celulaNumero'] == null) {
                 $id = 1;
                 $identificador = 'CCR' . $id;
-                $codigo = $territorio->codigo . '-' . $identificador;
+                $codigo = $territorio->getCodigo() . '-' . $identificador;
             } else {
                 /** @var CelulaCrecimiento[] */
                 $celulas = CelulaCrecimiento::cargarRelaciones($idTerritorio, "Territorio");
@@ -55,11 +55,11 @@ class CelulaCrecimiento extends Model
 
                     $contador = $mayorNumero + 1;
                     $identificador = 'CCR' . $contador;
-                    $codigo = $territorio->codigo . '-' . $identificador;
+                    $codigo = $territorio->getCodigo() . '-' . $identificador;
                 } else {
                     $contador = 1;
                     $identificador = 'CCR' . $contador;
-                    $codigo = $territorio->codigo . '-' . $identificador;
+                    $codigo = $territorio->getCodigo() . '-' . $identificador;
                 }
             }
 
@@ -203,11 +203,11 @@ class CelulaCrecimiento extends Model
 
                     $contador = $mayorNumero + 1;
                     $identificador = 'CCR' . $contador;
-                    $codigo = $territorio->codigo . '-' . $identificador;
+                    $codigo = $territorio->getCodigo() . '-' . $identificador;
                 } else {
                     $contador = 1;
                     $identificador = 'CCR' . $contador;
-                    $codigo = $territorio->codigo . '-' . $identificador;
+                    $codigo = $territorio->getCodigo() . '-' . $identificador;
                 }
 
                 $sql = "UPDATE celulacrecimiento SET  nombre = :nombre, idLider = :idLider, idCoLider = :idCoLider, codigo = :codigo, identificador = :identificador WHERE celulacrecimiento.id = :id";

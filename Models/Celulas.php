@@ -4,14 +4,14 @@ require_once "Models/Model.php";
 class Celulas extends Model
 {
     public int $id;
-    public string $tipo;
-    public int $idLider;
-    public int $idColider;
-    public int $idTerritorio;
-    public string $identificador;
-    public string $codigo;
-    public string $nombre;
-    public int $estatus;
+    private string $tipo;
+    private int $idLider;
+    private int $idColider;
+    private int $idTerritorio;
+    private string $identificador;
+    private string $codigo;
+    private string $nombre;
+    private int $estatus;
 
     //Expresiones regulares
     private $expresion_nombre = '/^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]{5,50}$/';
@@ -53,7 +53,7 @@ class Celulas extends Model
                         break;
                 }
                 
-                $codigo = $territorio->codigo . '-' . $identificador;
+                $codigo = $territorio->getCodigo() . '-' . $identificador;
                 
             } else {
 
@@ -96,7 +96,7 @@ class Celulas extends Model
                             break;
                     }
                 
-                    $codigo = $territorio->codigo . '-' . $identificador;
+                    $codigo = $territorio->getCodigo() . '-' . $identificador;
 
                 } else {
                     $contador = 1;
@@ -115,7 +115,7 @@ class Celulas extends Model
                             break;
                     }
 
-                    $codigo = $territorio->codigo . '-' . $identificador;
+                    $codigo = $territorio->getCodigo() . '-' . $identificador;
                 }
             }
 
@@ -154,7 +154,6 @@ class Celulas extends Model
                 $stmt->execute();
             }
 
-            /** @var Bitacora **/
             Bitacora::registrar("Registro de celula familiar");
 
             http_response_code(200);
@@ -207,7 +206,6 @@ class Celulas extends Model
 
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            /** @var Bitacora **/
             Bitacora::registrar("Consulta de celula familiar");
 
             return $resultado;
@@ -255,7 +253,6 @@ class Celulas extends Model
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            /** @var Bitacora **/
             Bitacora::registrar("Consulta de celula de Crecimiento");
 
             return $resultado;
@@ -302,7 +299,6 @@ class Celulas extends Model
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            /** @var Bitacora **/
             Bitacora::registrar("Consulta de celula de Consolidacion");
 
             return $resultado;
@@ -386,7 +382,7 @@ class Celulas extends Model
                             break;
                     }
                     
-                    $codigo = $territorio->codigo . '-' . $identificador;
+                    $codigo = $territorio->getCodigo() . '-' . $identificador;
                 } else {
                     $contador = 1;
 
@@ -404,7 +400,7 @@ class Celulas extends Model
                             break;
                     }
                     
-                    $codigo = $territorio->codigo . '-' . $identificador;
+                    $codigo = $territorio->getCodigo() . '-' . $identificador;
                 }
 
                 $sql = "UPDATE celulas SET nombre = :nombre, idLider = :idLider, idCoLider = :idCoLider, codigo = :codigo, identificador = :identificador, idTerritorio = :idTerritorio WHERE id = :id";
@@ -420,7 +416,6 @@ class Celulas extends Model
 
                 $stmt->execute();
             }
-            /** @var Bitacora **/
             Bitacora::registrar("Actualizacion de celula familiar");
 
             http_response_code(200);
@@ -455,7 +450,6 @@ class Celulas extends Model
 
             $stmt->execute();
 
-            /** @var Bitacora **/
             Bitacora::registrar("Eliminacion de Celula");
 
             http_response_code(200);
@@ -519,7 +513,6 @@ class Celulas extends Model
 
         }
 
-            /** @var Bitacora **/
             Bitacora::registrar("Registro de reunion de celula");
 
             http_response_code(200);
@@ -621,7 +614,6 @@ class Celulas extends Model
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            /** @var Bitacora **/
             Bitacora::registrar("Consulta de reuniones de celula familiar");
 
             return $resultado;
@@ -668,7 +660,6 @@ class Celulas extends Model
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            /** @var Bitacora **/
             Bitacora::registrar("Consulta de reuniones de celula Crecimiento");
 
             return $resultado;
@@ -711,7 +702,6 @@ class Celulas extends Model
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            /** @var Bitacora **/
             Bitacora::registrar("Consulta de reuniones de celula Consolidacion");
 
             return $resultado;
@@ -796,8 +786,7 @@ class Celulas extends Model
 
             }
 
-            /** @var Bitacora **/
-            Bitacora::registrar("Actualizacion de reunion de Celula");
+            Bitacora::registrar("Actualización de reunion de Celula");
 
             http_response_code(200);
             echo json_encode(array('msj' => 'Reunion actualizada correctamente', 'status' => 200));
@@ -830,7 +819,6 @@ class Celulas extends Model
 
             $stmt->execute();
 
-            /** @var Bitacora **/
             Bitacora::registrar("Eliminacion de reunion de celula");
 
             http_response_code(200);
@@ -1027,7 +1015,6 @@ class Celulas extends Model
 
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            /** @var Bitacora **/
             Bitacora::registrar("Consulta de asistencias de reunion de celula de consolidacion");
 
             return $resultado;
@@ -1054,7 +1041,6 @@ class Celulas extends Model
 
             $stmt->execute();
 
-            /** @var Bitacora **/
             Bitacora::registrar("Eliminacion de asistencia en reunion de celula de consolidacion");
 
             http_response_code(200);
@@ -1087,7 +1073,6 @@ class Celulas extends Model
                 $stmt->execute();
             }
 
-            /** @var Bitacora **/
             Bitacora::registrar("Eliminacion de asistencia en reunion de celula de consolidacion");
 
             http_response_code(200);
