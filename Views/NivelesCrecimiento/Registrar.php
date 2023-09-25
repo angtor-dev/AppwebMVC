@@ -12,12 +12,12 @@ $title = "Registrar Nivel de Crecimineto";
         <div class="mb-3">
             <label class="form-label fw-bold">Nombre del nivel</label>
             <input type="text" class="form-control" id="nombre" name="nombre" required
-                value="<?= @$nivelCrecimiento?->nombre ?>">
+                value="<?= @$nivelCrecimiento?->getNombre() ?>">
         </div>
         <div class="mb-3">
             <label class="form-label fw-bold">Nivel (grado)</label>
             <input type="number" class="form-control" id="nivel" name="nivel" required min="1" max="99"
-                value="<?= @$nivelCrecimiento?->nivel ?>">
+                value="<?= @$nivelCrecimiento?->getNivel() ?>">
         </div>
         <div class="d-flex justify-content-end">
             <a href="/AppwebMVC/NivelesCrecimiento" class="btn btn-secondary me-3">

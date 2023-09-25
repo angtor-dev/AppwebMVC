@@ -27,6 +27,6 @@ try {
 }
 
 $_SESSION['exitos'][] = "Rol actualizado con exito.";
-Bitacora::registrar("Actualizo el rol $rol->nombre");
+Bitacora::registrar("Actualizo el rol ".$rol->getNombre());
 header("Location: /AppwebMVC/Seguridad/Roles/");
 ?>

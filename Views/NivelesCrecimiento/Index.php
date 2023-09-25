@@ -49,8 +49,8 @@ $title = "Niveles de Crecimiento";
                     data-niveles="<?= $nivel->subnivelesArray['niveles'] ?>"
                     data-ids="<?= $nivel->subnivelesArray['ids'] ?>">
                     <td></td>
-                    <td><?= $nivel->nivel ?></td>
-                    <td><?= $nivel->nombre ?></td>
+                    <td><?= $nivel->getNivel() ?></td>
+                    <td><?= $nivel->getNombre() ?></td>
                     <td>
                         <div class="acciones">
                             <a role="button">

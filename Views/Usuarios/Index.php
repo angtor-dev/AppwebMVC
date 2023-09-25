@@ -48,7 +48,7 @@ $usuarioSesion = $_SESSION['usuario'];
                 <td>
                     <?=
                     implode(", ", array_map(function(Rol $rol) {
-                        return $rol->nombre;
+                        return $rol->getNombre();
                     }, $usuario->roles));
                     ?>
                 </td>

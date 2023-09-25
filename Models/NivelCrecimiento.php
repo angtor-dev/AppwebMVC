@@ -146,5 +146,10 @@ class NivelCrecimiento extends Model
     public function getNivel() : int {
         return $this->nivel;
     }
+
+    // Setters
+    public function setIdEscuela(int $idEscuela) : void {
+        $this->idEscuela = $idEscuela;
+    }
 }
 ?>

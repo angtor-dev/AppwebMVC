@@ -4,7 +4,7 @@ require_once "Models/Model.php";
 class Escuela extends Model
 {
     public int $id;
-    private int $idSede;
+    public int $idSede;
     
     public Sede $sede;
     

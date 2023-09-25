@@ -10,7 +10,7 @@
         <div class="col-sm-12">
             <label for="input-nombre">Nombre</label>
             <input class="form-control" type="text" name="nombre" id="input-nombre" required maxlength="30"
-                value="<?= $rol->nombre ?? "" ?>">
+                value="<?= $rol->getNombre() ?? "" ?>">
             <div class="invalid-feedback">
                 Ingresa un nombre válido
             </div>
@@ -18,7 +18,7 @@
         <div class="col-sm-12">
             <label for="input-descripcion">Descripción</label>
             <input class="form-control" type="text" name="descripcion" id="input-descripcion" required maxlength="100"
-                value="<?= $rol->descripcion ?? "" ?>">
+                value="<?= $rol->getDescripcion() ?? "" ?>">
             <div class="invalid-feedback">
                 Ingresa una descripcion válido
             </div>
@@ -26,7 +26,7 @@
         <div class="col-sm-6">
             <label for="input-nivel">Nivel de rol</label>
             <input class="form-control" type="number" name="nivel" id="input-nivel" required min="0" max="999"
-                value="<?= $rol->nivel ?? "" ?>">
+                value="<?= $rol->getNivel() ?? "" ?>">
             <div class="invalid-feedback">
                 Cédula inválida
             </div>

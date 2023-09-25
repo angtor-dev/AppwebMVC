@@ -14,7 +14,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST')
     $nivelCrecimiento = new NivelCrecimiento();
 
     $nivelCrecimiento->mapFromPost();
-    $nivelCrecimiento->idEscuela = $escuela->id;
+    $nivelCrecimiento->setIdEscuela($escuela->id);
     
     if (!$nivelCrecimiento->esValido()) {
         renderView();

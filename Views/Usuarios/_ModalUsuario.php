@@ -87,7 +87,7 @@
                 <?php foreach ($sedes as $sede): ?>
                     <option value="<?= $sede->id ?>"
                         <?= $sede->id == ($usuario->idSede ?? "") ? "selected" : "" ?>>
-                        <?= $sede->nombre ?>
+                        <?= $sede->getNombre() ?>
                     </option>
                 <?php endforeach ?>
             </select>
@@ -99,8 +99,8 @@
             <label for="input-roles">Roles</label>
             <select class="form-select" name="idRoles[]" id="select-roles" multiple required>
                 <?php foreach ($roles as $rol): ?>
-                    <option value="<?= $rol->id ?>" <?= $usuario->tieneRol($rol->nombre) ? "selected" : "" ?>>
-                        <?= $rol->nombre ?>
+                    <option value="<?= $rol->id ?>" <?= $usuario->tieneRol($rol->getNombre()) ? "selected" : "" ?>>
+                        <?= $rol->getNombre() ?>
                     </option>
                 <?php endforeach ?>
             </select>

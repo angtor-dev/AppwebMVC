@@ -14,7 +14,7 @@ $title = "Registrar grupo";
         <div class="mb-3">
             <label class="form-label fw-bold">Nombre del grupo</label>
             <input type="text" class="form-control" id="nombre" name="nombre" required
-                value="<?= @$grupo?->nombre ?>">
+                value="<?= @$grupo?->getNombre() ?>">
         </div>
         <div class="row mb-3">
             <div class="col-md-6">
@@ -22,8 +22,8 @@ $title = "Registrar grupo";
                 <select name="idNivelCrecimiento" id="idNivelCrecimiento" class="form-select">
                     <option value="0">Elige un nivel de crecimiento</option>
                     <?php foreach ($niveles as $nivel): ?>
-                        <option value="<?= $nivel->id ?>" <?= $nivel->id == @$grupo?->idNivelCrecimiento ? "selected" : "" ?>>
-                            <?= $nivel->nombre ?>
+                        <option value="<?= $nivel->id ?>" <?= $nivel->id == @$grupo?->nivelCrecimiento->id ? "selected" : "" ?>>
+                            <?= $nivel->getNombre() ?>
                         </option>
                     <?php endforeach ?>
                 </select>
@@ -33,7 +33,7 @@ $title = "Registrar grupo";
                 <select name="idProfesor" id="idProfesor" class="form-select">
                     <option value="0">Elige un profesor</option>
                     <?php foreach ($profesores as $profesor): ?>
-                        <option value="<?= $profesor->id ?>" <?= $profesor->id == @$grupo?->idProfesor ? "selected" : ""  ?>>
+                        <option value="<?= $profesor->id ?>" <?= $profesor->id == @$grupo?->profesor->id ? "selected" : ""  ?>>
                             <?= $profesor->getCedula()." - ".$profesor->getNombreCompleto() ?>
                         </option>
                     <?php endforeach ?>

@@ -86,5 +86,18 @@ class Grupo extends Model
         }
         return true;
     }
+
+    // Getters
+    public function getNombre() : string {
+        return $this->nombre;
+    }
+    public function getEstado() : int {
+        return $this->estado;
+    }
+
+    // Setters
+    public function setEstado(int $estado) : void {
+        $this->estado = $estado;
+    }
 }
 ?>

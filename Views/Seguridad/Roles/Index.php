@@ -32,28 +32,28 @@ $usuario = $_SESSION['usuario'];
     <tbody>
         <?php foreach ($roles as $rol) : ?>
             <tr>
-                <td><?= $rol->nombre ?></td>
-                <td><?= $rol->descripcion ?></td>
-                <td><?= $rol->nivel ?></td>
+                <td><?= $rol->getNombre() ?></td>
+                <td><?= $rol->getDescripcion() ?></td>
+                <td><?= $rol->getNivel() ?></td>
                 <td>
                     <div class="acciones">
-                        <?php if ($usuario->tienePermiso("roles", "actualizar") && $rol->nombre != "Superusuario"): ?>
+                        <?php if ($usuario->tienePermiso("roles", "actualizar") && $rol->getNombre() != "Superusuario"): ?>
                             <a role="button" onclick="abrirModalRol(<?= $rol->id ?>)">
                                 <i class="fa-solid fa-pen" title="Modificar" data-bs-toggle="tooltip"></i>
                             </a>
                         <?php endif ?>
-                        <?php if ($usuario->tienePermiso("roles", "eliminar") && $rol->nombre != "Superusuario"): ?>
+                        <?php if ($usuario->tienePermiso("roles", "eliminar") && $rol->getNombre() != "Superusuario"): ?>
                             <a role="button" data-bs-toggle="modal" data-bs-target="#confirmar-eliminacion"
                                 data-id="<?= $rol->id ?>">
                                 <i class="fa-solid fa-trash" title="Eliminar" data-bs-toggle="tooltip"></i>
                             </a>
                         <?php endif ?>
-                        <?php if ($usuario->tienePermiso("Permisos", "actualizar") && $rol->nombre != "Superusuario"): ?>
+                        <?php if ($usuario->tienePermiso("Permisos", "actualizar") && $rol->getNombre() != "Superusuario"): ?>
                             <a role="button" onclick="abrirModalPermisos(<?= $rol->id ?>)">
                                 <i class="fa-solid fa-key" title="Gestionar permisos" data-bs-toggle="tooltip"></i>
                             </a>
                         <?php endif ?>
-                        <?php if ($rol->nombre == "Superusuario"): ?>
+                        <?php if ($rol->getNombre() == "Superusuario"): ?>
                             <em>Rol integrado</em>
                         <?php endif ?>
                     </div>

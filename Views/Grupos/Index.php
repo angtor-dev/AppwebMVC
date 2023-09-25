@@ -22,10 +22,10 @@ $title = "Grupos";
             <div class="col-12 col-lg-6 col-xl-4">
                 <div class="card">
                     <div class="card-header">
-                        <div class="card-title fw-medium mb-0"><?= $grupo->nombre ?></div>
+                        <div class="card-title fw-medium mb-0"><?= $grupo->getNombre() ?></div>
                     </div>
                     <div class="card-body">
-                        <b>Nivel:</b> <?= $grupo->nivelCrecimiento->nombre ?> <br>
+                        <b>Nivel:</b> <?= $grupo->nivelCrecimiento->getNombre() ?> <br>
                         <b>Profesor:</b> <?= $grupo->profesor->getNombreCompleto() ?> <br>
                         <b>Participantes:</b> 0
                     </div>

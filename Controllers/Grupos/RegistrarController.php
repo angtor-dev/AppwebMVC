@@ -21,7 +21,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST')
     $grupo = new Grupo();
 
     $grupo->mapFromPost();
-    $grupo->estado = EstadosGrupo::Activo->value;
+    $grupo->setEstado(EstadosGrupo::Activo->value);
     
     if (!$grupo->esValido()) {
         /** @var Usuario */

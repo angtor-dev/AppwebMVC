@@ -22,6 +22,6 @@ try {
 }
 
 $_SESSION['exitos'][] = "Se ha eliminado el rol correctamente.";
-Bitacora::registrar("Elimino el rol $rol->nombre");
+Bitacora::registrar("Elimino el rol ".$rol->getNombre());
 redirigir("/AppwebMVC/Seguridad/Roles/");
 ?>
