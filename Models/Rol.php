@@ -10,7 +10,7 @@ class Rol extends Model
     private int $nivel;
 
     /** @var Permiso[] */
-    public array $permisos;
+    public array $permisos = array();
 
     public function __construct()
     {
@@ -87,6 +87,18 @@ class Rol extends Model
         }
 
         return true;
+    }
+
+    public function tienePermiso(string $modulo, string $permiso) : bool
+    {
+        $permiso = "get".$permiso;
+        
+        foreach ($this->permisos as $p) {
+            if ($p->modulo->getNombre() == $modulo && $p->$permiso()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // Getters

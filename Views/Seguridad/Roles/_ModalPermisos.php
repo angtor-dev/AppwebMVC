@@ -5,7 +5,7 @@
 <div class="modal-dialog modal-lg">
     <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title">Permisos del rol <?= $rol->nombre ?></h5>
+            <h5 class="modal-title">Permisos del rol <?= $rol->getNombre() ?></h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -30,81 +30,81 @@
                 </div>
                 <div class="card-body">
                     <form action="/AppwebMVC/Seguridad/Roles/ActualizarPermisos" method="post" id="formPermisos">
-                        <input type="hidden" name="id" id="idPermisos" value="<?= $rol->idPermisos ?>">
+                        <input type="hidden" name="idRol" value="<?= $rol->id ?>">
                         <div class="tab-content" id="nav-tabContent">
                             <!-- Permisos de Iglesia -->
                             <div class="tab-pane fade show active" id="tab-iglesia" role="tabpanel" tabindex="0">
                                 <h5>Sedes</h5>
                                 <div class="d-flex flex-wrap gap-3 mb-3">
                                     <label class="pill-check">
-                                        <input type="checkbox" name="listarSede" value="true"
-                                            <?= $rol->permisos->listarSede ? "checked" : null ?>>
+                                        <input type="checkbox" name="sedes[consultar]" value="true"
+                                            <?= $rol->tienePermiso("sedes", "consultar") ? "checked" : null ?>>
                                         Consultar
                                     </label>
                                     <label class="pill-check">
-                                        <input type="checkbox" name="registrarSede" value="true"
-                                            <?= $rol->permisos->registrarSede ? "checked" : null ?>>
+                                        <input type="checkbox" name="sedes[registrar]" value="true"
+                                            <?= $rol->tienePermiso("sedes", "registrar") ? "checked" : null ?>>
                                         Registrar
                                     </label>
                                     <label class="pill-check">
-                                        <input type="checkbox" name="actualizarSede" value="true"
-                                            <?= $rol->permisos->actualizarSede ? "checked" : null ?>>
+                                        <input type="checkbox" name="sedes[actualizar]" value="true"
+                                            <?= $rol->tienePermiso("sedes", "actualizar") ? "checked" : null ?>>
                                         Actualizar
                                     </label>
                                     <label class="pill-check">
-                                        <input type="checkbox" name="eliminarSede" value="true"
-                                            <?= $rol->permisos->eliminarSede ? "checked" : null ?>>
+                                        <input type="checkbox" name="sedes[eliminar]" value="true"
+                                            <?= $rol->tienePermiso("sedes", "eliminar") ? "checked" : null ?>>
                                         Eliminar
                                     </label>
-                                    <label class="pill-check">
+                                    <!-- <label class="pill-check">
                                         <input type="checkbox" name="cambiarSede" value="true"
-                                            <?= $rol->permisos->cambiarSede ? "checked" : null ?>>
+                                            <?= $rol->getNombre() == "Superusuario" ? "checked" : null ?>>
                                         Cambiar entre sedes
-                                    </label>
+                                    </label> -->
                                 </div>
                                 <h5>Territorios</h5>
                                 <div class="d-flex flex-wrap gap-3 mb-3">
                                     <label class="pill-check">
-                                        <input type="checkbox" name="listarTerritorio" value="true"
-                                            <?= $rol->permisos->listarTerritorio ? "checked" : null ?>>
+                                        <input type="checkbox" name="territorios[consultar]" value="true"
+                                            <?= $rol->tienePermiso("territorios", "consultar") ? "checked" : null ?>>
                                         Consultar
                                     </label>
                                     <label class="pill-check">
-                                        <input type="checkbox" name="registrarTerritorio" value="true"
-                                            <?= $rol->permisos->registrarTerritorio ? "checked" : null ?>>
+                                        <input type="checkbox" name="territorios[registrar]" value="true"
+                                            <?= $rol->tienePermiso("territorios", "registrar") ? "checked" : null ?>>
                                         Registrar
                                     </label>
                                     <label class="pill-check">
-                                        <input type="checkbox" name="actualizarTerritorio" value="true"
-                                            <?= $rol->permisos->actualizarTerritorio ? "checked" : null ?>>
+                                        <input type="checkbox" name="territorios[actualizar]" value="true"
+                                            <?= $rol->tienePermiso("territorios", "actualizar") ? "checked" : null ?>>
                                         Actualizar
                                     </label>
                                     <label class="pill-check">
-                                        <input type="checkbox" name="eliminarTerritorio" value="true"
-                                            <?= $rol->permisos->eliminarTerritorio ? "checked" : null ?>>
+                                        <input type="checkbox" name="territorios[eliminar]" value="true"
+                                            <?= $rol->tienePermiso("territorios", "eliminar") ? "checked" : null ?>>
                                         Eliminar
                                     </label>
                                 </div>
                                 <h5>Agenda</h5>
                                 <div class="d-flex flex-wrap gap-3 mb-3">
                                     <label class="pill-check">
-                                        <input type="checkbox" name="consultarEventos" value="true"
-                                            <?= $rol->permisos->consultarEventos ? "checked" : null ?>>
+                                        <input type="checkbox" name="eventos[consultar]" value="true"
+                                            <?= $rol->tienePermiso("eventos", "consultar") ? "checked" : null ?>>
                                         Consultar
                                     </label>
                                     <label class="pill-check">
-                                        <input type="checkbox" name="registrarEventos" value="true"
-                                            <?= $rol->permisos->registrarEventos ? "checked" : null ?>>
+                                        <input type="checkbox" name="eventos[registrar]" value="true"
+                                            <?= $rol->tienePermiso("eventos", "registrar") ? "checked" : null ?>>
                                         Registrar
                                     </label>
                                     <label class="pill-check">
-                                        <input type="checkbox" name="actualizarEventos" value="true"
-                                            <?= $rol->permisos->actualizarEventos ? "checked" : null ?>>
+                                        <input type="checkbox" name="eventos[actualizar]" value="true"
+                                            <?= $rol->tienePermiso("eventos", "actualizar") ? "checked" : null ?>>
                                         Actualizar
                                     </label>
                                     <label class="pill-check">
-                                        <input type="checkbox" name="eliminarEventos" value="true"
-                                            <?= $rol->permisos->eliminarEventos ? "checked" : null ?>>
+                                        <input type="checkbox" name="eventos[eliminar]" value="true"
+                                            <?= $rol->tienePermiso("eventos", "eliminar") ? "checked" : null ?>>
                                         Eliminar
                                     </label>
                                 </div>
@@ -114,69 +114,69 @@
                                 <h5>Células de Consolidación</h5>
                                 <div class="d-flex flex-wrap gap-3 mb-3">
                                     <label class="pill-check">
-                                        <input type="checkbox" name="listarCelulaConsolidacion" value="true"
-                                            <?= $rol->permisos->listarCelulaConsolidacion ? "checked" : null ?>>
+                                        <input type="checkbox" name="celulaConsolidacion[consultar]" value="true"
+                                            <?= $rol->tienePermiso("celulaConsolidacion", "consultar") ? "checked" : null ?>>
                                         Consultar
                                     </label>
                                     <label class="pill-check">
-                                        <input type="checkbox" name="registrarCelulaConsolidacion" value="true"
-                                            <?= $rol->permisos->registrarCelulaConsolidacion ? "checked" : null ?>>
+                                        <input type="checkbox" name="celulaConsolidacion[registrar]" value="true"
+                                            <?= $rol->tienePermiso("celulaConsolidacion", "registrar") ? "checked" : null ?>>
                                         Registrar
                                     </label>
                                     <label class="pill-check">
-                                        <input type="checkbox" name="actualizarCelulaConsolidacion" value="true"
-                                            <?= $rol->permisos->actualizarCelulaConsolidacion ? "checked" : null ?>>
+                                        <input type="checkbox" name="celulaConsolidacion[actualizar]" value="true"
+                                            <?= $rol->tienePermiso("celulaConsolidacion", "actualizar") ? "checked" : null ?>>
                                         Actualizar
                                     </label>
                                     <label class="pill-check">
-                                        <input type="checkbox" name="eliminarCelulaConsolidacion" value="true"
-                                            <?= $rol->permisos->eliminarCelulaConsolidacion ? "checked" : null ?>>
+                                        <input type="checkbox" name="celulaConsolidacion[eliminar]" value="true"
+                                            <?= $rol->tienePermiso("celulaConsolidacion", "eliminar") ? "checked" : null ?>>
                                         Eliminar
                                     </label>
                                 </div>
                                 <h5>Células de Crecimiento</h5>
                                 <div class="d-flex flex-wrap gap-3 mb-3">
                                     <label class="pill-check">
-                                        <input type="checkbox" name="listarCelulaCrecimiento" value="true"
-                                            <?= $rol->permisos->listarCelulaCrecimiento ? "checked" : null ?>>
+                                        <input type="checkbox" name="celulaCrecimiento[consultar]" value="true"
+                                            <?= $rol->tienePermiso("celulaCrecimiento", "consultar") ? "checked" : null ?>>
                                         Consultar
                                     </label>
                                     <label class="pill-check">
-                                        <input type="checkbox" name="registrarCelulaCrecimiento" value="true"
-                                            <?= $rol->permisos->registrarCelulaCrecimiento ? "checked" : null ?>>
+                                        <input type="checkbox" name="celulaCrecimiento[registrar]" value="true"
+                                            <?= $rol->tienePermiso("celulaCrecimiento", "registrar") ? "checked" : null ?>>
                                         Registrar
                                     </label>
                                     <label class="pill-check">
-                                        <input type="checkbox" name="actualizarCelulaCrecimiento" value="true"
-                                            <?= $rol->permisos->actualizarCelulaCrecimiento ? "checked" : null ?>>
+                                        <input type="checkbox" name="celulaCrecimiento[actualizar]" value="true"
+                                            <?= $rol->tienePermiso("celulaCrecimiento", "actualizar") ? "checked" : null ?>>
                                         Actualizar
                                     </label>
                                     <label class="pill-check">
-                                        <input type="checkbox" name="eliminarCelulaCrecimiento" value="true"
-                                            <?= $rol->permisos->eliminarCelulaCrecimiento ? "checked" : null ?>>
+                                        <input type="checkbox" name="celulaCrecimiento[eliminar]" value="true"
+                                            <?= $rol->tienePermiso("celulaCrecimiento", "eliminar") ? "checked" : null ?>>
                                         Eliminar
                                     </label>
                                 </div>
                                 <h5>Células Familiares</h5>
                                 <div class="d-flex flex-wrap gap-3 mb-3">
                                     <label class="pill-check">
-                                        <input type="checkbox" name="listarCelulaFamiliar" value="true"
-                                            <?= $rol->permisos->listarCelulaFamiliar ? "checked" : null ?>>
+                                        <input type="checkbox" name="celulaFamiliar[consultar]" value="true"
+                                            <?= $rol->tienePermiso("celulaFamiliar", "consultar") ? "checked" : null ?>>
                                         Consultar
                                     </label>
                                     <label class="pill-check">
-                                        <input type="checkbox" name="registrarCelulaFamiliar" value="true"
-                                            <?= $rol->permisos->registrarCelulaFamiliar ? "checked" : null ?>>
+                                        <input type="checkbox" name="celulaFamiliar[registrar]" value="true"
+                                            <?= $rol->tienePermiso("celulaFamiliar", "registrar") ? "checked" : null ?>>
                                         Registrar
                                     </label>
                                     <label class="pill-check">
-                                        <input type="checkbox" name="actualizarCelulaFamiliar" value="true"
-                                            <?= $rol->permisos->actualizarCelulaFamiliar ? "checked" : null ?>>
+                                        <input type="checkbox" name="celulaFamiliar[actualizar]" value="true"
+                                            <?= $rol->tienePermiso("celulaFamiliar", "actualizar") ? "checked" : null ?>>
                                         Actualizar
                                     </label>
                                     <label class="pill-check">
-                                        <input type="checkbox" name="eliminarCelulaFamiliar" value="true"
-                                            <?= $rol->permisos->eliminarCelulaFamiliar ? "checked" : null ?>>
+                                        <input type="checkbox" name="celulaFamiliar[eliminar]" value="true"
+                                            <?= $rol->tienePermiso("celulaFamiliar", "eliminar") ? "checked" : null ?>>
                                         Eliminar
                                     </label>
                                 </div>
@@ -186,36 +186,36 @@
                                 <h5>Niveles de Crecimiento</h5>
                                 <div class="d-flex flex-wrap gap-3 mb-3">
                                     <label class="pill-check">
-                                        <input type="checkbox" name="consultarNivelesCrecimiento" value="true"
-                                            <?= $rol->permisos->consultarNivelesCrecimiento ? "checked" : null ?>>
+                                        <input type="checkbox" name="nivelesCrecimiento[consultar]" value="true"
+                                            <?= $rol->tienePermiso("nivelesCrecimiento", "consultar") ? "checked" : null ?>>
                                         Consultar
                                     </label>
                                     <label class="pill-check">
-                                        <input type="checkbox" name="registrarNivelesCrecimiento" value="true"
-                                            <?= $rol->permisos->registrarNivelesCrecimiento ? "checked" : null ?>>
+                                        <input type="checkbox" name="nivelesCrecimiento[registrar]" value="true"
+                                            <?= $rol->tienePermiso("nivelesCrecimiento", "registrar") ? "checked" : null ?>>
                                         Registrar
                                     </label>
                                     <label class="pill-check">
-                                        <input type="checkbox" name="actualizarNivelesCrecimiento" value="true"
-                                            <?= $rol->permisos->actualizarNivelesCrecimiento ? "checked" : null ?>>
+                                        <input type="checkbox" name="nivelesCrecimiento[actualizar]" value="true"
+                                            <?= $rol->tienePermiso("nivelesCrecimiento", "actualizar") ? "checked" : null ?>>
                                         Actualizar
                                     </label>
                                     <label class="pill-check">
-                                        <input type="checkbox" name="eliminarNivelesCrecimiento" value="true"
-                                            <?= $rol->permisos->eliminarNivelesCrecimiento ? "checked" : null ?>>
+                                        <input type="checkbox" name="nivelesCrecimiento[eliminar]" value="true"
+                                            <?= $rol->tienePermiso("nivelesCrecimiento", "eliminar") ? "checked" : null ?>>
                                         Eliminar
                                     </label>
                                 </div>
                                 <h5>Notas</h5>
                                 <div class="d-flex flex-wrap gap-3 mb-3">
                                     <label class="pill-check">
-                                        <input type="checkbox" name="consultarNotas" value="true"
-                                            <?= $rol->permisos->consultarNotas ? "checked" : null ?>>
+                                        <input type="checkbox" name="notas[consultar]" value="true"
+                                            <?= $rol->tienePermiso("notas", "consultar") ? "checked" : null ?>>
                                         Consultar
                                     </label>
                                     <label class="pill-check">
-                                        <input type="checkbox" name="gestionarNotas" value="true"
-                                            <?= $rol->permisos->gestionarNotas ? "checked" : null ?>>
+                                        <input type="checkbox" name="notas[actualizar]" value="true"
+                                            <?= $rol->tienePermiso("notas", "actualizar") ? "checked" : null ?>>
                                         Gestionar
                                     </label>
                                 </div>
@@ -225,23 +225,23 @@
                                 <h5>Usuarios</h5>
                                 <div class="d-flex flex-wrap gap-3 mb-3">
                                     <label class="pill-check">
-                                        <input type="checkbox" name="consultarUsuarios" value="true"
-                                            <?= $rol->permisos->consultarUsuarios ? "checked" : null ?>>
+                                        <input type="checkbox" name="usuarios[consultar]" value="true"
+                                            <?= $rol->tienePermiso("usuarios", "consultar") ? "checked" : null ?>>
                                         Consultar
                                     </label>
                                     <label class="pill-check">
-                                        <input type="checkbox" name="registrarUsuarios" value="true"
-                                            <?= $rol->permisos->registrarUsuarios ? "checked" : null ?>>
+                                        <input type="checkbox" name="usuarios[registrar]" value="true"
+                                            <?= $rol->tienePermiso("usuarios", "registrar") ? "checked" : null ?>>
                                         Registrar
                                     </label>
                                     <label class="pill-check">
-                                        <input type="checkbox" name="actualizarUsuarios" value="true"
-                                            <?= $rol->permisos->actualizarUsuarios ? "checked" : null ?>>
+                                        <input type="checkbox" name="usuarios[actualizar]" value="true"
+                                            <?= $rol->tienePermiso("usuarios", "actualizar") ? "checked" : null ?>>
                                         Actualizar
                                     </label>
                                     <label class="pill-check">
-                                        <input type="checkbox" name="eliminarUsuarios" value="true"
-                                            <?= $rol->permisos->eliminarUsuarios ? "checked" : null ?>>
+                                        <input type="checkbox" name="usuarios[eliminar]" value="true"
+                                            <?= $rol->tienePermiso("usuarios", "eliminar") ? "checked" : null ?>>
                                         Eliminar
                                     </label>
                                 </div>
@@ -249,36 +249,36 @@
                                 <h6>Roles y permisos</h6>
                                 <div class="d-flex flex-wrap gap-3 mb-3">
                                     <label class="pill-check">
-                                        <input type="checkbox" name="consultarRoles" value="true"
-                                            <?= $rol->permisos->consultarRoles ? "checked" : null ?>>
+                                        <input type="checkbox" name="roles[consultar]" value="true"
+                                            <?= $rol->tienePermiso("roles", "consultar") ? "checked" : null ?>>
                                         Consultar
                                     </label>
                                     <label class="pill-check">
-                                        <input type="checkbox" name="registrarRoles" value="true"
-                                            <?= $rol->permisos->registrarRoles ? "checked" : null ?>>
+                                        <input type="checkbox" name="roles[registrar]" value="true"
+                                            <?= $rol->tienePermiso("roles", "registrar") ? "checked" : null ?>>
                                         Registrar
                                     </label>
                                     <label class="pill-check">
-                                        <input type="checkbox" name="actualizarRoles" value="true"
-                                            <?= $rol->permisos->actualizarRoles ? "checked" : null ?>>
+                                        <input type="checkbox" name="roles[actualizar]" value="true"
+                                            <?= $rol->tienePermiso("roles", "actualizar") ? "checked" : null ?>>
                                         Actualizar
                                     </label>
                                     <label class="pill-check">
-                                        <input type="checkbox" name="eliminarRoles" value="true"
-                                            <?= $rol->permisos->eliminarRoles ? "checked" : null ?>>
+                                        <input type="checkbox" name="roles[eliminar]" value="true"
+                                            <?= $rol->tienePermiso("roles", "eliminar") ? "checked" : null ?>>
                                         Eliminar
                                     </label>
                                     <label class="pill-check">
-                                        <input type="checkbox" name="gestionarPermisos" value="true"
-                                            <?= $rol->permisos->gestionarPermisos ? "checked" : null ?>>
+                                        <input type="checkbox" name="permisos[actualizar]" value="true"
+                                            <?= $rol->tienePermiso("permisos", "actualizar") ? "checked" : null ?>>
                                         Gestionar permisos
                                     </label>
                                 </div>
                                 <h6>Bitacora</h6>
                                 <div class="d-flex flex-wrap gap-3 mb-3">
                                     <label class="pill-check">
-                                        <input type="checkbox" name="consultarBitacora" value="true"
-                                            <?= $rol->permisos->consultarBitacora ? "checked" : null ?>>
+                                        <input type="checkbox" name="bitacora[consultar]" value="true"
+                                            <?= $rol->tienePermiso("bitacora", "consultar") ? "checked" : null ?>>
                                         Consultar bitacora
                                     </label>
                                 </div>

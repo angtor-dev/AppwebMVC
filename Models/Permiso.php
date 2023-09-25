@@ -15,10 +15,40 @@ class Permiso extends Model
 
     public Modulo $modulo;
 
-    public function __construct()
+    public function __construct($idRol = null, $idModulo = null, $consultar = false, $registrar = false, $actualizar = false, $eliminar = false)
     {
+        parent::__construct();
+        if (!empty($idRol) && !empty($idModulo)) {
+            $this->idRol = $idRol;
+            $this->idModulo = $idModulo;
+            $this->consultar = $consultar;
+            $this->registrar = $registrar;
+            $this->actualizar = $actualizar;
+            $this->eliminar = $eliminar;
+        }
         if (!empty($this->idModulo)) {
             $this->modulo = Modulo::cargar($this->idModulo);
+        }
+    }
+
+    public function registrar() : void
+    {
+        $query = "INSERT INTO permiso(idRol, idModulo, consultar, registrar, actualizar, eliminar)
+            VALUES(:idRol, :idModulo, :consultar, :registrar, :actualizar, :eliminar)";
+        
+        try {
+            $stmt = $this->prepare($query);
+            $stmt->bindValue("idRol", $this->idRol);
+            $stmt->bindValue("idModulo", $this->idModulo);
+            $stmt->bindValue("consultar", $this->consultar, PDO::PARAM_BOOL);
+            $stmt->bindValue("registrar", $this->registrar, PDO::PARAM_BOOL);
+            $stmt->bindValue("actualizar", $this->actualizar, PDO::PARAM_BOOL);
+            $stmt->bindValue("eliminar", $this->eliminar, PDO::PARAM_BOOL);
+
+            $stmt->execute();
+        } catch (\Throwable $th) {
+            $_SESSION['errores'][] = "Ha ocurrido un error al registrar los permisos de rol.";
+            throw $th;
         }
     }
 
@@ -56,6 +86,19 @@ class Permiso extends Model
     }
     public function getEliminar() : bool {
         return $this->eliminar;
+    }
+
+    // Setters
+    public function setAllFalse() : void
+    {
+        $this->consultar = false;
+        $this->registrar = false;
+        $this->actualizar = false;
+        $this->eliminar = false;
+    }
+    public function setPermiso(string $permiso, bool $valor = false)
+    {
+        $this->$permiso = $valor;
     }
 }
 ?>
