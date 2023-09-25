@@ -364,7 +364,7 @@ class Celulas extends Model
                         // Extraer el número del identificador (eliminar la "CFA")
                         // Extraer el número del identificador (eliminar la "CCO")
                         // Extraer el número del identificador (eliminar la "CCR")
-                        $numero = (int) substr($resultado->identificador, 3);
+                        $numero = (int) substr($resultado['identificador'], 3);
                         $numeros[] = $numero;
                     }
                     // Encontrar el número más grande en el array
