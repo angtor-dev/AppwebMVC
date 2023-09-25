@@ -3,12 +3,15 @@ $(document).ready(function () {
     let choices1;
     let choices2;
     let choices3;
+    let choices4;
+    let choices5;
+    let choices6;
 
     const dataTable = $('#celulaDatatables').DataTable({
         responsive: true,
         ajax: {
             method: "GET",
-            url: 'http://localhost/AppwebMVC/CelulaFamiliar/Listar',
+            url: 'http://localhost/AppwebMVC/CelulaFamiliar/Index',
             data: { cargar_data: 'cargar_data' }
         },
         columns: [
@@ -32,6 +35,7 @@ $(document).ready(function () {
     })
 
 
+
     $('#celulaDatatables tbody').on('click', '#ver_info', function () {
         const datos = dataTable.row($(this).parents()).data();
 
@@ -51,11 +55,17 @@ $(document).ready(function () {
         const datos = dataTable.row($(this).parents()).data();
 
         document.getElementById('idCelulaFamiliar').textContent = datos.id;
-        document.getElementById('nombre').value = datos.nombre;
+        document.getElementById('nombre2').value = datos.nombre;
 
-        Listar_Territorio(datos.idTerritorio);
-        Listar_Lideres(datos.idLider, datos.idCoLider);
+        Listar_TerritorioEditar(datos.idTerritorio);
+        Listar_LideresEditar(datos.idLider, datos.idCoLider);
 
+    })
+
+    $('#registrar').on('click', function () {
+
+        Listar_TerritorioRegistrar();
+        Listar_LideresRegistrar();
     })
 
 
@@ -83,7 +93,7 @@ $(document).ready(function () {
 
                 $.ajax({
                     type: "POST",
-                    url: "http://localhost/AppwebMVC/CelulaFamiliar/Listar",
+                    url: "http://localhost/AppwebMVC/CelulaFamiliar/Index",
                     data: {
 
                         eliminar: 'eliminar',
@@ -135,11 +145,11 @@ $(document).ready(function () {
 
 
 
-    function Listar_Lideres(idLider, idCoLider) {
+    function Listar_LideresEditar(idLider, idCoLider) {
 
         $.ajax({
             type: "GET",
-            url: "http://localhost/AppwebMVC/CelulaFamiliar/Listar",
+            url: "http://localhost/AppwebMVC/CelulaFamiliar/Index",
             data: {
 
                 listaLideres: 'listaLideres',
@@ -149,9 +159,9 @@ $(document).ready(function () {
 
                 let data = JSON.parse(response);
 
-                let selector = document.getElementById('idLider');
+                let selector = document.getElementById('idLider2');
 
-                let selector2 = document.getElementById('idCoLider');
+                let selector2 = document.getElementById('idCoLider2');
 
                 data.forEach(item => {
 
@@ -209,11 +219,11 @@ $(document).ready(function () {
     
 
 
-    function Listar_Territorio(idTerritorio) {
+    function Listar_TerritorioEditar(idTerritorio) {
 
         $.ajax({
             type: "GET",
-            url: "http://localhost/AppwebMVC/CelulaFamiliar/Listar",
+            url: "http://localhost/AppwebMVC/CelulaFamiliar/Index",
             data: {
 
                 listaTerritorio: 'listaTerritorio',
@@ -224,7 +234,7 @@ $(document).ready(function () {
 
                 let data = JSON.parse(response);
 
-                let selector = document.getElementById('idTerritorio');
+                let selector = document.getElementById('idTerritorio2');
 
                 data.forEach(item => {
 
@@ -258,9 +268,294 @@ $(document).ready(function () {
         })
     }
 
+
+
+    function Listar_LideresRegistrar() {
+
+        $.ajax({
+            type: "GET",
+            url: "http://localhost/AppwebMVC/CelulaFamiliar/Index",
+            data: {
+
+                listaLideres: 'listaLideres',
+
+            },
+            success: function (response) {
+
+                let data = JSON.parse(response);
+
+                let selector = document.getElementById('idLider');
+                const placeholderOption = document.createElement('option');
+                    placeholderOption.value = '';
+                    placeholderOption.text = 'Seleccione el Lider de Celula';
+                    placeholderOption.disabled = true;
+                    placeholderOption.selected = true;
+                    selector.appendChild(placeholderOption);
+
+                let selector2 = document.getElementById('idCoLider');
+
+                const placeholderOption2 = document.createElement('option');
+                        placeholderOption2.value = '';
+                        placeholderOption2.text = 'Seleccione el CoLider de las Celula';
+                        placeholderOption2.disabled = true;
+                        placeholderOption2.selected = true;
+                        selector2.appendChild(placeholderOption2);
+
+                data.forEach(item => {
+
+                    const option = document.createElement('option');
+                    option.value = item.id;
+                    option.text = `${item.cedula} ${item.nombre} ${item.apellido}`;
+                    selector.appendChild(option);
+
+                });
+
+                data.forEach(item => {
+
+                    const option = document.createElement('option');
+                    option.value = item.id;
+                    option.text = `${item.cedula} ${item.nombre} ${item.apellido}`;
+                    selector2.appendChild(option);
+
+                });
+
+                // Destruir la instancia existente si la hay
+                if (choices4) {
+                    choices4.destroy();
+                }
+
+                choices4 = new Choices(selector, {
+                    allowHTML: true,
+                    searchEnabled: true,  // Habilita la funcionalidad de búsqueda
+                    removeItemButton: true,  // Habilita la posibilidad de remover items
+                    placeholderValue: 'Selecciona una opción',  // Texto del placeholder
+                });
+
+                // Destruir la instancia existente si la hay
+                if (choices5) {
+                    choices5.destroy();
+                }
+
+                choices5 = new Choices(selector2, {
+                    allowHTML: true,
+                    searchEnabled: true,  // Habilita la funcionalidad de búsqueda
+                    removeItemButton: true,  // Habilita la posibilidad de remover items
+                    placeholderValue: 'Selecciona una opción',  // Texto del placeholder
+                });
+
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                // Aquí puedes manejar errores, por ejemplo:
+                console.error("Error al enviar:", textStatus, errorThrown);
+            }
+        })
+    }
+
     
 
 
+    function Listar_TerritorioRegistrar() {
+
+        $.ajax({
+            type: "GET",
+            url: "http://localhost/AppwebMVC/CelulaFamiliar/Index",
+            data: {
+
+                listaTerritorio: 'listaTerritorio',
+
+            },
+            success: function (response) {
+
+                let data = JSON.parse(response);
+
+
+                let selector = document.getElementById('idTerritorio');
+
+                const placeholderOption = document.createElement('option');
+                    placeholderOption.value = '';
+                    placeholderOption.text = 'Selecciona el Territorio';
+                    placeholderOption.disabled = true;
+                    placeholderOption.selected = true;
+                    selector.appendChild(placeholderOption);
+
+                data.forEach(item => {
+
+                    const option = document.createElement('option');
+                    option.value = item.id;
+                    option.text = `${item.codigo} ${item.nombre}`;
+                    selector.appendChild(option);
+
+                });
+
+                // Destruir la instancia existente si la hay
+                if (choices6) {
+                    choices6.destroy();
+                }
+                
+                choices6 = new Choices(selector, {
+                    allowHTML: true,
+                    searchEnabled: true,  // Habilita la funcionalidad de búsqueda
+                    removeItemButton: true,  // Habilita la posibilidad de remover items
+                    placeholderValue: 'Selecciona una opción',  // Texto del placeholder
+                });
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                // Aquí puedes manejar errores, por ejemplo:
+                console.error("Error al enviar:", textStatus, errorThrown);
+                alert("Hubo un error al realizar el registro. Por favor, inténtalo de nuevo.");
+            }
+        })
+    }
+
+    
+
+
+
+ ///////////////////////////// REGISTRAR CELULA ////////////////////////////////
+
+ const regexObj = {
+
+    nombre: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]{5,50}$/, // Letras, números, espacios, puntos y comas con un máximo de 20 caracteres
+    idLider: /^[1-9]\d*$/, // Números enteros mayores a 0
+    idCoLider: /^[1-9]\d*$/, // Números enteros mayores a 0
+    idTerritorio: /^[1-9]\d*$/, // Números enteros mayores a 0
+
+};
+
+const validationStatus = {
+    nombre: false,
+    idLider: false,
+    idCoLider: false,
+    idTerritorio: false
+};
+
+
+//Validar nombre
+const nombre = document.getElementById("nombre");
+nombre.addEventListener('keyup', (e) => {
+    // Validar nombre
+    if (!regexObj.nombre.test(e.target.value)) {
+        document.getElementById("msj_nombre").classList.remove("d-none");
+        validationStatus.nombre = false;
+    } else {
+        document.getElementById("msj_nombre").classList.add("d-none");
+        validationStatus.nombre = true;
+    }
+})
+
+
+// Validacion de idLider y idCoLider
+
+const idLider = document.getElementById("idLider");
+const idCoLider = document.getElementById("idCoLider");
+
+idLider.addEventListener('change', (e) => {
+    if (!regexObj.idLider.test(e.target.value) || e.target.value === idCoLider.value) {
+        document.getElementById("msj_idLider").classList.remove("d-none");
+        validationStatus.idLider = false;
+    } else {
+        document.getElementById("msj_idLider").classList.add("d-none");
+        validationStatus.idLider = true;
+    }
+})
+
+idCoLider.addEventListener('change', (e) => {
+    if (!regexObj.idCoLider.test(e.target.value) || e.target.value === idLider.value) {
+        document.getElementById("msj_idCoLider").classList.remove("d-none");
+        validationStatus.idCoLider = false;
+    } else {
+        document.getElementById("msj_idCoLider").classList.add("d-none");
+        validationStatus.idCoLider = true;
+    }
+})
+
+
+// Validar idTerritorio
+const idTerritorio = document.getElementById("idTerritorio");
+idTerritorio.addEventListener('change', (e) => {
+    if (!regexObj.idTerritorio.test(e.target.value)) {
+        document.getElementById("msj_idTerritorio").classList.remove("d-none");
+        validationStatus.idSede = false;
+    } else {
+        document.getElementById("msj_idTerritorio").classList.add("d-none");
+        validationStatus.idTerritorio = true;
+    }
+})
+
+
+
+const form = document.getElementById("formulario");
+form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    // Verifica si todos los campos son válidos antes de enviar el formulario
+    if (Object.values(validationStatus).every(status => status === true)) {
+        console.log("Formulario válido. Puedes enviar los datos al servidor");
+        // Aquí puedes agregar el código para enviar el formulario
+        $.ajax({
+            type: "POST",
+            url: "http://localhost/AppwebMVC/CelulaFamiliar/Index",
+            data: {
+
+                registrar: 'registrar',
+                nombre: nombre.value,
+                idLider: idLider.value,
+                idCoLider: idCoLider.value,
+                idTerritorio: idTerritorio.value
+            },
+            success: function (response) {
+                console.log(response);
+                dataTable.ajax.reload();
+
+                let data = JSON.parse(response);
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Registrado Correctamente',
+                    showConfirmButton: false,
+                    timer: 2000,
+                })
+
+                nombre.value = '';
+                choices4.setChoiceByValue('');
+                choices5.setChoiceByValue('');
+                choices6.setChoiceByValue('');
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                if (jqXHR.responseText) {
+                    let jsonResponse = JSON.parse(jqXHR.responseText);
+
+                    if (jsonResponse.msj) {
+                         Swal.fire({
+                            icon: 'error',
+                            title: 'Denegado',
+                            text: jsonResponse.msj,
+                            showConfirmButton: true,
+                        })
+                    } else {
+                        const respuesta = JSON.stringify(jsonResponse, null, 2)
+                        Swal.fire({
+                            background: 'red',
+                            color: '#fff',
+                            title: respuesta,
+                            showConfirmButton: true,
+                        })
+                    }
+                } else {
+                    alert('Error desconocido: ' + textStatus);
+                }
+            }
+        });
+    } else {
+        Swal.fire({
+            icon: 'error',
+            title: 'Formulario invalido. Verifique sus datos',
+            showConfirmButton: false,
+            timer: 2000,
+        })
+    }
+});
 
 
 
@@ -274,16 +569,7 @@ $(document).ready(function () {
     ////////////////////////////// ACTUALIZAR DATOS DE LA CELULA ///////////////////////////////
 
 
-    const regexObj = {
-
-        nombre: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]{5,50}$/, // Letras, números, espacios, puntos y comas con un máximo de 20 caracteres
-        idLider: /^[1-9]\d*$/, // Números enteros mayores a 0
-        idCoLider: /^[1-9]\d*$/, // Números enteros mayores a 0
-        idTerritorio: /^[1-9]\d*$/, // Números enteros mayores a 0
-
-    };
-
-    const validationStatus = {
+    const validationStatus2 = {
         nombre: true,
         idLider: true,
         idCoLider: true,
@@ -292,79 +578,79 @@ $(document).ready(function () {
 
 
     //Validar nombre
-    const nombre = document.getElementById("nombre");
-    nombre.addEventListener('keyup', (e) => {
+    const nombre2 = document.getElementById("nombre2");
+    nombre2.addEventListener('keyup', (e) => {
         // Validar nombre
         if (!regexObj.nombre.test(e.target.value)) {
-            document.getElementById("msj_nombre").classList.remove("d-none");
-            validationStatus.nombre = false;
+            document.getElementById("msj_nombre2").classList.remove("d-none");
+            validationStatus2.nombre = false;
         } else {
-            document.getElementById("msj_nombre").classList.add("d-none");
-            validationStatus.nombre = true;
+            document.getElementById("msj_nombre2").classList.add("d-none");
+            validationStatus2.nombre = true;
         }
     })
 
 
     // Validacion de idLider y idCoLider
 
-    const idLider = document.getElementById("idLider");
-    const idCoLider = document.getElementById("idCoLider");
+    const idLider2 = document.getElementById("idLider2");
+    const idCoLider2 = document.getElementById("idCoLider2");
 
-    idLider.addEventListener('change', (e) => {
-        if (!regexObj.idLider.test(e.target.value) || e.target.value === idCoLider.value) {
-            document.getElementById("msj_idLider").classList.remove("d-none");
-            validationStatus.idLider = false;
+    idLider2.addEventListener('change', (e) => {
+        if (!regexObj.idLider.test(e.target.value) || e.target.value === idCoLider2.value) {
+            document.getElementById("msj_idLider2").classList.remove("d-none");
+            validationStatus2.idLider = false;
         } else {
-            document.getElementById("msj_idLider").classList.add("d-none");
-            validationStatus.idLider = true;
+            document.getElementById("msj_idLider2").classList.add("d-none");
+            validationStatus2.idLider = true;
         }
     })
 
-    idCoLider.addEventListener('change', (e) => {
-        if (!regexObj.idCoLider.test(e.target.value) || e.target.value === idLider.value) {
-            document.getElementById("msj_idCoLider").classList.remove("d-none");
-            validationStatus.idCoLider = false;
+    idCoLider2.addEventListener('change', (e) => {
+        if (!regexObj.idCoLider.test(e.target.value) || e.target.value === idLider2.value) {
+            document.getElementById("msj_idCoLider2").classList.remove("d-none");
+            validationStatus2.idCoLider = false;
         } else {
-            document.getElementById("msj_idCoLider").classList.add("d-none");
-            validationStatus.idCoLider = true;
+            document.getElementById("msj_idCoLider2").classList.add("d-none");
+            validationStatus2.idCoLider = true;
         }
     })
 
 
     // Validar idTerritorio
-    const idTerritorio = document.getElementById("idTerritorio");
-    idTerritorio.addEventListener('change', (e) => {
+    const idTerritorio2 = document.getElementById("idTerritorio2");
+    idTerritorio2.addEventListener('change', (e) => {
         if (!regexObj.idTerritorio.test(e.target.value)) {
-            document.getElementById("msj_idTerritorio").classList.remove("d-none");
-            validationStatus.idSede = false;
+            document.getElementById("msj_idTerritorio2").classList.remove("d-none");
+            validationStatus2.idSede = false;
         } else {
-            document.getElementById("msj_idTerritorio").classList.add("d-none");
-            validationStatus.idTerritorio = true;
+            document.getElementById("msj_idTerritorio2").classList.add("d-none");
+            validationStatus2.idTerritorio = true;
         }
     })
 
 
-    const form = document.getElementById("formulario");
-    form.addEventListener("submit", (e) => {
+    const form2 = document.getElementById("formulario2");
+    form2.addEventListener("submit", (e) => {
         e.preventDefault();
 
-        const id = document.getElementById('idCelulaFamiliar').textContent;
+        const id2 = document.getElementById('idCelulaFamiliar').textContent;
 
         // Verifica si todos los campos son válidos antes de enviar el formulario
-        if (Object.values(validationStatus).every(status => status === true)) {
+        if (Object.values(validationStatus2).every(status => status === true)) {
             console.log("Formulario válido. Puedes enviar los datos al servidor");
             // Aquí puedes agregar el código para enviar el formulario
             $.ajax({
                 type: "POST",
-                url: "http://localhost/AppwebMVC/CelulaFamiliar/Listar",
+                url: "http://localhost/AppwebMVC/CelulaFamiliar/Index",
                 data: {
 
                     editar: 'editar',
-                    id: id,
-                    nombre: nombre.value,
-                    idLider: idLider.value,
-                    idCoLider: idCoLider.value,
-                    idTerritorio: idTerritorio.value
+                    id2: id2,
+                    nombre2: nombre2.value,
+                    idLider2: idLider2.value,
+                    idCoLider2: idCoLider2.value,
+                    idTerritorio2: idTerritorio2.value
                 },
                 success: function (response) {
                     console.log(response);
@@ -437,7 +723,7 @@ $(document).ready(function () {
         observaciones: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/ // Letras, números, espacios, puntos y comas con un máximo de 100 caracteres
     };
 
-    const validationStatus2 = {
+    const validationStatus3 = {
 
         tematica: false,
         semana: false,
@@ -450,26 +736,26 @@ $(document).ready(function () {
     };
 
 
-    const form2 = document.getElementById("formularioReunion");
+    const form3 = document.getElementById("formularioReunion");
 
-    form2.addEventListener("submit", (e) => {
+    form3.addEventListener("submit", (e) => {
         e.preventDefault();
 
-        const idCelulaFamiliar = document.getElementById('idCelulaFamiliarR').textContent;
+        const idCelula = document.getElementById('idCelulaFamiliarR').textContent;
 
         // Validar fecha
         const fecha = document.getElementById("fecha").value;
        /* if (fecha === "") {
             document.getElementById("msj_fecha").classList.remove("d-none");
-            validationStatus2.fecha = false;
+            validationStatus3.fecha = false;
         } else {
             // Comprobar que la fecha esté en un formato válido
             if (!expresiones_regulares2.actividad.test(fecha)) {
                 document.getElementById("msj_fecha").classList.remove("d-none");
-                validationStatus2.fecha = false;
+                validationStatus3.fecha = false;
             } else {
                 document.getElementById("msj_fecha").classList.add("d-none");
-                validationStatus2.fecha = true;
+                validationStatus3.fecha = true;
             }
         }*/
 
@@ -477,94 +763,94 @@ $(document).ready(function () {
         const tematica = document.getElementById("tematica").value;
         if (!expresiones_regulares2.tematica.test(tematica)) {
             document.getElementById("msj_tematica").classList.remove("d-none");
-            validationStatus2.tematica = false;
+            validationStatus3.tematica = false;
         } else {
             document.getElementById("msj_tematica").classList.add("d-none");
-            validationStatus2.tematica = true;
+            validationStatus3.tematica = true;
         }
 
         // Validar semana
         const semana = document.getElementById("semana").value;
         if (!expresiones_regulares2.semana.test(semana)) {
             document.getElementById("msj_semana").classList.remove("d-none");
-            validationStatus2.semana = false;
+            validationStatus3.semana = false;
         } else {
             document.getElementById("msj_semana").classList.add("d-none");
-            validationStatus2.semana = true;
+            validationStatus3.semana = true;
         }
 
         // Validar generosidad
         const generosidad = document.getElementById("generosidad").value;
         if (!expresiones_regulares2.generosidad.test(generosidad)) {
             document.getElementById("msj_generosidad").classList.remove("d-none");
-            validationStatus2.generosidad = false;
+            validationStatus3.generosidad = false;
         } else {
             document.getElementById("msj_generosidad").classList.add("d-none");
-            validationStatus2.generosidad = true;
+            validationStatus3.generosidad = true;
         }
 
         // Validar infantil
         const infantil = document.getElementById("infantil").value;
         if (!expresiones_regulares2.infantil.test(infantil)) {
             document.getElementById("msj_infantil").classList.remove("d-none");
-            validationStatus2.infantil = false;
+            validationStatus3.infantil = false;
         } else {
             document.getElementById("msj_infantil").classList.add("d-none");
-            validationStatus2.infantil = true;
+            validationStatus3.infantil = true;
         }
 
         // Validar juvenil
         const juvenil = document.getElementById("juvenil").value;
         if (!expresiones_regulares2.juvenil.test(juvenil)) {
             document.getElementById("msj_juvenil").classList.remove("d-none");
-            validationStatus2.juvenil = false;
+            validationStatus3.juvenil = false;
         } else {
             document.getElementById("msj_juvenil").classList.add("d-none");
-            validationStatus2.juvenil = true;
+            validationStatus3.juvenil = true;
         }
 
         // Validar adulto
         const adulto = document.getElementById("adulto").value;
         if (!expresiones_regulares2.adulto.test(adulto)) {
             document.getElementById("msj_adulto").classList.remove("d-none");
-            validationStatus2.adulto = false;
+            validationStatus3.adulto = false;
         } else {
             document.getElementById("msj_adulto").classList.add("d-none");
-            validationStatus2.adulto = true;
+            validationStatus3.adulto = true;
         }
 
         // Validar actividad
         const actividad = document.getElementById("actividad").value;
         if (!expresiones_regulares2.actividad.test(actividad)) {
             document.getElementById("msj_actividad").classList.remove("d-none");
-            validationStatus2.actividad = false;
+            validationStatus3.actividad = false;
         } else {
             document.getElementById("msj_actividad").classList.add("d-none");
-            validationStatus2.actividad = true;
+            validationStatus3.actividad = true;
         }
 
         // Validar observaciones
         const observaciones = document.getElementById("observaciones").value;
         if (!expresiones_regulares2.observaciones.test(observaciones)) {
             document.getElementById("msj_juvenil").classList.remove("d-none");
-            validationStatus2.observaciones = false;
+            validationStatus3.observaciones = false;
         } else {
             document.getElementById("msj_observaciones").classList.add("d-none");
-            validationStatus2.observaciones = true;
+            validationStatus3.observaciones = true;
         }
 
 
 
         // Verifica si todos los campos son válidos antes de enviar el formulario
-        if (Object.values(validationStatus2).every(status => status === true)) {
+        if (Object.values(validationStatus3).every(status => status === true)) {
             // Aquí puedes agregar el código para enviar el formulario
             $.ajax({
                 type: "POST",
-                url: "http://localhost/AppwebMVC/CelulaFamiliar/Listar",
+                url: "http://localhost/AppwebMVC/CelulaFamiliar/Index",
                 data: {
 
                     registroreunion: 'registroreunion',
-                    idCelulaFamiliar: idCelulaFamiliar,
+                    idCelula: idCelula,
                     fecha: fecha,
                     tematica: tematica,
                     semana: semana,
@@ -589,7 +875,7 @@ $(document).ready(function () {
                         timer: 2000,
                     })
 
-                    form2.reset()
+                    form3.reset()
 
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -629,4 +915,6 @@ $(document).ready(function () {
     });
 
 });
+
+
 

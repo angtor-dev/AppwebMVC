@@ -11,7 +11,7 @@ $viewScripts = ["CelulaFamiliar-reunion.js"];
     <div class="row mt-4">
         <div class="col-sm-12 col-md-12 col-lg-12">
             <div class="table-responsive">
-                <table id="celulaDatatables" class="table table-hover">
+                <table id="celulaDatatables" class="table table-bordered table-hover">
                     <thead>
                         <tr>
                             <th>Codigo Celula Familiar</th>
@@ -43,7 +43,7 @@ $viewScripts = ["CelulaFamiliar-reunion.js"];
                     <ul class="list-group list-group-horizontal">
                         <li class="list-group-item col-4">
                             <strong>Código:</strong>
-                            <p id="inf_codigocelulafamiliar"></p>
+                            <p id="inf_codigocelula"></p>
                         </li>
 
                         <li class="list-group-item col-4">
@@ -128,12 +128,12 @@ $viewScripts = ["CelulaFamiliar-reunion.js"];
                         <div class="row">
 
                             <div class="mb-3">
-                                <input type="hidden" id="idreunionfamiliar">
-                                <label for="idCelulaFamiliar" class="form-label fw-bold">Celula Familiar</label>
-                                <select class="form-select" id="idCelulaFamiliar" name="idCelulaFamiliar">
+                                <input type="hidden" id="idreunion">
+                                <label for="idCelula" class="form-label fw-bold">Celula Familiar</label>
+                                <select class="form-select" id="idCelula" name="idCelula">
                                     <option selected value="">Seleccione</option>
                                 </select>
-                                <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_idCelulaFamiliar" role="alert">
+                                <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_idCelula" role="alert">
                                     Debe seleccionar una CelulaFamiliar.
                                 </div>
                             </div>

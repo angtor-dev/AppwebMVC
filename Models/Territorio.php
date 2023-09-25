@@ -7,6 +7,7 @@ class Territorio extends Model
     public int $idSede;
     public int $idLider;
     public int $idTerritorio;
+    public string $identificador;
     public string $codigo;
     public string $nombre;
     public string $detalles;
@@ -65,11 +66,14 @@ class Territorio extends Model
                     // Encontrar el número más grande en el array
                     $mayorNumero = max($numeros);
 
+                    $id = $datos['territorioNumero'] + 1;
                     $contador = $mayorNumero + 1;
                     $territorio = 'T' . $contador;
                     $identificador = $sede->codigo;
                     $codigo = $identificador . '-' . $territorio;
                 } else {
+
+                    $id = $datos['territorioNumero'] + 1;
                     $contador = 1;
                     $territorio = 'T' . $contador;
                     $identificador = $sede->codigo;
@@ -103,8 +107,8 @@ class Territorio extends Model
             } else {
                 //Aqui puedes declarar una variable con el nombre que quieras. Puede ser $sql, $consulta, $query. Como desees
                 //Lo unico que tienes que tomar en cuenta que hay nombras que si estan predefinidos, pero relah, ya el editor te avisa
-                $sql = "INSERT INTO territorio (idSede, idLider, codigo, identificador, nombre, detalles, fechaCreacion) 
-                VALUES (:idSede, :idLider, :codigo, :identificador, :nombre, :detalles, CURDATE())";
+                $sql = "INSERT INTO territorio (id, idSede, idLider, codigo, identificador, nombre, detalles, fechaCreacion) 
+                VALUES (:id, :idSede, :idLider, :codigo, :identificador, :nombre, :detalles, CURDATE())";
                 //no se pueden enviar los valores por variables  parametrizacion y evita inyeccion de slq':nombrequetuquieres'
                 //Todo lo que esta en VALUES() esta malo, preguntame el porque y despues quiero que escribas la respuesta aqui como comentario para que nunca se te olvide
 
@@ -113,6 +117,7 @@ class Territorio extends Model
 
                 //Ahora empezamos a ingresar los valores en la consulta sql. Es decir, ingresamos los valores parametrizados
                 //Esto con la finalidad de evitar inyecciones SQL
+                $stmt->bindValue(':id', $id);
                 $stmt->bindValue(':idSede', $idSede);
                 $stmt->bindValue(':idLider', $idLider);
                 $stmt->bindValue(':codigo', $codigo);

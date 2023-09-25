@@ -45,6 +45,9 @@ if (isset($_POST['editar'])) {
     $tematica = trim(strtolower($_POST['tematica']));
     $semana = trim($_POST['semana']);
     $generosidad = trim($_POST['generosidad']);
+    $infantil = '';
+    $juvenil = '';
+    $adulto = '';
     $actividad = trim(strtolower($_POST['actividad']));
     $observaciones = trim(strtolower($_POST['observaciones']));
 
@@ -52,7 +55,7 @@ if (isset($_POST['editar'])) {
 
     $CelulaConsolidacion->validacion_datos_reunion([$idCelulaConsolidacion, $semana, $generosidad, $id], [$tematica, $actividad, $observaciones], $fecha);
     $CelulaConsolidacion->validacion_accion_reunion($arrayAccion);
-    $CelulaConsolidacion->editar_reuniones($id, $idCelulaConsolidacion, $fecha, $tematica, $semana, $generosidad, $actividad, $observaciones);
+    $CelulaConsolidacion->editar_reuniones($id, $idCelulaConsolidacion, $fecha, $tematica, $semana, $generosidad, $infantil, $juvenil, $adulto, $actividad, $observaciones);
 
     die();
 }

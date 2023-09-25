@@ -1,7 +1,7 @@
 
 <?php
 
-require_once "Models/CelulaFamiliar.php";
+require_once "Models/Celulas.php";
 
 necesitaAutenticacion();
 
@@ -10,12 +10,12 @@ requierePermiso("celulaFamiliar", "registrar");
 $usuarioSesion = $_SESSION['usuario'];
 
 
-$CelulaFamiliar = new CelulaFamiliar();
+$Celulas = new Celulas();
 
 
 if (isset($_GET['cargar_data'])) {
     //Primero inicializamos las variables
-    $Lista = $CelulaFamiliar->listar_reuniones();
+    $Lista = $Celulas->listar_reunionesFamiliar();
     //Variable json solamente para guardar el array de datos
     $json = array();
 
@@ -43,7 +43,7 @@ if (isset($_POST['editar'])) {
     requierePermiso("celulaFamiliar", "actualizar");
 
     $id = $_POST['id'];
-    $idCelulaFamiliar = $_POST['idCelulaFamiliar'];
+    $idCelula = $_POST['idCelula'];
     $fecha = $_POST['fecha'];
     $tematica = trim(strtolower($_POST['tematica']));
     $semana = trim($_POST['semana']);
@@ -54,8 +54,8 @@ if (isset($_POST['editar'])) {
     $actividad = trim(strtolower($_POST['actividad']));
     $observaciones = trim(strtolower($_POST['observaciones']));
 
-    $CelulaFamiliar->validacion_datos_reunion([$id, $idCelulaFamiliar, $semana, $generosidad, $infantil, $juvenil, $adulto], [$tematica, $actividad, $observaciones], $fecha);
-    $CelulaFamiliar->editar_reuniones($id, $idCelulaFamiliar, $fecha, $tematica, $semana, $generosidad, $infantil, $juvenil, $adulto, $actividad, $observaciones);
+    $Celulas->validacion_datos_reunion([$id, $idCelula, $semana, $generosidad, $infantil, $juvenil, $adulto], [$tematica, $actividad, $observaciones], $fecha);
+    $Celulas->editar_reuniones($id, $idCelula, $fecha, $tematica, $semana, $generosidad, $infantil, $juvenil, $adulto, $actividad, $observaciones);
 
     die();
 }
@@ -67,7 +67,7 @@ if (isset($_POST['eliminar'])) {
 
     $id = $_POST['id'];
 
-    $CelulaFamiliar->eliminar_reuniones($id);
+    $Celulas->eliminar_reuniones($id);
 
     die();
 }
@@ -77,7 +77,7 @@ if (isset($_GET['listarcelulas'])) {
 
     requierePermiso("celulaFamiliar", "actualizar");
 
-    $listaCelulas = $CelulaFamiliar->listar_celulas();
+    $listaCelulas = $Celulas->listar_celulas();
 
     echo json_encode($listaCelulas);
 

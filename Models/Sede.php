@@ -6,7 +6,9 @@ class Sede extends Model
     public int $id;
     public ?int $idPastor;
     public ?string $codigo;
+    public string $identificador;
     public string $nombre;
+    public string $estadoCodigo;
     public string $estado;
     public string $direccion;
     public int $estatus;
@@ -148,6 +150,8 @@ class Sede extends Model
     {
 
         try {
+
+            /** @var Sede **/
             $consulta = Sede::cargar($id);
 
             if ($consulta->estado == $estado) {
@@ -326,6 +330,8 @@ class Sede extends Model
     public function validacion_editar_estado(int $idSede, string $estado): void
     {
         try {
+
+            /** @var Sede **/
             $resultado = Sede::cargar($idSede);
 
             if ($resultado->estadoCodigo != $estado) {
@@ -349,6 +355,8 @@ class Sede extends Model
     
     public function getEscuela() : Escuela
     {
+
+    
         return Escuela::cargarRelaciones($this->id, "Sede")[0];
     }
 }

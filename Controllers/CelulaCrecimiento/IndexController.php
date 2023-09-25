@@ -1,6 +1,6 @@
 <?php
 require_once "Models/Territorio.php";
-require_once "Models/CelulaCrecimiento.php";
+require_once "Models/Celulas.php";
 
 necesitaAutenticacion();
 
@@ -8,13 +8,12 @@ requierePermiso("celulaCrecimiento", "registrar");
 
 $usuarioSesion = $_SESSION['usuario'];
 
-$CelulaCrecimiento = new CelulaCrecimiento();
+$Celulas = new Celulas();
 
 
 if (isset($_GET['cargar_data'])) {
-
     //Primero inicializamos las variables
-    $Lista = $CelulaCrecimiento->listar_CelulaCrecimiento();
+    $Lista = $Celulas->listar_CelulaCrecimiento();
     //Variable json solamente para guardar el array de datos
     $json = array();
 
@@ -36,7 +35,7 @@ if (isset($_GET['cargar_data'])) {
     die();
 }
 
-if (isset($_POST['editar'])) {
+if (isset($_POST['registrar'])) {
 
     requierePermiso("celulaCrecimiento", "actualizar");
 
@@ -45,11 +44,30 @@ if (isset($_POST['editar'])) {
     $idLider = trim($_POST['idLider']);
     $idCoLider = trim($_POST['idCoLider']);
     $idTerritorio = trim($_POST['idTerritorio']);
+    
+    $Celulas->validacion_datos($nombre, [$idLider, $idCoLider, $idTerritorio]);
+    $Celulas->validacion_existencia($nombre, $id='');
+    $Celulas->registrar_Celula($tipo, $nombre, $idLider, $idCoLider, $idTerritorio);
 
-    $CelulaCrecimiento->validacion_datos($nombre, [$idLider, $idCoLider, $idTerritorio]);
-    $CelulaCrecimiento->validacion_existencia($nombre, $id);
-    $CelulaCrecimiento->validacion_accion($id, $accion = 'actualizar');
-    $CelulaCrecimiento->editar_CelulaCrecimiento($id, $nombre, $idLider, $idCoLider, $idTerritorio);
+    die();
+}
+
+
+if (isset($_POST['editar'])) {
+
+    // requierePermisos("actualizarCelula");
+
+    $id = $_POST['id2'];
+    $tipo =  trim(strtolower('crecimiento'));
+    $nombre = trim(strtolower($_POST['nombre2']));
+    $idLider = trim($_POST['idLider2']);
+    $idCoLider = trim($_POST['idCoLider2']);
+    $idTerritorio = trim($_POST['idTerritorio2']);
+
+    $Celulas->validacion_datos($nombre, [$idLider, $idCoLider, $idTerritorio]);
+    $Celulas->validacion_existencia($nombre, $id);
+    $Celulas->validacion_accion($id, $accion = 'actualizar');
+    $Celulas->editar_Celula($id, $tipo, $nombre, $idLider, $idCoLider, $idTerritorio);
 
     die();
 }
@@ -60,8 +78,7 @@ if (isset($_POST['registroreunion'])) {
 
     requierePermiso("celulaCrecimiento", "actualizar");
 
-
-    $idCelulaCrecimiento = $_POST['idCelulaCrecimiento'];
+    $idCelula = $_POST['idCelula'];
     $fecha = $_POST['fecha'];
     $tematica = trim(strtolower($_POST['tematica']));
     $semana = trim($_POST['semana']);
@@ -72,8 +89,8 @@ if (isset($_POST['registroreunion'])) {
     $actividad = trim(strtolower($_POST['actividad']));
     $observaciones = trim(strtolower($_POST['observaciones']));
 
-    $CelulaCrecimiento->validacion_datos_reunion([$idCelulaCrecimiento, $semana, $generosidad, $infantil, $juvenil, $adulto], [$tematica, $actividad, $observaciones], $fecha);
-    $CelulaCrecimiento->registrar_reunion($idCelulaCrecimiento, $fecha, $tematica, $semana, $generosidad, $infantil, $juvenil, $adulto, $actividad, $observaciones);
+    $Celulas->validacion_datos_reunion([$idCelula, $semana, $generosidad, $infantil, $juvenil, $adulto], [$tematica, $actividad, $observaciones], $fecha);
+    $Celulas->registrar_reunion($idCelula, $fecha, $tematica, $semana, $generosidad, $infantil, $juvenil, $adulto, $actividad, $observaciones);
 
     die();
 }
@@ -87,8 +104,8 @@ if (isset($_POST['eliminar'])) {
 
     $id = $_POST['id'];
 
-    $CelulaCrecimiento->validacion_accion($id, $accion = 'eliminar');
-    $CelulaCrecimiento->eliminar_CelulaCrecimiento($id);
+    $Celulas->validacion_accion($id, $accion = 'eliminar');
+    $Celulas->eliminar_Celula($id);
 
     die();
 }
@@ -98,7 +115,7 @@ if (isset($_GET['listaLideres'])) {
 
     requierePermiso("celulaCrecimiento", "actualizar");
 
-    $ListaLideres = $CelulaCrecimiento->listar_lideres();
+    $ListaLideres = $Celulas->listar_lideres();
 
     echo json_encode($ListaLideres);
 
@@ -109,11 +126,24 @@ if (isset($_GET['listaTerritorio'])) {
 
     requierePermiso("celulaCrecimiento", "actualizar");
 
-    $Listaterritorio = $CelulaCrecimiento->listar_territorios();
+    $Listaterritorio = $Celulas->listar_territorios();
 
     echo json_encode($Listaterritorio);
 
     die();
 }
+
+if (isset($_GET['cargar_discipulos_celula'])) {
+
+    requierePermiso("celulaConsolidacion", "actualizar");
+
+    $idCelula = $_GET['idCelula'];
+    $resultado = $Celulas->listarDiscipulados_celula($idCelula);
+
+    echo json_encode($resultado);
+    die();
+}
+
+
 
 renderView();
