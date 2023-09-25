@@ -223,7 +223,7 @@ class Usuario extends Model
         }
 
         foreach ($this->roles as $rol) {
-            if (strcasecmp($rol->nombre, $nombreRol) == 0) {
+            if (strcasecmp($rol->getNombre(), $nombreRol) == 0) {
                 return true;
             }
         }
@@ -245,7 +245,7 @@ class Usuario extends Model
 
         foreach ($this->roles as $rol) {
             foreach ($rol->permisos as $p) {
-                if ($p->modulo->nombre == $modulo && $p->$permiso) {
+                if ($p->modulo->getNombre() == $modulo && $p->$permiso) {
                     return true;
                 }
             }
@@ -261,7 +261,7 @@ class Usuario extends Model
 
         foreach ($usuarios as $key => $usuario) {
             foreach ($usuario->roles as $rol) {
-                if (!in_array($rol->nombre, $roles)) {
+                if (!in_array($rol->getNombre(), $roles)) {
                     unset($usuarios[$key]);
                     break;
                 }

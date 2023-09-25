@@ -6,12 +6,12 @@ require_once "Models/Modulo.php";
 class Permiso extends Model
 {
     public int $id;
-    public int $idRol;
-    public int $idModulo;
-    public bool $consultar = false;
-    public bool $registrar = false;
-    public bool $actualizar = false;
-    public bool $eliminar = false;
+    private int $idRol;
+    private int $idModulo;
+    private bool $consultar = false;
+    private bool $registrar = false;
+    private bool $actualizar = false;
+    private bool $eliminar = false;
 
     public Modulo $modulo;
 

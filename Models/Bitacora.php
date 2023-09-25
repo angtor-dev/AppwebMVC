@@ -4,10 +4,10 @@ require_once "Models/Model.php";
 class Bitacora extends Model
 {
     public int $id;
-    public ?int $idUsuario;
-    public string $registro;
-    public string $ruta;
-    public string $fecha;
+    private ?int $idUsuario;
+    private string $registro;
+    private string $ruta;
+    private string $fecha;
 
     public ?Usuario $usuario = null;
 
@@ -43,6 +43,17 @@ class Bitacora extends Model
     {
         $_SESSION['errores'][] = "No se puede eliminar un registro de la bitacora";
         return;
+    }
+
+    // Getters
+    public function getRegistro() : string {
+        return $this->registro;
+    }
+    public function getRuta() : string {
+        return $this->ruta;
+    }
+    public function getFecha() : string {
+        return $this->fecha;
     }
 }
 ?>

@@ -25,9 +25,9 @@ $title = "Bitacora";
         <?php foreach ($bitacoras as $bitacora) : ?>
             <tr>
                 <td><?= ($bitacora->usuario?->getCedula() ?? "")." - ".($bitacora->usuario?->getNombre() ?? "") ?></td>
-                <td><?= $bitacora->registro ?></td>
-                <td><?= $bitacora->ruta ?></td>
-                <td><?= date("d/m/Y H:i a", strtotime($bitacora->fecha)) ?></td>
+                <td><?= $bitacora->getRegistro() ?></td>
+                <td><?= $bitacora->getRuta() ?></td>
+                <td><?= date("d/m/Y H:i a", strtotime($bitacora->getFecha())) ?></td>
             </tr>
         <?php endforeach ?>
     </tbody>

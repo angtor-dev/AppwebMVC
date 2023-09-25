@@ -5,10 +5,10 @@ require_once "Models/Escuela.php";
 class NivelCrecimiento extends Model
 {
     public int $id;
-    public int $idEscuela;
-    public string $nombre;
-    public int $nivel;
-    public int $estatus;
+    private int $idEscuela;
+    private string $nombre;
+    private int $nivel;
+    private int $estatus;
 
     public Escuela $escuela;
     public array $subnivelesArray;
@@ -122,6 +122,7 @@ class NivelCrecimiento extends Model
         return true;
     }
 
+    // Getters
     public function getSubniveles() : array
     {
         $query = "SELECT nivelcrecimiento.id, GROUP_CONCAT(subnivel.id SEPARATOR ',') AS 'ids',
@@ -137,6 +138,13 @@ class NivelCrecimiento extends Model
             return $subniveles;
         }
         return ["id" => null, "ids" => null, "nombres" => null, "niveles" => null];
+    }
+
+    public function getNombre() : string {
+        return $this->nombre;
+    }
+    public function getNivel() : int {
+        return $this->nivel;
     }
 }
 ?>

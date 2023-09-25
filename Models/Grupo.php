@@ -6,11 +6,11 @@ require_once "Models/Enums/EstadosGrupo.php";
 class Grupo extends Model
 {
     public int $id;
-    public int $idNivelCrecimiento;
-    public int $idProfesor;
-    public string $nombre;
-    public int $estado;
-    public int $estatus;
+    private int $idNivelCrecimiento;
+    private int $idProfesor;
+    private string $nombre;
+    private int $estado;
+    private int $estatus;
     
     public NivelCrecimiento $nivelCrecimiento;
     public Usuario $profesor;

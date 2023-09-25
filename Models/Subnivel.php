@@ -5,9 +5,9 @@ require_once "Models/NivelCrecimiento.php";
 class Subnivel extends Model
 {
     public int $id;
-    public int $idNivelCrecimiento;
-    public string $nombre;
-    public int $nivel;
-    public int $estatus;
+    private int $idNivelCrecimiento;
+    private string $nombre;
+    private int $nivel;
+    private int $estatus;
 }
 ?>

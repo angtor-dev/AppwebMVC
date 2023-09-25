@@ -5,9 +5,9 @@ require_once "Models/Permiso.php";
 class Rol extends Model
 {
     public int $id;
-    public string $nombre;
-    public ?string $descripcion;
-    public int $nivel;
+    private string $nombre;
+    private ?string $descripcion;
+    private int $nivel;
 
     /** @var Permiso[] */
     public array $permisos;
@@ -87,6 +87,17 @@ class Rol extends Model
         }
 
         return true;
+    }
+
+    // Getters
+    public function getNombre() : string {
+        return $this->nombre;
+    }
+    public function getDescripcion() : ?string {
+        return $this->descripcion;
+    }
+    public function getNivel() : int {
+        return $this->nivel;
     }
 }
 ?>
