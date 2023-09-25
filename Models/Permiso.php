@@ -43,5 +43,19 @@ class Permiso extends Model
             throw $th;
         }
     }
+
+    // Getters
+    public function getConsultar() : bool {
+        return $this->consultar;
+    }
+    public function getActualizar() : bool {
+        return $this->actualizar;
+    }
+    public function getRegistrar() : bool {
+        return $this->registrar;
+    }
+    public function getEliminar() : bool {
+        return $this->eliminar;
+    }
 }
 ?>

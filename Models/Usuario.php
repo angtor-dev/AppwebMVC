@@ -242,10 +242,11 @@ class Usuario extends Model
         if (empty($this->roles)) {
             return false;
         }
+        $permiso = "get".$permiso;
 
         foreach ($this->roles as $rol) {
             foreach ($rol->permisos as $p) {
-                if ($p->modulo->getNombre() == $modulo && $p->$permiso) {
+                if ($p->modulo->getNombre() == $modulo && $p->$permiso()) {
                     return true;
                 }
             }
