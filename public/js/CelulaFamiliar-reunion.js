@@ -55,7 +55,7 @@ $(document).ready(function () {
         document.getElementById('adulto').value = datos.adulto;
         document.getElementById('actividad').value = datos.actividad;
         document.getElementById('observaciones').value = datos.observaciones;
-        Listar_celulas(datos.idCelulaFamiliar);
+        Listar_celulas(datos.idCelula);
 
     })
 
@@ -350,7 +350,7 @@ $(document).ready(function () {
     form2.addEventListener("submit", (e) => {
         e.preventDefault();
 
-        const id = document.getElementById('idreunionfamiliar').textContent
+        const id = document.getElementById('idreunion').textContent
 
         // Verifica si todos los campos son válidos antes de enviar el formulario
         if (Object.values(validationStatus2).every(status => status === true)) {

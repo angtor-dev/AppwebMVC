@@ -11,11 +11,11 @@ $viewScripts = ["CelulaCrecimiento-reunion.js"];
     <div class="row mt-4">
         <div class="col-sm-12 col-md-12 col-lg-12">
             <div class="table-responsive">
-                <table id="celulaDatatables" class="table table-hover">
+                <table id="celulaDatatables" class="table table-bordered table-hover">
                     <thead>
                         <tr>
-                            <th>Codigo Celula Crecimiento</th>
-                            <th>Nombre de la Celula Crecimiento</th>
+                            <th>Codigo Celula de Crecimiento</th>
+                            <th>Nombre de la Celula de Crecimiento</th>
                             <th>Fecha de la reunión</th>
                             <th>Opciones</th>
                         </tr>
@@ -27,8 +27,6 @@ $viewScripts = ["CelulaCrecimiento-reunion.js"];
             </div>
         </div>
     </div>
-
-
 
 
     <!-- MODAL PARA VER TODA LA Informacion de la reunion REUNION -->
@@ -45,7 +43,7 @@ $viewScripts = ["CelulaCrecimiento-reunion.js"];
                     <ul class="list-group list-group-horizontal">
                         <li class="list-group-item col-4">
                             <strong>Código:</strong>
-                            <p id="inf_codigocelulacrecimiento"></p>
+                            <p id="inf_codigocelula"></p>
                         </li>
 
                         <li class="list-group-item col-4">
@@ -117,7 +115,7 @@ $viewScripts = ["CelulaCrecimiento-reunion.js"];
 
 
 
-
+    
     <!-- MODAL PARA EDITAR TODOS LOS DATOS DE LA Reunion -->
     <div class="modal fade" id="modal_editarInfo" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog">
@@ -127,97 +125,100 @@ $viewScripts = ["CelulaCrecimiento-reunion.js"];
                 </div>
                 <div class="modal-body">
                     <form id="formularioReunion">
+                        <div class="row">
 
-                        <div class="mb-3">
-                            <input type="hidden" id="idreunioncrecimiento">
-                            <label for="idCelulaCrecimiento" class="form-label fw-bold">Celula de Crecimiento</label>
-                            <select class="form-select" id="idCelulaCrecimiento" name="idCelulaCrecimiento">
-                            </select>
-                            <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_idCelulaCrecimiento" role="alert">
-                                Debe seleccionar una Celula de Crecimiento.
-                            </div>
-                        </div>
-
-
-                        <div class="mb-3">
-                            <label for="fecha" class="form-label fw-bold">Fecha</label>
-                            <input type="date" class="form-control" id="fecha" name="fecha">
-                            <div class="alert alert-danger d-none" id="msj_fecha" role="alert"> Debe seleccionar la fecha de la reunión</div>
-                        </div>
-
-
-                        <div class="mb-3">
-                            <label for="tematica" class="form-label fw-bold">Tematica</label>
-                            <input type="text" class="form-control" id="tematica" name="tematica" maxlength="100">
-                            <div class="alert alert-danger d-none" id="msj_tematica" role="alert">Este campo no puede estar vacio</div>
-                        </div>
-
-
-                        <div class="row mb-3">
-                            <div class="col-4">
-                                <label for="tematica" class="form-label fw-bold">Semana del Ciclo</label>
-                                <input type="number" class="form-control" id="semana" name="tematica">
-                                <div class="alert alert-danger d-none" id="msj_semana" role="alert">Este campo no puede estar vacio</div>
-                            </div>
-
-
-                            <div class="col-8">
-                                <label class="form-label fw-bold">Generosidad</label>
-                                <input type="number" class="form-control" id="generosidad" name="tematica" step="0.01">
-                                <div class="alert alert-danger d-none" id="msj_generosidad" role="alert">Este campo no puede estar vacio</div>
-                            </div>
-                        </div>
-
-
-
-                        <div class="row mb-3">
-                            <label class="form-label fw-bold">Asistencia:</label>
-                            <div class="row g-3">
-                                <div class="col-lg-4">
-                                    <label for="infantil" class="form-label fw-bold">Infantil:</label>
-                                    <input type="number" class="form-control" id="infantil" name="infantil" placeholder="Infantil">
-                                    <div class="alert alert-danger d-none" id="msj_infantil" role="alert"></div>
-                                </div>
-
-                                <div class="col-lg-4">
-                                    <label for="juvenil" class="form-label fw-bold">Juvenil:</label>
-                                    <input type="number" class="form-control" id="juvenil" name="juvenil" placeholder="Juvenil">
-                                    <div class="alert alert-danger d-none" id="msj_juvenil" role="alert"></div>
-                                </div>
-
-                                <div class="col-lg-4">
-                                    <label for="adulto" class="form-label fw-bold">Adultos:</label>
-                                    <input type="number" class="form-control" id="adulto" name="adulto" placeholder="Adulto">
-                                    <div class="alert alert-danger d-none" id="msj_adulto" role="alert"></div>
+                            <div class="mb-3">
+                                <input type="hidden" id="idreunion">
+                                <label for="idCelula" class="form-label fw-bold">Celulas de Crecimiento</label>
+                                <select class="form-select" id="idCelula" name="idCelula">
+                                    <option selected value="">Seleccione</option>
+                                </select>
+                                <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_idCelula" role="alert">
+                                    Debe seleccionar una Celula de Crecimiento.
                                 </div>
                             </div>
+
+                            <div class="mb-3">
+                                <label for="fecha" class="form-label fw-bold">Fecha</label>
+                                <input type="date" class="form-control" id="fecha" name="fecha">
+                                <div class="alert alert-danger d-none" id="msj_fecha" role="alert"> Debe seleccionar la fecha de la reunión</div>
+                            </div>
+
+
+                            <div class="mb-3">
+                                <label for="tematica" class="form-label fw-bold">Tematica</label>
+                                <input type="text" class="form-control" id="tematica" name="tematica" maxlength="100">
+                                <div class="alert alert-danger d-none" id="msj_tematica" role="alert">Este campo no puede estar vacio</div>
+                            </div>
+
+
+                            <div class="mb-3">
+                                <div class="row g-3">
+                                    <div class="col-4">
+                                        <label for="tematica" class="form-label fw-bold">Semana del Ciclo</label>
+                                        <input type="number" class="form-control" id="semana" name="tematica">
+                                        <div class="alert alert-danger d-none" id="msj_semana" role="alert">Este campo no puede estar vacio</div>
+                                    </div>
+
+
+                                    <div class="col-8">
+                                        <label class="form-label fw-bold">Generosidad</label>
+                                        <input type="number" class="form-control" id="generosidad" name="tematica" step="0.01">
+                                        <div class="alert alert-danger d-none" id="msj_generosidad" role="alert">Este campo no puede estar vacio</div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Asistencia:</label>
+                                <div class="row g-3">
+                                    <div class="col-4">
+                                        <label for="infantil" class="form-label fw-bold">Infantil:</label>
+                                        <input type="number" class="form-control" id="infantil" name="infantil" placeholder="Infantil">
+                                        <div class="alert alert-danger d-none" id="msj_infantil" role="alert"></div>
+                                    </div>
+
+
+                                    <div class="col-4">
+                                        <label for="juvenil" class="form-label fw-bold">Juvenil:</label>
+                                        <input type="number" class="form-control" id="juvenil" name="juvenil" placeholder="Juvenil">
+                                        <div class="alert alert-danger d-none" id="msj_juvenil" role="alert"></div>
+                                    </div>
+
+                                    <div class="col-4">
+                                        <label for="adulto" class="form-label fw-bold">Adultos:</label>
+                                        <input type="number" class="form-control" id="adulto" name="adulto" placeholder="Adulto">
+                                        <div class="alert alert-danger d-none" id="msj_adulto" role="alert"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="mb-3">
+                                <label for="actividad" class="form-label fw-bold">Actividad</label>
+                                <input type="text" class="form-control" id="actividad" name="actividad" maxlength="100">
+
+                                <div class="alert alert-danger d-none" id="msj_actividad" role="alert">Este campo no puede estar vacio</div>
+                            </div>
+
+
+                            <div class="mb-3">
+                                <label for="observaciones" class="form-label fw-bold">Observaciones</label>
+                                <input type="100" class="form-control" id="observaciones" name="observaciones" rows="3"></textarea>
+
+                                <div class="alert alert-danger d-none" id="msj_observaciones" role="alert">Este campo no puede estar vacio</div>
+                            </div>
+
+
+                            <div class="d-flex justify-content-end gap-1">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                <button type="submit" class="btn btn-primary">Registrar</button>
+                            </div>
+
                         </div>
-
-
-                        <div class="mb-3">
-                            <label for="actividad" class="form-label fw-bold">Actividad</label>
-                            <input type="text" class="form-control" id="actividad" name="actividad" maxlength="100">
-
-                            <div class="alert alert-danger d-none" id="msj_actividad" role="alert">Este campo no puede estar vacio</div>
-                        </div>
-
-
-                        <div class="mb-3">
-                            <label for="observaciones" class="form-label fw-bold">Observaciones</label>
-                            <input type="100" class="form-control" id="observaciones" name="observaciones" rows="3"></textarea>
-
-                            <div class="alert alert-danger d-none" id="msj_observaciones" role="alert">Este campo no puede estar vacio</div>
-                        </div>
-
-
-
-                        <div class="d-flex justify-content-end gap-1">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-primary">Registrar</button>
-                        </div>
-
-
                     </form>
+
                 </div>
             </div>
         </div>

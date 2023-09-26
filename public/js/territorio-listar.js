@@ -2,6 +2,8 @@ $(document).ready(function () {
 
     let choices1;
     let choices2;
+    let choices3;
+    let choices4;
 
     const dataTable = $('#territorioDatatables').DataTable({
         responsive: true,
@@ -46,12 +48,21 @@ $(document).ready(function () {
         const datos = dataTable.row($(this).parents()).data();
 
         document.getElementById('idTerritorio').textContent = datos.id;
-        document.getElementById('nombre').value = datos.nombre;
-        document.getElementById('detalles').value = datos.detalles;
-        Listar_Lideres(datos.idLider)
-        Listar_Sedes(datos.idSede)
+        document.getElementById('nombre2').value = datos.nombre;
+        document.getElementById('detalles2').value = datos.detalles;
+        Listar_LideresEditar(datos.idLider);
+        Listar_SedesEditar(datos.idSede)
 
     })
+
+
+    $('#registrar').on('click', function () {
+
+
+        Listar_LideresRegistrar();
+        Listar_SedesRegistrar()
+    
+      })
 
     $('#territorioDatatables tbody').on('click', '#eliminar', function () {
         const datos = dataTable.row($(this).parents()).data();
@@ -121,7 +132,7 @@ $(document).ready(function () {
 
 
 
-    function Listar_Lideres(idLider) {
+    function Listar_LideresRegistrar() {
 
         $.ajax({
             type: "GET",
@@ -136,6 +147,118 @@ $(document).ready(function () {
                 let data = JSON.parse(response);
 
                 let selector = document.getElementById('idLider');
+                // Limpiar el selector antes de agregar nuevas opciones
+                const placeholderOption = document.createElement('option');
+                placeholderOption.value = '';
+                placeholderOption.text = 'Seleccione un Lider';
+                placeholderOption.disabled = true;
+                placeholderOption.selected = true;
+                selector.appendChild(placeholderOption);
+
+                data.forEach(item => {
+
+                    const option = document.createElement('option');
+                    option.value = item.id;
+                    option.text = `${item.cedula} ${item.nombre} ${item.apellido}`;
+                    selector.appendChild(option);
+
+                });
+
+                // Destruir la instancia existente si la hay
+                if (choices3) {
+                    choices3.destroy();
+                }
+                choices3 = new Choices(selector, {
+                    allowHTML: true,
+                    searchEnabled: true,  // Habilita la funcionalidad de búsqueda
+                    removeItemButton: true,  // Habilita la posibilidad de remover items
+                    placeholderValue: 'Selecciona una opción',  // Texto del placeholder
+                });
+
+                choices3.setChoiceByValue(idLider.toString());
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                // Aquí puedes manejar errores, por ejemplo:
+                console.error("Error al enviar:", textStatus, errorThrown);
+                alert("Hubo un error al realizar el registro. Por favor, inténtalo de nuevo.");
+            }
+        })
+    }
+
+
+
+
+    function Listar_SedesRegistrar() {
+
+        $.ajax({
+            type: "GET",
+            url: "http://localhost/AppwebMVC/Territorios/Listar",
+            data: {
+
+                listaSedes: 'listaSedes',
+
+            },
+            success: function (response) {
+
+
+                let data = JSON.parse(response);
+
+                let selector = document.getElementById('idSede');
+
+                const placeholderOption = document.createElement('option');
+                placeholderOption.value = '';
+                placeholderOption.text = 'Seleccione una Sede';
+                placeholderOption.disabled = true;
+                placeholderOption.selected = true;
+                selector.appendChild(placeholderOption);
+
+                data.forEach(item => {
+
+                    const option = document.createElement('option');
+                    option.value = item.id;
+                    option.text = `${item.codigo} ${item.nombre}`;
+                    selector.appendChild(option);
+
+                });
+
+                // Destruir la instancia existente si la hay
+                if (choices4) {
+                    choices4.destroy();
+                }
+                choices4 = new Choices(selector, {
+                    allowHTML: true,
+                    searchEnabled: true,  // Habilita la funcionalidad de búsqueda
+                    removeItemButton: true,  // Habilita la posibilidad de remover items
+                    placeholderValue: 'Selecciona una opción',  // Texto del placeholder
+                });
+
+                choices4.setChoiceByValue(idSede.toString());
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                // Aquí puedes manejar errores, por ejemplo:
+                console.error("Error al enviar:", textStatus, errorThrown);
+                alert("Hubo un error al realizar el registro. Por favor, inténtalo de nuevo.");
+            }
+        })
+    }
+
+    function Listar_LideresEditar(idLider) {
+
+        $.ajax({
+            type: "GET",
+            url: "http://localhost/AppwebMVC/Territorios/Listar",
+            data: {
+
+                listaLideres: 'listaLideres',
+
+            },
+            success: function (response) {
+
+                let data = JSON.parse(response);
+
+                let selector = document.getElementById('idLider2');
                 // Limpiar el selector antes de agregar nuevas opciones
                 selector.innerHTML = '';
 
@@ -173,7 +296,7 @@ $(document).ready(function () {
 
 
 
-    function Listar_Sedes(idSede) {
+    function Listar_SedesEditar(idSede) {
 
         $.ajax({
             type: "GET",
@@ -188,7 +311,7 @@ $(document).ready(function () {
 
                 let data = JSON.parse(response);
 
-                let selector = document.getElementById('idSede');
+                let selector = document.getElementById('idSede2');
 
                 data.forEach(item => {
 
@@ -236,11 +359,12 @@ $(document).ready(function () {
         detalles: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/ // Letras, números, espacios, puntos y comas con un máximo de 100 caracteres
     };
 
+
     const validationStatus = {
-        idSede: true,
-        nombre: true,
-        idLider: true,
-        detalles: true
+        idSede: false,
+        nombre: false,
+        idLider: false,
+        detalles: false
     };
 
 
@@ -248,8 +372,6 @@ $(document).ready(function () {
 
     form.addEventListener("submit", (e) => {
         e.preventDefault();
-
-        let id = document.getElementById('idTerritorio').textContent;
 
         // Validar idSede
         const idSede = document.getElementById("idSede").value;
@@ -289,6 +411,124 @@ $(document).ready(function () {
         } else {
             document.getElementById("msj_detalles").classList.add("d-none");
             validationStatus.detalles = true;
+        }
+
+        // Verifica si todos los campos son válidos antes de enviar el formulario
+        if (Object.values(validationStatus).every(status => status === true)) {
+            // Aquí puedes agregar el código para enviar el formulario
+            $.ajax({
+                type: "POST",
+                url: "http://localhost/AppwebMVC/Territorios/Listar",
+                data: {
+
+                    registrar: 'registrar',
+                    idSede: idSede,
+                    nombre: nombre,
+                    idLider: idLider,
+                    detalles: detalles
+                },
+                success: function (response) {
+                    console.log(response);
+                    let data = JSON.parse(response);
+
+                    // Aquí puedes manejar una respuesta exitosa, por ejemplo:
+                    Swal.fire({
+                        icon: 'success',
+                        title: data.msj,
+                        showConfirmButton: false,
+                        timer: 2000,
+                    })
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    if (jqXHR.responseText) {
+                        let jsonResponse = JSON.parse(jqXHR.responseText);
+                
+                        if (jsonResponse.msj) {
+                             Swal.fire({
+                                icon: 'error',
+                                title: 'Denegado',
+                                text: jsonResponse.msj,
+                                showConfirmButton: true,
+                            })
+                        } else {
+                            const respuesta = JSON.stringify(jsonResponse, null, 2)
+                            Swal.fire({
+                                background: 'red',
+                                color: '#fff',
+                                title: respuesta,
+                                showConfirmButton: true,
+                            })
+                        }
+                    } else {
+                        alert('Error desconocido: ' + textStatus);
+                    }
+                }
+            });
+
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Formulario invalido para enviar. Por favor, ingrese nuevamente sus datos',
+                showConfirmButton: false,
+                timer: 2000,
+            })
+        }
+    });
+
+    const validationStatus2 = {
+        idSede: true,
+        nombre: true,
+        idLider: true,
+        detalles: true
+    };
+
+
+    const form2 = document.getElementById("formulario2");
+
+    form2.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        let id = document.getElementById('idTerritorio2').textContent;
+
+        // Validar idSede
+        const idSede = document.getElementById("idSede2").value;
+        if (!regexObj.idSede.test(idSede)) {
+            document.getElementById("msj_idSede2").classList.remove("d-none");
+            validationStatus2.idSede = false;
+        } else {
+            document.getElementById("msj_idSede2").classList.add("d-none");
+            validationStatus2.idSede = true;
+        }
+
+        // Validar nombre
+        const nombre = document.getElementById("nombre2").value;
+        if (!regexObj.nombre.test(nombre)) {
+            document.getElementById("msj_nombre2").classList.remove("d-none");
+            validationStatus2.nombre = false;
+        } else {
+            document.getElementById("msj_nombre2").classList.add("d-none");
+            validationStatus2.nombre = true;
+        }
+
+        // Validar idLider
+        const idLider = document.getElementById("idLider2").value;
+        if (!regexObj.idLider.test(idLider2)) {
+            document.getElementById("msj_idLider").classList.remove("d-none");
+            validationStatus2.idLider = false;
+        } else {
+            document.getElementById("msj_idLider2").classList.add("d-none");
+            validationStatus2.idLider = true;
+        }
+
+        // Validar detalles
+        const detalles = document.getElementById("detalles2").value;
+        if (!regexObj.detalles.test(detalles)) {
+            document.getElementById("msj_detalles2").classList.remove("d-none");
+            validationStatus2.detalles = false;
+        } else {
+            document.getElementById("msj_detalles2").classList.add("d-none");
+            validationStatus2.detalles = true;
         }
 
 

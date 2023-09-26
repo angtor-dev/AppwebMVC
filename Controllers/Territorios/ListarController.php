@@ -34,6 +34,21 @@ if (isset($_GET['cargar_data'])) {
     die();
 }
 
+if (isset($_POST['registrar'])) {   
+
+    $idSede = trim($_POST['idSede']);
+    $nombre = trim(strtolower($_POST['nombre']));
+    $idLider = trim($_POST['idLider']);
+    $detalles = trim(strtolower($_POST['detalles']));
+    
+    $Territorio->validacion_datos($idSede, $nombre, $idLider, $detalles);
+    $Territorio->validacion_existencia($nombre, $idTerritorio = '');
+    $Territorio->registrar_territorio($idSede, $nombre, $idLider, $detalles);
+
+    echo json_encode('Lo logramos!!');
+    die();
+}
+
 
 if (isset($_GET['listaLideres'])) {
 

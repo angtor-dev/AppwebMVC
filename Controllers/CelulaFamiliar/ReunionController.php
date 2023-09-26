@@ -1,4 +1,3 @@
-
 <?php
 
 require_once "Models/Celulas.php";
@@ -77,7 +76,7 @@ if (isset($_GET['listarcelulas'])) {
 
     requierePermisos("actualizarCelulaFamiliar");
 
-    $listaCelulas = $Celulas->listar_celulas();
+    $listaCelulas = $Celulas->listar_celulaFamiliar();
 
     echo json_encode($listaCelulas);
 

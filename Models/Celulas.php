@@ -239,7 +239,7 @@ class Celulas extends Model
             CoLider.cedula AS cedulaCoLider,
             celulas.id,
             celulas.idLider,
-            celulas.idCoLider
+            celulas.idCoLider,
             celulas.idTerritorio,
             celulas.codigo,
             celulas.nombre,
@@ -254,9 +254,8 @@ class Celulas extends Model
 
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
             /** @var Bitacora **/
-            Bitacora::registrar("Consulta de celula de Crecimiento");
+            Bitacora::registrar("Consulta de celula crecimiento");
 
             return $resultado;
 
@@ -286,7 +285,7 @@ class Celulas extends Model
             CoLider.cedula AS cedulaCoLider,
             celulas.id,
             celulas.idLider,
-            celulas.idCoLider
+            celulas.idCoLider,
             celulas.idTerritorio,
             celulas.codigo,
             celulas.nombre,
@@ -301,9 +300,8 @@ class Celulas extends Model
 
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
             /** @var Bitacora **/
-            Bitacora::registrar("Consulta de celula de Consolidacion");
+            Bitacora::registrar("Consulta de celula consolidacion");
 
             return $resultado;
 
@@ -421,7 +419,7 @@ class Celulas extends Model
                 $stmt->execute();
             }
             /** @var Bitacora **/
-            Bitacora::registrar("Actualizacion de celula familiar");
+            //Bitacora::registrar("Actualizacion de celula familiar");
 
             http_response_code(200);
             echo json_encode(array('msj' => 'Celula actualizada exitosamente', 'status' => 200));
@@ -474,7 +472,7 @@ class Celulas extends Model
         }
     }
 
-    public function registrar_reunion($idCelula, $fecha, $tematica, $semana, $generosidad, $infantil, $juvenil, $adulto, $actividad, $observaciones)
+    public function registrar_reunion($idCelula, $fecha, $tematica, $semana, $generosidad, $infantil, $juvenil, $adulto, $actividad, $observaciones, $arrayAsistencias)
     {
 
         try {
@@ -496,6 +494,26 @@ class Celulas extends Model
 
             $stmt->execute();
 
+                   //Registrando las asistencias
+                   $consulta = "SELECT id FROM reunioncelula ORDER BY id DESC LIMIT 1";
+                   $stmt2 = $this->db->pdo()->prepare($consulta);
+                   $stmt2->execute();
+       
+                   if ($stmt2->rowCount() > 0) {
+                       $resultado = $stmt2->fetch(PDO::FETCH_ASSOC);
+                       $idReunion = $resultado['id'];
+       
+                       foreach ($arrayAsistencias as $values) {
+                           $sql2 = "INSERT INTO `asistencia` (`idReunion`, `idDiscipulo`) VALUES (:idReunion, :idDiscipulo)";
+                           $stmt3 = $this->db->pdo()->prepare($sql2);
+       
+                           $stmt3->bindValue(':idReunion', $idReunion);
+                           $stmt3->bindValue(':idDiscipulo', $values);
+       
+                           $stmt3->execute();
+                       }
+                   }
+
         } else {
 
 
@@ -516,6 +534,8 @@ class Celulas extends Model
                 $stmt->bindValue(':observaciones', $observaciones);
     
                 $stmt->execute();
+
+          
 
         }
 
@@ -872,58 +892,6 @@ class Celulas extends Model
         }
     }
 
-
-
-
-
-    ///////////////////////////////// ESPACIO PARA VALIDACIONES //////////////////////////////////
-
-
-    public function validacion_datos(string $nombre, array $idArray): void
-    {
-        try {
-            // Utilizar preg_match para validar el string contra la expresión regular
-            if (!preg_match($this->expresion_nombre, $nombre)) {
-                // Lanzar una excepción si el string no es válido
-                throw new Exception("El nombre que ingresaste no cumple con los requisitos. Ingrese nuevamente", 422);
-            }
-
-            foreach ($idArray as $key) {
-                if (!preg_match($this->expresion_id, $key)) {
-                    // Lanzar una excepción si el string no es válido
-                    throw new Exception("El ID no cumple con los requisitos. Seleccione nuevamente", 422);
-                }
-            }
-        } catch (Exception $e) {
-            http_response_code($e->getCode());
-            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
-            die();
-        }
-    }
-
-    public function validacion_existencia(string $nombre, $id): void
-    {
-        try {
-            $sql = "SELECT * FROM celulas WHERE nombre = :nombre" . (!empty($id) ? " AND id != $id" : "");
-            $stmt = $this->db->pdo()->prepare($sql);
-            $stmt->bindValue(":nombre", $nombre);
-            $stmt->execute();
-            $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            if ($resultado != false) {
-                if ($resultado['nombre'] == $nombre) {
-                    // Lanzar una excepción si el dato existe en la BD
-                    throw new Exception("La celula llamada " . $nombre . " ya existe", 422);
-                }
-            }
-        } catch (Exception $e) {
-            http_response_code($e->getCode());
-            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
-            die();
-        }
-    }
-
-
     public function listarDiscipulados_celula($idCelula)
     {
         try {
@@ -944,6 +912,9 @@ class Celulas extends Model
             die();
         }
     }
+
+
+
 
 
     public function listar_asistencia($idReunion)
@@ -980,37 +951,7 @@ class Celulas extends Model
         }
     }
 
-
-
-    // VALIDAR ANTES DE ELIMINAR O EDITAR
-    public function validacion_accion(int $id, string $accion): void
-    {
-        try {
-
-            $sql = "SELECT * FROM reunioncelula WHERE idCelula= :idCelula AND estatus = 1";
-
-            $stmt = $this->db->pdo()->prepare($sql);
-            $stmt->bindValue(":idCelula", $id);
-            $stmt->execute();
-
-            if ($stmt->rowCount() > 0) {
-                // Lanzar una excepción si el dato existe en la BD
-                if ($accion == 'eliminar') {
-                    throw new Exception("Esta celula esta asociada a reuniones y otro tipo de informacion que podria corromper la integridad de los datos.", 422);
-                }
-                if ($accion == 'actualizar') {
-                    throw new Exception("No puedes cambiar el territorio porque la celula posee datos de reuniones e informacion adicional. Esto podria destruir la integridad de los datos", 422);
-                }
-            }
-        } catch (Exception $e) {
-            http_response_code($e->getCode());
-            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
-            die();
-        }
-    }
-
-
-    public function listarAsistencia_reunion($idCelulaConsolidacion, $idReunion)
+    public function listarAsistencia_reunion($idCelula, $idReunion)
     {
         try {
 
@@ -1020,14 +961,13 @@ class Celulas extends Model
 
             $stmt = $this->db->pdo()->prepare($sql);
 
-            $stmt->bindValue(":idCelulaConsolidacion", $idCelulaConsolidacion);
+            $stmt->bindValue(":idCelula", $idCelula);
             $stmt->bindValue(":idReunion", $idReunion);
 
             $stmt->execute();
 
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            /** @var Bitacora **/
             Bitacora::registrar("Consulta de asistencias de reunion de celula de consolidacion");
 
             return $resultado;
@@ -1054,7 +994,6 @@ class Celulas extends Model
 
             $stmt->execute();
 
-            /** @var Bitacora **/
             Bitacora::registrar("Eliminacion de asistencia en reunion de celula de consolidacion");
 
             http_response_code(200);
@@ -1087,7 +1026,6 @@ class Celulas extends Model
                 $stmt->execute();
             }
 
-            /** @var Bitacora **/
             Bitacora::registrar("Eliminacion de asistencia en reunion de celula de consolidacion");
 
             http_response_code(200);
@@ -1105,6 +1043,130 @@ class Celulas extends Model
         }
     }
 
+
+
+
+    ///////////////////////////////// ESPACIO PARA VALIDACIONES //////////////////////////////////
+
+    public function validacion_datos(string $nombre, array $idArray): void
+    {
+        try {
+            // Utilizar preg_match para validar el string contra la expresión regular
+            if (!preg_match($this->expresion_nombre, $nombre)) {
+                // Lanzar una excepción si el string no es válido
+                throw new Exception("El nombre que ingresaste no cumple con los requisitos. Ingrese nuevamente", 422);
+            }
+
+            foreach ($idArray as $key) {
+                if (!preg_match($this->expresion_id, $key)) {
+                    // Lanzar una excepción si el string no es válido
+                    throw new Exception("El ID no cumple con los requisitos. Seleccione nuevamente", 422);
+                }
+            }
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+            die();
+        }
+    }
+
+
+
+
+    public function validacion_existencia(string $nombre, $id): void
+    {
+        try {
+            $sql = "SELECT * FROM celulas WHERE nombre = :nombre" . (!empty($id) ? " AND id != $id" : "");
+            $stmt = $this->db->pdo()->prepare($sql);
+            $stmt->bindValue(":nombre", $nombre);
+            $stmt->execute();
+            $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($resultado != false) {
+                if ($resultado['nombre'] == $nombre) {
+                    // Lanzar una excepción si el dato existe en la BD
+                    throw new Exception("La celula llamada " . $nombre . " ya existe", 422);
+                }
+            }
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+            die();
+        }
+    }
+
+    //Validacion de accion para actualizar reunion o eliminar
+    public function validacion_accion_reunion($arrayAccion)
+    {
+        try {
+            if ($arrayAccion['accion'] == 'eliminar') {
+                $sql = "SELECT * FROM asistencia WHERE asistencia.idReunion = :id";
+                $stmt = $this->db->pdo()->prepare($sql);
+                $stmt->bindValue(":id", $arrayAccion['id']);
+                $stmt->execute();
+                if ($stmt->rowCount() > 0) {
+                    throw new Exception("No puedes eliminar la reunion porque ya se encuentran asistencias registradas.", 422);
+                }
+            }
+
+            if ($arrayAccion['accion'] == 'actualizar') {
+                $sql = "SELECT * FROM reunionconsolidacion WHERE reunionconsolidacion.id = :id";
+                $stmt = $this->db->pdo()->prepare($sql);
+                $stmt->bindValue(":id", $arrayAccion['id']);
+                $stmt->execute();
+                $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                if ($resultado['idCelulaConsolidacion'] != $arrayAccion['idCelulaConsolidacion']) {
+                    $sql2 = "SELECT * FROM asistencia WHERE asistencia.idReunion = :id";
+                    $stmt2 = $this->db->pdo()->prepare($sql2);
+                    $stmt2->bindValue(":id", $arrayAccion['id']);
+                    $stmt2->execute();
+                    if ($stmt2->rowCount() > 0) {
+                        throw new Exception("No puedes cambiar la celula de consolidacion porque ya se encuentran datos de asistencias registradas en la reunion.", 422);
+                    }
+                }
+            }
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+            die();
+        }
+    }
+
+
+    // VALIDAR ANTES DE ELIMINAR O EDITAR
+    public function validacion_accion(int $id, string $accion): void
+    {
+        try {
+
+            $sql = "SELECT * FROM reunioncelula WHERE idCelula= :idCelula AND estatus = 1";
+
+            $stmt = $this->db->pdo()->prepare($sql);
+            $stmt->bindValue(":idCelula", $id);
+            $stmt->execute();
+
+            if ($stmt->rowCount() > 0) {
+                // Lanzar una excepción si el dato existe en la BD
+                if ($accion == 'eliminar') {
+                    throw new Exception("Esta celula esta asociada a reuniones y otro tipo de informacion que podria corromper la integridad de los datos.", 422);
+                }
+                if ($accion == 'actualizar') {
+                    throw new Exception("No puedes cambiar el territorio porque la celula posee datos de reuniones e informacion adicional. Esto podria destruir la integridad de los datos", 422);
+                }
+            }
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+            die();
+        }
+    }
+
+
+
+
+  
+
+   
 
 
 
