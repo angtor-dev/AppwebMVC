@@ -1,7 +1,7 @@
 $(document).ready(function () {
     let dataTable2;
     let choices;
-    let Choices2;
+    let choices2;
 
     const dataTable = $('#celulaDatatables').DataTable({
         responsive: true,
@@ -18,6 +18,7 @@ $(document).ready(function () {
                 defaultContent: `
             <button type="button" id="ver_info" data-bs-toggle="modal" data-bs-target="#modal_verInfo" class="btn btn-secondary">Info</button>
             <button type="button" id="editar" data-bs-toggle="modal" data-bs-target="#modal_editarInfo" class="btn btn-primary">Editar</button>
+            <button type="button" id="asistencias" data-bs-toggle="modal" data-bs-target="#modal_editarAsistencia" class="btn btn-info">Asistencias</button>
             <button type="button" id="eliminar" class="btn btn-danger delete-btn">Eliminar</button>
             `}
                                                                                     
@@ -57,13 +58,13 @@ $(document).ready(function () {
 
     let idReunionAsistencia;
     let idCelulaConsolidacionDatatable;
-    $('#celulaDatatables tbody').on('click', '#asistencia', function () {
+    $('#celulaDatatables tbody').on('click', '#asistencias', function () {
         const datos = dataTable.row($(this).parents()).data();
 
         idReunionAsistencia = datos.id
-        idCelulaConsolidacionDatatable = datos.idCelulaConsolidacion
+        idCelulaConsolidacionDatatable = datos.idCelula
         Listar_asistencia(datos.id)
-        Listar_discipulos_reunion(datos.idCelulaConsolidacion, datos.id)
+        Listar_discipulos_reunion(datos.idCelula, datos.id)
     })
 
 
@@ -189,7 +190,6 @@ $(document).ready(function () {
 
 
     function Listar_discipulos_reunion(idCelulaConsolidacion, idReunion) {
-
         $.ajax({
             type: "GET",
             url: "http://localhost/AppwebMVC/CelulaConsolidacion/Reunion",
@@ -230,6 +230,7 @@ $(document).ready(function () {
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR.responseText);
                 // Aquí puedes manejar errores, por ejemplo:
                 console.error("Error al enviar:", textStatus, errorThrown);
                 alert("Hubo un error al realizar el registro. Por favor, inténtalo de nuevo.");

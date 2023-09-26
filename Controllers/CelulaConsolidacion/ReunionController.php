@@ -92,11 +92,11 @@ if (isset($_GET['listarcelulas'])) {
 
 if (isset($_GET['cargar_discipulos_reunion'])) {
 
-    requierePermisos("actualizarCelulaConsolidacion");
+    //requierePermisos("actualizarCelulaConsolidacion");
 
-    $idCelula = $_GET['idCelula'];
+    $idCelulaConsolidacion = $_GET['idCelulaConsolidacion'];
     $idReunion = $_GET['idReunion'];
-    $resultado = $Celulas->listarAsistencia_reunion($idCelula, $idReunion);
+    $resultado = $Celulas->listarAsistencia_reunion($idCelulaConsolidacion, $idReunion);
 
     echo json_encode($resultado);
     die();

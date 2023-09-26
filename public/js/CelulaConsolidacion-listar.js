@@ -26,10 +26,12 @@ $(document).ready(function () {
             },
             {
                 defaultContent: `
+                <div class="d-flex justify-content-center gap-1">
             <button type="button" id="ver_info" data-bs-toggle="modal" data-bs-target="#modal_verInfo" class="btn btn-secondary">Info</button>
             <button type="button" id="editar" data-bs-toggle="modal" data-bs-target="#modal_editarInfo" class="btn btn-primary">Editar</button>
             <button type="button" id="reunion" data-bs-toggle="modal" data-bs-target="#modal_registroreunion" class="btn btn-info">Reunion</button>
             <button type="button" id="eliminar" class="btn btn-danger delete-btn">Eliminar</button>
+            </div>
             `}
 
         ],
@@ -72,7 +74,7 @@ $(document).ready(function () {
 
     $('#celulaDatatables tbody').on('click', '#reunion', function () {
         const datos = dataTable.row($(this).parents()).data();
-         document.getElementById('idCelulaConsolidacionR').textContent = datos.id;
+        document.getElementById('idCelulaConsolidacionR').textContent = datos.id;
         Listar_discipulos_celula(datos.id);
     })
 
@@ -118,7 +120,7 @@ $(document).ready(function () {
                     error: function (jqXHR, textStatus, errorThrown) {
                         if (jqXHR.responseText) {
                             let jsonResponse = JSON.parse(jqXHR.responseText);
-    
+
                             if (jsonResponse.msj) {
                                 Swal.fire({
                                     icon: 'error',
@@ -162,7 +164,7 @@ $(document).ready(function () {
                 // Destruir la instancia existente si la hay
                 if (choices7) {
                     choices7.destroy();
-                 }
+                }
 
                 // Limpiar el select
                 selector.innerHTML = "";
@@ -176,8 +178,6 @@ $(document).ready(function () {
 
                 });
 
-                
-                
                 choices7 = new Choices(selector, {
                     allowHTML: true,
                     searchEnabled: true,  // Habilita la funcionalidad de búsqueda
@@ -187,6 +187,7 @@ $(document).ready(function () {
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR.responseText);
                 // Aquí puedes manejar errores, por ejemplo:
                 console.error("Error al enviar:", textStatus, errorThrown);
                 alert("Hubo un error al realizar el registro. Por favor, inténtalo de nuevo.");
@@ -266,7 +267,7 @@ $(document).ready(function () {
         })
     }
 
-    
+
 
 
     function Listar_TerritorioEditar(idTerritorio) {
@@ -299,7 +300,7 @@ $(document).ready(function () {
                 if (choices3) {
                     choices3.destroy();
                 }
-                
+
                 choices3 = new Choices(selector, {
                     allowHTML: true,
                     searchEnabled: true,  // Habilita la funcionalidad de búsqueda
@@ -336,20 +337,20 @@ $(document).ready(function () {
 
                 let selector = document.getElementById('idLider');
                 const placeholderOption = document.createElement('option');
-                    placeholderOption.value = '';
-                    placeholderOption.text = 'Seleccione el Lider de Celula';
-                    placeholderOption.disabled = true;
-                    placeholderOption.selected = true;
-                    selector.appendChild(placeholderOption);
+                placeholderOption.value = '';
+                placeholderOption.text = 'Seleccione el Lider de Celula';
+                placeholderOption.disabled = true;
+                placeholderOption.selected = true;
+                selector.appendChild(placeholderOption);
 
                 let selector2 = document.getElementById('idCoLider');
 
                 const placeholderOption2 = document.createElement('option');
-                        placeholderOption2.value = '';
-                        placeholderOption2.text = 'Seleccione el CoLider de las Celula';
-                        placeholderOption2.disabled = true;
-                        placeholderOption2.selected = true;
-                        selector2.appendChild(placeholderOption2);
+                placeholderOption2.value = '';
+                placeholderOption2.text = 'Seleccione el CoLider de las Celula';
+                placeholderOption2.disabled = true;
+                placeholderOption2.selected = true;
+                selector2.appendChild(placeholderOption2);
 
                 data.forEach(item => {
 
@@ -402,7 +403,7 @@ $(document).ready(function () {
         })
     }
 
-    
+
 
 
     function Listar_TerritorioRegistrar() {
@@ -423,11 +424,11 @@ $(document).ready(function () {
                 let selector = document.getElementById('idTerritorio');
 
                 const placeholderOption = document.createElement('option');
-                    placeholderOption.value = '';
-                    placeholderOption.text = 'Selecciona el Territorio';
-                    placeholderOption.disabled = true;
-                    placeholderOption.selected = true;
-                    selector.appendChild(placeholderOption);
+                placeholderOption.value = '';
+                placeholderOption.text = 'Selecciona el Territorio';
+                placeholderOption.disabled = true;
+                placeholderOption.selected = true;
+                selector.appendChild(placeholderOption);
 
                 data.forEach(item => {
 
@@ -442,7 +443,7 @@ $(document).ready(function () {
                 if (choices6) {
                     choices6.destroy();
                 }
-                
+
                 choices6 = new Choices(selector, {
                     allowHTML: true,
                     searchEnabled: true,  // Habilita la funcionalidad de búsqueda
@@ -459,153 +460,153 @@ $(document).ready(function () {
         })
     }
 
-    
 
 
 
- ///////////////////////////// REGISTRAR CELULA ////////////////////////////////
 
- const regexObj = {
+    ///////////////////////////// REGISTRAR CELULA ////////////////////////////////
 
-    nombre: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]{5,50}$/, // Letras, números, espacios, puntos y comas con un máximo de 20 caracteres
-    idLider: /^[1-9]\d*$/, // Números enteros mayores a 0
-    idCoLider: /^[1-9]\d*$/, // Números enteros mayores a 0
-    idTerritorio: /^[1-9]\d*$/, // Números enteros mayores a 0
+    const regexObj = {
 
-};
+        nombre: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]{5,50}$/, // Letras, números, espacios, puntos y comas con un máximo de 20 caracteres
+        idLider: /^[1-9]\d*$/, // Números enteros mayores a 0
+        idCoLider: /^[1-9]\d*$/, // Números enteros mayores a 0
+        idTerritorio: /^[1-9]\d*$/, // Números enteros mayores a 0
 
-const validationStatus = {
-    nombre: false,
-    idLider: false,
-    idCoLider: false,
-    idTerritorio: false
-};
+    };
 
-
-//Validar nombre
-const nombre = document.getElementById("nombre");
-nombre.addEventListener('keyup', (e) => {
-    // Validar nombre
-    if (!regexObj.nombre.test(e.target.value)) {
-        document.getElementById("msj_nombre").classList.remove("d-none");
-        validationStatus.nombre = false;
-    } else {
-        document.getElementById("msj_nombre").classList.add("d-none");
-        validationStatus.nombre = true;
-    }
-})
+    const validationStatus = {
+        nombre: false,
+        idLider: false,
+        idCoLider: false,
+        idTerritorio: false
+    };
 
 
-// Validacion de idLider y idCoLider
-
-const idLider = document.getElementById("idLider");
-const idCoLider = document.getElementById("idCoLider");
-
-idLider.addEventListener('change', (e) => {
-    if (!regexObj.idLider.test(e.target.value) || e.target.value === idCoLider.value) {
-        document.getElementById("msj_idLider").classList.remove("d-none");
-        validationStatus.idLider = false;
-    } else {
-        document.getElementById("msj_idLider").classList.add("d-none");
-        validationStatus.idLider = true;
-    }
-})
-
-idCoLider.addEventListener('change', (e) => {
-    if (!regexObj.idCoLider.test(e.target.value) || e.target.value === idLider.value) {
-        document.getElementById("msj_idCoLider").classList.remove("d-none");
-        validationStatus.idCoLider = false;
-    } else {
-        document.getElementById("msj_idCoLider").classList.add("d-none");
-        validationStatus.idCoLider = true;
-    }
-})
+    //Validar nombre
+    const nombre = document.getElementById("nombre");
+    nombre.addEventListener('keyup', (e) => {
+        // Validar nombre
+        if (!regexObj.nombre.test(e.target.value)) {
+            document.getElementById("msj_nombre").classList.remove("d-none");
+            validationStatus.nombre = false;
+        } else {
+            document.getElementById("msj_nombre").classList.add("d-none");
+            validationStatus.nombre = true;
+        }
+    })
 
 
-// Validar idTerritorio
-const idTerritorio = document.getElementById("idTerritorio");
-idTerritorio.addEventListener('change', (e) => {
-    if (!regexObj.idTerritorio.test(e.target.value)) {
-        document.getElementById("msj_idTerritorio").classList.remove("d-none");
-        validationStatus.idSede = false;
-    } else {
-        document.getElementById("msj_idTerritorio").classList.add("d-none");
-        validationStatus.idTerritorio = true;
-    }
-})
+    // Validacion de idLider y idCoLider
+
+    const idLider = document.getElementById("idLider");
+    const idCoLider = document.getElementById("idCoLider");
+
+    idLider.addEventListener('change', (e) => {
+        if (!regexObj.idLider.test(e.target.value) || e.target.value === idCoLider.value) {
+            document.getElementById("msj_idLider").classList.remove("d-none");
+            validationStatus.idLider = false;
+        } else {
+            document.getElementById("msj_idLider").classList.add("d-none");
+            validationStatus.idLider = true;
+        }
+    })
+
+    idCoLider.addEventListener('change', (e) => {
+        if (!regexObj.idCoLider.test(e.target.value) || e.target.value === idLider.value) {
+            document.getElementById("msj_idCoLider").classList.remove("d-none");
+            validationStatus.idCoLider = false;
+        } else {
+            document.getElementById("msj_idCoLider").classList.add("d-none");
+            validationStatus.idCoLider = true;
+        }
+    })
+
+
+    // Validar idTerritorio
+    const idTerritorio = document.getElementById("idTerritorio");
+    idTerritorio.addEventListener('change', (e) => {
+        if (!regexObj.idTerritorio.test(e.target.value)) {
+            document.getElementById("msj_idTerritorio").classList.remove("d-none");
+            validationStatus.idSede = false;
+        } else {
+            document.getElementById("msj_idTerritorio").classList.add("d-none");
+            validationStatus.idTerritorio = true;
+        }
+    })
 
 
 
-const form = document.getElementById("formulario");
-form.addEventListener("submit", (e) => {
-    e.preventDefault();
+    const form = document.getElementById("formulario");
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
 
-    // Verifica si todos los campos son válidos antes de enviar el formulario
-    if (Object.values(validationStatus).every(status => status === true)) {
-        console.log("Formulario válido. Puedes enviar los datos al servidor");
-        // Aquí puedes agregar el código para enviar el formulario
-        $.ajax({
-            type: "POST",
-            url: "http://localhost/AppwebMVC/CelulaConsolidacion/Index",
-            data: {
+        // Verifica si todos los campos son válidos antes de enviar el formulario
+        if (Object.values(validationStatus).every(status => status === true)) {
+            console.log("Formulario válido. Puedes enviar los datos al servidor");
+            // Aquí puedes agregar el código para enviar el formulario
+            $.ajax({
+                type: "POST",
+                url: "http://localhost/AppwebMVC/CelulaConsolidacion/Index",
+                data: {
 
-                registrar: 'registrar',
-                nombre: nombre.value,
-                idLider: idLider.value,
-                idCoLider: idCoLider.value,
-                idTerritorio: idTerritorio.value
-            },
-            success: function (response) {
-                console.log(response);
-                dataTable.ajax.reload();
+                    registrar: 'registrar',
+                    nombre: nombre.value,
+                    idLider: idLider.value,
+                    idCoLider: idCoLider.value,
+                    idTerritorio: idTerritorio.value
+                },
+                success: function (response) {
+                    console.log(response);
+                    dataTable.ajax.reload();
 
-                let data = JSON.parse(response);
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Registrado Correctamente',
-                    showConfirmButton: false,
-                    timer: 2000,
-                })
+                    let data = JSON.parse(response);
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Registrado Correctamente',
+                        showConfirmButton: false,
+                        timer: 2000,
+                    })
 
-                nombre.value = '';
-                choices4.setChoiceByValue('');
-                choices5.setChoiceByValue('');
-                choices6.setChoiceByValue('');
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                if (jqXHR.responseText) {
-                    let jsonResponse = JSON.parse(jqXHR.responseText);
+                    nombre.value = '';
+                    choices4.setChoiceByValue('');
+                    choices5.setChoiceByValue('');
+                    choices6.setChoiceByValue('');
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    if (jqXHR.responseText) {
+                        let jsonResponse = JSON.parse(jqXHR.responseText);
 
-                    if (jsonResponse.msj) {
-                         Swal.fire({
-                            icon: 'error',
-                            title: 'Denegado',
-                            text: jsonResponse.msj,
-                            showConfirmButton: true,
-                        })
+                        if (jsonResponse.msj) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Denegado',
+                                text: jsonResponse.msj,
+                                showConfirmButton: true,
+                            })
+                        } else {
+                            const respuesta = JSON.stringify(jsonResponse, null, 2)
+                            Swal.fire({
+                                background: 'red',
+                                color: '#fff',
+                                title: respuesta,
+                                showConfirmButton: true,
+                            })
+                        }
                     } else {
-                        const respuesta = JSON.stringify(jsonResponse, null, 2)
-                        Swal.fire({
-                            background: 'red',
-                            color: '#fff',
-                            title: respuesta,
-                            showConfirmButton: true,
-                        })
+                        alert('Error desconocido: ' + textStatus);
                     }
-                } else {
-                    alert('Error desconocido: ' + textStatus);
                 }
-            }
-        });
-    } else {
-        Swal.fire({
-            icon: 'error',
-            title: 'Formulario invalido. Verifique sus datos',
-            showConfirmButton: false,
-            timer: 2000,
-        })
-    }
-});
+            });
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Formulario invalido. Verifique sus datos',
+                showConfirmButton: false,
+                timer: 2000,
+            })
+        }
+    });
 
 
 
@@ -705,7 +706,7 @@ form.addEventListener("submit", (e) => {
                 success: function (response) {
                     console.log(response);
                     let data = JSON.parse(response);
-                    dataTable.ajax.reload(); 
+                    dataTable.ajax.reload();
 
                     Swal.fire({
                         icon: 'success',
@@ -764,14 +765,13 @@ form.addEventListener("submit", (e) => {
 
     const expresiones_regulares2 = {
 
-        tematica: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/, // Letras, números, espacios, puntos y comas con un máximo de 100 caracteres
         semana: /^[1-9]\d*$/, // Números enteros mayores a 0
         generosidad: /^[0-9]+(\.[0-9]{2})?$/,
         infantil: /^[0-9]\d*$/,
         juvenil: /^[0-9]\d*$/,
         adulto: /^[0-9]\d*$/,
-        actividad: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/, // Letras, números, espacios, puntos y comas con un máximo de 100 caracteres
-        observaciones: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/ // Letras, números, espacios, puntos y comas con un máximo de 100 caracteres
+        texto: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/, // Letras, números, espacios, puntos y comas con un máximo de 100 caracteres
+        fecha: /^\d{4}-\d{2}-\d{2}$/
     };
 
     const validationStatus3 = {
@@ -785,91 +785,107 @@ form.addEventListener("submit", (e) => {
     };
 
 
-    const form3 = document.getElementById("formularioReunion");
-
-    form3.addEventListener("submit", (e) => {
-        e.preventDefault();
-
-        const idCelula = document.getElementById('idCelulaConsolidacionR').textContent;
-
-        // Validar fecha
-        const fecha = document.getElementById("fecha").value;
-       /* if (fecha === "") {
+    // Validar fecha
+    const fecha = document.getElementById("fecha");
+    fecha.addEventListener('change', (e) => {
+        // Comprobar que la fecha esté en un formato válido
+        if (!expresiones_regulares2.fecha.test(fecha.value)) {
             document.getElementById("msj_fecha").classList.remove("d-none");
             validationStatus3.fecha = false;
         } else {
-            // Comprobar que la fecha esté en un formato válido
-            if (!expresiones_regulares2.actividad.test(fecha)) {
-                document.getElementById("msj_fecha").classList.remove("d-none");
-                validationStatus3.fecha = false;
-            } else {
-                document.getElementById("msj_fecha").classList.add("d-none");
-                validationStatus3.fecha = true;
-            }
-        }*/
+            document.getElementById("msj_fecha").classList.add("d-none");
+            validationStatus3.fecha = true;
+        }
+    })
 
-        // Validar tematica
-        const tematica = document.getElementById("tematica").value;
-        if (!expresiones_regulares2.tematica.test(tematica)) {
+
+    // Validar tematica
+    const tematica = document.getElementById("tematica");
+    tematica.addEventListener('keyup', (e) => {
+        if (!expresiones_regulares2.texto.test(tematica.value)) {
             document.getElementById("msj_tematica").classList.remove("d-none");
             validationStatus3.tematica = false;
         } else {
             document.getElementById("msj_tematica").classList.add("d-none");
             validationStatus3.tematica = true;
         }
+    })
 
-        // Validar semana
-        const semana = document.getElementById("semana").value;
-        if (!expresiones_regulares2.semana.test(semana)) {
+
+    // Validar semana
+    const semana = document.getElementById("semana");
+    semana.addEventListener('change', (e) => {
+        if (!expresiones_regulares2.semana.test(semana.value)) {
             document.getElementById("msj_semana").classList.remove("d-none");
             validationStatus3.semana = false;
         } else {
             document.getElementById("msj_semana").classList.add("d-none");
             validationStatus3.semana = true;
         }
+    })
 
-        // Validar generosidad
-        const generosidad = document.getElementById("generosidad").value;
-        if (!expresiones_regulares2.generosidad.test(generosidad)) {
+
+    // Validar generosidad
+    const generosidad = document.getElementById("generosidad");
+    generosidad.addEventListener('change', (e) => {
+        if (!expresiones_regulares2.generosidad.test(generosidad.value)) {
             document.getElementById("msj_generosidad").classList.remove("d-none");
             validationStatus3.generosidad = false;
         } else {
             document.getElementById("msj_generosidad").classList.add("d-none");
             validationStatus3.generosidad = true;
         }
+    })
 
-       //Validar asistencia
-       const asistencia = document.querySelector("#discipulos");
-       const selectedValues = Array.from(asistencia.selectedOptions).map(option => option.value);
-       if (selectedValues.length === 0) {
-           document.getElementById("msj_asistencia").classList.remove("d-none");
-           validationStatus3.asistencia= false;
-       } else {
-           document.getElementById("msj_asistencia").classList.add("d-none");
-           validationStatus3.asistencia = true;
-       }
 
-        // Validar actividad
-        const actividad = document.getElementById("actividad").value;
-        if (!expresiones_regulares2.actividad.test(actividad)) {
+    //Validar asistencia
+    const asistencia = document.querySelector("#discipulos");
+    let selectedValues;
+    asistencia.addEventListener('change', (e) => {
+        selectedValues = Array.from(asistencia.selectedOptions).map(option => option.value);
+        if (selectedValues.length === 0) {
+            document.getElementById("msj_discipulos").classList.remove("d-none");
+            validationStatus3.asistencia = false;
+        } else {
+            document.getElementById("msj_discipulos").classList.add("d-none");
+            validationStatus3.asistencia = true;
+        }
+    })
+
+
+    // Validar actividad
+    const actividad = document.getElementById("actividad");
+    actividad.addEventListener('keyup', (e) => {
+        if (!expresiones_regulares2.texto.test(actividad.value)) {
             document.getElementById("msj_actividad").classList.remove("d-none");
             validationStatus3.actividad = false;
         } else {
             document.getElementById("msj_actividad").classList.add("d-none");
             validationStatus3.actividad = true;
         }
+    })
 
-        // Validar observaciones
-        const observaciones = document.getElementById("observaciones").value;
-        if (!expresiones_regulares2.observaciones.test(observaciones)) {
-            document.getElementById("msj_juvenil").classList.remove("d-none");
+
+    // Validar observaciones
+    const observaciones = document.getElementById("observaciones");
+    observaciones.addEventListener('keyup', (e) => {
+        if (!expresiones_regulares2.texto.test(observaciones.value)) {
+            document.getElementById("msj_observaciones").classList.remove("d-none");
             validationStatus3.observaciones = false;
         } else {
             document.getElementById("msj_observaciones").classList.add("d-none");
             validationStatus3.observaciones = true;
         }
+    })
 
 
+
+    const form3 = document.getElementById("formularioReunion");
+
+    form3.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const idCelula = document.getElementById('idCelulaConsolidacionR').textContent;
 
         // Verifica si todos los campos son válidos antes de enviar el formulario
         if (Object.values(validationStatus3).every(status => status === true)) {
@@ -881,13 +897,13 @@ form.addEventListener("submit", (e) => {
 
                     registroreunion: 'registroreunion',
                     idCelula: idCelula,
-                    fecha: fecha,
-                    tematica: tematica,
-                    semana: semana,
-                    generosidad: generosidad,
+                    fecha: fecha.value,
+                    tematica: tematica.value,
+                    semana: semana.value,
+                    generosidad: generosidad.value,
                     selectedValues: selectedValues,
-                    actividad: actividad,
-                    observaciones: observaciones
+                    actividad: actividad.value,
+                    observaciones: observaciones.value
                 },
                 success: function (response) {
 
@@ -903,7 +919,12 @@ form.addEventListener("submit", (e) => {
                         timer: 2000,
                     })
 
-                    form3.reset()
+                    Object.keys(validationStatus3).forEach((key) => {
+                        validationStatus3[key] = true;
+                    });
+
+                    document.getElementById("formularioReunion").reset();
+                    Listar_discipulos_celula(idCelula);
 
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -911,7 +932,7 @@ form.addEventListener("submit", (e) => {
                         let jsonResponse = JSON.parse(jqXHR.responseText);
 
                         if (jsonResponse.msj) {
-                             Swal.fire({
+                            Swal.fire({
                                 icon: 'error',
                                 title: 'Denegado',
                                 text: jsonResponse.msj,

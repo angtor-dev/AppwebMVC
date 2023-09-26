@@ -213,7 +213,7 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
                             <i class="fa-solid fa-pen-to-square fa-fw"></i>
                             Registrar
                         </a>
-                        <a href="<?= LOCAL_DIR ?>Discipulos/Listar" class="nav-link">
+                        <a href="<?= LOCAL_DIR ?>Discipulos" class="nav-link">
                             <i class="fa-solid fa-rectangle-list fa-fw"></i>
                             Listar
                         </a>
