@@ -1,22 +1,20 @@
 $(document).ready(function () {
 
-    let choices;
-
     const dataTable = $('#sedeDatatables').DataTable({
-      responsive: true,
-      ajax: {
-        method: "GET",
-        url: 'http://localhost/AppwebMVC/Discipulos/Index',
-        data: { cargar_data: 'cargar_data' }
-      },
-      columns: [
-        { data: 'cedula' },
-        { data: 'nombre' },
-        { data: 'apellido' },
-        { data: 'codigo' },
-        { data: 'asistencias'},
-        {
-          defaultContent: `
+        responsive: true,
+        ajax: {
+            method: "GET",
+            url: 'http://localhost/AppwebMVC/Discipulos/Index',
+            data: { cargar_data: 'cargar_data' }
+        },
+        columns: [
+            { data: 'cedula' },
+            { data: 'nombre' },
+            { data: 'apellido' },
+            { data: 'codigo' },
+            { data: 'asistencias' },
+            {
+                defaultContent: `
               <button type="button" id="ver_info" data-bs-toggle="modal" data-bs-target="#modal_verInfo" class="btn btn-secondary">Info</button>
               <button type="button" id="editar" data-bs-toggle="modal" data-bs-target="#modal_editarInfo" class="btn btn-primary">Editar</button>
               <button type="button" id="eliminar" class="btn btn-danger delete-btn">Eliminar</button>
@@ -25,8 +23,8 @@ $(document).ready(function () {
     })
 
     $('#registrar').on('click', function () {
-        Listar_Consolidador('');
-        Listar_celulas('');
+        Listar_Consolidador('', 1);
+        Listar_celulas('', 1);
     })
 
     $('#sedeDatatables tbody').on('click', '#ver_info', function () {
@@ -56,20 +54,20 @@ $(document).ready(function () {
         const datos = dataTable.row($(this).parents()).data();
 
         document.getElementById('idDiscipulo').textContent = datos.id;
-        document.getElementById('nombre').value = datos.nombre;
-        document.getElementById('apellido').value = datos.apellido;
-        document.getElementById('cedula').value = datos.cedula;
-        document.getElementById('telefono').value = datos.telefono;
-        document.getElementById('estadoCivil').value = datos.estadoCivil;
-        document.getElementById('fechaNacimiento').value = datos.fechaNacimiento;
-        document.getElementById('fechaConvercion').value = datos.fechaConvercion;
-        document.getElementById('asisFamiliar').checked = datos.asisFamiliar == 'si' ? true : false;
-        document.getElementById('asisCrecimiento').checked = datos.asisCrecimiento == 'si' ? true : false;
-        document.getElementById('direccion').value = datos.direccion;
-        document.getElementById('motivo').value = datos.motivo;
+        document.getElementById('nombre2').value = datos.nombre;
+        document.getElementById('apellido2').value = datos.apellido;
+        document.getElementById('cedula2').value = datos.cedula;
+        document.getElementById('telefono2').value = datos.telefono;
+        document.getElementById('estadoCivil2').value = datos.estadoCivil;
+        document.getElementById('fechaNacimiento2').value = datos.fechaNacimiento;
+        document.getElementById('fechaConvercion2').value = datos.fechaConvercion;
+        document.getElementById('asisFamiliar2').checked = datos.asisFamiliar == 'si' ? true : false;
+        document.getElementById('asisCrecimiento2').checked = datos.asisCrecimiento == 'si' ? true : false;
+        document.getElementById('direccion2').value = datos.direccion;
+        document.getElementById('motivo2').value = datos.motivo;
 
-        Listar_Consolidador(datos.idConsolidador);
-        Listar_celulas(datos.idCelulaConsolidacion);
+        Listar_Consolidador(datos.idConsolidador, 2);
+        Listar_celulas(datos.idCelulaConsolidacion, 2);
     })
 
     $('#sedeDatatables tbody').on('click', '#eliminar', function () {
@@ -115,7 +113,7 @@ $(document).ready(function () {
                     error: function (jqXHR, textStatus, errorThrown) {
                         if (jqXHR.responseText) {
                             let jsonResponse = JSON.parse(jqXHR.responseText);
-    
+
                             if (jsonResponse.msj) {
                                 Swal.fire({
                                     icon: 'error',
@@ -137,7 +135,7 @@ $(document).ready(function () {
                         }
                     }
                 })
-            } 
+            }
         });
     });
 
@@ -146,7 +144,7 @@ $(document).ready(function () {
     let choices1;
     let choices2;
 
-    function Listar_Consolidador(idConsolidador) {
+    function Listar_Consolidador(idConsolidador, opcion) {
 
         $.ajax({
             type: "GET",
@@ -160,7 +158,13 @@ $(document).ready(function () {
                 console.log(response);
                 let data = JSON.parse(response);
 
-                let selector = document.getElementById('idConsolidador');
+                let selector;
+                if (opcion == 1) {
+                    selector = document.getElementById('idConsolidador');
+                }else{
+                    selector = document.getElementById('idConsolidador2');
+                }
+                
 
                 data.forEach(item => {
 
@@ -185,7 +189,7 @@ $(document).ready(function () {
                 if (idConsolidador !== '') {
                     choices1.setChoiceByValue(idConsolidador.toString())
                 }
-                
+
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -198,7 +202,7 @@ $(document).ready(function () {
 
 
 
-    function Listar_celulas(idCelulaConsolidacion) {
+    function Listar_celulas(idCelulaConsolidacion, opcion) {
 
         $.ajax({
             type: "GET",
@@ -212,7 +216,13 @@ $(document).ready(function () {
 
                 let data = JSON.parse(response);
 
-                let selector = document.getElementById('idcelulaconsolidacion');
+                let selector;
+                if (opcion == 1) {
+                    selector = document.getElementById('idCelulaConsolidacion');
+                }else{
+                    selector = document.getElementById('idCelulaConsolidacion2');
+                }
+                
 
                 data.forEach(item => {
 
@@ -237,7 +247,7 @@ $(document).ready(function () {
                 if (idCelulaConsolidacion !== '') {
                     choices2.setChoiceByValue(idCelulaConsolidacion.toString())
                 }
-                
+
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -464,12 +474,12 @@ $(document).ready(function () {
             let asisCrecimiento
             if (document.getElementById('asisFamiliar').checked == true) {
                 asisFamiliar = 'si'
-            }else{
+            } else {
                 asisFamiliar = 'no'
             }
             if (document.getElementById('asisCrecimiento').checked == true) {
                 asisCrecimiento = 'si'
-            }else{
+            } else {
                 asisCrecimiento = 'no'
             }
             let nombre = $("#nombre").val();
@@ -525,7 +535,7 @@ $(document).ready(function () {
                         let jsonResponse = JSON.parse(jqXHR.responseText);
 
                         if (jsonResponse.msj) {
-                             Swal.fire({
+                            Swal.fire({
                                 icon: 'error',
                                 title: 'Denegado',
                                 text: jsonResponse.msj,
@@ -775,6 +785,7 @@ $(document).ready(function () {
 
 
     /////////////////////////////// REGISTRAR DISCIPULOS ///////////////////////////////////
+
     $("#formulario").submit(function (event) {
         event.preventDefault();
 
@@ -786,13 +797,13 @@ $(document).ready(function () {
 
             if (document.getElementById('asisCrecimiento').checked) {
                 asisCrecimiento = 'si'
-            }else{
+            } else {
                 asisCrecimiento = 'no'
             }
 
             if (document.getElementById('asisFamiliar').checked) {
                 asisFamiliar = 'si'
-            }else{
+            } else {
                 asisFamiliar = 'no'
             }
 
@@ -840,19 +851,9 @@ $(document).ready(function () {
                         timer: 2000,
                     })
 
-                    document.getElementById('nombre').value = ''
-                    document.getElementById('apellido').value = ''
-                    document.getElementById('cedula').value = ''
-                    document.getElementById('telefono').value = ''
-                    document.getElementById('estadoCivil').value = ''
-                    document.getElementById('fechaNacimiento').value = ''
-                    document.getElementById('fechaConvercion').value = ''
-                    document.getElementById('direccion').value = ''
-                    document.getElementById('motivo').value = ''
-                    asisCrecimiento.checked = false
-                    asisFamiliar.checked = false
-                    choices1.setChoiceByValue('')
-                    choices2.setChoiceByValue('')
+                    document.getElementById('formulario').reset()
+                    Listar_Consolidador('');
+                    Listar_celulas('');
 
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -860,7 +861,7 @@ $(document).ready(function () {
                         let jsonResponse = JSON.parse(jqXHR.responseText);
 
                         if (jsonResponse.msj) {
-                             Swal.fire({
+                            Swal.fire({
                                 icon: 'error',
                                 title: 'Denegado',
                                 text: jsonResponse.msj,

@@ -4,7 +4,7 @@ require_once "Models/Sede.php";
 
 necesitaAutenticacion();
 
-requierePermiso("sedes", "listar");
+requierePermiso("sedes", "registrar");
 
 $usuarioSesion = $_SESSION['usuario'];
 

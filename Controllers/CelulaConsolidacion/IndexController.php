@@ -39,7 +39,7 @@ if (isset($_POST['registrar'])) {
 
     requierePermiso("celulaConsolidacion", "actualizar");
 
-    $id = $_POST['id'];
+    $tipo =  trim(strtolower('consolidacion'));
     $nombre = trim(strtolower($_POST['nombre']));
     $idLider = trim($_POST['idLider']);
     $idCoLider = trim($_POST['idCoLider']);
