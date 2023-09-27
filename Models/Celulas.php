@@ -43,7 +43,7 @@ class Celulas extends Model
                     case 'consolidacion':
                         $identificador = 'CCO' . $id;
                         break;
-                    
+
                     case 'crecimiento':
                         $identificador = 'CCR' . $id;
                         break;
@@ -86,11 +86,11 @@ class Celulas extends Model
                         case 'consolidacion':
                             $identificador = 'CCO' . $contador;
                             break;
-                        
+
                         case 'crecimiento':
                             $identificador = 'CCR' . $contador;
                             break;
-    
+
                         case 'familiar':
                             $identificador = 'CFA' . $contador;
                             break;
@@ -100,16 +100,16 @@ class Celulas extends Model
 
                 } else {
                     $contador = 1;
-                    
+
                     switch ($tipo) {
                         case 'consolidacion':
                             $identificador = 'CCO' . $contador;
                             break;
-                        
+
                         case 'crecimiento':
                             $identificador = 'CCR' . $contador;
                             break;
-    
+
                         case 'familiar':
                             $identificador = 'CFA' . $contador;
                             break;
@@ -159,7 +159,6 @@ class Celulas extends Model
             http_response_code(200);
             echo json_encode(array('msj' => 'Celula registrada exitosamente', 'status' => 200));
             die();
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -209,7 +208,6 @@ class Celulas extends Model
             Bitacora::registrar("Consulta de celula familiar");
 
             return $resultado;
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -237,7 +235,7 @@ class Celulas extends Model
             CoLider.cedula AS cedulaCoLider,
             celulas.id,
             celulas.idLider,
-            celulas.idCoLider
+            celulas.idCoLider,
             celulas.idTerritorio,
             celulas.codigo,
             celulas.nombre,
@@ -252,11 +250,10 @@ class Celulas extends Model
 
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-            Bitacora::registrar("Consulta de celula de Crecimiento");
+            /** @var Bitacora **/
+            Bitacora::registrar("Consulta de celula crecimiento");
 
             return $resultado;
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -283,7 +280,7 @@ class Celulas extends Model
             CoLider.cedula AS cedulaCoLider,
             celulas.id,
             celulas.idLider,
-            celulas.idCoLider
+            celulas.idCoLider,
             celulas.idTerritorio,
             celulas.codigo,
             celulas.nombre,
@@ -298,11 +295,10 @@ class Celulas extends Model
 
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-            Bitacora::registrar("Consulta de celula de Consolidacion");
+            /** @var Bitacora **/
+            Bitacora::registrar("Consulta de celula consolidacion");
 
             return $resultado;
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -360,7 +356,7 @@ class Celulas extends Model
                         // Extraer el número del identificador (eliminar la "CFA")
                         // Extraer el número del identificador (eliminar la "CCO")
                         // Extraer el número del identificador (eliminar la "CCR")
-                        $numero = (int) substr($resultado->identificador, 3);
+                        $numero = (int) substr($resultado['identificador'], 3);
                         $numeros[] = $numero;
                     }
                     // Encontrar el número más grande en el array
@@ -372,11 +368,11 @@ class Celulas extends Model
                         case 'consolidacion':
                             $identificador = 'CCO' . $contador;
                             break;
-                        
+
                         case 'crecimiento':
                             $identificador = 'CCR' . $contador;
                             break;
-    
+
                         case 'familiar':
                             $identificador = 'CFA' . $contador;
                             break;
@@ -390,11 +386,11 @@ class Celulas extends Model
                         case 'consolidacion':
                             $identificador = 'CCO' . $contador;
                             break;
-                        
+
                         case 'crecimiento':
                             $identificador = 'CCR' . $contador;
                             break;
-    
+
                         case 'familiar':
                             $identificador = 'CFA' . $contador;
                             break;
@@ -416,12 +412,12 @@ class Celulas extends Model
 
                 $stmt->execute();
             }
-            Bitacora::registrar("Actualizacion de celula familiar");
+            /** @var Bitacora **/
+            //Bitacora::registrar("Actualizacion de celula familiar");
 
             http_response_code(200);
             echo json_encode(array('msj' => 'Celula actualizada exitosamente', 'status' => 200));
             die();
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -455,7 +451,6 @@ class Celulas extends Model
             http_response_code(200);
             echo json_encode(array('msj' => 'Celula eliminada correctamente'));
             die();
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -468,36 +463,77 @@ class Celulas extends Model
         }
     }
 
-    public function registrar_reunion($idCelula, $fecha, $tematica, $semana, $generosidad, $infantil, $juvenil, $adulto, $actividad, $observaciones)
+    public function registrar_reunion($idCelula, $fecha, $tematica, $semana, $generosidad, $infantil, $juvenil, $adulto, $actividad, $observaciones, $arrayAsistencias)
     {
 
         try {
 
-        if (empty($infantil) && empty($juvenil) && empty($adulto)) {
+            //Condicional para verificar si es una reunion de Celula de Consolidacion.
+            if (empty($infantil) && empty($juvenil) && empty($adulto)) {
 
-            $sql = "INSERT INTO reunioncelula (idCelula, fecha, tematica, semana, generosidad, actividad, observaciones) 
-        VALUES (:idCelula, :fecha, :tematica, :semana, :generosidad, :actividad, :observaciones)";
+                $sql = "INSERT INTO reunioncelula (idCelula, fecha, tematica, semana, generosidad, actividad, observaciones) 
+                VALUES (:idCelula, :fecha, :tematica, :semana, :generosidad, :actividad, :observaciones)";
 
-            $stmt = $this->db->pdo()->prepare($sql);
-        
-            $stmt->bindValue(':idCelula', $idCelula);
-            $stmt->bindValue(':fecha', $fecha);
-            $stmt->bindValue(':tematica', $tematica);
-            $stmt->bindValue(':semana', $semana);
-            $stmt->bindValue(':generosidad', $generosidad);
-            $stmt->bindValue(':actividad', $actividad);
-            $stmt->bindValue(':observaciones', $observaciones);
+                $stmt = $this->db->pdo()->prepare($sql);
 
-            $stmt->execute();
+                $stmt->bindValue(':idCelula', $idCelula);
+                $stmt->bindValue(':fecha', $fecha);
+                $stmt->bindValue(':tematica', $tematica);
+                $stmt->bindValue(':semana', $semana);
+                $stmt->bindValue(':generosidad', $generosidad);
+                $stmt->bindValue(':actividad', $actividad);
+                $stmt->bindValue(':observaciones', $observaciones);
 
-        } else {
+                $stmt->execute();
+
+                //Registrando las asistencias
+                $consulta = "SELECT id FROM reunioncelula ORDER BY id DESC LIMIT 1";
+                $stmt2 = $this->db->pdo()->prepare($consulta);
+                $stmt2->execute();
+
+                if ($stmt2->rowCount() > 0) {
+                    $resultado = $stmt2->fetch(PDO::FETCH_ASSOC);
+                    $idReunion = $resultado['id'];
+
+                    foreach ($arrayAsistencias as $values) {
+                        $sql2 = "INSERT INTO `asistencia` (`idReunion`, `idDiscipulo`) VALUES (:idReunion, :idDiscipulo)";
+                        $stmt3 = $this->db->pdo()->prepare($sql2);
+
+                        $stmt3->bindValue(':idReunion', $idReunion);
+                        $stmt3->bindValue(':idDiscipulo', $values);
+
+                        $stmt3->execute();
 
 
-            $sql = "INSERT INTO reunioncelula (idCelula, fecha, tematica, semana, generosidad, infantil, juvenil, adulto, actividad, observaciones) 
-            VALUES (:idCelula, :fecha, :tematica, :semana, :generosidad, :infantil, :juvenil, :adulto, :actividad, :observaciones)";
-    
-                $stmt = $this->db->pdo()->prepare($sql);        
-    
+                        //Esta es una version solamente, se podria ahcer de una forma mas dinamica (OJO)
+
+                        /* Logica para verificar que al momento de registrar la asistencia, cuente si el discipulo
+                           cuenta con la cantidad de 5 asistencias para ser aprobado su estatus de crearle un usuario */
+                        $consultaSql = "SELECT * FROM asistencia WHERE idDiscipulo = :idDiscipulo AND idReunion = :idReunion";
+                        $stmt4 = $this->db->pdo()->prepare($consultaSql);
+                        $stmt4->bindValue(':idReunion', $idReunion);
+                        $stmt4->bindValue(':idDiscipulo', $values);
+
+                        $stmt4->execute();
+
+                        // Si la cuenta de la consulta es igual a 5, entonces este sera aprobado. Del resto, no hara nada
+                        if ($stmt4->rowCount() == 5) {
+                            $update = "UPDATE `discipulo` SET `aprobarUsuario` = '1' WHERE `discipulo`.`id` = :idDiscipulo";
+                            $stmt5 = $this->db->pdo()->prepare($update);
+                            $stmt5->bindValue(':idDiscipulo', $values);
+
+                            $stmt5->execute();
+                        }
+                    }
+                }
+            } else {
+
+
+                $sql = "INSERT INTO reunioncelula (idCelula, fecha, tematica, semana, generosidad, infantil, juvenil, adulto, actividad, observaciones) 
+                VALUES (:idCelula, :fecha, :tematica, :semana, :generosidad, :infantil, :juvenil, :adulto, :actividad, :observaciones)";
+
+                $stmt = $this->db->pdo()->prepare($sql);
+
                 $stmt->bindValue(':idCelula', $idCelula);
                 $stmt->bindValue(':fecha', $fecha);
                 $stmt->bindValue(':tematica', $tematica);
@@ -508,10 +544,9 @@ class Celulas extends Model
                 $stmt->bindValue(':adulto', $adulto);
                 $stmt->bindValue(':actividad', $actividad);
                 $stmt->bindValue(':observaciones', $observaciones);
-    
-                $stmt->execute();
 
-        }
+                $stmt->execute();
+            }
 
             Bitacora::registrar("Registro de reunion de celula");
 
@@ -617,7 +652,6 @@ class Celulas extends Model
             Bitacora::registrar("Consulta de reuniones de celula familiar");
 
             return $resultado;
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -663,7 +697,6 @@ class Celulas extends Model
             Bitacora::registrar("Consulta de reuniones de celula Crecimiento");
 
             return $resultado;
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -705,7 +738,6 @@ class Celulas extends Model
             Bitacora::registrar("Consulta de reuniones de celula Consolidacion");
 
             return $resultado;
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -727,7 +759,7 @@ class Celulas extends Model
 
             if (empty($infantil) && empty($juvenil) && empty($adulto)) {
 
-            $sql = "UPDATE reunioncelula
+                $sql = "UPDATE reunioncelula
                 SET
                 idCelula = :idCelula,
                 fecha = :fecha,
@@ -738,19 +770,18 @@ class Celulas extends Model
                 observaciones = :observaciones
                 WHERE id = :id";
 
-            $stmt = $this->db->pdo()->prepare($sql);
+                $stmt = $this->db->pdo()->prepare($sql);
 
-            $stmt->bindValue(':id', $id);
-            $stmt->bindValue(':idCelula', $idCelula);
-            $stmt->bindValue(':fecha', $fecha);
-            $stmt->bindValue(':tematica', $tematica);
-            $stmt->bindValue(':semana', $semana);
-            $stmt->bindValue(':generosidad', $generosidad);
-            $stmt->bindValue(':actividad', $actividad);
-            $stmt->bindValue(':observaciones', $observaciones);
+                $stmt->bindValue(':id', $id);
+                $stmt->bindValue(':idCelula', $idCelula);
+                $stmt->bindValue(':fecha', $fecha);
+                $stmt->bindValue(':tematica', $tematica);
+                $stmt->bindValue(':semana', $semana);
+                $stmt->bindValue(':generosidad', $generosidad);
+                $stmt->bindValue(':actividad', $actividad);
+                $stmt->bindValue(':observaciones', $observaciones);
 
-            $stmt->execute();
-
+                $stmt->execute();
             } else {
 
                 $sql = "UPDATE reunioncelula
@@ -767,23 +798,21 @@ class Celulas extends Model
                 observaciones = :observaciones
                 WHERE id = :id";
 
-            $stmt = $this->db->pdo()->prepare($sql);
+                $stmt = $this->db->pdo()->prepare($sql);
 
-            $stmt->bindValue(':id', $id);
-            $stmt->bindValue(':idCelula', $idCelula);
-            $stmt->bindValue(':fecha', $fecha);
-            $stmt->bindValue(':tematica', $tematica);
-            $stmt->bindValue(':semana', $semana);
-            $stmt->bindValue(':generosidad', $generosidad);
-            $stmt->bindValue(':infantil', $infantil);
-            $stmt->bindValue(':juvenil', $juvenil);
-            $stmt->bindValue(':adulto', $adulto);
-            $stmt->bindValue(':actividad', $actividad);
-            $stmt->bindValue(':observaciones', $observaciones);
+                $stmt->bindValue(':id', $id);
+                $stmt->bindValue(':idCelula', $idCelula);
+                $stmt->bindValue(':fecha', $fecha);
+                $stmt->bindValue(':tematica', $tematica);
+                $stmt->bindValue(':semana', $semana);
+                $stmt->bindValue(':generosidad', $generosidad);
+                $stmt->bindValue(':infantil', $infantil);
+                $stmt->bindValue(':juvenil', $juvenil);
+                $stmt->bindValue(':adulto', $adulto);
+                $stmt->bindValue(':actividad', $actividad);
+                $stmt->bindValue(':observaciones', $observaciones);
 
-            $stmt->execute();
-
-
+                $stmt->execute();
             }
 
             Bitacora::registrar("Actualización de reunion de Celula");
@@ -791,7 +820,6 @@ class Celulas extends Model
             http_response_code(200);
             echo json_encode(array('msj' => 'Reunion actualizada correctamente', 'status' => 200));
             die();
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -860,68 +888,21 @@ class Celulas extends Model
         }
     }
 
-
-
-
-
-    ///////////////////////////////// ESPACIO PARA VALIDACIONES //////////////////////////////////
-
-
-    public function validacion_datos(string $nombre, array $idArray): void
-    {
-        try {
-            // Utilizar preg_match para validar el string contra la expresión regular
-            if (!preg_match($this->expresion_nombre, $nombre)) {
-                // Lanzar una excepción si el string no es válido
-                throw new Exception("El nombre que ingresaste no cumple con los requisitos. Ingrese nuevamente", 422);
-            }
-
-            foreach ($idArray as $key) {
-                if (!preg_match($this->expresion_id, $key)) {
-                    // Lanzar una excepción si el string no es válido
-                    throw new Exception("El ID no cumple con los requisitos. Seleccione nuevamente", 422);
-                }
-            }
-        } catch (Exception $e) {
-            http_response_code($e->getCode());
-            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
-            die();
-        }
-    }
-
-    public function validacion_existencia(string $nombre, $id): void
-    {
-        try {
-            $sql = "SELECT * FROM celulas WHERE nombre = :nombre" . (!empty($id) ? " AND id != $id" : "");
-            $stmt = $this->db->pdo()->prepare($sql);
-            $stmt->bindValue(":nombre", $nombre);
-            $stmt->execute();
-            $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            if ($resultado != false) {
-                if ($resultado['nombre'] == $nombre) {
-                    // Lanzar una excepción si el dato existe en la BD
-                    throw new Exception("La celula llamada " . $nombre . " ya existe", 422);
-                }
-            }
-        } catch (Exception $e) {
-            http_response_code($e->getCode());
-            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
-            die();
-        }
-    }
-
-
     public function listarDiscipulados_celula($idCelula)
     {
         try {
 
-            $sql = "SELECT * FROM discipulo WHERE idCelula= :idCelula";
+            $sql = "SELECT * FROM discipulo WHERE idCelulaConsolidacion= :idCelulaConsolidacion";
             $stmt = $this->db->pdo()->prepare($sql);
-            $stmt->bindValue(":idCelula", $idCelula);
+            $stmt->bindValue(":idCelulaConsolidacion", $idCelula);
             $stmt->execute();
-            $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $resultado;
+
+            if ($stmt->rowCount() > 0) {
+                $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                return $resultado;
+            } else {
+                return array();
+            }
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -932,6 +913,9 @@ class Celulas extends Model
             die();
         }
     }
+
+
+
 
 
     public function listar_asistencia($idReunion)
@@ -967,36 +951,6 @@ class Celulas extends Model
             die();
         }
     }
-
-
-
-    // VALIDAR ANTES DE ELIMINAR O EDITAR
-    public function validacion_accion(int $id, string $accion): void
-    {
-        try {
-
-            $sql = "SELECT * FROM reunioncelula WHERE idCelula= :idCelula AND estatus = 1";
-
-            $stmt = $this->db->pdo()->prepare($sql);
-            $stmt->bindValue(":idCelula", $id);
-            $stmt->execute();
-
-            if ($stmt->rowCount() > 0) {
-                // Lanzar una excepción si el dato existe en la BD
-                if ($accion == 'eliminar') {
-                    throw new Exception("Esta celula esta asociada a reuniones y otro tipo de informacion que podria corromper la integridad de los datos.", 422);
-                }
-                if ($accion == 'actualizar') {
-                    throw new Exception("No puedes cambiar el territorio porque la celula posee datos de reuniones e informacion adicional. Esto podria destruir la integridad de los datos", 422);
-                }
-            }
-        } catch (Exception $e) {
-            http_response_code($e->getCode());
-            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
-            die();
-        }
-    }
-
 
     public function listarAsistencia_reunion($idCelulaConsolidacion, $idReunion)
     {
@@ -1078,7 +1032,6 @@ class Celulas extends Model
             http_response_code(200);
             echo json_encode(array('msj' => 'Asistencias actualizadas correctamente'));
             die();
-            
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -1089,6 +1042,130 @@ class Celulas extends Model
             die();
         }
     }
+
+
+
+
+    ///////////////////////////////// ESPACIO PARA VALIDACIONES //////////////////////////////////
+
+    public function validacion_datos(string $nombre, array $idArray): void
+    {
+        try {
+            // Utilizar preg_match para validar el string contra la expresión regular
+            if (!preg_match($this->expresion_nombre, $nombre)) {
+                // Lanzar una excepción si el string no es válido
+                throw new Exception("El nombre que ingresaste no cumple con los requisitos. Ingrese nuevamente", 422);
+            }
+
+            foreach ($idArray as $key) {
+                if (!preg_match($this->expresion_id, $key)) {
+                    // Lanzar una excepción si el string no es válido
+                    throw new Exception("El ID no cumple con los requisitos. Seleccione nuevamente", 422);
+                }
+            }
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+            die();
+        }
+    }
+
+
+
+
+    public function validacion_existencia(string $nombre, $id): void
+    {
+        try {
+            $sql = "SELECT * FROM celulas WHERE nombre = :nombre" . (!empty($id) ? " AND id != $id" : "");
+            $stmt = $this->db->pdo()->prepare($sql);
+            $stmt->bindValue(":nombre", $nombre);
+            $stmt->execute();
+            $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($resultado != false) {
+                if ($resultado['nombre'] == $nombre) {
+                    // Lanzar una excepción si el dato existe en la BD
+                    throw new Exception("La celula llamada " . $nombre . " ya existe", 422);
+                }
+            }
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+            die();
+        }
+    }
+
+    //Validacion de accion para actualizar reunion o eliminar
+    public function validacion_accion_reunion($arrayAccion)
+    {
+        try {
+            if ($arrayAccion['accion'] == 'eliminar') {
+                $sql = "SELECT * FROM asistencia WHERE asistencia.idReunion = :id";
+                $stmt = $this->db->pdo()->prepare($sql);
+                $stmt->bindValue(":id", $arrayAccion['id']);
+                $stmt->execute();
+                if ($stmt->rowCount() > 0) {
+                    throw new Exception("No puedes eliminar la reunion porque ya se encuentran asistencias registradas.", 422);
+                }
+            }
+
+            if ($arrayAccion['accion'] == 'actualizar') {
+                $sql = "SELECT * FROM reunionconsolidacion WHERE reunionconsolidacion.id = :id";
+                $stmt = $this->db->pdo()->prepare($sql);
+                $stmt->bindValue(":id", $arrayAccion['id']);
+                $stmt->execute();
+                $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                if ($resultado['idCelulaConsolidacion'] != $arrayAccion['idCelulaConsolidacion']) {
+                    $sql2 = "SELECT * FROM asistencia WHERE asistencia.idReunion = :id";
+                    $stmt2 = $this->db->pdo()->prepare($sql2);
+                    $stmt2->bindValue(":id", $arrayAccion['id']);
+                    $stmt2->execute();
+                    if ($stmt2->rowCount() > 0) {
+                        throw new Exception("No puedes cambiar la celula de consolidacion porque ya se encuentran datos de asistencias registradas en la reunion.", 422);
+                    }
+                }
+            }
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+            die();
+        }
+    }
+
+
+    // VALIDAR ANTES DE ELIMINAR O EDITAR
+    public function validacion_accion(int $id, string $accion): void
+    {
+        try {
+
+            $sql = "SELECT * FROM reunioncelula WHERE idCelula= :idCelula AND estatus = 1";
+
+            $stmt = $this->db->pdo()->prepare($sql);
+            $stmt->bindValue(":idCelula", $id);
+            $stmt->execute();
+
+            if ($stmt->rowCount() > 0) {
+                // Lanzar una excepción si el dato existe en la BD
+                if ($accion == 'eliminar') {
+                    throw new Exception("Esta celula esta asociada a reuniones y otro tipo de informacion que podria corromper la integridad de los datos.", 422);
+                }
+                if ($accion == 'actualizar') {
+                    throw new Exception("No puedes cambiar el territorio porque la celula posee datos de reuniones e informacion adicional. Esto podria destruir la integridad de los datos", 422);
+                }
+            }
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+            die();
+        }
+    }
+
+
+
+
+
+
 
 
 
@@ -1113,7 +1190,6 @@ class Celulas extends Model
             if (!preg_match($this->expresion_fecha, $fecha) || !checkdate(substr($fecha, 5, 2), substr($fecha, 8, 2), substr($fecha, 0, 4))) {
                 throw new Exception("La fecha no tiene el formato correcto o no es válida.", 422);
             }
-
         } catch (Exception $e) {
             http_response_code($e->getCode());
             echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));

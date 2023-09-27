@@ -1,17 +1,17 @@
 <?php
-require_once "Models/CelulaConsolidacion.php";
+require_once "Models/Celulas.php";
 
 necesitaAutenticacion();
 
 requierePermiso("celulaConsolidacion", "registrar");
 
-$CelulaConsolidacion = new CelulaConsolidacion();
+$Celulas = new Celulas();
 
 
 
 if (isset($_GET['cargar_data'])) {
     //Primero inicializamos las variablelistar_reunioness
-    $Lista = $CelulaConsolidacion->listar_reuniones();
+    $Lista = $Celulas->listar_reunionesConsolidacion();
     //Variable json solamente para guardar el array de datos
     $json = array();
 
@@ -40,7 +40,7 @@ if (isset($_POST['editar'])) {
     requierePermiso("celulaConsolidacion", "actualizar");
 
     $id = $_POST['id'];
-    $idCelulaConsolidacion = trim($_POST['idCelulaConsolidacion']);
+    $idCelula = trim($_POST['idCelula']);
     $fecha = $_POST['fecha'];
     $tematica = trim(strtolower($_POST['tematica']));
     $semana = trim($_POST['semana']);
@@ -51,11 +51,11 @@ if (isset($_POST['editar'])) {
     $actividad = trim(strtolower($_POST['actividad']));
     $observaciones = trim(strtolower($_POST['observaciones']));
 
-    $arrayAccion = array('id'=>$id, 'idCelulaConsolidacion'=>$idCelulaConsolidacion, 'accion'=>'actualizar');
+    $arrayAccion = array('id'=>$id, 'idCelula'=>$idCelula, 'accion'=>'actualizar');
 
-    $CelulaConsolidacion->validacion_datos_reunion([$idCelulaConsolidacion, $semana, $generosidad, $id], [$tematica, $actividad, $observaciones], $fecha);
-    $CelulaConsolidacion->validacion_accion_reunion($arrayAccion);
-    $CelulaConsolidacion->editar_reuniones($id, $idCelulaConsolidacion, $fecha, $tematica, $semana, $generosidad, $infantil, $juvenil, $adulto, $actividad, $observaciones);
+    $Celulas->validacion_datos_reunion([$idCelula, $semana, $generosidad, $id], [$tematica, $actividad, $observaciones], $fecha);
+    $Celulas->validacion_accion_reunion($arrayAccion);
+    $Celulas->editar_reuniones($id, $idCelula, $fecha, $tematica, $semana, $generosidad, $infantil, $juvenil, $adulto, $actividad, $observaciones);
 
     die();
 }
@@ -67,10 +67,10 @@ if (isset($_POST['eliminar'])) {
 
     $id = $_POST['id'];
 
-    $arrayAccion = array('id'=>$id, 'idCelulaConsolidacion'=>'', 'accion'=>'eliminar');
+    $arrayAccion = array('id'=>$id, 'idCelula'=>'', 'accion'=>'eliminar');
 
-    $CelulaConsolidacion->validacion_accion_reunion($arrayAccion);
-    $CelulaConsolidacion->eliminar_reuniones($id);
+    $Celulas->validacion_accion_reunion($arrayAccion);
+    $Celulas->eliminar_reuniones($id);
 
     die();
 }
@@ -80,12 +80,15 @@ if (isset($_GET['listarcelulas'])) {
 
     requierePermiso("celulaConsolidacion", "actualizar");
     
-    $listaCelulas = $CelulaConsolidacion->listar_celulas();
+    $listaCelulas = $Celulas->listar_celulaConsolidacion();
 
     echo json_encode($listaCelulas);
 
     die();
 }
+
+
+
 
 if (isset($_GET['cargar_discipulos_reunion'])) {
 
@@ -93,7 +96,7 @@ if (isset($_GET['cargar_discipulos_reunion'])) {
 
     $idCelulaConsolidacion = $_GET['idCelulaConsolidacion'];
     $idReunion = $_GET['idReunion'];
-    $resultado = $CelulaConsolidacion->listarAsistencia_reunion($idCelulaConsolidacion, $idReunion);
+    $resultado = $Celulas->listarAsistencia_reunion($idCelulaConsolidacion, $idReunion);
 
     echo json_encode($resultado);
     die();
@@ -105,7 +108,7 @@ if (isset($_GET['cargar_data_asistencia'])) {
 
     //Primero inicializamos las variablelistar_reunioness
     $idReunion = $_GET['idReunion'];
-    $Lista = $CelulaConsolidacion->listar_asistencia($idReunion);
+    $Lista = $Celulas->listar_asistencia($idReunion);
     //Variable json solamente para guardar el array de datos
     $json = array();
 
@@ -117,6 +120,8 @@ if (isset($_GET['cargar_data_asistencia'])) {
             $json['data'][] = $key;
         }
     } else {
+        //Aqui esta guardado en esa variable llamada json un arreglo vacio porque obvio no hay nada si cayo aqui ok?, si 
+        //esto no esta guardando en esa variables llamada json un arreglo vacio porque no se le esta enviando nada, esto es como un feedback 
         //Si el listado esta vacio, hara esto
         //Aqui esta guardando en esa variable llamada json un arreglo vacio porque obvio no hay nada si cayo aqui ok?
         //Si esto no se hace, el datatables dara error porque no se le esta enviado nada. Esto es como un feedback para el datatables
@@ -132,7 +137,7 @@ if (isset($_POST['eliminarAsistencia'])) {
     requierePermiso("celulaConsolidacion", "actualizar");
 
     $id = $_POST['id'];
-    $CelulaConsolidacion->eliminar_asistenciaReunion($id);
+    $Celulas->eliminar_asistenciaReunion($id);
     
     die();
 }
@@ -142,7 +147,7 @@ if (isset($_POST['actualizarAsistencia'])) {
     $idReunion = $_POST['idReunion'];
     $discipulos = $_POST['discipulos'];
 
-    $CelulaConsolidacion->actualizar_asistenciaReunion($idReunion, $discipulos);
+    $Celulas->actualizar_asistenciaReunion($idReunion, $discipulos);
     die();
 }
 

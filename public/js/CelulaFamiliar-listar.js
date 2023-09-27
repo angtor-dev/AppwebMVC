@@ -666,6 +666,7 @@ form.addEventListener("submit", (e) => {
 
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR.responseText);
                     if (jqXHR.responseText) {
                         let jsonResponse = JSON.parse(jqXHR.responseText);
 

@@ -23,10 +23,12 @@ $(document).ready(function () {
         ],
     })
 
+
     $('#celulaDatatables tbody').on('click', '#ver_info', function () {
         const datos = dataTable.row($(this).parents()).data();
 
-        document.getElementById('inf_codigocelulacrecimiento').textContent = datos.codigo;
+
+        document.getElementById('inf_codigocelula').textContent = datos.codigo;
         document.getElementById('inf_fecha').textContent = datos.fecha;
         document.getElementById('inf_tematica').textContent = datos.tematica;
         document.getElementById('inf_semana').textContent = datos.semana;
@@ -39,11 +41,11 @@ $(document).ready(function () {
 
     })
 
+
     $('#celulaDatatables tbody').on('click', '#editar', function () {
         const datos = dataTable.row($(this).parents()).data();
 
-
-        document.getElementById('idreunioncrecimiento').textContent = datos.id;
+        document.getElementById('idreunion').textContent = datos.id;
         document.getElementById('fecha').value = datos.fecha;
         document.getElementById('tematica').value = datos.tematica;
         document.getElementById('semana').value = datos.semana;
@@ -53,7 +55,7 @@ $(document).ready(function () {
         document.getElementById('adulto').value = datos.adulto;
         document.getElementById('actividad').value = datos.actividad;
         document.getElementById('observaciones').value = datos.observaciones;
-        Listar_celulas(datos.idCelulaCrecimiento);
+        Listar_celulas(datos.idCelula);
 
     })
 
@@ -64,7 +66,7 @@ $(document).ready(function () {
 
         Swal.fire({
             title: '¿Estas Seguro?',
-            text: "No podras acceder a esta reunion otra vez!",
+            text: "No podras acceder a esta celula otra vez!",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: '¡Si, estoy seguro!',
@@ -73,7 +75,6 @@ $(document).ready(function () {
             reverseButtons: true
         }).then((result) => {
             if (result.isConfirmed) {
-
 
                 $.ajax({
                     type: "POST",
@@ -95,7 +96,6 @@ $(document).ready(function () {
                             showConfirmButton: false,
                             timer: 2000,
                         })
-
 
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
@@ -129,7 +129,8 @@ $(document).ready(function () {
 
 
 
-    function Listar_celulas(idCelulaCrecimiento) {
+
+    function Listar_celulas(idCelula) {
 
         $.ajax({
             type: "GET",
@@ -145,7 +146,7 @@ $(document).ready(function () {
 
                 console.log(data);
 
-                let selector = document.getElementById('idCelulaCrecimiento');
+                let selector = document.getElementById('idCelula');
 
 
                 data.forEach(item => {
@@ -163,50 +164,33 @@ $(document).ready(function () {
                 }
 
                 choices = new Choices(selector, {
+                    allowHTML: true,
                     searchEnabled: true,  // Habilita la funcionalidad de búsqueda
                     removeItemButton: true,  // Habilita la posibilidad de remover items
                     placeholderValue: 'Selecciona una opción',  // Texto del placeholder
                 });
 
-                choices.setChoiceByValue(idCelulaCrecimiento.toString());
+                choices.setChoiceByValue(idCelula.toString());
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                if (jqXHR.responseText) {
-                    let jsonResponse = JSON.parse(jqXHR.responseText);
-
-                    if (jsonResponse.msj) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: jsonResponse.msj,
-                            showConfirmButton: true,
-                        })
-                    } else {
-                        const respuesta = JSON.stringify(jsonResponse, null, 2)
-                        Swal.fire({
-                            background: 'red',
-                            color: '#fff',
-                            title: respuesta,
-                            showConfirmButton: true,
-                        })
-                    }
-                } else {
-                    alert('Error desconocido: ' + textStatus);
-                }
+                // Aquí puedes manejar errores, por ejemplo:
+                console.error("Error al enviar:", textStatus, errorThrown);
             }
         })
     }
 
-    
 
 
 
 
-    //////////////////////////// ACTUALIZAR DATOS DE REUNION ////////////////////////////
+
+
+    /////////////////////////////////// ACTUALIZAR DATOS DE REUNION //////////////////////////////////      
 
     const expresiones_regulares2 = {
 
-        idCelulaCrecimiento: /^[1-9]\d*$/, // Números enteros mayores a 0
+        idCelula: /^[1-9]\d*$/, // Números enteros mayores a 0
         tematica: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/, // Letras, números, espacios, puntos y comas con un máximo de 100 caracteres
         semana: /^[1-9]\d*$/, // Números enteros mayores a 0
         generosidad: /^[0-9]+(\.[0-9]{2})?$/,
@@ -220,7 +204,7 @@ $(document).ready(function () {
 
     const validationStatus2 = {
 
-        idCelulaCrecimiento: true,
+        idCelula: true,
         tematica: true,
         semana: true,
         generosidad: true,
@@ -232,15 +216,17 @@ $(document).ready(function () {
         fecha: true
     };
 
-    // Validar idCelulaCrecimiento
-    const idCelulaCrecimiento = document.getElementById("idCelulaCrecimiento");
-    idCelulaCrecimiento.addEventListener('change', () => {
-        if (!expresiones_regulares2.idCelulaCrecimiento.test(idCelulaCrecimiento.value)) {
-            document.getElementById("msj_idCelulaCrecimiento").classList.remove("d-none");
-            validationStatus2.idCelulaCrecimiento = false;
+
+
+    // Validar idCelula
+    const idCelula = document.getElementById("idCelula");
+    idCelula.addEventListener('change', () => {
+        if (!expresiones_regulares2.idCelula.test(idCelula.value)) {
+            document.getElementById("msj_idCelula").classList.remove("d-none");
+            validationStatus2.idCelula = false;
         } else {
-            document.getElementById("msj_idCelulaCrecimiento").classList.add("d-none");
-            validationStatus2.idCelulaCrecimiento = true;
+            document.getElementById("msj_idCelula").classList.add("d-none");
+            validationStatus2.idCelula = true;
         }
     })
 
@@ -364,7 +350,7 @@ $(document).ready(function () {
     form2.addEventListener("submit", (e) => {
         e.preventDefault();
 
-        const id = document.getElementById('idreunioncrecimiento').textContent;
+        const id = document.getElementById('idreunion').textContent
 
         // Verifica si todos los campos son válidos antes de enviar el formulario
         if (Object.values(validationStatus2).every(status => status === true)) {
@@ -372,12 +358,11 @@ $(document).ready(function () {
             // Aquí puedes agregar el código para enviar el formulario
             $.ajax({
                 type: "POST",
-                url: "http://localhost/AppwebMVC/CelulaCrecimiento/Reunion",
+                url: "http://localhost/AppwebMVC/CelulaCrecimiento/reunion",
                 data: {
-
                     editar: 'editar',
                     id: id,
-                    idCelulaCrecimiento: idCelulaCrecimiento.value,
+                    idCelula: idCelula.value,
                     fecha: fecha.value,
                     tematica: tematica.value,
                     semana: semana.value,
@@ -426,7 +411,6 @@ $(document).ready(function () {
                     }
                 }
             });
-
         } else {
             Swal.fire({
                 icon: 'error',

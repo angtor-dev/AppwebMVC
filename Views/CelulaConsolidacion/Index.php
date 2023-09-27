@@ -4,16 +4,17 @@ global $viewScripts;
 $viewScripts = ["CelulaConsolidacion-listar.js"];
 ?>
 
+
 <div class="container-fluid">
 
     <div class="row mt-4">
         <div class="col-sm-12 col-md-12 col-lg-12">
             <div class="table-responsive">
-                <table id="celulaDatatables" class="table table-hover">
+                <table id="celulaDatatables" class="table table-bordered table-hover">
                     <thead>
 
                         <div class="d-flex align-items-end justify-content-between mb-2">
-                            <h2><strong>Celulas de Consolidación:</strong></h2>
+                            <h2><strong>Celulas de Consolidacion:</strong></h2>
                             <button class="btn btn-accent text-nowrap" id="registrar" data-bs-toggle="modal" data-bs-target="#modal_registrar">
                                 <i class="fa-solid fa-plus"></i>
                                 Nueva Celula
@@ -21,7 +22,7 @@ $viewScripts = ["CelulaConsolidacion-listar.js"];
                         </div>
                         <tr>
                             <th>Codigo</th>
-                            <th>Nombre de la Celula Familiar</th>
+                            <th>Nombre de la Celula Consolidacion</th>
                             <th>Lider</th>
                             <th>Opciones</th>
                         </tr>
@@ -99,7 +100,7 @@ $viewScripts = ["CelulaConsolidacion-listar.js"];
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Informacion de la Celula Familiar</h5>
+                    <h5 class="modal-title">Informacion de la Celula Consolidacion</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -144,7 +145,7 @@ $viewScripts = ["CelulaConsolidacion-listar.js"];
                     <div class="mb-3">
                         <form id="formulario2">
                             <div class="mb-3 col-12">
-                                <input type="hidden" id="idCelulaFamiliar">
+                                <input type="hidden" id="idCelulaConsolidacion">
                                 <label for="nombre2" class="form-label fw-bold">Nombre de la Celula</label>
                                 <input type="text" class="form-control" id="nombre2" maxlength="50" name="nombre2">
 
@@ -205,7 +206,7 @@ $viewScripts = ["CelulaConsolidacion-listar.js"];
                     <div class="mb-3">
                         <form id="formularioReunion">
 
-                            <input type="hidden" id="idCelulaFamiliarR">
+                            <input type="hidden" id="idCelulaConsolidacionR">
                             <div class="mb-3">
                                 <label for="fecha" class="form-label fw-bold">Fecha</label>
                                 <input type="date" class="form-control" id="fecha" name="fecha">
@@ -237,30 +238,15 @@ $viewScripts = ["CelulaConsolidacion-listar.js"];
                                 </div>
                             </div>
 
-
                             <div class="mb-3">
-                                <label class="form-label fw-bold">Asistencia:</label>
-                                <div class="row g-3">
-                                    <div class="col-4">
-                                        <label for="infantil" class="form-label fw-bold">Infantil:</label>
-                                        <input type="number" class="form-control" id="infantil" name="infantil" placeholder="Infantil">
-                                        <div class="alert alert-danger d-none" id="msj_infantil" role="alert"></div>
-                                    </div>
-
-
-                                    <div class="col-4">
-                                        <label for="juvenil" class="form-label fw-bold">Juvenil:</label>
-                                        <input type="number" class="form-control" id="juvenil" name="juvenil" placeholder="Juvenil">
-                                        <div class="alert alert-danger d-none" id="msj_juvenil" role="alert"></div>
-                                    </div>
-
-                                    <div class="col-4">
-                                        <label for="adulto" class="form-label fw-bold">Adultos:</label>
-                                        <input type="number" class="form-control" id="adulto" name="adulto" placeholder="Adulto">
-                                        <div class="alert alert-danger d-none" id="msj_adulto" role="alert"></div>
-                                    </div>
+                                <label for="discipulos" class="form-label fw-bold">Asistencia</label>
+                                <select multiple class="form-select" id="discipulos" name="discipulos" >
+                                </select>
+                                <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_discipulos" role="alert">
+                                    Debe seleccionar discipulos para la asistencia.
                                 </div>
                             </div>
+
 
 
                             <div class="mb-3">
@@ -293,3 +279,5 @@ $viewScripts = ["CelulaConsolidacion-listar.js"];
         </div>
     </div>
 </div>
+
+
