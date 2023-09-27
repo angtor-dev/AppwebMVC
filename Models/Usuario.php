@@ -242,7 +242,7 @@ class Usuario extends Model
         if (empty($this->roles)) {
             return false;
         }
-        $permiso = "get".$permiso;
+        $permiso = "get".ucfirst($permiso);
 
         foreach ($this->roles as $rol) {
             foreach ($rol->permisos as $p) {
