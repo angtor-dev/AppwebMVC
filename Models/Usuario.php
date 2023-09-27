@@ -272,6 +272,20 @@ class Usuario extends Model
         return $usuarios;
     }
 
+    /** Mapea los valores de un formulario post a las propiedades del objeto */
+    public function mapFromPost() : bool
+    {
+        if (!empty($_POST)) {
+            foreach ($_POST as $key => $value) {
+                if (property_exists($this, $key)) {
+                    $this->$key = trim($value);
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
     // Getters
     public function getEdad() : int
     {
