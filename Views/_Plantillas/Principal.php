@@ -104,38 +104,16 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
             <div class="nav-link py-0 mt-3 text-uppercase">Iglesia</div>
 
             <!-- Anjhel -->
-            <div class="acordeon">
-                <a href="#" class="nav-link acordeon-toggle">
+            
+            <a href="<?= LOCAL_DIR ?>Sedes/Listar" class="nav-link">
                     <i class="fa-solid fa-church fa-fw me-2"></i>
                     Sedes
                 </a>
-                <div class="acordeon-body">
-                    <div class="acordeon-items">
-                        <a href="<?= LOCAL_DIR ?>Sedes/Listar" class="nav-link">
-                            <i class="fa-solid fa-rectangle-list fa-fw"></i>
-                            Listar
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="acordeon">
-                <a href="#" class="nav-link acordeon-toggle">
+            
+                <a href="<?= LOCAL_DIR ?>Territorios/Listar" class="nav-link">
                     <i class="fa-sharp fa-solid fa-earth-americas fa-fw me-2"></i>
                     Territorios
                 </a>
-                <div class="acordeon-body">
-                    <div class="acordeon-items">
-                        <a href="<?= LOCAL_DIR ?>Territorios/Registrar" class="nav-link">
-                            <i class="fa-solid fa-pen-to-square fa-fw"></i>
-                            Registrar
-                        </a>
-                        <a href="<?= LOCAL_DIR ?>Territorios/Listar" class="nav-link">
-                            <i class="fa-solid fa-rectangle-list fa-fw"></i>
-                            Listar
-                        </a>
-                    </div>
-                </div>
-            </div>
             <a href="<?= LOCAL_DIR ?>Agenda/Index" class="nav-link">
                 <i class="fa-solid fa-calendar fa-fw me-2"></i>
                 Agenda
@@ -198,24 +176,13 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
                     </div>
                 </div>
             </div>
-            <div class="acordeon">
-                <a href="#" class="nav-link acordeon-toggle">
+          
+               <a href="<?= LOCAL_DIR ?>Discipulos" class="nav-link">
                     <i class="fa-solid fa-clipboard-user fa-fw me-2"></i>
                     Discípulos
                 </a>
-                <div class="acordeon-body">
-                    <div class="acordeon-items">
-                        <a href="<?= LOCAL_DIR ?>Discipulos/Registrar" class="nav-link">
-                            <i class="fa-solid fa-pen-to-square fa-fw"></i>
-                            Registrar
-                        </a>
-                        <a href="<?= LOCAL_DIR ?>Discipulos" class="nav-link">
-                            <i class="fa-solid fa-rectangle-list fa-fw"></i>
-                            Listar
-                        </a>
-                    </div>
-                </div>
-            </div>
+               
+         
             
             <?php if ($usuario->tienePermiso("nivelesCrecimiento", "consultar") || $usuario->tieneRol("Profesor")
                 || $usuario->tieneRol("Estudiante")): ?>
@@ -319,10 +286,24 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
             <?php if ($usuario->tienePermiso("usuarios", "consultar") || $usuario->tienePermiso("roles", "consultar")
                 || $usuario->tienePermiso("bitacora", "consultar")): ?>
                 <div class="nav-link py-0 mt-3 text-uppercase">Sistema</div>
-                <a href="#" class="nav-link">
-                    <i class="fa-solid fa-chart-pie fa-fw me-2"></i>
-                    Estadisticas
+                <div class="acordeon">
+                <a href="#" class="nav-link acordeon-toggle">
+                <i class="fa-solid fa-chart-pie fa-fw me-2"></i>
+                    Estadistica
                 </a>
+                <div class="acordeon-body">
+                    <div class="acordeon-items">
+                        <a href="<?= LOCAL_DIR ?>Estadisticas/Iglesia" class="nav-link">
+                        <i class="fa-solid fa-chart-pie fa-fw me-2"></i>
+                            Iglesia
+                        </a>
+                        <a href="<?= LOCAL_DIR ?>Estadisticas/Escuela" class="nav-link">
+                        <i class="fa-solid fa-chart-pie fa-fw me-2"></i>
+                            EID
+                        </a>
+                    </div>
+                </div>
+            </div>
                 <a href="#" class="nav-link">
                     <i class="fa-solid fa-file fa-fw me-2"></i>
                     Reportes
