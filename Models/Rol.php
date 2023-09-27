@@ -22,27 +22,34 @@ class Rol extends Model
 
     public function registrar() : void
     {
-        $sql = "INSERT INTO permisos() VALUES()";
+        $sql = "INSERT INTO rol(nombre, descripcion, nivel)
+            VALUES(:nombre, :descripcion, :nivel)";
             
         try {
             $this->db->pdo()->beginTransaction();
-
-            // Primero crea permisos del rol
-            $this->query($sql);
-
-            $idPermisos = $this->db->pdo()->lastInsertId();
+            $modulos = Modulo::listar();
 
             // Registra el rol
-            $sql = "INSERT INTO rol(nombre, descripcion, nivel, idPermisos)
-                VALUES(:nombre, :descripcion, :nivel, :idPermisos)";
-
             $stmt = $this->prepare($sql);
-            $stmt->bindValue('nombre', $this->nombre);
-            $stmt->bindValue('descripcion', $this->descripcion);
-            $stmt->bindValue('nivel', $this->nivel);
-            $stmt->bindValue('idPermisos', $idPermisos);
+            $stmt->bindValue("nombre", $this->nombre);
+            $stmt->bindValue("descripcion", $this->descripcion);
+            $stmt->bindValue("nivel", $this->nivel);
 
             $stmt->execute();
+            $idRol = $this->db->pdo()->lastInsertId();
+
+            // Crea permisos del rol
+            $sql = "INSERT INTO permiso(idRol, idModulo)
+                VALUES(:idRol, :idModulo)";
+
+            $stmt = $this->prepare($sql);
+
+            foreach ($modulos as $modulo) {
+                $stmt->bindParam("idRol", $idRol);
+                $stmt->bindParam("idModulo", $modulo->id);
+
+                $stmt->execute();
+            }
 
             // Guarda los cambios
             $this->db->pdo()->commit();
@@ -117,13 +124,13 @@ class Rol extends Model
 
     // Getters
     public function getNombre() : string {
-        return $this->nombre;
+        return $this->nombre ?? "";
     }
     public function getDescripcion() : ?string {
-        return $this->descripcion;
+        return $this->descripcion ?? null;
     }
     public function getNivel() : int {
-        return $this->nivel;
+        return $this->nivel ?? 0;
     }
 }
 ?>

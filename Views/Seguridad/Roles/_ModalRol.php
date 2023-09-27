@@ -10,7 +10,7 @@
         <div class="col-sm-12">
             <label for="input-nombre">Nombre</label>
             <input class="form-control" type="text" name="nombre" id="input-nombre" required maxlength="30"
-                value="<?= $rol->getNombre() ?? "" ?>">
+                value="<?= $rol->getNombre() ?>">
             <div class="invalid-feedback">
                 Ingresa un nombre válido
             </div>
@@ -18,7 +18,7 @@
         <div class="col-sm-12">
             <label for="input-descripcion">Descripción</label>
             <input class="form-control" type="text" name="descripcion" id="input-descripcion" required maxlength="100"
-                value="<?= $rol->getDescripcion() ?? "" ?>">
+                value="<?= $rol->getDescripcion() ?>">
             <div class="invalid-feedback">
                 Ingresa una descripcion válido
             </div>
