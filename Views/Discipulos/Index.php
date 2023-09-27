@@ -410,14 +410,14 @@ $viewScripts = ["Discipulo-listar.js"];
                         <div class="row my-2">
                             <div class="col-lg-12">
                                 <label for="direccion" class="form-label fw-bold">Dirección</label>
-                                <textarea class="form-control" id="direccion" placeholder="" maxlength="100"></textarea>
+                                <textarea class="form-control" id="direccion" placeholder="Ingrese la direccion" maxlength="100"></textarea>
                                 <div class="invalid-feedback">
                                     Este campo no puede estar vacio.
                                 </div>
                             </div>
                             <div class="col-lg-12">
                                 <label for="motivo" class="form-label fw-bold">Motivo</label>
-                                <textarea class="form-control" id="motivo" placeholder="" maxlength="100"></textarea>
+                                <textarea class="form-control" id="motivo" placeholder="Ingrese el motivo" maxlength="100"></textarea>
                                 <div class="invalid-feedback">
                                     Este campo no puede estar vacio.
                                 </div>

@@ -24,6 +24,11 @@ $(document).ready(function () {
         ],
     })
 
+    $('#registrar').on('click', function () {
+        Listar_Consolidador('');
+        Listar_celulas('');
+    })
+
     $('#sedeDatatables tbody').on('click', '#ver_info', function () {
         const datos = dataTable.row($(this).parents()).data();
 
@@ -145,14 +150,14 @@ $(document).ready(function () {
 
         $.ajax({
             type: "GET",
-            url: "http://localhost/AppwebMVC/Discipulos/Registrar",
+            url: "http://localhost/AppwebMVC/Discipulos/Index",
             data: {
 
                 listaConsolidador: 'listaConsolidador',
 
             },
             success: function (response) {
-
+                console.log(response);
                 let data = JSON.parse(response);
 
                 let selector = document.getElementById('idConsolidador');
@@ -177,7 +182,10 @@ $(document).ready(function () {
                     removeItemButton: true,  // Habilita la posibilidad de remover items
                 });
 
-                choices1.setChoiceByValue(idConsolidador.toString())
+                if (idConsolidador !== '') {
+                    choices1.setChoiceByValue(idConsolidador.toString())
+                }
+                
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -194,7 +202,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "GET",
-            url: "http://localhost/AppwebMVC/Discipulos/Registrar",
+            url: "http://localhost/AppwebMVC/Discipulos/Index",
             data: {
 
                 listarcelulas: 'listarcelulas',
@@ -226,7 +234,10 @@ $(document).ready(function () {
                     removeItemButton: true,  // Habilita la posibilidad de remover items
                 });
 
-                choices2.setChoiceByValue(idCelulaConsolidacion.toString())
+                if (idCelulaConsolidacion !== '') {
+                    choices2.setChoiceByValue(idCelulaConsolidacion.toString())
+                }
+                
 
             },
             error: function (jqXHR, textStatus, errorThrown) {

@@ -38,7 +38,7 @@ if (isset($_GET['cargar_data'])) {
 
 if (isset($_GET['listaConsolidador'])) {
 
-    requierePermisos("actualizarDiscipulos");
+    //requierePermisos("actualizarDiscipulos");
 
     $ListaConsolidador = $Discipulo->listar_consolidador();
 
@@ -51,10 +51,9 @@ if (isset($_GET['listaConsolidador'])) {
 
 if (isset($_GET['listarcelulas'])) {
 
-    requierePermisos("actualizarDiscipulos");
+    //requierePermisos("actualizarDiscipulos");
 
     $listacelulas = $Discipulo->listar_celulas();
-
 
     echo json_encode($listacelulas);
 
@@ -172,29 +171,6 @@ if (isset($_POST['registrar'])) {
 
     die();
 }
-
-
-if (isset($_GET['listaConsolidador'])) {
-
-    $ListaConsolidador = $Discipulo->listar_consolidador();
-
-    echo json_encode($ListaConsolidador);
-
-    die();
-}
-
-
-
-if (isset($_GET['listarcelulas'])) {
-
-    $listacelulas = $Discipulo->listar_celulas();
-
-    echo json_encode($listacelulas);
-
-    die();
-}
-
-
 
 
 renderView();

@@ -128,7 +128,7 @@ class Discipulo extends Model
 
         try {
 
-            $sql = "SELECT * FROM celulaconsolidacion WHERE celulaconsolidacion.estatus = '1'";
+            $sql = "SELECT * FROM celulas WHERE celulas.estatus = '1' AND celulas.tipo = 'consolidacion'";
 
             $stmt = $this->db->pdo()->prepare($sql);
 
