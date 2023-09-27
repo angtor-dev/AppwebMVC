@@ -6,7 +6,7 @@ $(document).ready(function () {
       responsive: true,
       ajax: {
         method: "GET",
-        url: 'http://localhost/AppwebMVC/Discipulos/Listar',
+        url: 'http://localhost/AppwebMVC/Discipulos/Index',
         data: { cargar_data: 'cargar_data' }
       },
       columns: [
@@ -22,6 +22,11 @@ $(document).ready(function () {
               <button type="button" id="eliminar" class="btn btn-danger delete-btn">Eliminar</button>
               `}
         ],
+    })
+
+    $('#registrar').on('click', function () {
+        Listar_Consolidador('');
+        Listar_celulas('');
     })
 
     $('#sedeDatatables tbody').on('click', '#ver_info', function () {
@@ -145,14 +150,14 @@ $(document).ready(function () {
 
         $.ajax({
             type: "GET",
-            url: "http://localhost/AppwebMVC/Discipulos/Registrar",
+            url: "http://localhost/AppwebMVC/Discipulos/Index",
             data: {
 
                 listaConsolidador: 'listaConsolidador',
 
             },
             success: function (response) {
-
+                console.log(response);
                 let data = JSON.parse(response);
 
                 let selector = document.getElementById('idConsolidador');
@@ -177,7 +182,10 @@ $(document).ready(function () {
                     removeItemButton: true,  // Habilita la posibilidad de remover items
                 });
 
-                choices1.setChoiceByValue(idConsolidador.toString())
+                if (idConsolidador !== '') {
+                    choices1.setChoiceByValue(idConsolidador.toString())
+                }
+                
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -194,7 +202,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "GET",
-            url: "http://localhost/AppwebMVC/Discipulos/Registrar",
+            url: "http://localhost/AppwebMVC/Discipulos/Index",
             data: {
 
                 listarcelulas: 'listarcelulas',
@@ -226,7 +234,10 @@ $(document).ready(function () {
                     removeItemButton: true,  // Habilita la posibilidad de remover items
                 });
 
-                choices2.setChoiceByValue(idCelulaConsolidacion.toString())
+                if (idCelulaConsolidacion !== '') {
+                    choices2.setChoiceByValue(idCelulaConsolidacion.toString())
+                }
+                
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -551,6 +562,335 @@ $(document).ready(function () {
 
 
 
+
+    let validaciones2 = {
+        nombre: false,
+        apellido: false,
+        cedula: false,
+        telefono: false,
+        estadoCivil: false,
+        fechaNacimiento: false,
+        fechaConvercion: false,
+        idConsolidador: false,
+        idcelulaconsolidacion: false,
+        direccion: false,
+        motivo: false
+
+    };
+
+    const expresiones = {
+        nombrePersona: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ]{1,50}$/,
+        apellidoPersona: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ]{1,50}$/,
+        texto: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/,
+        telefono: /^(0414|0424|0416|0426|0412)[0-9]{7}/,
+        cedula: /^[0-9]{7,8}$/
+    }
+
+
+    $("#nombre").on("keyup", function (event) {
+        let nombre = $("#nombre").val();
+        if (expresiones.nombrePersona.test(nombre)) {
+            validaciones.nombre = true;
+            $("#nombre").removeClass("is-invalid");
+            $("#nombre").addClass("is-valid");
+
+        } else {
+            validaciones.nombre = false;
+            $("#nombre").removeClass("is-valid");
+            $("#nombre").addClass("is-invalid");
+
+        }
+    })
+
+    $("#apellido").on("keyup", function (event) {
+        let apellido = $("#apellido").val();
+        if (expresiones.apellidoPersona.test(apellido)) {
+            validaciones.apellido = true;
+            $("#apellido").removeClass("is-invalid");
+            $("#apellido").addClass("is-valid");
+
+        } else {
+            validaciones.apellido = false;
+            $("#apellido").removeClass("is-valid");
+            $("#apellido").addClass("is-invalid");
+
+        }
+    })
+
+    $("#cedula").on("keyup", function (event) {
+        let cedula = $("#cedula").val();
+        if (expresiones.cedula.test(cedula)) {
+            validaciones.cedula = true;
+            $("#cedula").removeClass("is-invalid");
+            $("#cedula").addClass("is-valid");
+
+        } else {
+            validaciones.cedula = false;
+            $("#cedula").removeClass("is-valid");
+            $("#cedula").addClass("is-invalid");
+
+        }
+    })
+
+    $("#direccion").on("keyup", function (event) {
+        let direccion = $("#direccion").val();
+        if (expresiones.texto.test(direccion)) {
+            validaciones.direccion = true;
+            $("#direccion").removeClass("is-invalid");
+            $("#direccion").addClass("is-valid");
+        } else {
+            validaciones.direccion = false;
+            $("#direccion").removeClass("is-valid");
+            $("#direccion").addClass("is-invalid");
+        }
+    })
+
+    $("#motivo").on("keyup", function (event) {
+        let motivo = $("#motivo").val();
+        if (expresiones.texto.test(motivo)) {
+            validaciones.motivo = true;
+            $("#motivo").removeClass("is-invalid");
+            $("#motivo").addClass("is-valid");
+        } else {
+            validaciones.motivo = false;
+            $("#motivo").removeClass("is-valid");
+            $("#motivo").addClass("is-invalid");
+        }
+    })
+
+    $("#telefono").on("keyup", function (event) {
+        let telefono = $("#telefono").val();
+        if (expresiones.telefono.test(telefono)) {
+            validaciones.telefono = true;
+            $("#telefono").removeClass("is-invalid");
+            $("#telefono").addClass("is-valid");
+        } else {
+            validaciones.telefono = false;
+            $("#telefono").removeClass("is-valid");
+            $("#telefono").addClass("is-invalid");
+        }
+    })
+
+
+    $("#estadoCivil").on("change", function (event) {
+        let estadoCivil = $("#estadoCivil").val();
+        let estadosPermitido = ["casado/a", "soltero/a", "viudo/a"];
+        if (estadosPermitido.includes(estadoCivil)) {
+            validaciones.estadoCivil = true;
+            $("#estadoCivil").removeClass("is-invalid");
+            $("#estadoCivil").addClass("is-valid");
+        } else {
+            validaciones.estadoCivil = false;
+            $("#estadoCivil").removeClass("is-valid");
+            $("#estadoCivil").addClass("is-invalid");
+        }
+    })
+
+
+    $("#fechaNacimiento").on("change", function (event) {
+
+        const fechaNacimiento = $("#fechaNacimiento").val();
+        const hoy = new Date();
+        const cumpleanos18 = new Date(fechaNacimiento);
+        cumpleanos18.setFullYear(cumpleanos18.getFullYear() + 18);
+
+        if (hoy >= cumpleanos18) {
+            validaciones.fechaNacimiento = true;
+            $("#fechaNacimiento").removeClass("is-invalid");
+            $("#fechaNacimiento").addClass("is-valid");
+        } else {
+            validaciones.fechaNacimiento = false;
+            $("#fechaNacimiento").removeClass("is-valid");
+            $("#fechaNacimiento").addClass("is-invalid");
+        }
+    })
+
+
+    $("#fechaConvercion").on("change", function (event) {
+        let fechaConvercion = $("#fechaConvercion").val();
+        if (fechaConvercion.value !== '') {
+            validaciones.fechaConvercion = true;
+            $("#fechaConvercion").removeClass("is-invalid");
+            $("#fechaConvercion").addClass("is-valid");
+        } else {
+            validaciones.fechaConvercion = false;
+            $("#fechaConvercion").removeClass("is-valid");
+            $("#fechaConvercion").addClass("is-invalid");
+        }
+    })
+
+
+    $("#idConsolidador").on("change", function (event) {
+
+        let idConsolidador = $("#idConsolidador").val();
+        if (/^[1-9]\d*$/.test(idConsolidador)) {
+            validaciones.idConsolidador = true;
+            $("#msj_idConsolidador").addClass("d-none");
+        } else {
+            console.log(idConsolidador);
+            validaciones.idConsolidador = false;
+            $("#msj_idConsolidador").removeClass("d-none");
+        }
+    })
+
+
+    $("#idcelulaconsolidacion").on("change", function (event) {
+        let idcelulaconsolidacion = $("#idcelulaconsolidacion").val();
+        if (/^[1-9]\d*$/.test(idcelulaconsolidacion)) {
+            validaciones.idcelulaconsolidacion = true;
+            $("#msj_idcelulaconsolidacion").addClass("d-none");
+        } else {
+            validaciones.idcelulaconsolidacion = false;
+            $("#idcelulaconsolidacion").removeClass("is-valid");
+            $("#idcelulaconsolidacion").addClass("is-invalid");
+        }
+
+
+
+        let direccion = $("#direccion").val();
+        if (/^[a-zA-ZñÑ\s]{1,100}$/.test(direccion)) {
+            validaciones.direccion = true;
+            $("#direccion").removeClass("is-invalid");
+            $("#direccion").addClass("is-valid");
+        } else {
+            validaciones.direccion = false;
+            $("#direccion").removeClass("is-valid");
+            $("#direccion").addClass("is-invalid");
+        }
+
+        let motivo = $("#motivo").val();
+        if (/^[a-zA-ZñÑ\s]{1,100}$/.test(motivo)) {
+            validaciones.motivo = true;
+            $("#motivo").removeClass("is-invalid");
+            $("#motivo").addClass("is-valid");
+        } else {
+            validaciones.motivo = false;
+            $("#motivo").removeClass("is-valid");
+            $("#motivo").addClass("is-invalid");
+        }
+
+    });
+
+
+
+
+    /////////////////////////////// REGISTRAR DISCIPULOS ///////////////////////////////////
+    $("#formulario").submit(function (event) {
+        event.preventDefault();
+
+        if (Object.values(validaciones).every(val => val)) {
+
+
+            let asisFamiliar;
+            let asisCrecimiento;
+
+            if (document.getElementById('asisCrecimiento').checked) {
+                asisCrecimiento = 'si'
+            }else{
+                asisCrecimiento = 'no'
+            }
+
+            if (document.getElementById('asisFamiliar').checked) {
+                asisFamiliar = 'si'
+            }else{
+                asisFamiliar = 'no'
+            }
+
+
+            let nombre = $("#nombre").val();
+            let apellido = $("#apellido").val();
+            let cedula = $("#cedula").val();
+            let telefono = $("#telefono").val();
+            let estadoCivil = $("#estadoCivil").val();
+            let fechaNacimiento = $("#fechaNacimiento").val();
+            let fechaConvercion = $("#fechaConvercion").val();
+            let idConsolidador = $("#idConsolidador").val();
+            let idcelulaconsolidacion = $("#idcelulaconsolidacion").val();
+            let direccion = $("#direccion").val();
+            let motivo = $("#motivo").val();
+
+            $.ajax({
+                type: "POST",
+                url: "http://localhost/AppwebMVC/Discipulos/Index",
+                data: {
+
+                    registrar: 'registrar',
+                    nombre: nombre,
+                    apellido: apellido,
+                    cedula: cedula,
+                    telefono: telefono,
+                    estadoCivil: estadoCivil,
+                    fechaNacimiento: fechaNacimiento,
+                    fechaConvercion: fechaConvercion,
+                    asisCrecimiento: asisCrecimiento,
+                    asisFamiliar: asisFamiliar,
+                    idConsolidador: idConsolidador,
+                    idcelulaconsolidacion: idcelulaconsolidacion,
+                    direccion: direccion,
+                    motivo: motivo
+                },
+                success: function (response) {
+                    console.log(response);
+                    let data = JSON.parse(response);
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Registrado Correctamente',
+                        showConfirmButton: false,
+                        timer: 2000,
+                    })
+
+                    document.getElementById('nombre').value = ''
+                    document.getElementById('apellido').value = ''
+                    document.getElementById('cedula').value = ''
+                    document.getElementById('telefono').value = ''
+                    document.getElementById('estadoCivil').value = ''
+                    document.getElementById('fechaNacimiento').value = ''
+                    document.getElementById('fechaConvercion').value = ''
+                    document.getElementById('direccion').value = ''
+                    document.getElementById('motivo').value = ''
+                    asisCrecimiento.checked = false
+                    asisFamiliar.checked = false
+                    choices1.setChoiceByValue('')
+                    choices2.setChoiceByValue('')
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    if (jqXHR.responseText) {
+                        let jsonResponse = JSON.parse(jqXHR.responseText);
+
+                        if (jsonResponse.msj) {
+                             Swal.fire({
+                                icon: 'error',
+                                title: 'Denegado',
+                                text: jsonResponse.msj,
+                                showConfirmButton: true,
+                            })
+                        } else {
+                            const respuesta = JSON.stringify(jsonResponse, null, 2)
+                            Swal.fire({
+                                background: 'red',
+                                color: '#fff',
+                                title: respuesta,
+                                showConfirmButton: true,
+                            })
+                        }
+                    } else {
+                        alert('Error desconocido: ' + textStatus);
+                    }
+                }
+            });
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Debes llenar el formulario correctamente. Por favor, ingrese nuevamente los datos',
+                showConfirmButton: false,
+                timer: 2000,
+            })
+        }
+
+
+    });
 
 });
 

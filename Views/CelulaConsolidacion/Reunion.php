@@ -43,7 +43,7 @@ $viewScripts = ["CelulaConsolidacion-reunion.js"];
                     <ul class="list-group list-group-horizontal">
                         <li class="list-group-item col-4">
                             <strong>Código:</strong>
-                            <p id="inf_codigocelulaconsolidacion"></p>
+                            <p id="inf_codigocelula"></p>
                         </li>
 
                         <li class="list-group-item col-4">
@@ -101,11 +101,11 @@ $viewScripts = ["CelulaConsolidacion-reunion.js"];
 
                         <div class="mb-3">
                             <div class="mb-3">
-                                <input type="hidden" id="idreunionconsolidacion">
-                                <label for="idCelulaConsolidacion" class="form-label fw-bold">Celula de Consolidacion</label>
-                                <select class="form-select" id="idCelulaConsolidacion" name="idCelulaConsolidacion">
+                                <input type="hidden" id="idreunion">
+                                <label for="idCelula" class="form-label fw-bold">Celula de Consolidacion</label>
+                                <select class="form-select" id="idCelula" name="idCelula">
                                 </select>
-                                <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_idCelulaConsolidacion" role="alert">
+                                <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_idCelula" role="alert">
                                     Debe seleccionar una Celula de Consolidacion.
                                 </div>
                             </div>

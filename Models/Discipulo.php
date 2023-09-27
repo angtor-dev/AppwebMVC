@@ -128,7 +128,7 @@ class Discipulo extends Model
 
         try {
 
-            $sql = "SELECT * FROM celulaconsolidacion WHERE celulaconsolidacion.estatus = '1'";
+            $sql = "SELECT * FROM celulas WHERE celulas.estatus = '1' AND celulas.tipo = 'consolidacion'";
 
             $stmt = $this->db->pdo()->prepare($sql);
 
@@ -156,8 +156,8 @@ class Discipulo extends Model
             Consolidador.nombre AS nombreConsolidador,
             Consolidador.apellido AS apellidoConsolidador,
             Consolidador.cedula AS cedulaConsolidador,
-            celulaconsolidacion.id AS idCelulaConsolidacion,
-            celulaconsolidacion.codigo,
+            celulas.id AS idCelulaConsolidacion,
+            celulas.codigo,
             discipulo.id,
             discipulo.asisCrecimiento,
             discipulo.asisFamiliar,
@@ -177,7 +177,7 @@ class Discipulo extends Model
             discipulo
             INNER JOIN usuario AS Consolidador ON discipulo.idConsolidador = Consolidador.id
             LEFT JOIN asistencia ON discipulo.id = asistencia.idDiscipulo
-            INNER JOIN celulaconsolidacion ON discipulo.idcelulaconsolidacion = celulaconsolidacion.id
+            INNER JOIN celulas ON discipulo.idCelulaConsolidacion = celulas.id
         GROUP BY
             discipulo.id";
 

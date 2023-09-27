@@ -1,7 +1,6 @@
-
 <?php
 
-require_once "Models/CelulaCrecimiento.php";
+require_once "Models/Celulas.php";
 
 necesitaAutenticacion();
 
@@ -9,12 +8,13 @@ requierePermiso("celulaCrecimiento", "registrar");
 
 $usuarioSesion = $_SESSION['usuario'];
 
-$CelulaCrecimiento = new CelulaCrecimiento();
+
+$Celulas = new Celulas();
 
 
 if (isset($_GET['cargar_data'])) {
     //Primero inicializamos las variables
-    $Lista = $CelulaCrecimiento->listar_reuniones();
+    $Lista = $Celulas->listar_reunionesCrecimiento();
     //Variable json solamente para guardar el array de datos
     $json = array();
 
@@ -26,9 +26,7 @@ if (isset($_GET['cargar_data'])) {
             $json['data'][] = $key;
         }
     } else {
-        //Si el listado esta vacio, hara esto
-        //Aqui esta guardando en esa variable llamada json un arreglo vacio porque obvio no hay nada si cayo aqui ok?
-        //Si esto no se hace, el datatables dara error porque no se le esta enviado nada. Esto es como un feedback para el datatables
+        
         $json['data'] = array();
     }
     //Finalmente, aqui enviamos el listado
@@ -42,7 +40,7 @@ if (isset($_POST['editar'])) {
     requierePermiso("celulaCrecimiento", "actualizar");
 
     $id = $_POST['id'];
-    $idCelulaCrecimiento = $_POST['idCelulaCrecimiento'];
+    $idCelula = $_POST['idCelula'];
     $fecha = $_POST['fecha'];
     $tematica = trim(strtolower($_POST['tematica']));
     $semana = trim($_POST['semana']);
@@ -53,8 +51,8 @@ if (isset($_POST['editar'])) {
     $actividad = trim(strtolower($_POST['actividad']));
     $observaciones = trim(strtolower($_POST['observaciones']));
 
-    $CelulaCrecimiento->validacion_datos_reunion([$id, $idCelulaCrecimiento, $semana, $generosidad, $infantil, $juvenil, $adulto], [$tematica, $actividad, $observaciones], $fecha);
-    $CelulaCrecimiento->editar_reuniones($id, $idCelulaCrecimiento, $fecha, $tematica, $semana, $generosidad, $infantil, $juvenil, $adulto, $actividad, $observaciones);
+    $Celulas->validacion_datos_reunion([$id, $idCelula, $semana, $generosidad, $infantil, $juvenil, $adulto], [$tematica, $actividad, $observaciones], $fecha);
+    $Celulas->editar_reuniones($id, $idCelula, $fecha, $tematica, $semana, $generosidad, $infantil, $juvenil, $adulto, $actividad, $observaciones);
 
     die();
 }
@@ -71,7 +69,7 @@ if (isset($_POST['eliminar'])) {
 
     $id = $_POST['id'];
 
-    $CelulaCrecimiento->eliminar_reuniones($id);
+    $Celulas->eliminar_reuniones($id);
 
     die();
 }
@@ -81,13 +79,14 @@ if (isset($_GET['listarcelulas'])) {
 
     requierePermiso("celulaCrecimiento", "actualizar");
 
-    $listaCelulas = $CelulaCrecimiento->listar_celulas();
-
+    $listaCelulas = $Celulas->listar_CelulaCrecimiento();
 
     echo json_encode($listaCelulas);
 
     die();
 }
+
+
 
 
 

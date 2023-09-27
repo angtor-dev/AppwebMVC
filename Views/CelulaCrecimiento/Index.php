@@ -4,12 +4,13 @@ global $viewScripts;
 $viewScripts = ["CelulaCrecimiento-listar.js"];
 ?>
 
+
 <div class="container-fluid">
 
     <div class="row mt-4">
         <div class="col-sm-12 col-md-12 col-lg-12">
             <div class="table-responsive">
-                <table id="celulaDatatables" class="table table-hover">
+                <table id="celulaDatatables" class="table table-bordered table-hover">
                     <thead>
 
                         <div class="d-flex align-items-end justify-content-between mb-2">
@@ -21,7 +22,7 @@ $viewScripts = ["CelulaCrecimiento-listar.js"];
                         </div>
                         <tr>
                             <th>Codigo</th>
-                            <th>Nombre de la Celula Familiar</th>
+                            <th>Nombre de la Celula de Crecimiento</th>
                             <th>Lider</th>
                             <th>Opciones</th>
                         </tr>
@@ -99,7 +100,7 @@ $viewScripts = ["CelulaCrecimiento-listar.js"];
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Informacion de la Celula de Crecimiento</h5>
+                    <h5 class="modal-title">Informacion de la Celula de CrecimientoConsolidacion</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -205,7 +206,7 @@ $viewScripts = ["CelulaCrecimiento-listar.js"];
                     <div class="mb-3">
                         <form id="formularioReunion">
 
-                            <input type="hidden" id="idCelulaFamiliarR">
+                            <input type="hidden" id="idCelulaCrecimientoR">
                             <div class="mb-3">
                                 <label for="fecha" class="form-label fw-bold">Fecha</label>
                                 <input type="date" class="form-control" id="fecha" name="fecha">
