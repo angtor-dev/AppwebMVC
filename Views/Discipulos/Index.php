@@ -148,7 +148,7 @@ $viewScripts = ["Discipulo-listar.js"];
                     <form id="formulario2" class="row" novalidate>
                         <div class="row my-2">
                             <div class="col-md-6">
-                                <input type="hidden" class="d-none" id="idDiscipulo2">
+                                <input type="hidden" class="d-none" id="idDiscipulo">
                                 <label for="nombre2" class="form-label fw-bold">Nombre</label>
                                 <input name="nombre" type="text" class="form-control" id="nombre2" maxlength="50" aria-describedby="msj_nombre2">
                                 <div id="msj_nombre2" class="invalid-feedback">
@@ -239,8 +239,8 @@ $viewScripts = ["Discipulo-listar.js"];
 
                         <div class="row my-2">
                             <div class="col-lg-12">
-                                <label for="idConsolidador" class="form-label fw-bold">Consolidador</label>
-                                <select class="form-select" id="idConsolidador">
+                                <label for="idConsolidador2" class="form-label fw-bold">Consolidador</label>
+                                <select class="form-select" id="idConsolidador2">
                                     <option selected value="">Selecciona un consolidador</option>
                                 </select>
                                 <div id="msj_idConsolidador" class="text-danger d-none">
@@ -249,7 +249,7 @@ $viewScripts = ["Discipulo-listar.js"];
                             </div>
                             <div class="col-lg-12">
                                 <label for="idcelulaconsolidacion2" class="form-label fw-bold">Celula de Consolidacion</label>
-                                <select class="form-select" id="idcelulaconsolidacion2">
+                                <select class="form-select" id="idCelulaConsolidacion2">
                                     <option selected value="">Selecciona una celula</option>
                                 </select>
                                 <div id="msj_idcelulaconsolidacion" class="text-danger d-none">
@@ -297,7 +297,6 @@ $viewScripts = ["Discipulo-listar.js"];
                     <form id="formulario" class="row" novalidate>
                         <div class="row my-2">
                             <div class="col-md-6">
-                                <input type="hidden" class="d-none" id="idDiscipulo">
                                 <label for="nombre" class="form-label fw-bold">Nombre</label>
                                 <input name="nombre" type="text" class="form-control" id="nombre" maxlength="50" aria-describedby="msj_nombre" required>
                                 <div id="msj_nombre" class="invalid-feedback">
@@ -398,7 +397,7 @@ $viewScripts = ["Discipulo-listar.js"];
                             </div>
                             <div class="col-lg-12">
                                 <label for="idcelulaconsolidacion" class="form-label fw-bold">Celula de Consolidacion</label>
-                                <select class="form-select" id="idcelulaconsolidacion">
+                                <select class="form-select" id="idCelulaConsolidacion">
                                     <option selected value="">Selecciona una celula</option>
                                 </select>
                                 <div id="msj_idcelulaconsolidacion" class="text-danger d-none">

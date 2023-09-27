@@ -111,10 +111,6 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
                 </a>
                 <div class="acordeon-body">
                     <div class="acordeon-items">
-                        <a href="<?= LOCAL_DIR ?>Sedes/Registrar" class="nav-link">
-                            <i class="fa-solid fa-pen-to-square fa-fw"></i>
-                            Registrar
-                        </a>
                         <a href="<?= LOCAL_DIR ?>Sedes/Listar" class="nav-link">
                             <i class="fa-solid fa-rectangle-list fa-fw"></i>
                             Listar

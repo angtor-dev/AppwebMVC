@@ -4,7 +4,6 @@ require_once "Models/Discipulo.php";
 
 necesitaAutenticacion();
 
-requierePermisos("listarDiscipulos");
 
 $usuarioSesion = $_SESSION['usuario'];
 
@@ -38,8 +37,6 @@ if (isset($_GET['cargar_data'])) {
 
 if (isset($_GET['listaConsolidador'])) {
 
-    //requierePermisos("actualizarDiscipulos");
-
     $ListaConsolidador = $Discipulo->listar_consolidador();
 
     echo json_encode($ListaConsolidador);
@@ -51,8 +48,6 @@ if (isset($_GET['listaConsolidador'])) {
 
 if (isset($_GET['listarcelulas'])) {
 
-    //requierePermisos("actualizarDiscipulos");
-
     $listacelulas = $Discipulo->listar_celulas();
 
     echo json_encode($listacelulas);
@@ -61,8 +56,6 @@ if (isset($_GET['listarcelulas'])) {
 }
 
 if (isset($_POST['editar'])) {
-
-    requierePermisos("actualizarDiscipulos");
 
     $id = $_POST['id'];
     $asisCrecimiento = trim(strtolower($_POST['asisCrecimiento']));
@@ -113,8 +106,6 @@ if (isset($_POST['editar'])) {
 
 
 if (isset($_POST['eliminar'])) {
-
-    requierePermisos("eliminarDiscipulos");
 
     $id = $_POST['id'];
 
