@@ -241,7 +241,7 @@ $viewScripts = ["listar-sede.js"];
 
                     <div class="d-flex justify-content-end gap-1">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-primary">Editar</button>
+                        <button type="submit" class="btn btn-primary">Actualizar</button>
 
                     </div>
                 </form>

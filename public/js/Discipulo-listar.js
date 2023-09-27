@@ -161,10 +161,27 @@ $(document).ready(function () {
                 let selector;
                 if (opcion == 1) {
                     selector = document.getElementById('idConsolidador');
-                }else{
+                    /*while (selector.firstChild) {
+                        selector.removeChild(selector.firstChild);
+                    }*/
+                    selector.innerHTML = '';
+                    const newOption = document.createElement('option');
+                    newOption.value = '';
+                    newOption.textContent = 'Selecciona consolidador';
+                    newOption.disabled = true;
+                    newOption.selected = true;
+                    selector.appendChild(newOption);
+                } else {
                     selector = document.getElementById('idConsolidador2');
+                    selector.innerHTML = '';
+                    /*const newOption = document.createElement('option');
+                    newOption.value = '';
+                    newOption.textContent = 'Selecciona consolidador';
+                    newOption.disabled = true;
+                    newOption.selected = true;
+                    selector.appendChild(newOption);*/
                 }
-                
+
 
                 data.forEach(item => {
 
@@ -219,10 +236,18 @@ $(document).ready(function () {
                 let selector;
                 if (opcion == 1) {
                     selector = document.getElementById('idCelulaConsolidacion');
-                }else{
+                    selector.innerHTML = '';
+                    const newOption = document.createElement('option');
+                    newOption.value = '';
+                    newOption.textContent = 'Selecciona celula';
+                    newOption.disabled = true;
+                    newOption.selected = true;
+                    selector.appendChild(newOption);
+                } else {
                     selector = document.getElementById('idCelulaConsolidacion2');
+                    selector.innerHTML = '';
                 }
-                
+
 
                 data.forEach(item => {
 

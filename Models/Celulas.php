@@ -265,6 +265,7 @@ class Celulas extends Model
         }
     }
 
+
     public  function listar_CelulaConsolidacion()
     {
 
@@ -309,8 +310,6 @@ class Celulas extends Model
             die();
         }
     }
-
-
 
 
 
@@ -1160,13 +1159,6 @@ class Celulas extends Model
             die();
         }
     }
-
-
-
-
-
-
-
 
 
 

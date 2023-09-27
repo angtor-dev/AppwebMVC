@@ -58,11 +58,11 @@ $(document).ready(function () {
 
     $('#registrar').on('click', function () {
 
-
         Listar_LideresRegistrar();
         Listar_SedesRegistrar()
     
-      })
+    })
+
 
     $('#territorioDatatables tbody').on('click', '#eliminar', function () {
         const datos = dataTable.row($(this).parents()).data();
@@ -147,6 +147,7 @@ $(document).ready(function () {
                 let data = JSON.parse(response);
 
                 let selector = document.getElementById('idLider');
+                selector.innerHTML = '';
                 // Limpiar el selector antes de agregar nuevas opciones
                 const placeholderOption = document.createElement('option');
                 placeholderOption.value = '';
@@ -165,17 +166,18 @@ $(document).ready(function () {
                 });
 
                 // Destruir la instancia existente si la hay
-                if (choices3) {
-                    choices3.destroy();
+                if (choices1) {
+                    choices1.destroy();
                 }
-                choices3 = new Choices(selector, {
+
+                choices1 = new Choices(selector, {
                     allowHTML: true,
                     searchEnabled: true,  // Habilita la funcionalidad de búsqueda
                     removeItemButton: true,  // Habilita la posibilidad de remover items
                     placeholderValue: 'Selecciona una opción',  // Texto del placeholder
                 });
-
-                choices3.setChoiceByValue(idLider.toString());
+                
+                choices1.setChoiceByValue('');
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -205,6 +207,7 @@ $(document).ready(function () {
                 let data = JSON.parse(response);
 
                 let selector = document.getElementById('idSede');
+                selector.innerHTML = '';
 
                 const placeholderOption = document.createElement('option');
                 placeholderOption.value = '';
@@ -223,17 +226,17 @@ $(document).ready(function () {
                 });
 
                 // Destruir la instancia existente si la hay
-                if (choices4) {
-                    choices4.destroy();
+                if (choices2) {
+                    choices2.destroy();
                 }
-                choices4 = new Choices(selector, {
+                choices2 = new Choices(selector, {
                     allowHTML: true,
                     searchEnabled: true,  // Habilita la funcionalidad de búsqueda
                     removeItemButton: true,  // Habilita la posibilidad de remover items
                     placeholderValue: 'Selecciona una opción',  // Texto del placeholder
                 });
 
-                choices4.setChoiceByValue(idSede.toString());
+                choices2.setChoiceByValue('');
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -272,17 +275,17 @@ $(document).ready(function () {
                 });
 
                 // Destruir la instancia existente si la hay
-                if (choices1) {
-                    choices1.destroy();
+                if (choices3) {
+                    choices3.destroy();
                 }
-                choices1 = new Choices(selector, {
+                choices3 = new Choices(selector, {
                     allowHTML: true,
                     searchEnabled: true,  // Habilita la funcionalidad de búsqueda
                     removeItemButton: true,  // Habilita la posibilidad de remover items
                     placeholderValue: 'Selecciona una opción',  // Texto del placeholder
                 });
 
-                choices1.setChoiceByValue(idLider.toString());
+                choices3.setChoiceByValue(idLider.toString());
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -323,17 +326,17 @@ $(document).ready(function () {
                 });
 
                 // Destruir la instancia existente si la hay
-                if (choices2) {
-                    choices2.destroy();
+                if (choices4) {
+                    choices4.destroy();
                 }
-                choices2 = new Choices(selector, {
+                choices4 = new Choices(selector, {
                     allowHTML: true,
                     searchEnabled: true,  // Habilita la funcionalidad de búsqueda
                     removeItemButton: true,  // Habilita la posibilidad de remover items
                     placeholderValue: 'Selecciona una opción',  // Texto del placeholder
                 });
 
-                choices2.setChoiceByValue(idSede.toString());
+                choices4.setChoiceByValue(idSede.toString());
 
             },
             error: function (jqXHR, textStatus, errorThrown) {

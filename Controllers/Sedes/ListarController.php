@@ -59,13 +59,13 @@ if (isset($_POST['registrar'])) {
 }
 
 if (isset($_POST['editar'])) {
-    requierePermiso("sede", "actualizar");
+    requierePermiso("sedes", "actualizar");
 
-    $idSede = $_POST['id2'];
-    $idPastor = $_POST['idPastor2'];
-    $nombre = trim(strtolower($_POST['nombre2']));
-    $direccion = trim(strtolower($_POST['direccion2']));
-    $estado = trim($_POST['estado2']);
+    $idSede = $_POST['id'];
+    $idPastor = $_POST['idPastor'];
+    $nombre = trim(strtolower($_POST['nombre']));
+    $direccion = trim(strtolower($_POST['direccion']));
+    $estado = trim($_POST['estado']);
 
     $Sede->validacion_datos($idPastor, $nombre, $direccion, $estado);
     $Sede->validacion_existencia($nombre, $idSede);

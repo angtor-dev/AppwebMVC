@@ -3,8 +3,6 @@ $(document).ready(function () {
   let choices;
   let choices2;
 
-  console.log(choices2);
-
   const dataTable = $('#sedeDatatables').DataTable({
     responsive: true,
     ajax: {
@@ -51,7 +49,6 @@ $(document).ready(function () {
   })
 
   $('#registrar').on('click', function () {
-
 
     Listar_PastoresRegistrar();
 
@@ -137,7 +134,6 @@ $(document).ready(function () {
       data: {
 
         listaPastores: 'listaPastores',
-        
 
       },
       success: function (response) {
@@ -218,13 +214,13 @@ $(document).ready(function () {
         if (choices2) {
           choices2.destroy();
         }
+
         choices2 = new Choices(selector, {
           allowHTML: true,
           searchEnabled: true,  // Habilita la funcionalidad de búsqueda
           removeItemButton: true,  // Habilita la posibilidad de remover items
          
         });
-        console.log(choices2);
 
         choices2.setChoiceByValue(idPastor.toString());
 
@@ -490,14 +486,15 @@ $(document).ready(function () {
         data: {
 
           editar: 'editar',
-          id2: id2,
-          idPastor2: idPastor2.value,
-          nombre2: nombre2.value,
-          direccion2: direccion2.value,
-          estado2: estado2.value
+          id: id2,
+          idPastor: idPastor2.value,
+          nombre: nombre2.value,
+          direccion: direccion2.value,
+          estado: estado2.value
         },
         success: function (response) {
           console.log(response);
+
           dataTable.ajax.reload();
 
           Swal.fire({

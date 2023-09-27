@@ -104,6 +104,7 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
             <div class="nav-link py-0 mt-3 text-uppercase">Iglesia</div>
 
             <!-- Anjhel -->
+            <?php if ($usuario->tieneRol("Superusuario")): ?>
             <div class="acordeon">
                 <a href="#" class="nav-link acordeon-toggle">
                     <i class="fa-solid fa-church fa-fw me-2"></i>
@@ -113,11 +114,12 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
                     <div class="acordeon-items">
                         <a href="<?= LOCAL_DIR ?>Sedes/Listar" class="nav-link">
                             <i class="fa-solid fa-rectangle-list fa-fw"></i>
-                            Listar
+                            Gestionar
                         </a>
                     </div>
                 </div>
             </div>
+            <?php endif ?>
             <div class="acordeon">
                 <a href="#" class="nav-link acordeon-toggle">
                     <i class="fa-sharp fa-solid fa-earth-americas fa-fw me-2"></i>
@@ -125,13 +127,9 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
                 </a>
                 <div class="acordeon-body">
                     <div class="acordeon-items">
-                        <a href="<?= LOCAL_DIR ?>Territorios/Registrar" class="nav-link">
-                            <i class="fa-solid fa-pen-to-square fa-fw"></i>
-                            Registrar
-                        </a>
                         <a href="<?= LOCAL_DIR ?>Territorios/Listar" class="nav-link">
                             <i class="fa-solid fa-rectangle-list fa-fw"></i>
-                            Listar
+                            Gestionar
                         </a>
                     </div>
                 </div>
@@ -205,13 +203,9 @@ $usuario = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
                 </a>
                 <div class="acordeon-body">
                     <div class="acordeon-items">
-                        <a href="<?= LOCAL_DIR ?>Discipulos/Registrar" class="nav-link">
-                            <i class="fa-solid fa-pen-to-square fa-fw"></i>
-                            Registrar
-                        </a>
                         <a href="<?= LOCAL_DIR ?>Discipulos" class="nav-link">
                             <i class="fa-solid fa-rectangle-list fa-fw"></i>
-                            Listar
+                            Gestionar
                         </a>
                     </div>
                 </div>

@@ -12,13 +12,13 @@ $viewScripts = ["territorio-listar.js"];
                 <table id="territorioDatatables" class="table table-hover">
                     <thead>
 
-                    <div class="d-flex align-items-end justify-content-between mb-2">
-                    <h2><strong>Territorios</strong></h2>
-                    <button class="btn btn-accent text-nowrap" id="registrar" data-bs-toggle="modal" data-bs-target="#modal_registrar">
-                        <i class="fa-solid fa-plus"></i>
-                        Nuevo Territorio
-                    </button>
-                </div>
+                        <div class="d-flex align-items-end justify-content-between mb-2">
+                            <h2><strong>Territorios</strong></h2>
+                            <button class="btn btn-accent text-nowrap" id="registrar" data-bs-toggle="modal" data-bs-target="#modal_registrar">
+                                <i class="fa-solid fa-plus"></i>
+                                Nuevo Territorio
+                            </button>
+                        </div>
 
                         <tr>
                             <th>Codigo</th>
@@ -75,7 +75,7 @@ $viewScripts = ["territorio-listar.js"];
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Editar datos del Territorio</h5>
+                    <h5 class="modal-title">Registrar Territorio</h5>
                 </div>
                 <div class="modal-body">
                     <form id="formulario">
@@ -101,7 +101,7 @@ $viewScripts = ["territorio-listar.js"];
                         </div>
                         <div class="mb-3">
                             <label for="idLider" class="form-label fw-bold">Lider Responsable</label>
-                            <select class="form-select" id="idLider" name="idLider" placeholder="hola">
+                            <select class="form-select" id="idLider" name="idLider">
                             </select>
                             <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_idLider" role="alert">
                                 Debe seleccionar un Lider.
@@ -121,8 +121,8 @@ $viewScripts = ["territorio-listar.js"];
 
 
                         <div class="d-flex justify-content-end">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-primary">Editar</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn btn-primary">Registrar</button>
                         </div>
                     </form>
 
@@ -163,7 +163,7 @@ $viewScripts = ["territorio-listar.js"];
                         </div>
                         <div class="mb-3">
                             <label for="idLider2" class="form-label fw-bold">Lider Responsable</label>
-                            <select class="form-select" id="idLider2" name="idLider2" placeholder="hola">
+                            <select class="form-select" id="idLider2" name="idLider2">
                             </select>
                             <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_idLider2" role="alert">
                                 Debe seleccionar un Lider.
