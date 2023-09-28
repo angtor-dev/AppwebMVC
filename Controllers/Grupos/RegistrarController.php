@@ -12,6 +12,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET')
 
     $niveles = NivelCrecimiento::cargarRelaciones($escuela->id, "Escuela", 1);
     $profesores = Usuario::listarPorRoles("Profesor");
+    $subniveles = array();
+    foreach ($niveles as $nivel) {
+        $grupoSubniveles = Subnivel::cargarRelaciones($nivel->id, "NivelCrecimiento", 1);
+        $subniveles = array_merge($subniveles, $grupoSubniveles);
+    }
 
     renderView();
 }
@@ -28,8 +33,13 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST')
         $usuario = $_SESSION['usuario'];
         $escuela = $usuario->sede->getEscuela();
 
-        $niveles = NivelCrecimiento::cargarRelaciones($escuela->id, "Escuela", 1);
         $profesores = Usuario::listarPorRoles("Profesor");
+        $niveles = NivelCrecimiento::cargarRelaciones($escuela->id, "Escuela", 1);
+        $subniveles = array();
+        foreach ($niveles as $nivel) {
+            $grupoSubniveles = Subnivel::cargarRelaciones($nivel->id, "NivelCrecimiento", 1);
+            $subniveles = array_merge($subniveles, $grupoSubniveles);
+        }
         
         renderView();
     }

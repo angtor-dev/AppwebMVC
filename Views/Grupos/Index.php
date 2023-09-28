@@ -25,7 +25,7 @@ $title = "Grupos";
                         <div class="card-title fw-medium mb-0"><?= $grupo->getNombre() ?></div>
                     </div>
                     <div class="card-body">
-                        <b>Nivel:</b> <?= $grupo->nivelCrecimiento->getNombre() ?> <br>
+                        <b>Nivel:</b> <?= $grupo->subnivel->nivelCrecimiento->getNombre() ?> <br>
                         <b>Profesor:</b> <?= $grupo->profesor->getNombreCompleto() ?> <br>
                         <b>Participantes:</b> 0
                     </div>

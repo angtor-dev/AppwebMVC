@@ -1,7 +1,8 @@
 <?php
-/** @var Grupo $grupo */
+/** @var ?Grupo $grupo */
 /** @var Usuario[] $profesores */
 /** @var NivelCrecimiento[] $niveles */
+/** @var Subnivel[] $subniveles */
 $title = "Registrar grupo";
 ?>
 
@@ -19,16 +20,29 @@ $title = "Registrar grupo";
         <div class="row mb-3">
             <div class="col-md-6">
                 <label class="form-label fw-bold">Nivel de crecimiento</label>
-                <select name="idNivelCrecimiento" id="idNivelCrecimiento" class="form-select">
+                <select name="idNivelCrecimiento" id="idNivelCrecimiento" class="form-select" onchange="selectNivelHandler(this)">
                     <option value="0">Elige un nivel de crecimiento</option>
                     <?php foreach ($niveles as $nivel): ?>
-                        <option value="<?= $nivel->id ?>" <?= $nivel->id == @$grupo?->nivelCrecimiento->id ? "selected" : "" ?>>
+                        <option value="<?= $nivel->id ?>" <?= $nivel->id == @$grupo?->subnivel->nivelCrecimiento->id ? "selected" : "" ?>>
                             <?= $nivel->getNombre() ?>
                         </option>
                     <?php endforeach ?>
                 </select>
             </div>
             <div class="col-md-6">
+                <label class="form-label fw-bold">Subnivel</label>
+                <select name="idSubnivel" id="idSubnivel" class="form-select">
+                    <option value="0">Elige un subnivel</option>
+                    <?php foreach ($subniveles as $subnivel): ?>
+                        <option value="<?= $subnivel->id ?>" <?= $subnivel->id == @$grupo?->subnivel->id ? "selected" : ""  ?>
+                            class="<?= isset($grupo) && $grupo->subnivel->nivelCrecimiento->id == $subnivel->nivelCrecimiento->id
+                            ? "" : "d-none" ?>" data-id-nivel="<?= $subnivel->nivelCrecimiento->id ?>">
+                            <?= $subnivel->getNombre() ?>
+                        </option>
+                    <?php endforeach ?>
+                </select>
+            </div>
+            <div class="col-md-12">
                 <label class="form-label fw-bold">Profesor</label>
                 <select name="idProfesor" id="idProfesor" class="form-select">
                     <option value="0">Elige un profesor</option>
@@ -50,3 +64,16 @@ $title = "Registrar grupo";
         </div>
     </form>
 </div>
+
+<script>
+    function selectNivelHandler(nivelEl) {
+        const subniveles = document.querySelectorAll("#idSubnivel option")
+        subniveles.forEach(subnivelEl => {
+            if (subnivelEl.dataset.idNivel == nivelEl.value) {
+                subnivelEl.classList.remove('d-none')
+            } else {
+                subnivelEl.classList.add('d-none')
+            }
+        });
+    }
+</script>
