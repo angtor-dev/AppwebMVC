@@ -4,7 +4,7 @@ require_once "Models/Sede.php";
 
 necesitaAutenticacion();
 
-requierePermiso("sedes", "registrar");
+requierePermiso("sedes", "consultar");
 
 $usuarioSesion = $_SESSION['usuario'];
 
@@ -46,6 +46,7 @@ if (isset($_GET['listaPastores'])) {
 }
 
 if (isset($_POST['registrar'])) {
+    requierePermiso("sedes", "registrar");
 
     $idPastor = $_POST['idPastor'];
     $nombre = trim(strtolower($_POST['nombre']));

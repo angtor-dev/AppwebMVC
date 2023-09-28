@@ -338,18 +338,16 @@ $(document).ready(function () {
                 let selector = document.getElementById('idLider');
                 const placeholderOption = document.createElement('option');
                 placeholderOption.value = '';
-                placeholderOption.text = 'Seleccione el Lider de Celula';
+                placeholderOption.text = 'Seleccione el lider';
                 placeholderOption.disabled = true;
-                placeholderOption.selected = true;
                 selector.appendChild(placeholderOption);
 
                 let selector2 = document.getElementById('idCoLider');
 
                 const placeholderOption2 = document.createElement('option');
                 placeholderOption2.value = '';
-                placeholderOption2.text = 'Seleccione el CoLider de las Celula';
+                placeholderOption2.text = 'Seleccione el CoLider';
                 placeholderOption2.disabled = true;
-                placeholderOption2.selected = true;
                 selector2.appendChild(placeholderOption2);
 
                 data.forEach(item => {
@@ -394,6 +392,9 @@ $(document).ready(function () {
                     placeholderValue: 'Selecciona una opción',  // Texto del placeholder
                 });
 
+                choices4.setChoiceByValue('')
+                choices5.setChoiceByValue('')
+
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -425,9 +426,8 @@ $(document).ready(function () {
 
                 const placeholderOption = document.createElement('option');
                 placeholderOption.value = '';
-                placeholderOption.text = 'Selecciona el Territorio';
+                placeholderOption.text = 'Selecciona el territorio';
                 placeholderOption.disabled = true;
-                placeholderOption.selected = true;
                 selector.appendChild(placeholderOption);
 
                 data.forEach(item => {
@@ -450,6 +450,8 @@ $(document).ready(function () {
                     removeItemButton: true,  // Habilita la posibilidad de remover items
                     placeholderValue: 'Selecciona una opción',  // Texto del placeholder
                 });
+
+                choices6.setChoiceByValue('')
 
             },
             error: function (jqXHR, textStatus, errorThrown) {

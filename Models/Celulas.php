@@ -1109,13 +1109,13 @@ class Celulas extends Model
             }
 
             if ($arrayAccion['accion'] == 'actualizar') {
-                $sql = "SELECT * FROM reunionconsolidacion WHERE reunionconsolidacion.id = :id";
+                $sql = "SELECT * FROM reunioncelula WHERE reunioncelula.id = :id";
                 $stmt = $this->db->pdo()->prepare($sql);
                 $stmt->bindValue(":id", $arrayAccion['id']);
                 $stmt->execute();
                 $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
 
-                if ($resultado['idCelulaConsolidacion'] != $arrayAccion['idCelulaConsolidacion']) {
+                if ($resultado['idCelula'] !== $arrayAccion['idCelulaConsolidacion']) {
                     $sql2 = "SELECT * FROM asistencia WHERE asistencia.idReunion = :id";
                     $stmt2 = $this->db->pdo()->prepare($sql2);
                     $stmt2->bindValue(":id", $arrayAccion['id']);

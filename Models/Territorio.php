@@ -407,17 +407,19 @@ class Territorio extends Model
     {
         try {
             
-            $sql = "(SELECT 1 FROM celulafamiliar WHERE idTerritorio= :idTerritorio1 AND estatus = 1 LIMIT 1)
+            /*$sql = "(SELECT 1 FROM celulafamiliar WHERE idTerritorio= :idTerritorio1 AND estatus = 1 LIMIT 1)
                     UNION
                     (SELECT 1 FROM celulaconsolidacion WHERE idTerritorio = :idTerritorio2 AND estatus = 1  LIMIT 1)
                     UNION
                     (SELECT 1 FROM celulacrecimiento WHERE idTerritorio = :idTerritorio3 AND estatus = 1  LIMIT 1)
-                    LIMIT 1";
+                    LIMIT 1";*/
+            $sql = "SELECT * FROM celulas WHERE idTerritorio = :idTerritorio AND estatus = 1";
 
             $stmt = $this->db->pdo()->prepare($sql);
-            $stmt->bindValue(":idTerritorio1", $idTerritorio);
+            $stmt->bindValue(":idTerritorio", $idTerritorio);
+            /*$stmt->bindValue(":idTerritorio1", $idTerritorio);
             $stmt->bindValue(":idTerritorio2", $idTerritorio);
-            $stmt->bindValue(":idTerritorio3", $idTerritorio);
+            $stmt->bindValue(":idTerritorio3", $idTerritorio);*/
             $stmt->execute();
 
             if ($stmt->rowCount() > 0) {

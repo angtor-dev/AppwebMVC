@@ -44,7 +44,7 @@ $(document).ready(function () {
     document.getElementById('estado2').value = datos.estadoCodigo;
 
     Listar_PastoresEditar(datos.idPastor);
-    
+
 
   })
 
@@ -141,14 +141,14 @@ $(document).ready(function () {
         let data = JSON.parse(response);
 
         let selector = document.getElementById('idPastor');
-        // Crear y agregar la opción tipo "placeholder"
+        selector.innerHTML = '';
+
         const placeholderOption = document.createElement('option');
-          placeholderOption.value = '';
-          placeholderOption.text = 'Selecciona un pastor';
-          placeholderOption.disabled = true;
-          placeholderOption.selected = true;
-          selector.appendChild(placeholderOption);
-          
+        placeholderOption.value = '';
+        placeholderOption.text = 'Seleccionar pastor';
+        placeholderOption.disabled = true;
+        selector.appendChild(placeholderOption);
+
         data.forEach(item => {
 
           const option = document.createElement('option');
@@ -170,6 +170,7 @@ $(document).ready(function () {
           placeholderValue: 'Selecciona una opción',
         });
 
+        choices.setChoiceByValue('');
 
       },
       error: function (jqXHR, textStatus, errorThrown) {
@@ -180,7 +181,7 @@ $(document).ready(function () {
     })
   }
 
- 
+
 
 
   function Listar_PastoresEditar(idPastor) {
@@ -191,7 +192,7 @@ $(document).ready(function () {
       data: {
 
         listaPastores: 'listaPastores',
-        
+
 
       },
       success: function (response) {
@@ -200,7 +201,7 @@ $(document).ready(function () {
 
         let selector = document.getElementById('idPastor2');
         // Crear y agregar la opción tipo "placeholder"
-          
+
         data.forEach(item => {
 
           const option = document.createElement('option');
@@ -209,8 +210,8 @@ $(document).ready(function () {
           selector.appendChild(option);
 
         });
-        
-   
+
+
         if (choices2) {
           choices2.destroy();
         }
@@ -219,7 +220,7 @@ $(document).ready(function () {
           allowHTML: true,
           searchEnabled: true,  // Habilita la funcionalidad de búsqueda
           removeItemButton: true,  // Habilita la posibilidad de remover items
-         
+
         });
 
         choices2.setChoiceByValue(idPastor.toString());
@@ -230,7 +231,7 @@ $(document).ready(function () {
         console.error("Error al enviar:", textStatus, errorThrown);
         alert("Hubo un error al realizar el registro. Por favor, inténtalo de nuevo.");
       }
-      
+
     })
   }
 
@@ -326,7 +327,7 @@ $(document).ready(function () {
       // ... (tu código AJAX va aquí)
       $.ajax({
         type: "POST",
-        url: "http://localhost/AppwebMVC/Sedes/Registrar",
+        url: "http://localhost/AppwebMVC/Sedes/Listar",
         data: {
 
           registrar: 'registrar',

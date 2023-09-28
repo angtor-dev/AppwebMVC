@@ -39,7 +39,6 @@ if (isset($_POST['registrar'])) {
 
     requierePermiso("celulaCrecimiento", "actualizar");
 
-    $id = $_POST['id'];
     $nombre = trim(strtolower($_POST['nombre']));
     $idLider = trim($_POST['idLider']);
     $idCoLider = trim($_POST['idCoLider']);

@@ -2,57 +2,60 @@
 global $viewStyles;
 global $viewScripts;
 $viewScripts = ["listar-sede.js"];
+
+/** @var Usuario */
+$usuario = $_SESSION['usuario'];
 ?>
 
-
-
+<script>
+    const permisos = {
+        registrar: <?php echo $usuario->tienePermiso("sedes", "registrar") ?>,
+        consultar: <?php echo $usuario->tienePermiso("sedes", "consultar") ?>,
+        actualizar: <?php echo $usuario->tienePermiso("sedes", "actualizar") ?>,
+        eliminar: <?php echo $usuario->tienePermiso("sedes", "eliminar") ?>
+    }
+</script>
 
 <div class="container-fluid">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="table-responsive">
+            <table id="sedeDatatables" class="table table-bordered table-hover">
 
+                <thead>
+                    <div class="d-flex align-items-end justify-content-between mb-2">
+                        <h2><strong>Sedes</strong></h2>
+                        <?php if ($usuario->tienePermiso("sedes", "registrar")) : ?>
+                            <button class="btn btn-accent text-nowrap" id="registrar" data-bs-toggle="modal" data-bs-target="#modal_registrar">
+                                <i class="fa-solid fa-plus"></i>
+                                Nueva Sede
+                            </button>
+                        <?php endif ?>
+                    </div>
 
-
-
-
-
-
-</div>
-<div class="col-sm-12 col-md-12 col-lg-12">
-    <div class="table-responsive">
-        <table id="sedeDatatables" class="table table-bordered table-hover">
-
-            <thead>
-                <div class="d-flex align-items-end justify-content-between mb-2">
-                    <h2><strong>Sedes</strong></h2>
-                    <button class="btn btn-accent text-nowrap" id="registrar" data-bs-toggle="modal" data-bs-target="#modal_registrar">
-                        <i class="fa-solid fa-plus"></i>
-                        Nueva Sede
-                    </button>
-                </div>
-
-                <tr>
-                    <th>Codigo</th>
-                    <th>Nombre de la sede</th>
-                    <th>Direccion</th>
-                    <th>Opciones</th>
-                </tr>
-            </thead>
-            <!-- AQUI MOSTRARA LA INFORMACION -->
-            </tbody>
-        </table>
+                    <tr>
+                        <th>Codigo</th>
+                        <th>Nombre de la sede</th>
+                        <th>Direccion</th>
+                        <th>Opciones</th>
+                    </tr>
+                </thead>
+                <!-- AQUI MOSTRARA LA INFORMACION -->
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
-</div>
-</div>
-</div>
 
 
 
+<?php if ($usuario->tienePermiso("sedes", "registrar")) : ?>
 <!-- MODAL PARA REGISTRAR-->
+
 <div class="modal fade" id="modal_registrar" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Registro</h5>
+                <h5 class="modal-title">Registrar Sede</h5>
             </div>
             <div class="modal-body">
                 <form id="formulario">
@@ -115,19 +118,20 @@ $viewScripts = ["listar-sede.js"];
                             Debe seleccionar un estado.
                         </div>
                     </div>
-               
 
-                <div class="d-flex justify-content-end gap-1">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Registrar</button>
 
-                </div>
-              </form>
+                    <div class="d-flex justify-content-end gap-1">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Registrar</button>
+
+                    </div>
+                </form>
 
             </div>
         </div>
     </div>
 </div>
+<?php endif ?>
 
 
 <!-- MODAL PARA VER TODOS LOS DATOS DE LA SEDE -->
@@ -138,7 +142,7 @@ $viewScripts = ["listar-sede.js"];
                 <h5 class="modal-title">Informacion de la sede</h5>
             </div>
             <div class="modal-body">
-                <!-- AQUI TE ESTA TODA LA INFORAMCION DE MANERA ESTATICA, ES DECIR, SOLO PARA MOSTRAR INFO -->\
+                <!-- AQUI TE ESTA TODA LA INFORAMCION DE MANERA ESTATICA, ES DECIR, SOLO PARA MOSTRAR INFO -->
                 <div class="mb-3">
                     <ul class="list-group">
                         <input type="hidden" id="id_Pastor">
@@ -169,7 +173,9 @@ $viewScripts = ["listar-sede.js"];
 </div>
 
 
+<?php if ($usuario->tienePermiso("sedes", "actualizar")) : ?>
 <!-- MODAL PARA EDITAR TODOS LOS DATOS DE LA SEDE -->
+
 <div class="modal fade" id="modal_editarInfo" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -249,4 +255,6 @@ $viewScripts = ["listar-sede.js"];
         </div>
     </div>
 </div>
+<?php endif ?>
+
 </div>

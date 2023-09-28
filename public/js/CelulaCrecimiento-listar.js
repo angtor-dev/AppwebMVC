@@ -117,7 +117,7 @@ $(document).ready(function () {
                     error: function (jqXHR, textStatus, errorThrown) {
                         if (jqXHR.responseText) {
                             let jsonResponse = JSON.parse(jqXHR.responseText);
-    
+
                             if (jsonResponse.msj) {
                                 Swal.fire({
                                     icon: 'error',
@@ -216,7 +216,7 @@ $(document).ready(function () {
         })
     }
 
-    
+
 
 
     function Listar_TerritorioEditar(idTerritorio) {
@@ -249,7 +249,7 @@ $(document).ready(function () {
                 if (choices3) {
                     choices3.destroy();
                 }
-                
+
                 choices3 = new Choices(selector, {
                     allowHTML: true,
                     searchEnabled: true,  // Habilita la funcionalidad de búsqueda
@@ -286,20 +286,18 @@ $(document).ready(function () {
 
                 let selector = document.getElementById('idLider');
                 const placeholderOption = document.createElement('option');
-                    placeholderOption.value = '';
-                    placeholderOption.text = 'Seleccione el Lider de Celula';
-                    placeholderOption.disabled = true;
-                    placeholderOption.selected = true;
-                    selector.appendChild(placeholderOption);
+                placeholderOption.value = '';
+                placeholderOption.text = 'Seleccione el lider';
+                placeholderOption.disabled = true;
+                selector.appendChild(placeholderOption);
 
                 let selector2 = document.getElementById('idCoLider');
 
                 const placeholderOption2 = document.createElement('option');
-                        placeholderOption2.value = '';
-                        placeholderOption2.text = 'Seleccione el CoLider de las Celula';
-                        placeholderOption2.disabled = true;
-                        placeholderOption2.selected = true;
-                        selector2.appendChild(placeholderOption2);
+                placeholderOption2.value = '';
+                placeholderOption2.text = 'Seleccione el CoLider';
+                placeholderOption2.disabled = true;
+                selector2.appendChild(placeholderOption2);
 
                 data.forEach(item => {
 
@@ -343,6 +341,8 @@ $(document).ready(function () {
                     placeholderValue: 'Selecciona una opción',  // Texto del placeholder
                 });
 
+                choices4.setChoiceByValue('')
+                choices5.setChoiceByValue('')
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -352,7 +352,7 @@ $(document).ready(function () {
         })
     }
 
-    
+
 
 
     function Listar_TerritorioRegistrar() {
@@ -373,11 +373,10 @@ $(document).ready(function () {
                 let selector = document.getElementById('idTerritorio');
 
                 const placeholderOption = document.createElement('option');
-                    placeholderOption.value = '';
-                    placeholderOption.text = 'Selecciona el Territorio';
-                    placeholderOption.disabled = true;
-                    placeholderOption.selected = true;
-                    selector.appendChild(placeholderOption);
+                placeholderOption.value = '';
+                placeholderOption.text = 'Selecciona el territorio';
+                placeholderOption.disabled = true;
+                selector.appendChild(placeholderOption);
 
                 data.forEach(item => {
 
@@ -392,13 +391,15 @@ $(document).ready(function () {
                 if (choices6) {
                     choices6.destroy();
                 }
-                
+
                 choices6 = new Choices(selector, {
                     allowHTML: true,
                     searchEnabled: true,  // Habilita la funcionalidad de búsqueda
                     removeItemButton: true,  // Habilita la posibilidad de remover items
                     placeholderValue: 'Selecciona una opción',  // Texto del placeholder
                 });
+
+                choices6.setChoiceByValue('')
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -409,153 +410,153 @@ $(document).ready(function () {
         })
     }
 
-    
 
 
 
- ///////////////////////////// REGISTRAR CELULA ////////////////////////////////
 
- const regexObj = {
+    ///////////////////////////// REGISTRAR CELULA ////////////////////////////////
 
-    nombre: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]{5,50}$/, // Letras, números, espacios, puntos y comas con un máximo de 20 caracteres
-    idLider: /^[1-9]\d*$/, // Números enteros mayores a 0
-    idCoLider: /^[1-9]\d*$/, // Números enteros mayores a 0
-    idTerritorio: /^[1-9]\d*$/, // Números enteros mayores a 0
+    const regexObj = {
 
-};
+        nombre: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]{5,50}$/, // Letras, números, espacios, puntos y comas con un máximo de 20 caracteres
+        idLider: /^[1-9]\d*$/, // Números enteros mayores a 0
+        idCoLider: /^[1-9]\d*$/, // Números enteros mayores a 0
+        idTerritorio: /^[1-9]\d*$/, // Números enteros mayores a 0
 
-const validationStatus = {
-    nombre: false,
-    idLider: false,
-    idCoLider: false,
-    idTerritorio: false
-};
+    };
 
-
-//Validar nombre
-const nombre = document.getElementById("nombre");
-nombre.addEventListener('keyup', (e) => {
-    // Validar nombre
-    if (!regexObj.nombre.test(e.target.value)) {
-        document.getElementById("msj_nombre").classList.remove("d-none");
-        validationStatus.nombre = false;
-    } else {
-        document.getElementById("msj_nombre").classList.add("d-none");
-        validationStatus.nombre = true;
-    }
-})
+    const validationStatus = {
+        nombre: false,
+        idLider: false,
+        idCoLider: false,
+        idTerritorio: false
+    };
 
 
-// Validacion de idLider y idCoLider
-
-const idLider = document.getElementById("idLider");
-const idCoLider = document.getElementById("idCoLider");
-
-idLider.addEventListener('change', (e) => {
-    if (!regexObj.idLider.test(e.target.value) || e.target.value === idCoLider.value) {
-        document.getElementById("msj_idLider").classList.remove("d-none");
-        validationStatus.idLider = false;
-    } else {
-        document.getElementById("msj_idLider").classList.add("d-none");
-        validationStatus.idLider = true;
-    }
-})
-
-idCoLider.addEventListener('change', (e) => {
-    if (!regexObj.idCoLider.test(e.target.value) || e.target.value === idLider.value) {
-        document.getElementById("msj_idCoLider").classList.remove("d-none");
-        validationStatus.idCoLider = false;
-    } else {
-        document.getElementById("msj_idCoLider").classList.add("d-none");
-        validationStatus.idCoLider = true;
-    }
-})
+    //Validar nombre
+    const nombre = document.getElementById("nombre");
+    nombre.addEventListener('keyup', (e) => {
+        // Validar nombre
+        if (!regexObj.nombre.test(e.target.value)) {
+            document.getElementById("msj_nombre").classList.remove("d-none");
+            validationStatus.nombre = false;
+        } else {
+            document.getElementById("msj_nombre").classList.add("d-none");
+            validationStatus.nombre = true;
+        }
+    })
 
 
-// Validar idTerritorio
-const idTerritorio = document.getElementById("idTerritorio");
-idTerritorio.addEventListener('change', (e) => {
-    if (!regexObj.idTerritorio.test(e.target.value)) {
-        document.getElementById("msj_idTerritorio").classList.remove("d-none");
-        validationStatus.idSede = false;
-    } else {
-        document.getElementById("msj_idTerritorio").classList.add("d-none");
-        validationStatus.idTerritorio = true;
-    }
-})
+    // Validacion de idLider y idCoLider
+
+    const idLider = document.getElementById("idLider");
+    const idCoLider = document.getElementById("idCoLider");
+
+    idLider.addEventListener('change', (e) => {
+        if (!regexObj.idLider.test(e.target.value) || e.target.value === idCoLider.value) {
+            document.getElementById("msj_idLider").classList.remove("d-none");
+            validationStatus.idLider = false;
+        } else {
+            document.getElementById("msj_idLider").classList.add("d-none");
+            validationStatus.idLider = true;
+        }
+    })
+
+    idCoLider.addEventListener('change', (e) => {
+        if (!regexObj.idCoLider.test(e.target.value) || e.target.value === idLider.value) {
+            document.getElementById("msj_idCoLider").classList.remove("d-none");
+            validationStatus.idCoLider = false;
+        } else {
+            document.getElementById("msj_idCoLider").classList.add("d-none");
+            validationStatus.idCoLider = true;
+        }
+    })
+
+
+    // Validar idTerritorio
+    const idTerritorio = document.getElementById("idTerritorio");
+    idTerritorio.addEventListener('change', (e) => {
+        if (!regexObj.idTerritorio.test(e.target.value)) {
+            document.getElementById("msj_idTerritorio").classList.remove("d-none");
+            validationStatus.idSede = false;
+        } else {
+            document.getElementById("msj_idTerritorio").classList.add("d-none");
+            validationStatus.idTerritorio = true;
+        }
+    })
 
 
 
-const form = document.getElementById("formulario");
-form.addEventListener("submit", (e) => {
-    e.preventDefault();
+    const form = document.getElementById("formulario");
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
 
-    // Verifica si todos los campos son válidos antes de enviar el formulario
-    if (Object.values(validationStatus).every(status => status === true)) {
-        console.log("Formulario válido. Puedes enviar los datos al servidor");
-        // Aquí puedes agregar el código para enviar el formulario
-        $.ajax({
-            type: "POST",
-            url: "http://localhost/AppwebMVC/CelulaCrecimiento/Index",
-            data: {
+        // Verifica si todos los campos son válidos antes de enviar el formulario
+        if (Object.values(validationStatus).every(status => status === true)) {
+            console.log("Formulario válido. Puedes enviar los datos al servidor");
+            // Aquí puedes agregar el código para enviar el formulario
+            $.ajax({
+                type: "POST",
+                url: "http://localhost/AppwebMVC/CelulaCrecimiento/Index",
+                data: {
 
-                registrar: 'registrar',
-                nombre: nombre.value,
-                idLider: idLider.value,
-                idCoLider: idCoLider.value,
-                idTerritorio: idTerritorio.value
-            },
-            success: function (response) {
-                console.log(response);
-                dataTable.ajax.reload();
+                    registrar: 'registrar',
+                    nombre: nombre.value,
+                    idLider: idLider.value,
+                    idCoLider: idCoLider.value,
+                    idTerritorio: idTerritorio.value
+                },
+                success: function (response) {
+                    console.log(response);
+                    dataTable.ajax.reload();
 
-                let data = JSON.parse(response);
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Registrado Correctamente',
-                    showConfirmButton: false,
-                    timer: 2000,
-                })
+                    let data = JSON.parse(response);
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Registrado Correctamente',
+                        showConfirmButton: false,
+                        timer: 2000,
+                    })
 
-                nombre.value = '';
-                choices4.setChoiceByValue('');
-                choices5.setChoiceByValue('');
-                choices6.setChoiceByValue('');
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                if (jqXHR.responseText) {
-                    let jsonResponse = JSON.parse(jqXHR.responseText);
+                    nombre.value = '';
+                    choices4.setChoiceByValue('');
+                    choices5.setChoiceByValue('');
+                    choices6.setChoiceByValue('');
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    if (jqXHR.responseText) {
+                        let jsonResponse = JSON.parse(jqXHR.responseText);
 
-                    if (jsonResponse.msj) {
-                         Swal.fire({
-                            icon: 'error',
-                            title: 'Denegado',
-                            text: jsonResponse.msj,
-                            showConfirmButton: true,
-                        })
+                        if (jsonResponse.msj) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Denegado',
+                                text: jsonResponse.msj,
+                                showConfirmButton: true,
+                            })
+                        } else {
+                            const respuesta = JSON.stringify(jsonResponse, null, 2)
+                            Swal.fire({
+                                background: 'red',
+                                color: '#fff',
+                                title: respuesta,
+                                showConfirmButton: true,
+                            })
+                        }
                     } else {
-                        const respuesta = JSON.stringify(jsonResponse, null, 2)
-                        Swal.fire({
-                            background: 'red',
-                            color: '#fff',
-                            title: respuesta,
-                            showConfirmButton: true,
-                        })
+                        alert('Error desconocido: ' + textStatus);
                     }
-                } else {
-                    alert('Error desconocido: ' + textStatus);
                 }
-            }
-        });
-    } else {
-        Swal.fire({
-            icon: 'error',
-            title: 'Formulario invalido. Verifique sus datos',
-            showConfirmButton: false,
-            timer: 2000,
-        })
-    }
-});
+            });
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Formulario invalido. Verifique sus datos',
+                showConfirmButton: false,
+                timer: 2000,
+            })
+        }
+    });
 
 
 
@@ -655,7 +656,7 @@ form.addEventListener("submit", (e) => {
                 success: function (response) {
                     console.log(response);
                     let data = JSON.parse(response);
-                    dataTable.ajax.reload(); 
+                    dataTable.ajax.reload();
 
                     Swal.fire({
                         icon: 'success',
@@ -746,19 +747,19 @@ form.addEventListener("submit", (e) => {
 
         // Validar fecha
         const fecha = document.getElementById("fecha").value;
-       /* if (fecha === "") {
-            document.getElementById("msj_fecha").classList.remove("d-none");
-            validationStatus3.fecha = false;
-        } else {
-            // Comprobar que la fecha esté en un formato válido
-            if (!expresiones_regulares2.actividad.test(fecha)) {
-                document.getElementById("msj_fecha").classList.remove("d-none");
-                validationStatus3.fecha = false;
-            } else {
-                document.getElementById("msj_fecha").classList.add("d-none");
-                validationStatus3.fecha = true;
-            }
-        }*/
+        /* if (fecha === "") {
+             document.getElementById("msj_fecha").classList.remove("d-none");
+             validationStatus3.fecha = false;
+         } else {
+             // Comprobar que la fecha esté en un formato válido
+             if (!expresiones_regulares2.actividad.test(fecha)) {
+                 document.getElementById("msj_fecha").classList.remove("d-none");
+                 validationStatus3.fecha = false;
+             } else {
+                 document.getElementById("msj_fecha").classList.add("d-none");
+                 validationStatus3.fecha = true;
+             }
+         }*/
 
         // Validar tematica
         const tematica = document.getElementById("tematica").value;
@@ -884,7 +885,7 @@ form.addEventListener("submit", (e) => {
                         let jsonResponse = JSON.parse(jqXHR.responseText);
 
                         if (jsonResponse.msj) {
-                             Swal.fire({
+                            Swal.fire({
                                 icon: 'error',
                                 title: 'Denegado',
                                 text: jsonResponse.msj,
