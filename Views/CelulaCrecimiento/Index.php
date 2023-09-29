@@ -9,10 +9,10 @@ $usuario = $_SESSION['usuario'];
 
 <script>
     const permisos = {
-        registrar: <?php echo $usuario->tienePermiso("celulaCrecimiento", "registrar") ?>,
-        consultar: <?php echo $usuario->tienePermiso("celulaCrecimiento", "consultar") ?>,
-        actualizar: <?php echo $usuario->tienePermiso("celulaCrecimiento", "actualizar") ?>,
-        eliminar: <?php echo $usuario->tienePermiso("celulaCrecimiento", "eliminar") ?>
+        registrar: <?php echo $usuario->tienePermiso("celulaCrecimiento", "registrar") ? 1 : 0 ?>,
+        consultar: <?php echo $usuario->tienePermiso("celulaCrecimiento", "consultar") ? 1 : 0 ?>,
+        actualizar: <?php echo $usuario->tienePermiso("celulaCrecimiento", "actualizar") ? 1 : 0 ?>,
+        eliminar: <?php echo $usuario->tienePermiso("celulaCrecimiento", "eliminar") ? 1 : 0 ?>
     }
 </script>
 
@@ -206,7 +206,7 @@ $usuario = $_SESSION['usuario'];
 
                                 <div class="d-flex justify-content-end gap-1">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                    <button type="submit" class="btn btn-primary">Registrar</button>
+                                    <button type="submit" class="btn btn-primary">Actualizar</button>
                                 </div>
                             </form>
                         </div>

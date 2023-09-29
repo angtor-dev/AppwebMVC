@@ -1,6 +1,9 @@
 $(document).ready(function () {
 
-    $('#botonSede1').on('click', function () {
+
+    ////////////// REPORTES ESTADISTICOS SEDES //////////////
+
+    $('#botonSede1').on('click', function (e) {
         $.ajax({
             type: "GET",
             url: "http://localhost/AppwebMVC/Estadisticas/Iglesia",
@@ -13,16 +16,48 @@ $(document).ready(function () {
                 let json = JSON.parse(response);
 
                 let labels = [];
-                let data = [];
+                let valores = [];
                 let colores = [];
 
                 json.forEach(element => {
                     labels.push(element.nombreSede)
-                    data.push(element.cantidadCelulas)
+                    valores.push(element.cantidadCelulas)
                     colores.push(colorRGB())
                 });
 
-                grafico1(labels, data, colores)
+                const data = {
+                    labels: labels,
+                    datasets: [
+                        {
+                            data: valores,
+                            backgroundColor: colores,
+                            borderColor: colores,
+                            borderWidth: 1,
+                        },
+                    ],
+                }
+                const config = {
+                    type: 'bar',
+                    data: data,
+                    options: {
+                        indexAxis: 'x',
+                        elements: {
+                            bar: {
+                                borderWidth: 2,
+                            }
+                        },
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                display: false,
+                            },
+                        }
+                    },
+                };
+
+                grafico1(config)
+
+                document.getElementById('nombreReporte').innerText = e.target.textContent
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -32,7 +67,7 @@ $(document).ready(function () {
         })
     })
 
-    $('#botonSede2').on('click', function () {
+    $('#botonSede2').on('click', function (e) {
         $.ajax({
             type: "GET",
             url: "http://localhost/AppwebMVC/Estadisticas/Iglesia",
@@ -45,16 +80,43 @@ $(document).ready(function () {
                 let json = JSON.parse(response);
 
                 let labels = [];
-                let data = [];
+                let valores = [];
                 let colores = [];
 
                 json.forEach(element => {
                     labels.push(element.nombreSede)
-                    data.push(element.cantidadTerritorios)
+                    valores.push(element.cantidadTerritorios)
                     colores.push(colorRGB())
                 });
 
-                grafico1(labels, data, colores)
+                const data = {
+                    labels: labels,
+                    datasets: [
+                        {
+                            data: valores,
+                            backgroundColor: colores,
+                            borderColor: colores,
+                            borderWidth: 1,
+                        },
+                    ],
+                }
+
+                const config = {
+                    type: 'doughnut',
+                    data: data,
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                display: true,
+                            },
+                        }
+                    },
+                };
+
+                grafico1(config)
+
+                document.getElementById('nombreReporte').innerText = e.target.textContent
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -65,7 +127,7 @@ $(document).ready(function () {
         })
     })
 
-    $('#botonSede3').on('click', function () {
+    $('#botonSede3').on('click', function (e) {
         $.ajax({
             type: "GET",
             url: "http://localhost/AppwebMVC/Estadisticas/Iglesia",
@@ -78,16 +140,43 @@ $(document).ready(function () {
                 let json = JSON.parse(response);
 
                 let labels = [];
-                let data = [];
+                let valores = [];
                 let colores = [];
 
                 Object.entries(json[0]).forEach(([month, value]) => {
                     labels.push(month);
-                    data.push(Number(value));
+                    valores.push(Number(value));
                     colores.push(colorRGB())
                 });
-                    
-                grafico1(labels, data, colores)
+
+                const data = {
+                    labels: labels,
+                    datasets: [
+                        {
+                            data: valores,
+                            backgroundColor: colores,
+                            borderColor: colores,
+                            borderWidth: 1,
+                        },
+                    ],
+                }
+
+                const config = {
+                    type: 'bar',
+                    data: data,
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                display: false,
+                            },
+                        }
+                    },
+                };
+
+                grafico1(config)
+
+                document.getElementById('nombreReporte').innerText = e.target.textContent
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -100,37 +189,289 @@ $(document).ready(function () {
 
 
 
+
+    ////////////// REPORTES ESTADISTICOS TERRITORIOS //////////////
+
+    $('#botonTerritorio1').on('click', function (e) {
+        $.ajax({
+            type: "GET",
+            url: "http://localhost/AppwebMVC/Estadisticas/Iglesia",
+            data: {
+                cantidad_celulas_territorio: 'cantidad_celulas_territorio',
+            },
+            success: function (response) {
+                console.log(response);
+
+                let json = JSON.parse(response);
+
+                let labels = [];
+                let valores = [];
+                let colores = [];
+
+                json.forEach(element => {
+                    labels.push(element.nombreTerritorio)
+                    valores.push(element.cantidadCelulas)
+                    colores.push(colorRGB())
+                });
+
+                const data = {
+                    labels: labels,
+                    datasets: [
+                        {
+                            data: valores,
+                            backgroundColor: colores,
+                            borderColor: colores,
+                            borderWidth: 1,
+                        },
+                    ],
+                }
+
+                const config = {
+                    type: 'bar',
+                    data: data,
+                    options: {
+                        indexAxis: 'x',
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                display: false,
+                            },
+                        }
+                    },
+                };
+
+                grafico1(config)
+
+                document.getElementById('nombreReporte').innerText = e.target.textContent
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                // Aquí puedes manejar errores, por ejemplo:
+                console.error("Error al enviar:", textStatus, errorThrown);
+            }
+        })
+    })
+
+
+
+
+    ////////////// REPORTES ESTADISTICOS CELULA FAMILIAR //////////////
+
+    $('#botonCelulaFamiliar1').on('click', function (e) {
+        $.ajax({
+            type: "GET",
+            url: "http://localhost/AppwebMVC/Estadisticas/Iglesia",
+            data: {
+                lideres_cantidad_celulas: 'lideres_cantidad_celulas',
+                tipo: 'familiar'
+            },
+            success: function (response) {
+                console.log(response);
+
+                let json = JSON.parse(response);
+
+                let labels = [];
+                let valores = [];
+                let colores = [];
+
+                json.forEach(element => {
+                    labels.push(element.nombre + ' ' + element.apellido)
+                    valores.push(element.cantidadCelulas)
+                    colores.push(colorRGB())
+                });
+
+                const data = {
+                    labels: labels,
+                    datasets: [
+                        {
+                            data: valores,
+                            backgroundColor: colores,
+                            borderColor: colores,
+                            borderWidth: 1,
+                        },
+                    ],
+                }
+
+                const config = {
+                    type: 'bar',
+                    data: data,
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                display: false,
+                            },
+                        }
+                    },
+                };
+
+                grafico1(config)
+
+                document.getElementById('nombreReporte').innerText = e.target.textContent
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                // Aquí puedes manejar errores, por ejemplo:
+                console.error("Error al enviar:", textStatus, errorThrown);
+            }
+        })
+    })
+
+
+
+
+
+    ////////////// REPORTES ESTADISTICOS CELULA CRECIMIENTO //////////////
+
+    $('#botonCelulaCrecimiento1').on('click', function (e) {
+        $.ajax({
+            type: "GET",
+            url: "http://localhost/AppwebMVC/Estadisticas/Iglesia",
+            data: {
+                lideres_cantidad_celulas: 'lideres_cantidad_celulas',
+                tipo: 'crecimiento'
+            },
+            success: function (response) {
+                console.log(response);
+
+                let json = JSON.parse(response);
+
+                let labels = [];
+                let valores = [];
+                let colores = [];
+
+                json.forEach(element => {
+                    labels.push(element.nombre + ' ' + element.apellido)
+                    valores.push(element.cantidadCelulas)
+                    colores.push(colorRGB())
+                });
+
+                const data = {
+                    labels: labels,
+                    datasets: [
+                        {
+                            data: valores,
+                            backgroundColor: colores,
+                            borderColor: colores,
+                            borderWidth: 1,
+                        },
+                    ],
+                }
+
+                const config = {
+                    type: 'bar',
+                    data: data,
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                display: false,
+                            },
+                        }
+                    },
+                };
+
+                grafico1(config)
+
+                document.getElementById('nombreReporte').innerText = e.target.textContent
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                // Aquí puedes manejar errores, por ejemplo:
+                console.error("Error al enviar:", textStatus, errorThrown);
+            }
+        })
+    })
+
+
+
+
+
+    ////////////// REPORTES ESTADISTICOS CELULA CONSOLIDACION //////////////
+
+    $('#botonCelulaConsolidacion1').on('click', function (e) {
+        $.ajax({
+            type: "GET",
+            url: "http://localhost/AppwebMVC/Estadisticas/Iglesia",
+            data: {
+                lideres_cantidad_celulas: 'lideres_cantidad_celulas',
+                tipo: 'consolidacion'
+            },
+            success: function (response) {
+                console.log(response);
+
+                let json = JSON.parse(response);
+
+                let labels = [];
+                let valores = [];
+                let colores = [];
+
+                json.forEach(element => {
+                    labels.push(element.nombre + ' ' + element.apellido)
+                    valores.push(element.cantidadCelulas)
+                    colores.push(colorRGB())
+                });
+
+                const data = {
+                    labels: labels,
+                    datasets: [
+                        {
+                            data: valores,
+                            backgroundColor: colores,
+                            borderColor: colores,
+                            borderWidth: 1,
+                        },
+                    ],
+                }
+
+                const config = {
+                    type: 'bar',
+                    data: data,
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                display: false,
+                            },
+                        }
+                    },
+                };
+
+                grafico1(config)
+
+                document.getElementById('nombreReporte').innerText = e.target.textContent
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                // Aquí puedes manejar errores, por ejemplo:
+                console.error("Error al enviar:", textStatus, errorThrown);
+            }
+        })
+    })
+
+
+
+
+
+    ///////// CREACION DEL OBJETO CHART JS //////////
+    // Se hizo de una forma modular para no repetir tanto. Love u
+
     let chart1;
-    function grafico1(array1, array2, colores) {
+    function grafico1(config) {
         const ctx = document.getElementById('estadistica1');
 
         if (chart1) {
             chart1.destroy()
         }
 
-        chart1 = new Chart(ctx, {
-            type: "bar",
-            data: {
-                labels: array1,
-                datasets: [
-                    {
-                        data: array2,
-                        backgroundColor: colores,
-                        borderColor: colores,
-                        borderWidth: 1,
-                    },
-                ],
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                    },
-                },
-            },
-        });
+        chart1 = new Chart(ctx, config)
     }
 
+
+    // Funciones para generar colores aleatorios para el Chart JS
 
     function generarNumero(numero) {
         return (Math.random() * numero).toFixed(0);

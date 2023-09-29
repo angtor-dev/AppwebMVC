@@ -1188,4 +1188,35 @@ class Celulas extends Model
             die();
         }
     }
+
+
+
+
+
+
+    ////////////////////////// APARTADO DE REPORTES ESTADISTICOS ///////////////////////////
+
+    public function lideres_cantidad_celulas($tipo)
+    {
+        try {
+            $sql = "SELECT usuario.nombre, usuario.apellido, COALESCE(COUNT(celulas.id), 0) AS cantidadCelulas FROM usuario 
+            LEFT JOIN celulas ON celulas.idLider = usuario.id WHERE celulas.tipo = :tipo
+            GROUP BY usuario.nombre";
+
+            $stmt = $this->db->pdo()->prepare($sql);
+            $stmt->bindValue(":tipo", $tipo);
+            $stmt->execute();
+
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
+            $error_data = array(
+                "error_message" => $e->getMessage(),
+                "error_line" => "Linea del error: " . $e->getLine()
+            );
+            http_response_code(422);
+            echo json_encode($error_data);
+            die();
+        }
+    }
 }

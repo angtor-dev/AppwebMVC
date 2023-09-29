@@ -3,6 +3,7 @@ $(document).ready(function () {
   let choices;
   let choices2;
 
+
   const dataTable = $('#sedeDatatables').DataTable({
     responsive: true,
     ajax: {
@@ -15,12 +16,25 @@ $(document).ready(function () {
       { data: 'nombre' },
       { data: 'direccion' },
       {
-        defaultContent: `
-            <button type="button" id="ver_info" data-bs-toggle="modal" data-bs-target="#modal_verInfo" class="btn btn-secondary">Info</button>
-            <button type="button" id="editar" data-bs-toggle="modal" data-bs-target="#modal_editarInfo" class="btn btn-primary">Editar</button>
-            <button type="button" id="eliminar" class="btn btn-danger delete-btn">Eliminar</button>
-            `}
+        data: null,
+        render: function (data, type, row, meta) {
 
+          let botonInfo = `<button type="button" id="ver_info" data-bs-toggle="modal" data-bs-target="#modal_verInfo" class="btn btn-secondary">Info</button>`;
+
+          let botonEditar = permisos.actualizar ? `<button type="button" id="editar" data-bs-toggle="modal" data-bs-target="#modal_editarInfo" class="btn btn-primary">Editar</button>` : '';
+
+          let botonEliminar = permisos.eliminar ? `<button type="button" id="eliminar" class="btn btn-danger delete-btn">Eliminar</button>` : '';
+
+          let div = `
+          <div class="d-flex justify-content-center gap-1">
+                    ${botonInfo}
+                    ${botonEditar}
+                    ${botonEliminar}
+          </div>
+          `
+          return div;
+        }
+      },
     ],
   })
 

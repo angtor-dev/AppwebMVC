@@ -22,8 +22,7 @@ $viewScripts = ["estadisticas-iglesia.js"];
             <div class="card">
                 <div class="card-body d-flex justify-content-center flex-column gap-2">
                     <h5 class="text-center">Reportes estadisticos territorios</h5>
-                    <button class="btn btn-primary">Cantidad de celulas por territorios</button>
-                    <button class="btn btn-primary">Cantidad de territorios por año</button>
+                    <button class="btn btn-primary" id="botonTerritorio1" data-bs-toggle="modal" data-bs-target="#modal1">Cantidad de celulas por territorios</button>
                 </div>
             </div>
         </div>
@@ -31,9 +30,8 @@ $viewScripts = ["estadisticas-iglesia.js"];
             <div class="card">
                 <div class="card-body d-flex justify-content-center flex-column gap-2">
                     <h5 class="text-center">Reportes estadisticos celula familiar</h5>
-                    <button class="btn btn-primary">Lideres con mas celulas</button>
-                    <button class="btn btn-primary">Cantidad de reuniones por celula</button>
-                    <button class="btn btn-primary">Celulas con mayor recepcion en reuniones</button>
+                    <button class="btn btn-primary" id="botonCelulaFamiliar1" data-bs-toggle="modal" data-bs-target="#modal1">Lideres con mas celulas familiares</button>
+                    <button class="btn btn-primary" id="botonCelulaFamiliar3" data-bs-toggle="modal" data-bs-target="#modal1">Celulas con mayor asistencias en reuniones</button>
                 </div>
             </div>
         </div>
@@ -44,9 +42,8 @@ $viewScripts = ["estadisticas-iglesia.js"];
             <div class="card">
                 <div class="card-body d-flex justify-content-center flex-column gap-2">
                     <h5 class="text-center">Reportes estadisticos celula crecimiento</h5>
-                    <button class="btn btn-primary">Lideres con mas celulas</button>
-                    <button class="btn btn-primary">Cantidad de reuniones por celula</button>
-                    <button class="btn btn-primary">Celulas con mayor recepcion en reuniones</button>
+                    <button class="btn btn-primary" id="botonCelulaCrecimiento1" data-bs-toggle="modal" data-bs-target="#modal1">Lideres con mas celulas de crecimiento</button>
+                    <button class="btn btn-primary" id="botonCelulaCrecimiento2" data-bs-toggle="modal" data-bs-target="#modal1">Celulas con mayor asistencias en reuniones</button>
                 </div>
             </div>
         </div>
@@ -54,16 +51,16 @@ $viewScripts = ["estadisticas-iglesia.js"];
             <div class="card">
                 <div class="card-body d-flex justify-content-center flex-column gap-2">
                     <h5 class="text-center">Reportes estadisticos celula consolidacion</h5>
-                    <button class="btn btn-primary">Lideres con mas celulas</button>
-                    <button class="btn btn-primary">Cantidad de reuniones por celula</button>
+                    <button class="btn btn-primary" id="botonCelulaConsolidacion1" data-bs-toggle="modal" data-bs-target="#modal1">Lideres con mas celulas de consolidacion</button>
+                    <button class="btn btn-primary" id="botonCelulaConsolidacion2" data-bs-toggle="modal" data-bs-target="#modal1">Cantidad de reuniones por celula</button>
                 </div>
             </div>
         </div>
         <div class="col-4">
             <div class="card">
                 <div class="card-body d-flex justify-content-center flex-column gap-2">
-                    <h5 class="text-center">Reportes estadisticos discipulos</h5>
-                    <button class="btn btn-primary">Cantidad de sedes por año</button>
+                    <h5 class="text-center" data-bs-toggle="modal" data-bs-target="#modal1">Reportes estadisticos discipulos</h5>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal1">Cantidad de sedes por año</button>
                 </div>
             </div>
         </div>
@@ -77,7 +74,7 @@ $viewScripts = ["estadisticas-iglesia.js"];
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Reporte estadistico</h5>
+                <h5 class="modal-title" id="nombreReporte"></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">

@@ -136,7 +136,7 @@ if (isset($_GET['listaTerritorio'])) {
 
 if (isset($_GET['cargar_discipulos_celula'])) {
 
-    requierePermiso("celulaConsolidacion", "actualizar");
+    requierePermiso("celulaFamiliar", "actualizar");
 
     $idCelula = $_GET['idCelula'];
     $resultado = $Celulas->listarDiscipulados_celula($idCelula);

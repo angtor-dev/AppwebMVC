@@ -9,11 +9,12 @@ $usuario = $_SESSION['usuario'];
 
 <script>
     const permisos = {
-        registrar: <?php echo $usuario->tienePermiso("sedes", "registrar") ?>,
-        consultar: <?php echo $usuario->tienePermiso("sedes", "consultar") ?>,
-        actualizar: <?php echo $usuario->tienePermiso("sedes", "actualizar") ?>,
-        eliminar: <?php echo $usuario->tienePermiso("sedes", "eliminar") ?>
+        registrar: <?php echo $usuario->tienePermiso("sedes", "registrar") ? 1 : 0 ?>,
+        consultar: <?php echo $usuario->tienePermiso("sedes", "consultar") ? 1 : 0  ?>,
+        actualizar: <?php echo $usuario->tienePermiso("sedes", "actualizar") ? 1 : 0  ?>,
+        eliminar: <?php echo $usuario->tienePermiso("sedes", "eliminar") ? 1 : 0  ?>
     }
+
 </script>
 
 <div class="container-fluid">

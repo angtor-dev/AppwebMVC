@@ -438,6 +438,41 @@ class Territorio extends Model
         }
     }
 
+
+
+
+
+
+    ////////////////////////// APARTADO DE REPORTES ESTADISTICOS ///////////////////////////
+
+    public function cantidad_celulas_territorios()
+    {
+        try {
+            $sql = "SELECT territorio.nombre AS nombreTerritorio, COALESCE(COUNT(celulas.id), 0) AS cantidadCelulas FROM territorio 
+            LEFT JOIN celulas ON celulas.idTerritorio = territorio.id 
+            GROUP BY territorio.nombre";
+
+            $stmt = $this->db->pdo()->prepare($sql);
+            $stmt->execute();
+
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
+            $error_data = array(
+                "error_message" => $e->getMessage(),
+                "error_line" => "Linea del error: " . $e->getLine()
+            );
+            http_response_code(422);
+            echo json_encode($error_data);
+            die();
+        }
+    }
+
+
+
+
+
+
+
     // Getters
     public function getIdentificador() : string {
         return $this->identificador;

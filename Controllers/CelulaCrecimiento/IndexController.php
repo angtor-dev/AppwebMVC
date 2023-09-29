@@ -4,7 +4,7 @@ require_once "Models/Celulas.php";
 
 necesitaAutenticacion();
 
-requierePermiso("celulaCrecimiento", "registrar");
+requierePermiso("celulaCrecimiento", "consultar");
 
 $usuarioSesion = $_SESSION['usuario'];
 
@@ -19,7 +19,7 @@ if (isset($_GET['cargar_data'])) {
 
     //Comrpobamos primero que la lista no este vacia
     if (!empty($Lista)) {
-        //Si no esta vacia, empezara a recorrer cada columna de la consulta sql, es decir, los datos obtenidos
+        //Si no esta vacia, empezara a recorrer cada columna de la consulta sql, es decirs, los datos obtenidos
         foreach ($Lista as $key) {
             //ese data es un indice que estoy creando para datatables, ya que ese es el indice que leera, fijate en el datatables para que veas que llama a los datos asi {data: 'example'}   
             $json['data'][] = $key;
@@ -37,9 +37,10 @@ if (isset($_GET['cargar_data'])) {
 
 if (isset($_POST['registrar'])) {
 
-    requierePermiso("celulaCrecimiento", "actualizar");
+    requierePermiso("celulaCrecimiento", "registrar");
 
     $nombre = trim(strtolower($_POST['nombre']));
+    $tipo =  trim(strtolower('crecimiento'));
     $idLider = trim($_POST['idLider']);
     $idCoLider = trim($_POST['idCoLider']);
     $idTerritorio = trim($_POST['idTerritorio']);
@@ -54,7 +55,7 @@ if (isset($_POST['registrar'])) {
 
 if (isset($_POST['editar'])) {
 
-    //requierePermisos("actualizarCelula");
+    requierePermiso("celulaCrecimiento", "actualizar");
 
     $id = $_POST['id2'];
     $tipo =  trim(strtolower('crecimiento'));

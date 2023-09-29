@@ -4,7 +4,7 @@ require_once "Models/Celulas.php";
 
 necesitaAutenticacion();
 
-requierePermiso("celulaConsolidacion", "registrar");
+requierePermiso("celulaConsolidacion", "consultar");
 
 $usuarioSesion = $_SESSION['usuario'];
 
@@ -37,7 +37,7 @@ if (isset($_GET['cargar_data'])) {
 
 if (isset($_POST['registrar'])) {
 
-    requierePermiso("celulaConsolidacion", "actualizar");
+    requierePermiso("celulaConsolidacion", "registrar");
 
     $tipo =  trim(strtolower('consolidacion'));
     $nombre = trim(strtolower($_POST['nombre']));
@@ -55,7 +55,7 @@ if (isset($_POST['registrar'])) {
 
 if (isset($_POST['editar'])) {
 
-    //requierePermisos("actualizarCelula");
+    requierePermiso("celulaConsolidacion", "actualizar");
 
     $id = $_POST['id2'];
     $tipo =  trim(strtolower('consolidacion'));

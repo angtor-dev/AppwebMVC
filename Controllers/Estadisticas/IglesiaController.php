@@ -28,6 +28,19 @@ if (isset($_GET['cantidad_sedes_fecha'])) {
     die();
 }
 
+if (isset($_GET['cantidad_celulas_territorio'])) {
+    $resultado = $Territorio->cantidad_celulas_territorios();
+    echo json_encode($resultado);
+    die();
+}
+
+if (isset($_GET['lideres_cantidad_celulas'])) {
+    $tipo = trim(strtolower($_GET['tipo']));
+    $resultado = $Celulas->lideres_cantidad_celulas($tipo);
+    echo json_encode($resultado);
+    die();
+}
+
 
 
 renderView();
