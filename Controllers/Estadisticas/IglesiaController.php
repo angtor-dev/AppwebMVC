@@ -41,6 +41,13 @@ if (isset($_GET['lideres_cantidad_celulas'])) {
     die();
 }
 
+if (isset($_GET['listar_celulas'])) {
+    $tipo = trim(strtolower($_GET['tipo']));
+    $resultado = $Celulas->listar_celulas($tipo);
+    echo json_encode($resultado);
+    die();
+}
+
 
 
 renderView();

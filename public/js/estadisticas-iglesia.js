@@ -453,6 +453,69 @@ $(document).ready(function () {
     })
 
 
+    $('#botonCelulaFamiliar3').on('click', function (e) {
+        document.getElementById('nombreSeleccionador').innerText = 'Seleccione la celula familiar'
+        listar_celulas('familiar')
+    })
+
+    
+    let choices;
+    function listar_celulas(tipo) {
+        $.ajax({
+            type: "GET",
+            url: "http://localhost/AppwebMVC/Estadisticas/Iglesia",
+            data: {
+
+                listar_celulas: 'listar_celulas',
+                tipo: tipo
+
+            },
+            success: function (response) {
+
+
+                let data = JSON.parse(response);
+
+                let selector = document.getElementById('selectorCelulas');
+
+                const optionVacio = document.createElement('option');
+                optionVacio.value = '';
+                optionVacio.text = 'Seleccionador de celulas';
+                optionVacio.disabled = true;
+                selector.appendChild(optionVacio);
+
+                data.forEach(item => {
+
+                    const option = document.createElement('option');
+                    option.value = item.id;
+                    option.text = `${item.codigo} ${item.nombre}`;
+                    selector.appendChild(option);
+
+                });
+
+                // Destruir la instancia existente si la hay
+                if (choices) {
+                    choices.destroy();
+                }
+
+                choices = new Choices(selector, {
+                    allowHTML: true,
+                    searchEnabled: true,  // Habilita la funcionalidad de búsqueda
+                    removeItemButton: true,  // Habilita la posibilidad de remover items
+                });
+
+                choices.setChoiceByValue('');
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                // Aquí puedes manejar errores, por ejemplo:
+                console.error("Error al enviar:", textStatus, errorThrown);
+                alert("Hubo un error al realizar el registro. Por favor, inténtalo de nuevo.");
+            }
+        })
+    }
+
+
+
 
 
 

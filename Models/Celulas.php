@@ -864,13 +864,14 @@ class Celulas extends Model
     }
 
 
-    public  function listar_celulas()
+    public  function listar_celulas($tipo)
     {
         try {
 
-            $sql = "SELECT * FROM celulas WHERE celulas.estatus = '1'";
+            $sql = "SELECT * FROM celulas WHERE celulas.estatus = '1' AND celulas.tipo = :tipo";
 
             $stmt = $this->db->pdo()->prepare($sql);
+            $stmt->bindValue(":tipo", $tipo);
 
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -1208,7 +1209,7 @@ class Celulas extends Model
             $stmt->execute();
 
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
-            
+
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
