@@ -52,9 +52,8 @@ class Celulas extends Model
                         $identificador = 'CFA' . $id;
                         break;
                 }
-                
+
                 $codigo = $territorio->getCodigo() . '-' . $identificador;
-                
             } else {
 
 
@@ -95,9 +94,8 @@ class Celulas extends Model
                             $identificador = 'CFA' . $contador;
                             break;
                     }
-                
-                    $codigo = $territorio->getCodigo() . '-' . $identificador;
 
+                    $codigo = $territorio->getCodigo() . '-' . $identificador;
                 } else {
                     $contador = 1;
 
@@ -376,7 +374,7 @@ class Celulas extends Model
                             $identificador = 'CFA' . $contador;
                             break;
                     }
-                    
+
                     $codigo = $territorio->getCodigo() . '-' . $identificador;
                 } else {
                     $contador = 1;
@@ -394,7 +392,7 @@ class Celulas extends Model
                             $identificador = 'CFA' . $contador;
                             break;
                     }
-                    
+
                     $codigo = $territorio->getCodigo() . '-' . $identificador;
                 }
 
@@ -552,7 +550,6 @@ class Celulas extends Model
             http_response_code(200);
             echo json_encode(array('msj' => 'Registro actualizado exitosamente', 'status' => 200));
             die();
-
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -1209,6 +1206,43 @@ class Celulas extends Model
             $stmt->execute();
 
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
+            $error_data = array(
+                "error_message" => $e->getMessage(),
+                "error_line" => "Linea del error: " . $e->getLine()
+            );
+            http_response_code(422);
+            echo json_encode($error_data);
+            die();
+        }
+    }
+
+    public function asistencias_reuniones_celulas($idCelula, $tipo)
+    {
+        try {
+            if ($tipo == 'consolidacion') {
+
+                $sql = "SELECT celulas.nombre, COUNT(asistencia.idDiscipulo) AS cantidad_asistencia, reunioncelula.fecha FROM reunioncelula 
+                INNER JOIN celulas ON celulas.id = reunioncelula.idCelula 
+                INNER JOIN asistencia ON asistencia.idReunion = reunioncelula.id 
+                WHERE reunioncelula.idCelula = :idCelula GROUP BY reunioncelula.fecha ORDER BY reunioncelula.fecha ASC";
+
+                $stmt = $this->db->pdo()->prepare($sql);
+                $stmt->bindValue(":idCelula", $idCelula);
+                $stmt->execute();
+
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            } else {
+
+                $sql = "SELECT celulas.nombre, (reunioncelula.infantil + reunioncelula.juvenil + reunioncelula.adulto) AS cantidad_asistencia, reunioncelula.fecha 
+                FROM reunioncelula INNER JOIN celulas ON celulas.id = reunioncelula.idCelula WHERE reunioncelula.idCelula = :idCelula ORDER BY reunioncelula.fecha ASC";
+
+                $stmt = $this->db->pdo()->prepare($sql);
+                $stmt->bindValue(":idCelula", $idCelula);
+                $stmt->execute();
+
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            }
 
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(

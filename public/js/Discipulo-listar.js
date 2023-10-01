@@ -489,7 +489,7 @@ $(document).ready(function () {
 
 
 
-    $("#formulario").submit(function (event) {
+    $("#formulario2").submit(function (event) {
         event.preventDefault();
 
         if (Object.values(validaciones).every(val => val)) {
@@ -841,7 +841,7 @@ $(document).ready(function () {
             let fechaNacimiento = $("#fechaNacimiento").val();
             let fechaConvercion = $("#fechaConvercion").val();
             let idConsolidador = $("#idConsolidador").val();
-            let idcelulaconsolidacion = $("#idcelulaconsolidacion").val();
+            let idcelulaconsolidacion = $("#idCelulaConsolidacion").val();
             let direccion = $("#direccion").val();
             let motivo = $("#motivo").val();
 
@@ -869,6 +869,8 @@ $(document).ready(function () {
                     console.log(response);
                     let data = JSON.parse(response);
 
+                    dataTable.ajax.reload();
+
                     Swal.fire({
                         icon: 'success',
                         title: 'Registrado Correctamente',
@@ -882,6 +884,7 @@ $(document).ready(function () {
 
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR.responseText);
                     if (jqXHR.responseText) {
                         let jsonResponse = JSON.parse(jqXHR.responseText);
 

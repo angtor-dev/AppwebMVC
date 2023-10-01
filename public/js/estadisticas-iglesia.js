@@ -452,13 +452,179 @@ $(document).ready(function () {
         })
     })
 
+    ///////////////////////////////////////////////////////
 
-    $('#botonCelulaFamiliar3').on('click', function (e) {
-        document.getElementById('nombreSeleccionador').innerText = 'Seleccione la celula familiar'
-        listar_celulas('familiar')
+
+
+
+
+    ////////////// REPORTES ESTADISTICOS DISCIPULOS //////////////
+
+    $('#botonDiscipulos1').on('click', function (e) {
+        $.ajax({
+            type: "GET",
+            url: "http://localhost/AppwebMVC/Estadisticas/Iglesia",
+            data: {
+                discipulos_consolidados_fecha: 'discipulos_consolidados_fecha',
+            },
+            success: function (response) {
+                console.log(response);
+
+                let json = JSON.parse(response);
+
+                let labels = [];
+                let valores = [];
+                let colores = [];
+
+                json.forEach(element => {
+                    labels.push(element.fechaConvercion)
+                    valores.push(element.cantidad_discipulos)
+                    colores.push(colorRGB())
+                });
+
+                const data = {
+                    labels: labels,
+                    datasets: [
+                        {
+                            data: valores,
+                            backgroundColor: colores,
+                            borderColor: colores,
+                            borderWidth: 1,
+                        },
+                    ],
+                }
+
+                const config = {
+                    type: 'polarArea',
+                    data: data,
+                    options: {
+                      responsive: true,
+                      scales: {
+                        r: {
+                          pointLabels: {
+                            display: true,
+                            centerPointLabels: true,
+                            font: {
+                              size: 15
+                            }
+                          }
+                        }
+                      },
+                      plugins: {
+                        legend: {
+                          position: 'top',
+                        },
+                        title: {
+                          display: false,
+                        }
+                      }
+                    },
+                  };
+
+                grafico1(config)
+
+                document.getElementById('nombreReporte').innerText = e.target.textContent
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                // Aquí puedes manejar errores, por ejemplo:
+                console.error("Error al enviar:", textStatus, errorThrown);
+            }
+        })
     })
 
-    
+
+    ////////////////////////////////////////////////////////
+
+
+
+
+
+
+    let tipoCelula;
+    $('#botonCelulaFamiliar2').on('click', function (e) {
+        document.getElementById('nombreSeleccionador').innerText = 'Seleccione la celula familiar'
+        listar_celulas('familiar')
+        tipoCelula = 'familiar'
+    })
+
+    $('#botonCelulaCrecimiento2').on('click', function (e) {
+        document.getElementById('nombreSeleccionador').innerText = 'Seleccione la celula crecimiento'
+        listar_celulas('crecimiento')
+        tipoCelula = 'crecimiento'
+    })
+
+    $('#botonCelulaConsolidacion2').on('click', function (e) {
+        document.getElementById('nombreSeleccionador').innerText = 'Seleccione la celula consolidacion'
+        listar_celulas('consolidacion')
+        tipoCelula = 'consolidacion'
+    })
+
+    $('#consultaAsistencia').on('click', function (e) {
+        const idCelula = document.getElementById('selectorCelulas').value;
+        $.ajax({
+            type: "GET",
+            url: "http://localhost/AppwebMVC/Estadisticas/Iglesia",
+            data: {
+
+                asistencias_reuniones_celulas: 'asistencias_reuniones_celulas',
+                idCelula: idCelula,
+                tipo: tipoCelula
+
+            },
+            success: function (response) {
+
+                let json = JSON.parse(response);
+
+                let labels = [];
+                let valores = [];
+                let colores = [];
+
+                json.forEach(element => {
+                    labels.push(element.fecha)
+                    valores.push(element.cantidad_asistencia)
+                    colores.push(colorRGB())
+                });
+
+                const data = {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: json[0].nombre,
+                            data: valores,
+                            backgroundColor: colores,
+                            borderColor: colores,
+                            borderWidth: 1,
+                            fill: true,
+                            pointStyle: 'circle',
+                            pointRadius: 10,
+                            pointHoverRadius: 15
+                        },
+                    ],
+                }
+
+                const config = {
+                    type: 'line',
+                    data: data,
+                };
+
+                grafico1(config)
+
+                $('#modal2').modal('hide')
+                $('#modal1').modal('show')
+
+                //document.getElementById('nombreReporte').innerText = e.target.textContent
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                // Aquí puedes manejar errores, por ejemplo:
+                console.error("Error al enviar:", textStatus, errorThrown);
+                alert("Hubo un error al realizar el registro. Por favor, inténtalo de nuevo.");
+            }
+        })
+    })
+
+
     let choices;
     function listar_celulas(tipo) {
         $.ajax({
@@ -472,10 +638,16 @@ $(document).ready(function () {
             },
             success: function (response) {
 
-
+                console.log(response);
                 let data = JSON.parse(response);
 
+                // Destruir la instancia existente si la hay
+                if (choices) {
+                    choices.destroy();
+                }
+
                 let selector = document.getElementById('selectorCelulas');
+                selector.innerHTML = '';
 
                 const optionVacio = document.createElement('option');
                 optionVacio.value = '';
@@ -491,11 +663,6 @@ $(document).ready(function () {
                     selector.appendChild(option);
 
                 });
-
-                // Destruir la instancia existente si la hay
-                if (choices) {
-                    choices.destroy();
-                }
 
                 choices = new Choices(selector, {
                     allowHTML: true,
@@ -543,4 +710,5 @@ $(document).ready(function () {
         var color = "(" + generarNumero(255) + "," + generarNumero(255) + "," + generarNumero(255) + ", 0.5)";
         return "rgb" + color;
     }
+
 })

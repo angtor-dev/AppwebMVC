@@ -384,7 +384,6 @@ $(document).ready(function () {
 
                 let data = JSON.parse(response);
 
-
                 let selector = document.getElementById('idTerritorio');
 
                 const placeholderOption = document.createElement('option');

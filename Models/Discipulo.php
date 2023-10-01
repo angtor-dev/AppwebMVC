@@ -477,4 +477,32 @@ class Discipulo extends Model
             die();
         }
     }
+
+
+
+
+
+
+    ////////////////////////// APARTADO DE REPORTES ESTADISTICOS ///////////////////////////
+
+    public function discipulos_consolidados_fecha()
+    {
+        try {
+            $sql = "SELECT COUNT(discipulo.id) AS cantidad_discipulos, discipulo.fechaConvercion FROM `discipulo` GROUP BY fechaConvercion";
+
+            $stmt = $this->db->pdo()->prepare($sql);
+            $stmt->execute();
+
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
+            $error_data = array(
+                "error_message" => $e->getMessage(),
+                "error_line" => "Linea del error: " . $e->getLine()
+            );
+            http_response_code(422);
+            echo json_encode($error_data);
+            die();
+        }
+    }
 }

@@ -35,7 +35,7 @@ $usuario = $_SESSION['usuario'];
                 <div class="card-body d-flex justify-content-center flex-column gap-2">
                     <h5 class="text-center">Reportes estadisticos celula familiar</h5>
                     <button class="btn btn-primary" id="botonCelulaFamiliar1" data-bs-toggle="modal" data-bs-target="#modal1">Lideres con mas celulas familiares</button>
-                    <button class="btn btn-primary" id="botonCelulaFamiliar3" data-bs-toggle="modal" data-bs-target="#modal2">Asistencias de reuniones por celula</button>
+                    <button class="btn btn-primary" id="botonCelulaFamiliar2" data-bs-toggle="modal" data-bs-target="#modal2">Asistencias de reuniones por celula</button>
                 </div>
             </div>
         </div>
@@ -64,7 +64,7 @@ $usuario = $_SESSION['usuario'];
             <div class="card">
                 <div class="card-body d-flex justify-content-center flex-column gap-2">
                     <h5 class="text-center" data-bs-toggle="modal" data-bs-target="#modal1">Reportes estadisticos discipulos</h5>
-                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal1">Cantidad de sedes por año</button>
+                    <button class="btn btn-primary" id="botonDiscipulos1" data-bs-toggle="modal" data-bs-target="#modal1">Discipulos consolidados por fecha</button>
                 </div>
             </div>
         </div>
@@ -103,7 +103,7 @@ $usuario = $_SESSION['usuario'];
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button class="btn btn-primary" type="button">Consultar</button>
+                <button class="btn btn-primary" id="consultaAsistencia" type="button">Consultar</button>
             </div>
         </div>
     </div>
