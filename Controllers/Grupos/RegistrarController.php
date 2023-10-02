@@ -6,6 +6,7 @@ requierePermiso("grupos", "registrar");
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET')
 {
+    $grupo = empty($_GET['id']) ? new Grupo() : Grupo::cargar($_GET['id']);
     /** @var Usuario */
     $usuario = $_SESSION['usuario'];
     $escuela = $usuario->sede->getEscuela();
@@ -22,7 +23,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET')
 }
 elseif ($_SERVER['REQUEST_METHOD'] === 'POST')
 {
-
     $grupo = new Grupo();
 
     $grupo->mapFromPost();

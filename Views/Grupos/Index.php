@@ -34,7 +34,7 @@ $title = "Grupos";
                                 data-id="<?= $grupo->id ?>">
                             <i class="fa-solid fa-trash fa-fw"></i>
                         </button>
-                        <a href="/AppwebMVC/Grupos/Actualizar?id=<?= $grupo->id ?>" class="btn btn-primary px-2">
+                        <a href="/AppwebMVC/Grupos/Registrar?id=<?= $grupo->id ?>" class="btn btn-primary px-2">
                             <i class="fa-solid fa-pen fa-fw"></i>
                         </a>
                         <a href="/AppwebMVC/Grupos/Gestionar?id=<?= $grupo->id ?>" class="btn btn-secondary px-2">
