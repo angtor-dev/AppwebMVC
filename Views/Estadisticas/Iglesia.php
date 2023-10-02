@@ -34,8 +34,8 @@ $usuario = $_SESSION['usuario'];
             <div class="card">
                 <div class="card-body d-flex justify-content-center flex-column gap-2">
                     <h5 class="text-center">Reportes estadisticos celula familiar</h5>
-                    <button class="btn btn-primary" id="botonCelulaFamiliar1" data-bs-toggle="modal" data-bs-target="#modal1">Lideres con mas celulas familiares</button>
-                    <button class="btn btn-primary" id="botonCelulaFamiliar2" data-bs-toggle="modal" data-bs-target="#modal2">Asistencias de reuniones por celula</button>
+                    <button class="btn btn-primary" id="botonCelulaFamiliar1" data-bs-toggle="modal" data-bs-target="#modal1">Lideres con mayor cantidad de celulas familiares</button>
+                    <button class="btn btn-primary" id="botonCelulaFamiliar2" data-bs-toggle="modal" data-bs-target="#modal2">Asistencias de reuniones por celula familiar</button>
                 </div>
             </div>
         </div>
@@ -46,8 +46,8 @@ $usuario = $_SESSION['usuario'];
             <div class="card">
                 <div class="card-body d-flex justify-content-center flex-column gap-2">
                     <h5 class="text-center">Reportes estadisticos celula crecimiento</h5>
-                    <button class="btn btn-primary" id="botonCelulaCrecimiento1" data-bs-toggle="modal" data-bs-target="#modal1">Lideres con mas celulas de crecimiento</button>
-                    <button class="btn btn-primary" id="botonCelulaCrecimiento2" data-bs-toggle="modal" data-bs-target="#modal2">Asistencias de reuniones por celula</button>
+                    <button class="btn btn-primary" id="botonCelulaCrecimiento1" data-bs-toggle="modal" data-bs-target="#modal1">Lideres con mayor cantidad de celulas de crecimiento</button>
+                    <button class="btn btn-primary" id="botonCelulaCrecimiento2" data-bs-toggle="modal" data-bs-target="#modal2">Asistencias de reuniones por celula de crecimiento</button>
                 </div>
             </div>
         </div>
@@ -55,8 +55,8 @@ $usuario = $_SESSION['usuario'];
             <div class="card">
                 <div class="card-body d-flex justify-content-center flex-column gap-2">
                     <h5 class="text-center">Reportes estadisticos celula consolidacion</h5>
-                    <button class="btn btn-primary" id="botonCelulaConsolidacion1" data-bs-toggle="modal" data-bs-target="#modal1">Lideres con mas celulas de consolidacion</button>
-                    <button class="btn btn-primary" id="botonCelulaConsolidacion2" data-bs-toggle="modal" data-bs-target="#modal2">Asistencias de reuniones por celula</button>
+                    <button class="btn btn-primary" id="botonCelulaConsolidacion1" data-bs-toggle="modal" data-bs-target="#modal1">Lideres con mayor cantidad de celulas de consolidacion</button>
+                    <button class="btn btn-primary" id="botonCelulaConsolidacion2" data-bs-toggle="modal" data-bs-target="#modal2">Asistencias de reuniones por celula de consolidacion</button>
                 </div>
             </div>
         </div>
@@ -64,7 +64,7 @@ $usuario = $_SESSION['usuario'];
             <div class="card">
                 <div class="card-body d-flex justify-content-center flex-column gap-2">
                     <h5 class="text-center" data-bs-toggle="modal" data-bs-target="#modal1">Reportes estadisticos discipulos</h5>
-                    <button class="btn btn-primary" id="botonDiscipulos1" data-bs-toggle="modal" data-bs-target="#modal1">Discipulos consolidados por fecha</button>
+                    <button class="btn btn-primary" id="botonDiscipulos1" data-bs-toggle="modal" data-bs-target="#modal1">Discipulos consolidados por fecha de conversion</button>
                 </div>
             </div>
         </div>

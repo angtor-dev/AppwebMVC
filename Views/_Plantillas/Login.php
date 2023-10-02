@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,13 +8,14 @@
     <title><?= APP_NAME ?></title>
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/lib/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/css/site.css">
+    <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/css/login.css">
 </head>
+
 <body>
-    <main class="mt-5">
-        <?= $GLOBALS['view'] ?>
-    </main>
-    
+    <?= $GLOBALS['view'] ?>
+
     <script src="<?= LOCAL_DIR ?>public/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="<?= LOCAL_DIR ?>public/js/login.js"></script>
 </body>
+
 </html>
