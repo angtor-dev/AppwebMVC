@@ -42,6 +42,8 @@ $title = "Registrar grupo";
                     <?php endforeach ?>
                 </select>
             </div>
+        </div>
+        <div class="row mb-3">
             <div class="col-md-12">
                 <label class="form-label fw-bold">Profesor</label>
                 <select name="idProfesor" id="idProfesor" class="form-select">
