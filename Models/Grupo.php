@@ -1,25 +1,25 @@
 <?php
 require_once "Models/Model.php";
-require_once "Models/NivelCrecimiento.php";
+require_once "Models/Subnivel.php";
 require_once "Models/Enums/EstadosGrupo.php";
 
 class Grupo extends Model
 {
     public int $id;
-    private int $idNivelCrecimiento;
+    private int $idSubnivel;
     private int $idProfesor;
     private string $nombre;
     private int $estado;
     private int $estatus;
     
-    public NivelCrecimiento $nivelCrecimiento;
+    public Subnivel $subnivel;
     public Usuario $profesor;
 
     public function __construct()
     {
         parent::__construct();
-        if (!empty($this->idNivelCrecimiento)) {
-            $this->nivelCrecimiento = NivelCrecimiento::cargar($this->idNivelCrecimiento);
+        if (!empty($this->idSubnivel)) {
+            $this->subnivel = Subnivel::cargar($this->idSubnivel);
         }
         if (!empty($this->idProfesor)) {
             $this->profesor = Usuario::cargar($this->idProfesor);
@@ -28,11 +28,11 @@ class Grupo extends Model
 
     public function registrar() : void
     {
-        $query = "INSERT INTO grupo(idNivelCrecimiento, idProfesor, nombre) VALUES(:idNivelCrecimiento, :idProfesor, :nombre)";
+        $query = "INSERT INTO grupo(idSubnivel, idProfesor, nombre) VALUES(:idSubnivel, :idProfesor, :nombre)";
 
         try {
             $stmt = $this->prepare($query);
-            $stmt->bindValue("idNivelCrecimiento", $this->idNivelCrecimiento);
+            $stmt->bindValue("idSubnivel", $this->idSubnivel);
             $stmt->bindValue("idProfesor", $this->idProfesor);
             $stmt->bindValue("nombre", $this->nombre);
 
@@ -45,17 +45,21 @@ class Grupo extends Model
 
     public function actualizar() : void
     {
-        $query = "UPDATE grupo SET idNivelCrecimiento = :idNivelCrecimiento, idProfesor = :idProfesor, nombre = :nombre WHERE id = :id";
+        $query = "UPDATE grupo SET idSubnivel = :idSubnivel, idProfesor = :idProfesor, nombre = :nombre, estado = :estado WHERE id = :id";
 
         try {
             $stmt = $this->prepare($query);
-            $stmt->bindValue("idNivelCrecimiento", $this->idNivelCrecimiento);
+            $stmt->bindValue("idSubnivel", $this->idSubnivel);
             $stmt->bindValue("idProfesor", $this->idProfesor);
             $stmt->bindValue("nombre", $this->nombre);
+            $stmt->bindValue("estado", $this->estado);
             $stmt->bindValue("id", $this->id);
 
             $stmt->execute();
         } catch (\Throwable $th) {
+            if (DEVELOPER_MODE) {
+                die($th->getMessage());
+            }
             $_SESSION['errores'][] = "Ha ocurrido un error al actualizar el grupo.";
             throw $th;
         }
@@ -64,8 +68,8 @@ class Grupo extends Model
     public function esValido() : bool
     {
         $errores = 0;
-        if (empty($this->idNivelCrecimiento)) {
-            $_SESSION['errores'][] = "Debe seleccionar un nivel de crecimiento.";
+        if (empty($this->idSubnivel)) {
+            $_SESSION['errores'][] = "Debe seleccionar un subnivel de crecimiento.";
             $errores++;
         }
         if (empty($this->idProfesor)) {
@@ -87,12 +91,26 @@ class Grupo extends Model
         return true;
     }
 
+    /** Mapea los valores de un formulario post a las propiedades del objeto */
+    public function mapFromPost() : bool
+    {
+        if (!empty($_POST)) {
+            foreach ($_POST as $key => $value) {
+                if (property_exists($this, $key)) {
+                    $this->$key = trim($value);
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
     // Getters
     public function getNombre() : string {
-        return $this->nombre;
+        return $this->nombre ?? "";
     }
-    public function getEstado() : int {
-        return $this->estado;
+    public function getEstado() : ?int {
+        return $this->estado ?? null;
     }
 
     // Setters

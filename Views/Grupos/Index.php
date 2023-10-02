@@ -25,18 +25,46 @@ $title = "Grupos";
                         <div class="card-title fw-medium mb-0"><?= $grupo->getNombre() ?></div>
                     </div>
                     <div class="card-body">
-                        <b>Nivel:</b> <?= $grupo->nivelCrecimiento->getNombre() ?> <br>
+                        <b>Nivel:</b> <?= $grupo->subnivel->nivelCrecimiento->getNombre() ?> <br>
                         <b>Profesor:</b> <?= $grupo->profesor->getNombreCompleto() ?> <br>
                         <b>Participantes:</b> 0
                     </div>
                     <div class="card-footer text-end">
-                        <button class="btn btn-sm btn-secondary">Estudiantes</button>
-                        <button class="btn btn-sm btn-danger">Eliminar</button>
-                        <button class="btn btn-sm btn-primary">Gestionar</button>
+                        <button class="btn btn-danger px-2" title="Eliminar" data-bs-toggle="modal" data-bs-target="#confirmar-eliminacion"
+                                data-id="<?= $grupo->id ?>">
+                            <i class="fa-solid fa-trash fa-fw"></i>
+                        </button>
+                        <a href="/AppwebMVC/Grupos/Registrar?id=<?= $grupo->id ?>" class="btn btn-primary px-2">
+                            <i class="fa-solid fa-pen fa-fw"></i>
+                        </a>
+                        <a href="/AppwebMVC/Grupos/Gestionar?id=<?= $grupo->id ?>" class="btn btn-secondary px-2">
+                            Gestionar
+                        </a>
                     </div>
                 </div>
             </div>
         <?php endforeach ?>
+    </div>
+</div>
+
+<!-- Confirmar eliminación -->
+<div class="modal fade modal-eliminar" id="confirmar-eliminacion" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Eliminar grupo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-danger mb-0" role="alert">
+                    ¿Seguro quieres eliminar este grupo?
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No, cancelar</button>
+                <a href="#" data-href="/AppwebMVC/Grupos/Eliminar?id=" type="button" class="btn btn-danger btn-eliminar">Si, eliminar</a>
+            </div>
+        </div>
     </div>
 </div>
 
