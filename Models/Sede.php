@@ -352,28 +352,128 @@ class Sede extends Model
             die();
         }
     }
-    
-    public function getEscuela() : Escuela
+
+
+
+
+    ////////////////////////// APARTADO DE REPORTES ESTADISTICOS ///////////////////////////
+
+    public function cantidad_celulas_sedes()
+    {
+        try {
+            $sql = "SELECT sede.nombre AS nombreSede, COALESCE(COUNT(celulas.id), 0) AS cantidadCelulas FROM sede 
+            LEFT JOIN territorio ON territorio.idSede = sede.id 
+            LEFT JOIN celulas ON celulas.idTerritorio = territorio.id 
+            GROUP BY sede.nombre";
+
+            $stmt = $this->db->pdo()->prepare($sql);
+            $stmt->execute();
+
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
+            $error_data = array(
+                "error_message" => $e->getMessage(),
+                "error_line" => "Linea del error: " . $e->getLine()
+            );
+            http_response_code(422);
+            echo json_encode($error_data);
+            die();
+        }
+    }
+
+    public function cantidad_territorios_sedes()
+    {
+        try {
+            $sql = "SELECT sede.nombre AS nombreSede, COALESCE(COUNT(territorio.id), 0) AS cantidadTerritorios FROM sede 
+            LEFT JOIN territorio ON territorio.idSede = sede.id 
+            GROUP BY sede.nombre";
+
+            $stmt = $this->db->pdo()->prepare($sql);
+            $stmt->execute();
+
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
+            $error_data = array(
+                "error_message" => $e->getMessage(),
+                "error_line" => "Linea del error: " . $e->getLine()
+            );
+            http_response_code(422);
+            echo json_encode($error_data);
+            die();
+        }
+    }
+
+    public function cantidad_sedes_fecha()
+    {
+        try {
+            $sql = "SELECT 
+            SUM(CASE WHEN MONTH(fechaCreacion) = 1 THEN 1 ELSE 0 END) AS Enero,
+            SUM(CASE WHEN MONTH(fechaCreacion) = 2 THEN 1 ELSE 0 END) AS Febrero,
+            SUM(CASE WHEN MONTH(fechaCreacion) = 3 THEN 1 ELSE 0 END) AS Marzo,
+            SUM(CASE WHEN MONTH(fechaCreacion) = 4 THEN 1 ELSE 0 END) AS Abril,
+            SUM(CASE WHEN MONTH(fechaCreacion) = 5 THEN 1 ELSE 0 END) AS Mayo,
+            SUM(CASE WHEN MONTH(fechaCreacion) = 6 THEN 1 ELSE 0 END) AS Junio,
+            SUM(CASE WHEN MONTH(fechaCreacion) = 7 THEN 1 ELSE 0 END) AS Julio,
+            SUM(CASE WHEN MONTH(fechaCreacion) = 8 THEN 1 ELSE 0 END) AS Agosto,
+            SUM(CASE WHEN MONTH(fechaCreacion) = 9 THEN 1 ELSE 0 END) AS Septiembre,
+            SUM(CASE WHEN MONTH(fechaCreacion) = 10 THEN 1 ELSE 0 END) AS Octubre,
+            SUM(CASE WHEN MONTH(fechaCreacion) = 11 THEN 1 ELSE 0 END) AS Noviembre,
+            SUM(CASE WHEN MONTH(fechaCreacion) = 12 THEN 1 ELSE 0 END) AS Diciembre
+            FROM 
+            sede
+            WHERE 
+            YEAR(fechaCreacion) = YEAR(CURDATE())";
+
+            $stmt = $this->db->pdo()->prepare($sql);
+            $stmt->execute();
+
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
+            $error_data = array(
+                "error_message" => $e->getMessage(),
+                "error_line" => "Linea del error: " . $e->getLine()
+            );
+            http_response_code(422);
+            echo json_encode($error_data);
+            die();
+        }
+    }
+
+
+
+
+
+
+
+
+    public function getEscuela(): Escuela
     {
         return Escuela::cargarRelaciones($this->id, "Sede")[0];
     }
 
-    public function getCodigo() : ?string {
+    public function getCodigo(): ?string
+    {
         return $this->codigo;
     }
-    public function getIdentificador() : string {
+    public function getIdentificador(): string
+    {
         return $this->identificador;
     }
-    public function getNombre() : string {
+    public function getNombre(): string
+    {
         return $this->nombre;
     }
-    public function getEstadoCodigo() : string {
+    public function getEstadoCodigo(): string
+    {
         return $this->estadoCodigo;
     }
-    public function getEstado() : string {
+    public function getEstado(): string
+    {
         return $this->estado;
     }
-    public function getDireccion() : string {
+    public function getDireccion(): string
+    {
         return $this->direccion;
     }
 }

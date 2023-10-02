@@ -3,7 +3,6 @@ $(document).ready(function () {
   let choices;
   let choices2;
 
-  console.log(choices2);
 
   const dataTable = $('#sedeDatatables').DataTable({
     responsive: true,
@@ -17,12 +16,25 @@ $(document).ready(function () {
       { data: 'nombre' },
       { data: 'direccion' },
       {
-        defaultContent: `
-            <button type="button" id="ver_info" data-bs-toggle="modal" data-bs-target="#modal_verInfo" class="btn btn-secondary">Info</button>
-            <button type="button" id="editar" data-bs-toggle="modal" data-bs-target="#modal_editarInfo" class="btn btn-primary">Editar</button>
-            <button type="button" id="eliminar" class="btn btn-danger delete-btn">Eliminar</button>
-            `}
+        data: null,
+        render: function (data, type, row, meta) {
 
+          let botonInfo = `<button type="button" id="ver_info" data-bs-toggle="modal" data-bs-target="#modal_verInfo" class="btn btn-secondary">Info</button>`;
+
+          let botonEditar = permisos.actualizar ? `<button type="button" id="editar" data-bs-toggle="modal" data-bs-target="#modal_editarInfo" class="btn btn-primary">Editar</button>` : '';
+
+          let botonEliminar = permisos.eliminar ? `<button type="button" id="eliminar" class="btn btn-danger delete-btn">Eliminar</button>` : '';
+
+          let div = `
+          <div class="d-flex justify-content-center gap-1">
+                    ${botonInfo}
+                    ${botonEditar}
+                    ${botonEliminar}
+          </div>
+          `
+          return div;
+        }
+      },
     ],
   })
 
@@ -46,12 +58,11 @@ $(document).ready(function () {
     document.getElementById('estado2').value = datos.estadoCodigo;
 
     Listar_PastoresEditar(datos.idPastor);
-    
+
 
   })
 
   $('#registrar').on('click', function () {
-
 
     Listar_PastoresRegistrar();
 
@@ -137,7 +148,6 @@ $(document).ready(function () {
       data: {
 
         listaPastores: 'listaPastores',
-        
 
       },
       success: function (response) {
@@ -145,14 +155,14 @@ $(document).ready(function () {
         let data = JSON.parse(response);
 
         let selector = document.getElementById('idPastor');
-        // Crear y agregar la opción tipo "placeholder"
+        selector.innerHTML = '';
+
         const placeholderOption = document.createElement('option');
-          placeholderOption.value = '';
-          placeholderOption.text = 'Selecciona un pastor';
-          placeholderOption.disabled = true;
-          placeholderOption.selected = true;
-          selector.appendChild(placeholderOption);
-          
+        placeholderOption.value = '';
+        placeholderOption.text = 'Seleccionar pastor';
+        placeholderOption.disabled = true;
+        selector.appendChild(placeholderOption);
+
         data.forEach(item => {
 
           const option = document.createElement('option');
@@ -174,6 +184,7 @@ $(document).ready(function () {
           placeholderValue: 'Selecciona una opción',
         });
 
+        choices.setChoiceByValue('');
 
       },
       error: function (jqXHR, textStatus, errorThrown) {
@@ -184,7 +195,7 @@ $(document).ready(function () {
     })
   }
 
- 
+
 
 
   function Listar_PastoresEditar(idPastor) {
@@ -195,7 +206,7 @@ $(document).ready(function () {
       data: {
 
         listaPastores: 'listaPastores',
-        
+
 
       },
       success: function (response) {
@@ -204,7 +215,7 @@ $(document).ready(function () {
 
         let selector = document.getElementById('idPastor2');
         // Crear y agregar la opción tipo "placeholder"
-          
+
         data.forEach(item => {
 
           const option = document.createElement('option');
@@ -213,18 +224,18 @@ $(document).ready(function () {
           selector.appendChild(option);
 
         });
-        
-   
+
+
         if (choices2) {
           choices2.destroy();
         }
+
         choices2 = new Choices(selector, {
           allowHTML: true,
           searchEnabled: true,  // Habilita la funcionalidad de búsqueda
           removeItemButton: true,  // Habilita la posibilidad de remover items
-         
+
         });
-        console.log(choices2);
 
         choices2.setChoiceByValue(idPastor.toString());
 
@@ -234,7 +245,7 @@ $(document).ready(function () {
         console.error("Error al enviar:", textStatus, errorThrown);
         alert("Hubo un error al realizar el registro. Por favor, inténtalo de nuevo.");
       }
-      
+
     })
   }
 
@@ -330,7 +341,7 @@ $(document).ready(function () {
       // ... (tu código AJAX va aquí)
       $.ajax({
         type: "POST",
-        url: "http://localhost/AppwebMVC/Sedes/Registrar",
+        url: "http://localhost/AppwebMVC/Sedes/Listar",
         data: {
 
           registrar: 'registrar',
@@ -490,14 +501,15 @@ $(document).ready(function () {
         data: {
 
           editar: 'editar',
-          id2: id2,
-          idPastor2: idPastor2.value,
-          nombre2: nombre2.value,
-          direccion2: direccion2.value,
-          estado2: estado2.value
+          id: id2,
+          idPastor: idPastor2.value,
+          nombre: nombre2.value,
+          direccion: direccion2.value,
+          estado: estado2.value
         },
         success: function (response) {
           console.log(response);
+
           dataTable.ajax.reload();
 
           Swal.fire({

@@ -161,10 +161,27 @@ $(document).ready(function () {
                 let selector;
                 if (opcion == 1) {
                     selector = document.getElementById('idConsolidador');
-                }else{
+                    /*while (selector.firstChild) {
+                        selector.removeChild(selector.firstChild);
+                    }*/
+                    selector.innerHTML = '';
+                    const newOption = document.createElement('option');
+                    newOption.value = '';
+                    newOption.textContent = 'Selecciona consolidador';
+                    newOption.disabled = true;
+                    newOption.selected = true;
+                    selector.appendChild(newOption);
+                } else {
                     selector = document.getElementById('idConsolidador2');
+                    selector.innerHTML = '';
+                    /*const newOption = document.createElement('option');
+                    newOption.value = '';
+                    newOption.textContent = 'Selecciona consolidador';
+                    newOption.disabled = true;
+                    newOption.selected = true;
+                    selector.appendChild(newOption);*/
                 }
-                
+
 
                 data.forEach(item => {
 
@@ -219,10 +236,18 @@ $(document).ready(function () {
                 let selector;
                 if (opcion == 1) {
                     selector = document.getElementById('idCelulaConsolidacion');
-                }else{
+                    selector.innerHTML = '';
+                    const newOption = document.createElement('option');
+                    newOption.value = '';
+                    newOption.textContent = 'Selecciona celula';
+                    newOption.disabled = true;
+                    newOption.selected = true;
+                    selector.appendChild(newOption);
+                } else {
                     selector = document.getElementById('idCelulaConsolidacion2');
+                    selector.innerHTML = '';
                 }
-                
+
 
                 data.forEach(item => {
 
@@ -464,7 +489,7 @@ $(document).ready(function () {
 
 
 
-    $("#formulario").submit(function (event) {
+    $("#formulario2").submit(function (event) {
         event.preventDefault();
 
         if (Object.values(validaciones).every(val => val)) {
@@ -816,7 +841,7 @@ $(document).ready(function () {
             let fechaNacimiento = $("#fechaNacimiento").val();
             let fechaConvercion = $("#fechaConvercion").val();
             let idConsolidador = $("#idConsolidador").val();
-            let idcelulaconsolidacion = $("#idcelulaconsolidacion").val();
+            let idcelulaconsolidacion = $("#idCelulaConsolidacion").val();
             let direccion = $("#direccion").val();
             let motivo = $("#motivo").val();
 
@@ -844,6 +869,8 @@ $(document).ready(function () {
                     console.log(response);
                     let data = JSON.parse(response);
 
+                    dataTable.ajax.reload();
+
                     Swal.fire({
                         icon: 'success',
                         title: 'Registrado Correctamente',
@@ -857,6 +884,7 @@ $(document).ready(function () {
 
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR.responseText);
                     if (jqXHR.responseText) {
                         let jsonResponse = JSON.parse(jqXHR.responseText);
 

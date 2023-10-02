@@ -4,7 +4,7 @@ require_once "Models/Celulas.php";
 
 necesitaAutenticacion();
 
-requierePermiso("celulaFamiliar", "registrar");
+requierePermiso("celulaFamiliar", "consultar");
 
 $usuarioSesion = $_SESSION['usuario'];
 
@@ -37,9 +37,8 @@ if (isset($_GET['cargar_data'])) {
 
 if (isset($_POST['registrar'])) {
 
-    requierePermiso("celulaFamiliar", "actualizar");
+    requierePermiso("celulaFamiliar", "registrar");
 
-    $id = $_POST['id'];
     $tipo =  trim(strtolower('familiar'));
     $nombre = trim(strtolower($_POST['nombre']));
     $idLider = trim($_POST['idLider']);
@@ -56,7 +55,7 @@ if (isset($_POST['registrar'])) {
 
 if (isset($_POST['editar'])) {
 
-    //requierePermisos("actualizarCelula");
+    requierePermiso("celulaFamiliar", "actualizar");
 
     $id = $_POST['id2'];
     $tipo =  trim(strtolower('familiar'));
@@ -137,7 +136,7 @@ if (isset($_GET['listaTerritorio'])) {
 
 if (isset($_GET['cargar_discipulos_celula'])) {
 
-    requierePermiso("celulaConsolidacion", "actualizar");
+    requierePermiso("celulaFamiliar", "actualizar");
 
     $idCelula = $_GET['idCelula'];
     $resultado = $Celulas->listarDiscipulados_celula($idCelula);
