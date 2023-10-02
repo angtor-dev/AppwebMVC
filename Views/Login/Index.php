@@ -29,8 +29,8 @@
                             </div>
                         </div>
                         <div class="d-flex justify-content-center">
-                            <button type="submit" class="btn w-auto text-white">
-                                <h2>INICIAR SESION</h2>
+                            <button type="submit" id="botonLogin" class="btn w-auto text-white">
+                                INICIAR SESION
                             </button>
                         </div>
                     </form>
