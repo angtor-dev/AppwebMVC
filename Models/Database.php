@@ -12,10 +12,10 @@ class Database
 
     private function __construct()
     {
-        $this->host = "localhost";
-        $this->dbname = defined('DB_NAME') ? DB_NAME : "llamasdefuego";
-        $this->user = defined('DB_USER') ? DB_USER : "root";
-        $this->password = defined('DB_PASSWORD') ? DB_PASSWORD : "";
+        $this->host = DB_HOST;
+        $this->dbname = DB_NAME;
+        $this->user = DB_USER;
+        $this->password = DB_PASSWORD;
         $this->charset = "utf8mb4";
 
         $this->pdo = $this->connect();
