@@ -1,5 +1,6 @@
 <?php
 require_once "Models/Grupo.php";
+require_once "Models/Enums/EstadosGrupo.php";
 necesitaAutenticacion();
 /** @var Usuario */
 $usuario = $_SESSION['usuario'];

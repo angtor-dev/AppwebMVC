@@ -45,17 +45,21 @@ class Grupo extends Model
 
     public function actualizar() : void
     {
-        $query = "UPDATE grupo SET idSubnivel = :idSubnivel, idProfesor = :idProfesor, nombre = :nombre WHERE id = :id";
+        $query = "UPDATE grupo SET idSubnivel = :idSubnivel, idProfesor = :idProfesor, nombre = :nombre, estado = :estado WHERE id = :id";
 
         try {
             $stmt = $this->prepare($query);
             $stmt->bindValue("idSubnivel", $this->idSubnivel);
             $stmt->bindValue("idProfesor", $this->idProfesor);
             $stmt->bindValue("nombre", $this->nombre);
+            $stmt->bindValue("estado", $this->estado);
             $stmt->bindValue("id", $this->id);
 
             $stmt->execute();
         } catch (\Throwable $th) {
+            if (DEVELOPER_MODE) {
+                die($th->getMessage());
+            }
             $_SESSION['errores'][] = "Ha ocurrido un error al actualizar el grupo.";
             throw $th;
         }
@@ -103,10 +107,10 @@ class Grupo extends Model
 
     // Getters
     public function getNombre() : string {
-        return $this->nombre;
+        return $this->nombre ?? "";
     }
-    public function getEstado() : int {
-        return $this->estado;
+    public function getEstado() : ?int {
+        return $this->estado ?? null;
     }
 
     // Setters
