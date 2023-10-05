@@ -28,7 +28,7 @@ $title = "Grupos";
                         <div class="card-body">
                             <b>Nivel:</b> <?= $grupo->subnivel->nivelCrecimiento->getNombre() ?> <br>
                             <b>Profesor:</b> <?= $grupo->profesor->getNombreCompleto() ?> <br>
-                            <b>Participantes:</b> 0
+                            <b>Participantes:</b> <?= count($grupo->estudiantes) ?>
                         </div>
                         <div class="card-footer text-end">
                             <button class="btn btn-danger px-2" title="Eliminar" data-bs-toggle="modal" data-bs-target="#confirmar-eliminacion"
@@ -39,7 +39,7 @@ $title = "Grupos";
                                 <i class="fa-solid fa-pen fa-fw"></i>
                             </a>
                             <a href="/AppwebMVC/Grupos/Gestionar?id=<?= $grupo->id ?>" class="btn btn-secondary px-2">
-                                Gestionar
+                                Estudiantes
                             </a>
                         </div>
                     </div>
@@ -62,7 +62,7 @@ $title = "Grupos";
                         <div class="card-body">
                             <b>Nivel:</b> <?= $grupo->subnivel->nivelCrecimiento->getNombre() ?> <br>
                             <b>Profesor:</b> <?= $grupo->profesor->getNombreCompleto() ?> <br>
-                            <b>Participantes:</b> 0
+                            <b>Participantes:</b> <?= count($grupo->estudiantes) ?>
                         </div>
                         <div class="card-footer text-end">
                             <button class="btn btn-danger px-2" title="Eliminar" data-bs-toggle="modal" data-bs-target="#confirmar-eliminacion"
@@ -73,7 +73,7 @@ $title = "Grupos";
                                 <i class="fa-solid fa-pen fa-fw"></i>
                             </a>
                             <a href="/AppwebMVC/Grupos/Gestionar?id=<?= $grupo->id ?>" class="btn btn-secondary px-2">
-                                Detalles
+                                Estudiantes
                             </a>
                         </div>
                     </div>

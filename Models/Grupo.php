@@ -14,6 +14,8 @@ class Grupo extends Model
     
     public Subnivel $subnivel;
     public Usuario $profesor;
+    /** @var Usuario[] */
+    public array $estudiantes;
 
     public function __construct()
     {
@@ -23,6 +25,9 @@ class Grupo extends Model
         }
         if (!empty($this->idProfesor)) {
             $this->profesor = Usuario::cargar($this->idProfesor);
+        }
+        if (!empty($this->id)) {
+            $this->estudiantes = $this->ListarEstudiantes();
         }
     }
 
@@ -63,6 +68,27 @@ class Grupo extends Model
             $_SESSION['errores'][] = "Ha ocurrido un error al actualizar el grupo.";
             throw $th;
         }
+    }
+
+    private function ListarEstudiantes() : array
+    {
+        $query = "SELECT usuario.* FROM usuario, matricula
+            WHERE usuario.id = matricula.idEstudiante AND matricula.idGrupo = :idGrupo";
+
+            try {
+                $stmt = $this->prepare($query);
+                $stmt->bindValue("idGrupo", $this->id);
+
+                $stmt->execute();
+
+                return $stmt->fetchAll(PDO::FETCH_CLASS, "Usuario");
+            } catch (\Throwable $th) {
+                if (DEVELOPER_MODE) {
+                    die($th->getMessage());
+                }
+                $_SESSION['errores'][] = "Ha ocurrido un error al listar los estudiantes del grupo.";
+                throw $th;
+            }
     }
 
     public function esValido() : bool
