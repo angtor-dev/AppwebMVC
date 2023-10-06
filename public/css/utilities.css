@@ -102,3 +102,26 @@
     border-radius: 100px;
     cursor: pointer;
 }
+
+/* Checkboxs de botones */
+.check-toggle input {
+    width: 0;
+    height: 0;
+    opacity: 0;
+}
+.check-toggle input + .btn {
+    background-color: var(--bs-success);
+    color: #fff;
+}
+.check-toggle input + .btn .fa-user-minus {
+    display: none;
+}
+.check-toggle input:checked + .btn {
+    background-color: var(--bs-danger);
+}
+.check-toggle input:checked + .btn .fa-user-minus {
+    display: inline-block;
+}
+.check-toggle input:checked + .btn .fa-user-plus {
+    display: none;
+}

@@ -1,6 +1,7 @@
 <?php
 require_once "Models/Model.php";
 require_once "Models/Subnivel.php";
+require_once "Models/Matricula.php";
 require_once "Models/Enums/EstadosGrupo.php";
 
 class Grupo extends Model
@@ -16,6 +17,9 @@ class Grupo extends Model
     public Usuario $profesor;
     /** @var Usuario[] */
     public array $estudiantes;
+    /** @var Matricula[] */
+    public array $matriculas;
+    // TODO: refactorizar para eliminar propiedad estudiantes
 
     public function __construct()
     {
@@ -28,6 +32,9 @@ class Grupo extends Model
         }
         if (!empty($this->id)) {
             $this->estudiantes = $this->ListarEstudiantes();
+        }
+        if (!empty($this->id)) {
+            $this->matriculas = Matricula::cargarRelaciones($this->id, get_class());
         }
     }
 
@@ -115,6 +122,16 @@ class Grupo extends Model
             return false;
         }
         return true;
+    }
+
+    public function tieneEstudiante(int $idEstudiante) : bool
+    {
+        foreach ($this->estudiantes as $estudiante) {
+            if ($estudiante->id == $idEstudiante) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /** Mapea los valores de un formulario post a las propiedades del objeto */

@@ -11,7 +11,7 @@ $usuario = $_SESSION['usuario'];
         Volver
     </a>
     <?php if ($usuario->tienePermiso("inscripciones", "registrar")): ?>
-        <button class="btn btn-accent">
+        <button class="btn btn-accent" onclick="abrirModalEstudiantes(<?= $grupo->id ?>)">
             <i class="fa-solid fa-plus"></i>
             Agregar estudiante
         </button>
@@ -48,20 +48,23 @@ $usuario = $_SESSION['usuario'];
                 </thead>
                 <tbody>
                     <?php foreach ($grupo->estudiantes as $estudiante): ?>
-                        <td><?= $estudiante->getNombreCompleto() ?></td>
-                        <td><?= $estudiante->getCedula() ?></td>
-                        <td><?= $estudiante->getCorreo() ?></td>
-                        <td class="acciones">
-                            <a role="button">
-                                <i class="fa-solid fa-circle-info" title="Ver detalles" data-bs-toggle="tooltip"></i>
-                            </a>
-                            <?php if ($usuario->tienePermiso("grupos", "actualizar")): ?>
-                                <a role="button" data-bs-toggle="modal" data-bs-target="#confirmar-eliminacion"
-                                    data-id="<?= $estudiante->id ?>">
-                                    <i class="fa-solid fa-trash" title="Eliminar" data-bs-toggle="tooltip"></i>
+                        <tr>
+                            <td><?= $estudiante->getNombreCompleto() ?></td>
+                            <td><?= $estudiante->getCedula() ?></td>
+                            <td><?= $estudiante->getCorreo() ?></td>
+                            <td class="acciones">
+                                <a role="button">
+                                    <i class="fa-solid fa-circle-info" title="Ver detalles" data-bs-toggle="tooltip"></i>
                                 </a>
-                            <?php endif ?>
-                        </td>
+                                <?php if ($usuario->tienePermiso("grupos", "actualizar")): ?>
+                                    <a role="button" data-bs-toggle="modal" data-bs-target="#confirmar-eliminacion"
+                                        data-id="<?= $estudiante->id ?>">
+                                        <i class="fa-solid fa-trash" title="Eliminar" data-bs-toggle="tooltip"></i>
+                                    </a>
+                                <?php endif ?>
+                            </td>
+                        </tr>
+                        
                     <?php endforeach ?>
                 </tbody>
             </table>
@@ -72,3 +75,39 @@ $usuario = $_SESSION['usuario'];
         <?php endif ?>
     </div>
 </div>
+
+<!-- Agregar estudiante -->
+<div class="modal fade" id="modal-estudiantes">
+    <!-- Contenido cargado con ajax -->
+</div>
+
+<script>
+    function abrirModalEstudiantes(id = 0) {
+        fetch('/AppwebMVC/Grupos/AgregarEstudiantes?id=' + id)
+            .then(res => res.text())
+            .then(data => {
+                const modalEl = document.getElementById('modal-estudiantes')
+                modalEl.innerHTML = data
+                modalEl.querySelectorAll('.needs-validation')
+                    .forEach(agregarValidacionGenerica)
+
+                let modal = new bootstrap.Modal(modalEl)
+                modal.show()
+
+                var tabla = new DataTable('#tabla-estudiantes', {
+                    info: false,
+                    lengthChange: false,
+                    pageLength: 15,
+                    language: {
+                        url: '/AppwebMVC/public/lib/datatables/datatable-spanish.json'
+                    },
+                    // Muestra paginacion solo si hay mas de una pagina
+                    drawCallback: function (settings) {
+                        var pagination = $(this).closest('.dataTables_wrapper').find('.dataTables_paginate');
+                        pagination.toggle(this.api().page.info().pages > 1);
+                    }
+                })
+            })
+            .catch(error => console.error(error))
+    }
+</script>

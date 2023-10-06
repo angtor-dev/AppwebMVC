@@ -102,4 +102,15 @@ function agregarCss($styleName) : void {
 
     $viewStyles[] = $styleName;
 }
+
+/**
+ * Imprime el contenido de una variable en un formato legible
+ * @param mixed $var variable a imprimir
+ */
+function debug(mixed $var) : void {
+    echo "<pre>";
+    print_r($var);
+    echo "</pre>";
+    exit;
+}
 ?>
