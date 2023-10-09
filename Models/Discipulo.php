@@ -508,6 +508,18 @@ class Discipulo extends Model
         return $stmt->fetch();
     }
 
+    public function marcarUsuarioCreado() : void
+    {
+        try {
+            $query = "UPDATE discipulo SET aprobarUsuario = 2 WHERE id = $this->id";
+
+            $this->query($query);
+        } catch (\Throwable $th) {
+            $_SESSION['errores'][] = "Ah ocurrido un error al actualizar el estado del discipulo";
+            throw $th;
+        }
+    }
+
 
 
 

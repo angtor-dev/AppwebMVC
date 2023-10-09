@@ -60,7 +60,7 @@
 </div>
 <?php if ($discipulo->getAprobarUsuario() == 1): ?>
     <div class="p-3 border-top">
-        <form action="/AppwebbMVC/Inscripciones/InscribirDiscipulo" method="post">
+        <form action="/AppwebMVC/Inscripciones/InscribirDiscipulo" method="post">
             <input type="hidden" name="id" value="<?= $discipulo->id ?>">
             <button type="submit" class="btn btn-accent w-100">Inscribir discipulo</button>
         </form>

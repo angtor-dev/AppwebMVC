@@ -122,6 +122,25 @@ class Rol extends Model
         return false;
     }
 
+    /** Busca un y retorna un rol por su nombre */
+    public static function tryFromNombre(string $nombre) : ?Rol
+    {
+        $db = Database::getInstance();
+        $query = "SELECT * FROM rol WHERE nombre = :nombre LIMIT 1";
+
+        $stmt = $db->pdo()->prepare($query);
+        $stmt->bindValue("nombre", $nombre);
+
+        $stmt->execute();
+        
+        $stmt->setFetchMode(PDO::FETCH_CLASS, "Rol");
+
+        if ($stmt->rowCount() == 0) {
+            return null;
+        }
+        return $stmt->fetch();
+    }
+
     // Getters
     public function getNombre() : string {
         return $this->nombre ?? "";

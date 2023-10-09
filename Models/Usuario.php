@@ -289,6 +289,33 @@ class Usuario extends Model
         return $usuarios;
     }
 
+    /**
+     * mapea las propiedades del usuario con las propiedades de un Discipulo
+     *
+     * @param Discipulo $discipulo El discipulo desde donde se mapeara el usuario
+     **/
+    public function fromDiscipulo(Discipulo $discipulo) : void
+    {
+        /** @var Usuario $usuarioSesion */
+        $usuarioSesion = $_SESSION['usuario'];
+        $idSede = $usuarioSesion->idSede;
+
+        $this->idSede = $idSede;
+        $this->idConsolidador = $discipulo->getIdConsolidador();
+        $this->cedula = $discipulo->getCedula();
+        $this->correo = null;
+        $this->clave = $this->cedula;
+        $this->nombre = $discipulo->getNombre();
+        $this->apellido = $discipulo->getApellido();
+        $this->telefono = $discipulo->getTelefono();
+        $this->direccion = $discipulo->getDireccion();
+        $this->estadoCivil = $discipulo->getEstadoCivil();
+        $this->fechaNacimiento = $discipulo->getFechaNacimiento();
+        $this->fechaConversion = $discipulo->getFechaConvercion();
+        $this->motivo = $discipulo->getMotivo();
+        $this->roles[] = Rol::tryFromNombre("Estudiante");
+    }
+
     /** Mapea los valores de un formulario post a las propiedades del objeto */
     public function mapFromPost() : bool
     {
