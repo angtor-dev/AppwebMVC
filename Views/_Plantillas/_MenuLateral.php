@@ -105,7 +105,7 @@
                 </a>
             <?php endif ?>
             <?php if ($usuario->tieneRol("Superusuario")) : ?>
-                <a href="#" class="nav-link">
+                <a href="/AppwebMVC/Inscripciones" class="nav-link">
                     <i class="fa-solid fa-clipboard-list fa-fw me-2"></i>
                     Inscripciones
                 </a>

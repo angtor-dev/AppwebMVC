@@ -254,6 +254,23 @@ class Usuario extends Model
         return false;
     }
 
+    public static function cargarPorCedula(string|int $cedula) : null|Usuario
+    {
+        $bd = Database::getInstance();
+        $query = "SELECT * FROM usuario WHERE cedula = :cedula AND estatus = 1 LIMIT 1";
+
+        $stmt = $bd->pdo()->prepare($query);
+        $stmt->bindValue("cedula", $cedula);
+
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_CLASS, "Usuario");
+
+        if ($stmt->rowCount() == 0) {
+            return null;
+        }
+        return $stmt->fetch();
+    }
+
     /** Retorna un arreglo con los usuarios que tengan alguno de los roles indicados */
     public static function listarPorRoles(string ...$roles) : array
     {
