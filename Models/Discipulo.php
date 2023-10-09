@@ -3,8 +3,21 @@ require_once "Models/Model.php";
 
 class Discipulo extends Model
 {
-
-    public int $idCelulaConsolidacion;
+    public int $id;
+    private int $idConsolidador;
+    private int $idCelulaConsolidacion;
+    private string $asisFamiliar;
+    private string $asisCrecimiento;
+    private string $cedula;
+    private string $nombre;
+    private string $apellido;
+    private string $telefono;
+    private string $direccion;
+    private string $estadoCivil;
+    private string $fechaNacimiento;
+    private string $motivo;
+    private string $fechaConvercion;
+    private int $aprobarUsuario;
 
     private $expresion_nombreApellido = '/^[a-zA-ZñÑáéíóúÁÉÍÓÚ]{1,50}$/';
     private $expresion_fecha = '/^\d{4}-\d{2}-\d{2}$/';
@@ -478,6 +491,23 @@ class Discipulo extends Model
         }
     }
 
+    public static function cargarPorCedula(string|int $cedula) : null|Usuario
+    {
+        $bd = Database::getInstance();
+        $query = "SELECT * FROM discipulo WHERE cedula = :cedula AND estatus = 1 LIMIT 1";
+
+        $stmt = $bd->pdo()->prepare($query);
+        $stmt->bindValue("cedula", $cedula);
+
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_CLASS, "Usuario");
+
+        if ($stmt->rowCount() == 0) {
+            return null;
+        }
+        return $stmt->fetch();
+    }
+
 
 
 
@@ -504,5 +534,49 @@ class Discipulo extends Model
             echo json_encode($error_data);
             die();
         }
+    }
+
+    // Getters
+    public function getIdConsolidador() : int {
+        return $this->idConsolidador;
+    }
+    public function getIdCelulaConsolidacion() : int {
+        return $this->idCelulaConsolidacion;
+    }
+    public function getAsisFamiliar() : string {
+        return $this->asisFamiliar;
+    }
+    public function getAsisCrecimiento() : string {
+        return $this->asisCrecimiento;
+    }
+    public function getCedula() : string {
+        return $this->cedula;
+    }
+    public function getNombre() : string {
+        return $this->nombre;
+    }
+    public function getApellido() : string {
+        return $this->apellido;
+    }
+    public function getTelefono() : string {
+        return $this->telefono;
+    }
+    public function getDireccion() : string {
+        return $this->direccion;
+    }
+    public function getEstadoCivil() : string {
+        return $this->estadoCivil;
+    }
+    public function getFechaNacimiento() : string {
+        return $this->fechaNacimiento;
+    }
+    public function getMotivo() : string {
+        return $this->motivo;
+    }
+    public function getFechaConvercion() : string {
+        return $this->fechaConvercion;
+    }
+    public function getAprobarUsuario() : int {
+        return $this->aprobarUsuario;
     }
 }
