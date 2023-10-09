@@ -1,3 +1,6 @@
+<?php
+/** @var Usuario $usuario */
+?>
 <aside id="sidebar" class="d-flex flex-column flex-shrink-0 py-3 px-2 bg-white
     position-fixed top-0 bottom-0 border-end">
     <div class="nav flex-column mb-auto pb-5">
@@ -104,8 +107,8 @@
                     Grupos
                 </a>
             <?php endif ?>
-            <?php if ($usuario->tieneRol("Superusuario")) : ?>
-                <a href="#" class="nav-link">
+            <?php if ($usuario->tienePermiso("inscripciones", "consultar")) : ?>
+                <a href="<?= LOCAL_DIR ?>Inscripciones" class="nav-link">
                     <i class="fa-solid fa-clipboard-list fa-fw me-2"></i>
                     Inscripciones
                 </a>
