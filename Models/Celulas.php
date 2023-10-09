@@ -506,9 +506,12 @@ class Celulas extends Model
 
                         /* Logica para verificar que al momento de registrar la asistencia, cuente si el discipulo
                            cuenta con la cantidad de 5 asistencias para ser aprobado su estatus de crearle un usuario */
-                        $consultaSql = "SELECT * FROM asistencia WHERE idDiscipulo = :idDiscipulo AND idReunion = :idReunion";
+                        $consultaSql = "SELECT reunioncelula.idCelula, reunioncelula.id, asistencia.idDiscipulo, asistencia.idReunion FROM asistencia 
+                        INNER JOIN reunioncelula ON reunioncelula.idCelula = :idCelula
+                        WHERE asistencia.idDiscipulo = :idDiscipulo AND asistencia.idReunion = reunioncelula.id";
+
                         $stmt4 = $this->db->pdo()->prepare($consultaSql);
-                        $stmt4->bindValue(':idReunion', $idReunion);
+                        $stmt4->bindValue(':idCelula', $idCelula);
                         $stmt4->bindValue(':idDiscipulo', $values);
 
                         $stmt4->execute();
