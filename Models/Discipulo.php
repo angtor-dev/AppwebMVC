@@ -4,10 +4,10 @@ require_once "Models/Model.php";
 class Discipulo extends Model
 {
     public int $id;
-    private int $idConsolidador;
+    private ?int $idConsolidador;
     private int $idCelulaConsolidacion;
-    private string $asisFamiliar;
-    private string $asisCrecimiento;
+    private ?string $asisFamiliar;
+    private ?string $asisCrecimiento;
     private string $cedula;
     private string $nombre;
     private string $apellido;
@@ -491,7 +491,7 @@ class Discipulo extends Model
         }
     }
 
-    public static function cargarPorCedula(string|int $cedula) : null|Usuario
+    public static function cargarPorCedula(string|int $cedula) : null|Discipulo
     {
         $bd = Database::getInstance();
         $query = "SELECT * FROM discipulo WHERE cedula = :cedula AND estatus = 1 LIMIT 1";
@@ -500,7 +500,7 @@ class Discipulo extends Model
         $stmt->bindValue("cedula", $cedula);
 
         $stmt->execute();
-        $stmt->setFetchMode(PDO::FETCH_CLASS, "Usuario");
+        $stmt->setFetchMode(PDO::FETCH_CLASS, "Discipulo");
 
         if ($stmt->rowCount() == 0) {
             return null;

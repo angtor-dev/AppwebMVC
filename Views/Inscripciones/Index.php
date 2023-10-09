@@ -95,15 +95,16 @@ $usuarioSesion = $_SESSION['usuario'];
             </div>
             <div class="modal-body">
                 <h5>Ingresa la cedula del estudiante</h5>
-                <form action="/AppwebMVC/Inscripciones/ValidarEstudiante" method="post">
+                <form action="/AppwebMVC/Inscripciones/ValidarEstudiante" method="post" id="form-buscar-cedula">
                     <input type="text" name="cedula" id="buscar-cedula" class="form-control" placeholder="28123456">
                 </form>
+                <div class="msgBox"></div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" data-bs-dismiss="modal">
                     Cancelar
                 </button>
-                <button class="btn btn-primary">
+                <button type="submit" form="form-buscar-cedula" class="btn btn-primary">
                     Aceptar
                 </button>
             </div>
@@ -116,19 +117,4 @@ $usuarioSesion = $_SESSION['usuario'];
     <!-- Contenido cargado desde ajax -->
 </div>
 
-<script>
-    function abrirModalUsuario(id = 0) {
-        fetch('/AppwebMVC/Inscripciones/Registrar?id=' + id)
-            .then(res => res.text())
-            .then(data => {
-                const modalEl = document.getElementById('offcanvas-estudiante')
-                modalEl.innerHTML = data
-                modalEl.querySelectorAll('.needs-validation')
-                    .forEach(agregarValidacionGenerica)
-
-                let modal = new bootstrap.Offcanvas(modalEl)
-                modal.show()
-            })
-            .catch(error => console.error(error))
-    }
-</script>
+<?php agregarScript("inscripciones.js"); ?>
