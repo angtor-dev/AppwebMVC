@@ -20,7 +20,7 @@ abstract class Model
     public static function listar(int $estatus = null) : array
     {
         $bd = Database::getInstance();
-        $table = static::class;
+        $table = strtolower(static::class);
         $query = "SELECT * FROM $table" . (isset($estatus) ? " WHERE estatus = $estatus" : "");
 
         $stmt = $bd->pdo()->query($query);
@@ -38,7 +38,7 @@ abstract class Model
     public static function cargar(int $id) : null|Model
     {
         $bd = Database::getInstance();
-        $table = static::class;
+        $table = strtolower(static::class);
         $query = "SELECT * FROM $table WHERE id = $id";
 
         $stmt = $bd->pdo()->query($query);
@@ -62,7 +62,7 @@ abstract class Model
     public static function cargarRelaciones(int $id, string $tablaForanea, int $estatus = null) : array
     {
         $bd = Database::getInstance();
-        $table = static::class;
+        $table = strtolower(static::class);
         $query = "SELECT * FROM $table WHERE id$tablaForanea = $id" . (isset($estatus) ? " AND estatus = $estatus" : "");
 
         $stmt = $bd->pdo()->query($query);
@@ -87,7 +87,8 @@ abstract class Model
         int $id, string $tablaForanea, string $tablaIntermediaria) : array
     {
         $bd = Database::getInstance();
-        $table = static::class;
+        $table = strtolower(static::class);
+        $tablaIntermediaria = strtolower($tablaIntermediaria);
         $query = "SELECT t.* FROM $table AS t
             INNER JOIN $tablaIntermediaria AS ti ON t.id = ti.id$table
             WHERE ti.id$tablaForanea = $id";
@@ -110,7 +111,7 @@ abstract class Model
      */
     public function eliminar(bool $eliminadoLogico = true) : void
     {
-        $tabla = get_class($this);
+        $tabla = strtolower(get_class($this));
         $query = $eliminadoLogico
             ? "UPDATE $tabla set estatus = 0 WHERE id = :id"
             : "DELETE FROM $tabla WHERE id = :id";

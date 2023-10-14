@@ -11,6 +11,9 @@ function renderView(?string $viewName = null, ?string $viewPath = null) : void
     $viewName ??= $GLOBALS['controllerName'];
     $viewPath ??= $GLOBALS['controllerPath'];
 
+    $viewName = ucfirst($viewName);
+    $viewPath = ucfirst($viewPath);
+
     foreach ($GLOBALS as $key => $value) $$key = $value;
     
     $_layout ??= "Principal";
@@ -54,7 +57,7 @@ function saveViewBuffer(string $buffer)
  */
 function necesitaAutenticacion() : void {
     if (!isset($_SESSION['usuario'])) {
-        header('location:'.LOCAL_DIR.'login');
+        header('location:'.LOCAL_DIR.'Login');
         exit();
     }
 }
