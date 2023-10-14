@@ -19,7 +19,9 @@ $profesorActual = empty($grupo->profesor) ? "" : $grupo->profesor->id;
     <?php $action = $actualizaGrupo ? "/AppwebMVC/Grupos/Actualizar" : "/AppwebMVC/Grupos/Registrar"; ?>
 
     <form action="<?= $action ?>" method="post" id="formRegistrarGrupo">
-        <input type="hidden" value="<?= $grupo->id ?? null ?>" name="id">
+    <?php if (!empty($grupo->id)): ?>
+        <input type="hidden" value="<?= $grupo->id ?>" name="id">
+    <?php endif ?>
         <div class="mb-3">
             <label class="form-label fw-bold">Nombre del grupo</label>
             <input type="text" class="form-control" id="nombre" name="nombre" required
