@@ -58,7 +58,7 @@ $title = "Niveles de Crecimiento";
                             </a>
                             <?php if ($usuario->tienePermiso("nivelesCrecimiento", "actualizar")): ?>
                                 <a role="button" onclick="abrirModalNivelCrecimiento(<?= $nivel->id ?>)">
-                                    <i class="fa-solid fa-pen" title="Modificar" data-bs-toggle="tooltip"></i>
+                                    <i class="fa-solid fa-pen" title="Actualizar" data-bs-toggle="tooltip"></i>
                                 </a>
                             <?php endif ?>
                             <?php if ($usuario->tienePermiso("nivelesCrecimiento", "eliminar")): ?>
@@ -161,7 +161,7 @@ $title = "Niveles de Crecimiento";
                         <td class="d-flex justify-content-center gap-3 border-bottom-0" style="color: var(--color-terceario);">
                             <?php if ($usuario->tienePermiso("nivelesCrecimiento", "actualizar")): ?>
                                 <a role="button" onclick="abrirModalSubnivel(${id})">
-                                    <i class="fa-solid fa-pen" title="Modificar" data-bs-toggle="tooltip"></i>
+                                    <i class="fa-solid fa-pen" title="Actualizar" data-bs-toggle="tooltip"></i>
                                 </a>
                                 <a role="button" data-bs-toggle="modal" data-bs-target="#confirmar-eliminacion"
                                     data-id="${id}">

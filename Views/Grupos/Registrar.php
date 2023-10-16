@@ -12,7 +12,7 @@ $profesorActual = empty($grupo->profesor) ? "" : $grupo->profesor->id;
 ?>
 
 <div class="d-flex align-items-end justify-content-between mb-2">
-    <h4 class="mb-0 fw-bold"><?= $actualizaGrupo ? "Modificar" : "Eliminar"; ?> grupo para la E.I.D.</h4>
+    <h4 class="mb-0 fw-bold"><?= $actualizaGrupo ? "Actualizar" : "Registrar"; ?> grupo para la E.I.D.</h4>
 </div>
 
 <div class="container-fluid">

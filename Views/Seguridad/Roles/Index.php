@@ -39,7 +39,7 @@ $usuario = $_SESSION['usuario'];
                     <div class="acciones">
                         <?php if ($usuario->tienePermiso("roles", "actualizar") && $rol->getNombre() != "Superusuario"): ?>
                             <a role="button" onclick="abrirModalRol(<?= $rol->id ?>)">
-                                <i class="fa-solid fa-pen" title="Modificar" data-bs-toggle="tooltip"></i>
+                                <i class="fa-solid fa-pen" title="Actualizar" data-bs-toggle="tooltip"></i>
                             </a>
                         <?php endif ?>
                         <?php if ($usuario->tienePermiso("roles", "eliminar") && $rol->getNombre() != "Superusuario"): ?>

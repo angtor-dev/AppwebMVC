@@ -2,7 +2,7 @@
 <?php /** @var Grupo[] $grupos */ ?>
 
 <div class="offcanvas-header border-bottom">
-    <h5 class="offcanvas-title"> <?= empty($clase->id) ? "Crear clase nueva" : "Modificar clase" ?> </h5>
+    <h5 class="offcanvas-title"> <?= empty($clase->id) ? "Crear clase nueva" : "Actualizar clase" ?> </h5>
     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
 </div>
 <div class="offcanvas-body text-secondary">

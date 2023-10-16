@@ -3,7 +3,7 @@
 <?php /** @var array<Sede> $sedes */ ?>
 
 <div class="offcanvas-header border-bottom">
-    <h5 class="offcanvas-title"> <?= empty($usuario->id) ? "Crear usuario nuevo" : "Modificar usuario" ?> </h5>
+    <h5 class="offcanvas-title"> <?= empty($usuario->id) ? "Crear usuario nuevo" : "Actualizar usuario" ?> </h5>
     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
 </div>
 <div class="offcanvas-body text-secondary">

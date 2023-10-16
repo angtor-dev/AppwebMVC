@@ -1,7 +1,7 @@
 <?php /** @var Rol $rol */ ?>
 
 <div class="offcanvas-header border-bottom">
-    <h5 class="offcanvas-title"> <?= empty($rol->id) ? "Crear rol nuevo" : "Modificar rol" ?> </h5>
+    <h5 class="offcanvas-title"> <?= empty($rol->id) ? "Crear rol nuevo" : "Actualizar rol" ?> </h5>
     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
 </div>
 <div class="offcanvas-body text-secondary">

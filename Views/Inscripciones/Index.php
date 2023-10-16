@@ -50,7 +50,7 @@ $usuarioSesion = $_SESSION['usuario'];
                         </a>
                         <?php if ($usuarioSesion->tienePermiso("inscripciones", "actualizar")): ?>
                             <a role="button" onclick="abrirModalUsuario(<?= $estudiante->id ?>)">
-                                <i class="fa-solid fa-pen" title="Modificar" data-bs-toggle="tooltip"></i>
+                                <i class="fa-solid fa-pen" title="Actualizar" data-bs-toggle="tooltip"></i>
                             </a>
                         <?php endif ?>
                         <?php if ($usuarioSesion->tienePermiso("inscripciones", "eliminar") && $estudiante->id != $usuarioSesion->id): ?>

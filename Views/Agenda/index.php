@@ -220,7 +220,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         },
 
-        //Modificar Evento del Calendario 
+        //Actualizar Evento del Calendario 
         eventClick: function(event) {
             var idEvento = event._id;
             $('input[name=idEvento').val(idEvento);

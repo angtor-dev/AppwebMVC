@@ -44,7 +44,7 @@ $usuario = $_SESSION['usuario'];
                         </a>
                         <?php if ($usuario->tienePermiso("clases", "actualizar")): ?>
                             <a role="button" onclick="abrirModalClase(<?= $clase->id ?>)">
-                                <i class="fa-solid fa-pen" title="Modificar" data-bs-toggle="tooltip"></i>
+                                <i class="fa-solid fa-pen" title="Actualizar" data-bs-toggle="tooltip"></i>
                             </a>
                         <?php endif ?>
                         <?php if ($usuario->tienePermiso("clases", "eliminar")): ?>
