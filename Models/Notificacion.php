@@ -45,7 +45,8 @@ class Notificacion  extends Model
                 echo $th->getMessage();
                 die;
             }
-            $_SESSION['errores'][] = "Ah ocurrido un error al marcar la notificacion";
+            $_SESSION['errores'][] = "Ha ocurrido un error al marcar la notificacion";
+            throw $th;
         }
     }
 
