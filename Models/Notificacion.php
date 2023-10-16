@@ -1,7 +1,7 @@
 <?php
 require_once "Models/Model.php";
 
-class Notificacion  extends Model
+class Notificacion extends Model
 {
     public int $id;
     private int $idUsuario;
@@ -10,6 +10,23 @@ class Notificacion  extends Model
     private string $fecha;
     private ?string $enlace;
     private bool $visto;
+    
+    public static function cargarRelaciones(int $id, string $tablaForanea, ?int $estatus = null): array
+    {
+        $notificaciones = parent::cargarRelaciones($id, $tablaForanea, $estatus);
+
+        usort($notificaciones, [get_class(), "porFechaAscendente"]);
+
+        return $notificaciones;
+    }
+
+    private static function porFechaAscendente(Notificacion $notifA, Notificacion $notifB) : int
+    {
+        $timeA = strtotime($notifA->fecha);
+        $timeB = strtotime($notifB->fecha);
+
+        return $timeB <=> $timeA;
+    }
 
     public static function registrar(int $idUsuario, string $titulo, string $mensaje, string $enlace = null) : void
     {
