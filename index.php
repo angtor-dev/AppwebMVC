@@ -25,13 +25,13 @@ $controllerPath = empty($requestUri) ? $defaultPath :
     (substr($requestUri, 0, strpos($requestUri, $controllerName)) ?: $requestUri."/");
 
 if (is_file("Controllers/".$controllerPath.$controllerName."Controller.php")) {
-    require_once "Controllers/".$controllerPath.$controllerName."Controller.php";
+    require_once "Controllers/".ucfirst($controllerPath).ucfirst($controllerName)."Controller.php";
     exit();
 } else {
     $controllerPath .= $controllerName."/";
     $controllerName = "Index";
-    if (is_file("Controllers/".$controllerPath.$controllerName."Controller.php")) {
-        require_once "Controllers/".$controllerPath.$controllerName."Controller.php";
+    if (is_file("Controllers/".ucfirst($controllerPath).$controllerName."Controller.php")) {
+        require_once "Controllers/".ucfirst($controllerPath).$controllerName."Controller.php";
         exit();
     }
 }
