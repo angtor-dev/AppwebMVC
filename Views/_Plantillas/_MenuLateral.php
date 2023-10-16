@@ -114,7 +114,7 @@
                 </a>
             <?php endif ?>
             <?php if ($usuario->tieneRol("Superusuario") || $usuario->tieneRol("Estudiante")) : ?>
-                <a href="#" class="nav-link acordeon-toggle">
+                <a href="<?= LOCAL_DIR ?>Clases" class="nav-link acordeon-toggle">
                     <i class="fa-solid fa-chalkboard-user fa-fw me-2"></i>
                     Clases
                 </a>
