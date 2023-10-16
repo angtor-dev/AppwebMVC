@@ -9,34 +9,79 @@ class Notificacion  extends Model
     private string $mensaje;
     private string $fecha;
     private ?string $enlace;
-    private string $visto;
+    private bool $visto;
 
-    public function __construct(?int $idUsuario, ?string $titulo, ?string $mensaje, ?string $enlace)
+    public static function registrar(int $idUsuario, string $titulo, string $mensaje, string $enlace = null) : void
     {
-        if (isset($idUsuario)) {
-            $this->idUsuario = $idUsuario;
-            $this->titulo = $titulo;
-            $this->mensaje = $mensaje;
-            $this->enlace - $enlace ?? "NULL";
-        }
-    }
-
-    public function registrar() : void
-    {
-        $query = "INSERT INTO evento (idUsuario, titulo, mensaje, enlace)
+        $db = Database::getInstance();
+        $query = "INSERT INTO notificacion (idUsuario, titulo, mensaje, enlace)
             VALUES (:idUsuario, :titulo, :mensaje, :enlace)";
 
         try {
-            $stmt = $this->prepare($query);
-            $stmt->bindValue("idUsuario", $this->idUsuario);
-            $stmt->bindValue("titulo", $this->titulo);
-            $stmt->bindValue("mensaje", $this->mensaje);
-            $stmt->bindValue("enlace", $this->enlace);
+            $stmt = $db->pdo()->prepare($query);
+            $stmt->bindValue("idUsuario", $idUsuario);
+            $stmt->bindValue("titulo", $titulo);
+            $stmt->bindValue("mensaje", $mensaje);
+            $stmt->bindValue("enlace", $enlace);
 
             $stmt->execute();
         } catch (\Throwable $th) {
+            if (DEVELOPER_MODE) {
+                echo $th->getMessage();
+                die;
+            }
             $_SESSION['errores'][] = "Ha ocurrido un error al registrar la notificacion.";
         }
+    }
+
+    public function marcarVisto() : void
+    {
+        $query = "UPDATE notificacion SET visto = 1 WHERE id = $this->id";
+
+        try {
+            $this->query($query);
+        } catch (\Throwable $th) {
+            if (DEVELOPER_MODE) {
+                echo $th->getMessage();
+                die;
+            }
+            $_SESSION['errores'][] = "Ah ocurrido un error al marcar la notificacion";
+        }
+    }
+
+    // Getters
+    public function getTiempo() : string
+    {
+        $fecha = new DateTime($this->fecha);
+        $hoy = new DateTime(date("Y-m-d H:i:s"));
+
+        $diff = $hoy->diff($fecha);
+
+        if ($diff->days == 0 && $diff->h == 0) {
+            return $diff->format('Hace %im');
+        } elseif ($diff->days == 0 && $diff->h > 0) {
+            return $diff->format('Hace %hh');
+        } else {
+            return $fecha->format('d/m/y');
+        }
+    }
+    public function getIdUsuario() : int {
+        return $this->idUsuario;
+    }
+    public function getTitulo() : string {
+        return $this->titulo;
+    }
+    public function getMensaje() : string {
+        return $this->mensaje;
+    }
+    public function getFecha() : string {
+        return $this->fecha;
+    }
+    public function getEnlace() : string {
+        return $this->enlace;
+    }
+    public function getVisto() : bool {
+        return $this->visto;
     }
 }
 ?>

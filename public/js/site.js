@@ -45,3 +45,17 @@ function agregarValidacionGenerica(form) {
         form.classList.add('was-validated')
     }, false)
 }
+
+// Marcar notificacion como vista
+async function marcarNotificacion(id, notifEl) {
+    const contador = document.getElementById('contadorNotif')
+    let res = await fetch("/AppwebMVC/Notificaciones/MarcarVisto?id=" + id)
+    if (res.status != 200) {
+        console.error("Ah ocurrido un error al marcar la notificacion");
+        console.error(await res.text())
+        return
+    }
+    contador.textContent = Number(contador.textContent) - 1;
+    notifEl.querySelector('.tiempo').classList.remove('text-primary', 'fw-bold')
+    notifEl.querySelector('.tiempo').classList.add('text-secondary')
+}

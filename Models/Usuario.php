@@ -2,6 +2,7 @@
 require_once "Models/Model.php";
 require_once "Models/Rol.php";
 require_once "Models/Sede.php";
+require_once "Models/Notificacion.php";
 
 class Usuario extends Model
 {
@@ -23,9 +24,11 @@ class Usuario extends Model
     private ?string $motivo;
     private int $estatus;
 
+    public Sede $sede;
     /** @var ?array<Rol> */
     public ?array $roles;
-    public Sede $sede;
+    /** @var ?array<Notificacion> */
+    public ?array $notificaciones;
 
     public function __construct()
     {
@@ -35,6 +38,9 @@ class Usuario extends Model
         }
         if (!empty($this->id)) {
             $this->roles = Rol::cargarMultiplesRelaciones($this->id, get_class($this), "UsuarioRol");
+        }
+        if (!empty($this->id)) {
+            $this->notificaciones = Notificacion::cargarRelaciones($this->id, get_class());
         }
     }
 

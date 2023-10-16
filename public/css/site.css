@@ -55,6 +55,14 @@ body {
     font-family: "Montserrat", var(--bs-font-sans-serif);
 }
 
+/* Notificaciones */
+.notificacion {
+    cursor: pointer;
+}
+.notificacion:hover {
+    background-color: var(--grey-lighter);
+}
+
 /* Contenido principal */
 #main {
     margin-left: var(--sidebar-width);

@@ -27,12 +27,14 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST')
 
         try {
             $matricula->registrar();
+            Notificacion::registrar($idEstudiante, "Inscrito en grupo", "Has sido inscrito en el grupo ".$grupo->getNombre());
         } catch (\Throwable $th) {
             throw $th;
         }
     }
     
-    $_SESSION['exitos'][] = "Estudiantes del grupo actuliados con exito";
+    $_SESSION['exitos'][] = "Estudiantes del grupo actuliados con exito.";
+    Bitacora::registrar("Actualizo los estudiantes del grupo ".$grupo->getNombre());
     redirigir("/AppwebMVC/Grupos/Gestionar?id=".$grupo->id);
 }
 else {
