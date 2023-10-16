@@ -58,4 +58,9 @@ async function marcarNotificacion(id, notifEl) {
     contador.textContent = Number(contador.textContent) - 1;
     notifEl.querySelector('.tiempo').classList.remove('text-primary', 'fw-bold')
     notifEl.querySelector('.tiempo').classList.add('text-secondary')
+
+    if (Number(contador.textContent) == 0) {
+        document.getElementById('btn-notif').classList.remove('btn-accent')
+        document.getElementById('btn-notif').classList.add('btn-dark')
+    }
 }

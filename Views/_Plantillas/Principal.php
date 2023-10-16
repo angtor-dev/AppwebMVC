@@ -59,7 +59,13 @@ if (isset($_SESSION['usuario'])) {
                             0
                         </button> -->
                         <div class="dropdown-center d-inline-block">
-                            <button class="btn btn-dark me-2 dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                            <?php
+                            $classBtn = $cantNotif > 0
+                                ? "btn btn-accent me-2 dropdown-toggle"
+                                : "btn btn-dark me-2 dropdown-toggle";
+                            ?>
+                            <button class="<?= $classBtn ?>" data-bs-toggle="dropdown"
+                                data-bs-auto-close="outside" aria-expanded="false" id="btn-notif">
                                 <i class="fa-solid fa-bell"></i>
                                 <span id="contadorNotif"><?= $cantNotif ?></span>
                             </button>
