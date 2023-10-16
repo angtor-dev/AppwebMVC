@@ -15,12 +15,12 @@ class Notificacion extends Model
     {
         $notificaciones = parent::cargarRelaciones($id, $tablaForanea, $estatus);
 
-        usort($notificaciones, [get_class(), "porFechaAscendente"]);
+        usort($notificaciones, [get_class(), "porFechaDescendente"]);
 
         return $notificaciones;
     }
 
-    private static function porFechaAscendente(Notificacion $notifA, Notificacion $notifB) : int
+    private static function porFechaDescendente(Notificacion $notifA, Notificacion $notifB) : int
     {
         $timeA = strtotime($notifA->fecha);
         $timeB = strtotime($notifB->fecha);
