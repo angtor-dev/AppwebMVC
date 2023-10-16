@@ -1,5 +1,6 @@
 <?php
 require_once "Models/Model.php";
+require_once "Models/Discipulo.php";
 
 class Celulas extends Model
 {
@@ -502,7 +503,7 @@ class Celulas extends Model
                         $stmt3->execute();
 
 
-                        //Esta es una version solamente, se podria ahcer de una forma mas dinamica (OJO)
+                        //Esta es una version solamente, se podria hacer de una forma mas dinamica (OJO)
 
                         /* Logica para verificar que al momento de registrar la asistencia, cuente si el discipulo
                            cuenta con la cantidad de 5 asistencias para ser aprobado su estatus de crearle un usuario */
@@ -523,6 +524,19 @@ class Celulas extends Model
                             $stmt5->bindValue(':idDiscipulo', $values);
 
                             $stmt5->execute();
+
+                            // Esto tal vez deba ir en el controlador pero no quiero refactorizar nada más antes de la defensa (y)
+                            // Envia la notificación de que el discipulo alcanzo las 5 reuniones
+                            /** @var Discipulo */
+                            $discipulo = Discipulo::cargar($values);
+                            /** @var Usuario[] */
+                            $usuarios = Usuario::listar(1);
+                            foreach ($usuarios as $usuario) {
+                                if ($usuario->tieneRol("Superusuario") || $usuario->tieneRol("Administrador") || $usuario->tienePermiso("inscripciones", "consultar")) {
+                                    Notificacion::registrar($usuario->id, "Discipulo consolidado",
+                                        "El discipulo ".$discipulo->getNombre()." ".$discipulo->getApellido()." ha alcanzado las 5 asistencias de consolidación.");
+                                }
+                            }
                         }
                     }
                 }
