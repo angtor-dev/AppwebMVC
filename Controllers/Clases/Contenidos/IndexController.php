@@ -10,7 +10,7 @@ if (empty($_GET['id'])) {
 /** @var Clase */
 $clase = Clase::cargar($_GET['id']);
 
-if (is_null($clase)) {
+if (is_null($clase) || $clase->getEstatus() == 0) {
     $_SESSION['errores'][] = "La clase que intentas ver no existe.";
     redirigir('/AppwebMVC/Clases');
 }

@@ -57,3 +57,24 @@ $usuarioSesion = $_SESSION['usuario'];
         </div>
     </div>
 <?php endif ?>
+
+<!-- Confirmar eliminación -->
+<div class="modal fade modal-eliminar" id="confirmar-eliminacion" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Eliminar clase</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-danger mb-0" role="alert">
+                    ¿Seguro quieres eliminar esta contenido?
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No, cancelar</button>
+                <a href="#" data-href="/AppwebMVC/Clases/Contenidos/Eliminar?idClase=<?= $clase->id ?>&id=" type="button" class="btn btn-danger btn-eliminar">Si, eliminar</a>
+            </div>
+        </div>
+    </div>
+</div>

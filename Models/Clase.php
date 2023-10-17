@@ -9,6 +9,7 @@ class Clase extends Model
     private int $idGrupo;
     private string $titulo;
     private ?string $objetivo;
+    private int $estatus;
     
     public Grupo $grupo;
     /** @var Contenido[] */
@@ -21,7 +22,7 @@ class Clase extends Model
             $this->grupo = Grupo::cargar($this->idGrupo);
         }
         if (!empty($this->id)) {
-            $this->contenidos = Contenido::cargarRelaciones($this->id, get_class());
+            $this->contenidos = Contenido::cargarRelaciones($this->id, get_class(), 1);
         }
     }
 
@@ -116,6 +117,9 @@ class Clase extends Model
     }
     public function getObjetivo() : ?string {
         return $this->objetivo ?? null;
+    }
+    public function getEstatus() : int {
+        return $this->estatus ?? -1;
     }
 }
 ?>
