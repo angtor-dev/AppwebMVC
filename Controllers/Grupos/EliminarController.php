@@ -1,5 +1,6 @@
 <?php
 require_once "Models/Grupo.php";
+require_once "Models/Clase.php";
 necesitaAutenticacion();
 requierePermiso("grupos", "eliminar");
 
