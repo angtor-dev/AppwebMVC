@@ -32,6 +32,11 @@ $usuario = $_SESSION['usuario'];
     </thead>
     <tbody>
         <?php foreach ($clases as $clase) : ?>
+            <?php
+            if ($clase->grupo->getEstado() == EstadosGrupo::Finalizado->value) {
+                continue;
+            }
+            ?>
             <tr>
                 <td><?= $clase->grupo->getNombre() ?></td>
                 <td><?= $clase->getTitulo() ?></td>
