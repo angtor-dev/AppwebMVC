@@ -109,6 +109,10 @@ class Grupo extends Model
             $_SESSION['errores'][] = "Se debe especificar un profesor.";
             $errores++;
         }
+        if (!is_null($this::fromNombre($this->nombre))) {
+            $_SESSION['errores'][] = "Ya existe un grupo con el nombre ingresado.";
+            $errores++;
+        }
         if (!preg_match(REG_ALFANUMERICO, $this->nombre)) {
             $_SESSION['errores'][] = "El nombre solo puede contener caracteres alfanúmericos.";
             $errores++;
@@ -122,6 +126,31 @@ class Grupo extends Model
             return false;
         }
         return true;
+    }
+
+    private static function fromNombre(string $nombre) : ?Grupo
+    {
+        $db = Database::getInstance();
+
+        $query = "SELECT * FROM grupo WHERE nombre = :nombre AND estatus = 1";
+
+        try {
+            $stmt = $db->pdo()->prepare($query);
+
+            $stmt->bindValue("nombre", $nombre);
+            $stmt->execute();
+
+            $stmt->setFetchMode(PDO::FETCH_CLASS, "Grupo");
+
+            if ($stmt->rowCount() == 0) {
+                return null;
+            }
+
+            return $stmt->fetch();
+        } catch (\Throwable $th) {
+            $_SESSION['errores'][] = "Ha ocurrido un error al cargar el grupo desde un nombre";
+            throw $th;
+        }
     }
 
     public function tieneEstudiante(int $idEstudiante) : bool
