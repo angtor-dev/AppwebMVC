@@ -44,6 +44,9 @@ $usuario = $_SESSION['usuario'];
                 <td><?= count($clase->contenidos) ?></td>
                 <td>
                     <div class="acciones">
+                        <a href="/AppwebMVC/Clases/Contenidos?id=<?= $clase->id ?>" style="color: inherit;">
+                            <i class="fa-solid fa-file-lines" title="Ver contenidos" data-bs-toggle="tooltip"></i>
+                        </a>
                         <a role="button">
                             <i class="fa-solid fa-circle-info" title="Ver detalles" data-bs-toggle="tooltip"></i>
                         </a>

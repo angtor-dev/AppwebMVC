@@ -177,3 +177,13 @@ table tbody .acciones i:hover {
 .offcanvas .form-select {
     background-color: var(--grey-lighter);
 }
+
+/* Botones flotantes de cartas */
+.card .float-buttons {
+    opacity: 0;
+    transition: opacity .2s;
+}
+
+.card:hover .float-buttons {
+    opacity: 1;
+}
