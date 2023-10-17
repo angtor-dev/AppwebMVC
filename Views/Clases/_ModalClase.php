@@ -13,6 +13,7 @@
             <select class="form-select" name="idGrupo" id="input-idGrupo" required>
                 <option value=""></option>
                 <?php foreach ($grupos as $grupo): ?>
+                    <?php if ($grupo->getEstado() == EstadosGrupo::Finalizado->value) continue; ?>
                     <option value="<?= $grupo->id ?>"
                         <?= $grupo->id == (!empty($clase->grupo) && $clase->grupo->id) ? "selected" : "" ?>>
                         <?= $grupo->getNombre() ?>
