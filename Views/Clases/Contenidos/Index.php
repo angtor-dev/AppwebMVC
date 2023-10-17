@@ -28,8 +28,8 @@ $usuarioSesion = $_SESSION['usuario'];
                 <div class="mb-2 pt-2 pb-3 border-bottom">
                     <h3 class="fw-bold mb-0"><?= $contenido->getTitulo() ?></h3>
                 </div>
-                <div class="pt-2">
-                    <?= $contenido->getContenido() ?>
+                <div class="ql-snow">
+                    <div class="pt-2 ql-editor"><?= $contenido->getContenido() ?></div>
                 </div>
             </div>
             <div class="float-buttons position-absolute d-flex gap-2 end-0 p-4">
