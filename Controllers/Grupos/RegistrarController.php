@@ -50,7 +50,8 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST')
         redirigir("/AppwebMVC/Grupos/Registrar");
     }
 
-    $_SESSION['exitos'][] = "Nivel de Crecimiento registrado con exito.";
+    $_SESSION['exitos'][] = "Grupo registrado con exito.";
+    Bitacora::registrar("Registro el grupo ".$grupo->getNombre());
     header("Location: /AppwebMVC/Grupos/");
 }
 else

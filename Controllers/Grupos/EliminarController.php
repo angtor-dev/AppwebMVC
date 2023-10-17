@@ -38,5 +38,6 @@ try {
 }
 
 $_SESSION['exitos'][] = "Se ha eliminado el grupo correctamente.";
+Bitacora::registrar("Elimino el grupo ".$grupo->getNombre());
 redirigir("/AppwebMVC/Grupos/");
 ?>
