@@ -9,6 +9,7 @@ if (empty($_GET['id'])) {
 }
 
 try {
+    /** @var Grupo */
     $grupo = Grupo::cargar($_GET['id']);
 
     if ($grupo == null) {
@@ -16,7 +17,16 @@ try {
         redirigir("/AppwebMVC/Grupos/");
     }
 
-    // Validar si tiene estudiantes
+    if (count($grupo->matriculas) > 0) {
+        $_SESSION['errores'][] = "No se puede eliminar un grupo con estudiantes asignados.";
+        redirigir("/AppwebMVC/Grupos/");
+    }
+
+    $clases = Clase::cargarRelaciones($grupo->id, get_class($grupo), 1);
+    if (count($clases) > 0) {
+        $_SESSION['errores'][] = "No se puede eliminar un grupo con clases registradas.";
+        redirigir("/AppwebMVC/Grupos/");
+    }
 
     $grupo->eliminar();
 } catch (\Throwable $th) {
