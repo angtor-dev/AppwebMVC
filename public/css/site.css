@@ -122,6 +122,9 @@ table tbody .acciones {
     width: 100%;
     color: var(--color-terceario);
 }
+table tbody .acciones a i {
+    color: var(--color-terceario);
+}
 table tbody .acciones i {
     cursor: pointer;
 }
