@@ -3,6 +3,7 @@ require_once "Models/Model.php";
 require_once "Models/Rol.php";
 require_once "Models/Sede.php";
 require_once "Models/Notificacion.php";
+require_once "Models/Nota.php";
 
 class Usuario extends Model
 {
@@ -29,6 +30,8 @@ class Usuario extends Model
     public ?array $roles;
     /** @var ?array<Notificacion> */
     public ?array $notificaciones;
+    /** @var array<Nota> */
+    public array $notas;
 
     public function __construct()
     {
@@ -41,6 +44,9 @@ class Usuario extends Model
         }
         if (!empty($this->id)) {
             $this->notificaciones = Notificacion::cargarRelaciones($this->id, get_class());
+        }
+        if (!empty($this->id)) {
+            $this->notas = Nota::cargarRelaciones($this->id, "Estudiante");
         }
     }
 
@@ -337,6 +343,23 @@ class Usuario extends Model
     }
 
     // Getters
+    public function getGrupo() : ?Grupo
+    {
+        $sql = "SELECT grupo.* FROM matricula, grupo
+            WHERE idEstudiante = $this->id AND matricula.idGrupo = grupo.id AND grupo.estado = 0 LIMIT 1";
+        
+        $stmt = $this->query($sql);
+        $stmt->setFetchMode(PDO::FETCH_CLASS, "Grupo");
+
+        $grupo = $stmt->fetch();
+
+        if ($grupo == false) {
+            return null;
+        }
+
+        return $grupo;
+    }
+
     public function getEdad() : int
     {
         if (empty($this->fechaNacimiento)) {

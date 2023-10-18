@@ -120,7 +120,7 @@
                 </a>
             <?php endif ?>
             <?php if ($usuario->tieneRol("Superusuario")) : ?>
-                <a href="#" class="nav-link <?= strtolower($uriParts[0]) == "notas" ? "active" : "" ?>">
+                <a href="<?= LOCAL_DIR ?>Notas" class="nav-link <?= strtolower($uriParts[0]) == "notas" ? "active" : "" ?>">
                     <i class="fa-solid fa-book fa-fw me-2"></i>
                     Notas
                 </a>
