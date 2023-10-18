@@ -343,7 +343,7 @@ class Usuario extends Model
     }
 
     // Getters
-    public function getGrupo() : ?Grupo
+    public function getGrupoActivo() : ?Grupo
     {
         $sql = "SELECT grupo.* FROM matricula, grupo
             WHERE idEstudiante = $this->id AND matricula.idGrupo = grupo.id AND grupo.estado = 0 LIMIT 1";

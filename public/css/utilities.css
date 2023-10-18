@@ -76,6 +76,19 @@
     --bs-btn-disabled-border-color: var(--color-acento-dark);
 }
 
+/* Boton de icono pequeño */
+.btn-small {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
 /* Tablas */
 .table-rounded>thead>tr>th:first-child {
     border-top-left-radius: var(--bs-border-radius);

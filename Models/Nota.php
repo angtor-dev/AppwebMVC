@@ -16,9 +16,6 @@ class Nota extends Model
     public function __construct()
     {
         parent::__construct();
-        if (!empty($this->idClase)) {
-            $this->clase = Clase::cargar($this->idClase);
-        }
     }
 
     public function registrar() : void
@@ -65,6 +62,17 @@ class Nota extends Model
     }
     public function getCalificaion() : float {
         return $this->calificacion;
+    }
+
+    // Setters
+    public function setIdClase(int $idClase) : void {
+        $this->idClase = $idClase;
+    }
+    public function setIdEstudiante(int $idEstudiante) : void {
+        $this->idEstudiante = $idEstudiante;
+    }
+    public function setCalificaion(float $calificacion) : void {
+        $this->calificacion = $calificacion;
     }
 }
 ?>

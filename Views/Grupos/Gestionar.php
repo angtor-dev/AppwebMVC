@@ -56,6 +56,9 @@ $usuario = $_SESSION['usuario'];
                                 <a role="button">
                                     <i class="fa-solid fa-circle-info" title="Ver detalles" data-bs-toggle="tooltip"></i>
                                 </a>
+                                <a role="button" onclick="abrirModalNotas(<?= $estudiante->id ?>)">
+                                    <i class="fa-solid fa-list-ol" title="Gestionar notas" data-bs-toggle="tooltip"></i>
+                                </a>
                             </td>
                         </tr>
                         
@@ -73,6 +76,11 @@ $usuario = $_SESSION['usuario'];
 <!-- Agregar estudiante -->
 <div class="modal fade" id="modal-estudiantes">
     <!-- Contenido cargado con ajax -->
+</div>
+
+<!-- Gestionar notas -->
+<div class="modal fade" tabindex="-1" id="modal-notas">
+    <!-- Contenido cargado desde ajax -->
 </div>
 
 <script>
@@ -101,6 +109,23 @@ $usuario = $_SESSION['usuario'];
                         pagination.toggle(this.api().page.info().pages > 1);
                     }
                 })
+            })
+            .catch(error => console.error(error))
+    }
+
+    function abrirModalNotas(id) {
+        fetch('/AppwebMVC/Grupos/Notas/Consultar?id=' + id)
+            .then(res => res.text())
+            .then(data => {
+                const modalEl = document.getElementById('modal-notas')
+                modalEl.innerHTML = data
+
+                modalEl.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(tooltipEl => {
+                    new bootstrap.Tooltip(tooltipEl)
+                })
+
+                let modal = new bootstrap.Modal(modalEl)
+                modal.show()
             })
             .catch(error => console.error(error))
     }
