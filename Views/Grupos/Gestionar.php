@@ -12,8 +12,8 @@ $usuario = $_SESSION['usuario'];
     </a>
     <?php if ($usuario->tienePermiso("inscripciones", "registrar")): ?>
         <button class="btn btn-accent" onclick="abrirModalEstudiantes(<?= $grupo->id ?>)">
-            <i class="fa-solid fa-plus"></i>
-            Agregar estudiante
+            <i class="fa-solid fa-pen"></i>
+            Actualizar matricula
         </button>
     <?php endif ?>
 </div>
@@ -56,12 +56,6 @@ $usuario = $_SESSION['usuario'];
                                 <a role="button">
                                     <i class="fa-solid fa-circle-info" title="Ver detalles" data-bs-toggle="tooltip"></i>
                                 </a>
-                                <?php if ($usuario->tienePermiso("grupos", "actualizar")): ?>
-                                    <a role="button" data-bs-toggle="modal" data-bs-target="#confirmar-eliminacion"
-                                        data-id="<?= $estudiante->id ?>">
-                                        <i class="fa-solid fa-trash" title="Eliminar" data-bs-toggle="tooltip"></i>
-                                    </a>
-                                <?php endif ?>
                             </td>
                         </tr>
                         
