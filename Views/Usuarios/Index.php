@@ -54,7 +54,7 @@ $usuarioSesion = $_SESSION['usuario'];
                 </td>
                 <td>
                     <div class="acciones">
-                        <a role="button">
+                        <a href="/AppwebMVC/Usuarios/Detalles?id=<?= $usuario->id ?>">
                             <i class="fa-solid fa-circle-info" title="Ver detalles" data-bs-toggle="tooltip"></i>
                         </a>
                         <?php if ($usuarioSesion->tienePermiso("usuarios", "actualizar")): ?>
