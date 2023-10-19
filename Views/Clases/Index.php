@@ -9,7 +9,7 @@ $usuario = $_SESSION['usuario'];
     <h4 class="mb-0 fw-bold">Clases de la E.I.D.</h4>
     <div class="d-flex gap-3">
         <div class="buscador">
-            <input type="text" id="tabla-usuarios_search" class="form-control" placeholder="Buscar clase">
+            <input type="text" id="tabla-clases_search" class="form-control" placeholder="Buscar clase">
         </div>
         <?php if ($usuario->tienePermiso("clases", "consultar")): ?>
             <button class="btn btn-accent text-nowrap" onclick="abrirModalClase()">
