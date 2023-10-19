@@ -171,7 +171,6 @@
                     </div>
                 </div>
                 <?php endif ?>
-            </div>
             <?php if ($usuario->tienePermiso("usuarios", "consultar")) : ?>
                 <a href="<?= LOCAL_DIR ?>Usuarios" class="nav-link <?= strtolower($uriParts[0]) == "usuarios" ? "active" : "" ?>">
                     <i class="fa-solid fa-user fa-fw me-2"></i>
