@@ -26,7 +26,7 @@ $usuarioSesion = $_SESSION['usuario'];
             <th>Nombre</th>
             <th>Cedula</th>
             <th>Correo</th>
-            <th>Roles</th>
+            <th>Grupo actual</th>
             <th class="text-center" style="width: 90px;">Acciones</th>
         </tr>
     </thead>
@@ -37,26 +37,14 @@ $usuarioSesion = $_SESSION['usuario'];
                 <td><?= $estudiante->getCedula() ?></td>
                 <td><?= $estudiante->getCorreo() ?></td>
                 <td>
-                    <?=
-                    implode(", ", array_map(function(Rol $rol) {
-                        return $rol->getNombre();
-                    }, $estudiante->roles));
-                    ?>
+                    <?php $grupoActivo = $estudiante->getGrupoActivo() ?>
+                    <?= is_null($grupoActivo) ? "<em>Sin grupo activo</em>" : $grupoActivo->getNombre() ?>
                 </td>
                 <td>
                     <div class="acciones">
-                        <a role="button">
-                            <i class="fa-solid fa-circle-info" title="Ver detalles" data-bs-toggle="tooltip"></i>
-                        </a>
-                        <?php if ($usuarioSesion->tienePermiso("inscripciones", "actualizar")): ?>
-                            <a role="button" onclick="abrirModalUsuario(<?= $estudiante->id ?>)">
-                                <i class="fa-solid fa-pen" title="Actualizar" data-bs-toggle="tooltip"></i>
-                            </a>
-                        <?php endif ?>
-                        <?php if ($usuarioSesion->tienePermiso("inscripciones", "eliminar") && $estudiante->id != $usuarioSesion->id): ?>
-                            <a role="button" data-bs-toggle="modal" data-bs-target="#confirmar-eliminacion"
-                                data-id="<?= $estudiante->id ?>">
-                                <i class="fa-solid fa-trash" title="Eliminar" data-bs-toggle="tooltip"></i>
+                        <?php if ($usuarioSesion->tienePermiso("usuarios", "consultar")): ?>
+                            <a href="/AppwebMVC/Usuarios/Detalles?id=<?= $estudiante->id ?>">
+                                <i class="fa-solid fa-circle-info" title="Ver detalles" data-bs-toggle="tooltip"></i>
                             </a>
                         <?php endif ?>
                     </div>
