@@ -26,7 +26,8 @@ $usuarioSesion = $_SESSION['usuario'];
             <th>Nombre</th>
             <th>Cedula</th>
             <th>Correo</th>
-            <th>Grupo actual</th>
+            <th>Grupo</th>
+            <th>Nivel</th>
             <th class="text-center" style="width: 90px;">Acciones</th>
         </tr>
     </thead>
@@ -40,6 +41,7 @@ $usuarioSesion = $_SESSION['usuario'];
                     <?php $grupoActivo = $estudiante->getGrupoActivo() ?>
                     <?= is_null($grupoActivo) ? "<em>Sin grupo activo</em>" : $grupoActivo->getNombre() ?>
                 </td>
+                <td><?= is_null($grupoActivo) ? "" : $grupoActivo->subnivel->nivelCrecimiento->getNombre() ?></td>
                 <td>
                     <div class="acciones">
                         <?php if ($usuarioSesion->tienePermiso("usuarios", "consultar")): ?>
