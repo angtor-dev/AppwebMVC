@@ -38,7 +38,7 @@
                 <div class="acordeon-items">
                     <a href="<?= LOCAL_DIR ?>CelulaFamiliar" class="nav-link">
                         <i class="fa-solid fa-pen-to-square fa-fw"></i>
-                        Registrar
+                        Gestionar
                     </a>
                     <a href="<?= LOCAL_DIR ?>CelulaFamiliar/Reunion" class="nav-link">
                         <i class="fa-solid fa-clipboard-user fa-fw"></i>
@@ -56,7 +56,7 @@
                 <div class="acordeon-items">
                     <a href="<?= LOCAL_DIR ?>CelulaCrecimiento" class="nav-link">
                         <i class="fa-solid fa-pen-to-square fa-fw"></i>
-                        Registrar
+                        Gestionar
                     </a>
 
                     <a href="<?= LOCAL_DIR ?>CelulaCrecimiento/Reunion" class="nav-link">
@@ -75,7 +75,7 @@
                 <div class="acordeon-items">
                     <a href="<?= LOCAL_DIR ?>CelulaConsolidacion" class="nav-link">
                         <i class="fa-solid fa-pen-to-square fa-fw"></i>
-                        Registrar
+                        Gestionar
                     </a>
                     <a href="<?= LOCAL_DIR ?>CelulaConsolidacion/Reunion" class="nav-link">
                         <i class="fa-solid fa-clipboard-user fa-fw"></i>
@@ -107,22 +107,16 @@
                     Grupos
                 </a>
             <?php endif ?>
-            <?php if ($usuario->tienePermiso("inscripciones", "consultar")) : ?>
-                <a href="<?= LOCAL_DIR ?>Inscripciones" class="nav-link <?= strtolower($uriParts[0]) == "inscripciones" ? "active" : "" ?>">
-                    <i class="fa-solid fa-clipboard-list fa-fw me-2"></i>
-                    Inscripciones
-                </a>
-            <?php endif ?>
             <?php if ($usuario->tieneRol("Superusuario") || $usuario->tieneRol("Estudiante")) : ?>
                 <a href="<?= LOCAL_DIR ?>Clases" class="nav-link <?= strtolower($uriParts[0]) == "clases" ? "active" : "" ?>">
                     <i class="fa-solid fa-chalkboard-user fa-fw me-2"></i>
                     Clases
                 </a>
             <?php endif ?>
-            <?php if ($usuario->tieneRol("Superusuario")) : ?>
-                <a href="<?= LOCAL_DIR ?>Notas" class="nav-link <?= strtolower($uriParts[0]) == "notas" ? "active" : "" ?>">
-                    <i class="fa-solid fa-book fa-fw me-2"></i>
-                    Notas
+            <?php if ($usuario->tienePermiso("inscripciones", "consultar")) : ?>
+                <a href="<?= LOCAL_DIR ?>Inscripciones" class="nav-link <?= strtolower($uriParts[0]) == "inscripciones" ? "active" : "" ?>">
+                    <i class="fa-solid fa-clipboard-list fa-fw me-2"></i>
+                    Inscripciones
                 </a>
             <?php endif ?>
         <?php endif ?>
@@ -150,10 +144,6 @@
                     </div>
                 </div>
             </div>
-            <a href="#" class="nav-link">
-                <i class="fa-solid fa-file fa-fw me-2"></i>
-                Reportes
-            </a>
             <?php if ($usuario->tienePermiso("usuarios", "consultar")) : ?>
                 <a href="<?= LOCAL_DIR ?>Usuarios" class="nav-link <?= strtolower($uriParts[0]) == "usuarios" ? "active" : "" ?>">
                     <i class="fa-solid fa-user fa-fw me-2"></i>
