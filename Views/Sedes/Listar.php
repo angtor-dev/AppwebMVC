@@ -37,7 +37,7 @@ $usuario = $_SESSION['usuario'];
                         <th>Codigo</th>
                         <th>Nombre de la sede</th>
                         <th>Direccion</th>
-                        <th>Opciones</th>
+                        <th class="text-center" style="width: 90px;">Opciones</th>
                     </tr>
                 </thead>
                 <!-- AQUI MOSTRARA LA INFORMACION -->

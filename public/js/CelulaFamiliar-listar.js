@@ -24,12 +24,26 @@ $(document).ready(function () {
                 }
             },
             {
-                defaultContent: `
-            <button type="button" id="ver_info" data-bs-toggle="modal" data-bs-target="#modal_verInfo" class="btn btn-secondary">Info</button>
-            <button type="button" id="editar" data-bs-toggle="modal" data-bs-target="#modal_editarInfo" class="btn btn-primary">Editar</button>
-            <button type="button" id="reunion" data-bs-toggle="modal" data-bs-target="#modal_registroreunion" class="btn btn-info">Reunion</button>
-            <button type="button" id="eliminar" class="btn btn-danger delete-btn">Eliminar</button>
-            `}
+                data: null,
+        render: function (data, type, row, meta) {
+
+          let botonInfo = `<button type="button" id="ver_info" data-bs-toggle="modal" data-bs-target="#modal_verInfo" title="Ver detalles" class="btn btn-secondary"><i class="fa-solid fa-circle-info" ></i></button>`;
+
+          let botonEditar = permisos.actualizar ? `<button type="button" id="editar" data-bs-toggle="modal" title="Actualizar" data-bs-target="#modal_editarInfo" class="btn btn-primary"><i class="fa-solid fa-pen" ></i></button>` : '';
+
+          let botonEliminar = permisos.eliminar ? `<button type="button"  id=eliminar class="btn btn-danger delete-btn" title="Eliminar"><i class="fa-solid fa-trash" ></i></button>` : '';
+
+          let botonReunion = `<button type="button" id="reunion" data-bs-toggle="modal" data-bs-target="#modal_registroreunion" class="btn btn-info" title="Réunion"><i class="fa-solid fa-users"></i></button>`;
+          let div = `
+          <div>
+                    ${botonInfo}
+                    ${botonEditar}
+                    ${botonEliminar}
+                    ${botonReunion}
+          </div>
+          `
+          return div;
+        }}
 
         ],
     })

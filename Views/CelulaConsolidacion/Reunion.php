@@ -17,7 +17,7 @@ $viewScripts = ["CelulaConsolidacion-reunion.js"];
                             <th>Codigo Celula Consolidacion</th>
                             <th>Nombre de la Celula Consolidacion</th>
                             <th>Fecha de la reunión</th>
-                            <th>Opciones</th>
+                            <th class="text-center" style="width: 200px;">Opciones</th>
                         </tr>
                     </thead>
                     <tbody>

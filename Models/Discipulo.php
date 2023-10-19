@@ -49,7 +49,7 @@ class Discipulo extends Model
             asisCrecimiento,
             asisFamiliar,
             idConsolidador,
-            idcelulaconsolidacion,
+            idCelulaConsolidacion,
             cedula,
             nombre,
             apellido,
@@ -175,7 +175,7 @@ class Discipulo extends Model
             discipulo.asisCrecimiento,
             discipulo.asisFamiliar,
             discipulo.idConsolidador,
-            discipulo.idcelulaconsolidacion,
+            discipulo.idCelulaConsolidacion,
             discipulo.cedula,
             discipulo.nombre,
             discipulo.apellido,
@@ -234,13 +234,6 @@ class Discipulo extends Model
 
         try {
 
-            /** @var Discipulo **/
-            $resultado = Discipulo::cargar($id);
-
-            if ($resultado->idCelulaConsolidacion != $idCelulaConsolidacion) {
-
-                $this->validacion_accion($id, $accion = 'actualizar');
-
                 $sql = "UPDATE discipulo SET
                         asisCrecimiento = :asisCrecimiento,
                         asisFamiliar = :asisFamiliar,
@@ -277,42 +270,7 @@ class Discipulo extends Model
                 $stmt->bindValue(':fechaConvercion', $fechaConvercion);
 
                 $stmt->execute();
-            }else{
-                $sql = "UPDATE discipulo SET
-                        asisCrecimiento = :asisCrecimiento,
-                        asisFamiliar = :asisFamiliar,
-                        idConsolidador = :idConsolidador,
-                        cedula = :cedula,
-                        nombre = :nombre,
-                        apellido = :apellido,
-                        telefono = :telefono,
-                        direccion = :direccion,
-                        estadoCivil = :estadoCivil,
-                        motivo = :motivo,
-                        fechaNacimiento = :fechaNacimiento,
-                        fechaConvercion = :fechaConvercion
-                        WHERE
-                        id = :id";
-
-
-                $stmt = $this->db->pdo()->prepare($sql);
-
-                $stmt->bindValue(':id', $id);
-                $stmt->bindValue(':asisCrecimiento', $asisCrecimiento);
-                $stmt->bindValue(':asisFamiliar', $asisFamiliar);
-                $stmt->bindValue(':idConsolidador', $idConsolidador);
-                $stmt->bindValue(':cedula', $cedula);
-                $stmt->bindValue(':nombre', $nombre);
-                $stmt->bindValue(':apellido', $apellido);
-                $stmt->bindValue(':telefono', $telefono);
-                $stmt->bindValue(':direccion', $direccion);
-                $stmt->bindValue(':estadoCivil', $estadoCivil);
-                $stmt->bindValue(':motivo', $motivo);
-                $stmt->bindValue(':fechaNacimiento', $fechaNacimiento);
-                $stmt->bindValue(':fechaConvercion', $fechaConvercion);
-
-                $stmt->execute();
-            }
+            
 
             Bitacora::registrar("Actualizacion de datos de discipulo");
 

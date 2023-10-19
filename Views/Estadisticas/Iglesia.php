@@ -12,7 +12,7 @@ $usuario = $_SESSION['usuario'];
 
 <div class="container-fluid">
     <div class="row mb-2">
-        <div class="col-4">
+        <div class="col-lg-4 col-md-12">
             <div class="card">
                 <div class="card-body d-flex justify-content-center flex-column gap-2">
                     <h5 class="text-center">Reportes estadisticos sedes</h5>
@@ -22,7 +22,7 @@ $usuario = $_SESSION['usuario'];
                 </div>
             </div>
         </div>
-        <div class="col-4">
+        <div class="col-lg-4 col-md-12">
             <div class="card">
                 <div class="card-body d-flex justify-content-center flex-column gap-2">
                     <h5 class="text-center">Reportes estadisticos territorios</h5>
@@ -30,7 +30,7 @@ $usuario = $_SESSION['usuario'];
                 </div>
             </div>
         </div>
-        <div class="col-4">
+        <div class="col-lg-4 col-md-12">
             <div class="card">
                 <div class="card-body d-flex justify-content-center flex-column gap-2">
                     <h5 class="text-center">Reportes estadisticos celula familiar</h5>
@@ -42,7 +42,7 @@ $usuario = $_SESSION['usuario'];
 
     </div>
     <div class="row">
-        <div class="col-4">
+        <div class="col-lg-4 col-md-12">
             <div class="card">
                 <div class="card-body d-flex justify-content-center flex-column gap-2">
                     <h5 class="text-center">Reportes estadisticos celula crecimiento</h5>
@@ -51,7 +51,7 @@ $usuario = $_SESSION['usuario'];
                 </div>
             </div>
         </div>
-        <div class="col-4">
+        <div class="col-lg-4 col-md-12">
             <div class="card">
                 <div class="card-body d-flex justify-content-center flex-column gap-2">
                     <h5 class="text-center">Reportes estadisticos celula consolidacion</h5>
@@ -60,7 +60,7 @@ $usuario = $_SESSION['usuario'];
                 </div>
             </div>
         </div>
-        <div class="col-4">
+        <div class="col-lg-4 col-md-12">
             <div class="card">
                 <div class="card-body d-flex justify-content-center flex-column gap-2">
                     <h5 class="text-center" data-bs-toggle="modal" data-bs-target="#modal1">Reportes estadisticos discipulos</h5>

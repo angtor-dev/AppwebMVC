@@ -21,7 +21,7 @@ $usuario = $_SESSION['usuario'];
     <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-12">
             <div class="table-responsive">
-                <table id="territorioDatatables" class="table table-hover">
+                <table id="territorioDatatables" class="table table-bordered table-hover">
                     <thead>
 
                         <div class="d-flex align-items-end justify-content-between mb-2">
@@ -38,7 +38,7 @@ $usuario = $_SESSION['usuario'];
                             <th>Codigo</th>
                             <th>Nombre de Territorio</th>
                             <th>Lider Responsable</th>
-                            <th>Opciones</th>
+                            <th class="text-center" style="width: 90px;">Opciones</th>
                         </tr>
                     </thead>
                     <tbody>

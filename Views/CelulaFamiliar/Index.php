@@ -38,7 +38,7 @@ $usuario = $_SESSION['usuario'];
                             <th>Codigo</th>
                             <th>Nombre de la Celula Familiar</th>
                             <th>Lider</th>
-                            <th>Opciones</th>
+                            <th class="text-center" style="width: 170px;">Opciones</th>
                         </tr>
                     </thead>
                     <tbody>
