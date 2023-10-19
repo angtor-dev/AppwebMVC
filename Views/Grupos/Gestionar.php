@@ -53,7 +53,7 @@ $usuario = $_SESSION['usuario'];
                             <td><?= $estudiante->getCedula() ?></td>
                             <td><?= $estudiante->getCorreo() ?></td>
                             <td class="acciones">
-                                <a role="button">
+                                <a href="/AppwebMVC/Usuarios/Detalles?id=<?= $estudiante->id ?>">
                                     <i class="fa-solid fa-circle-info" title="Ver detalles" data-bs-toggle="tooltip"></i>
                                 </a>
                                 <a role="button" onclick="abrirModalNotas(<?= $estudiante->id ?>)">
@@ -83,50 +83,4 @@ $usuario = $_SESSION['usuario'];
     <!-- Contenido cargado desde ajax -->
 </div>
 
-<script>
-    function abrirModalEstudiantes(id = 0) {
-        fetch('/AppwebMVC/Grupos/AgregarEstudiantes?id=' + id)
-            .then(res => res.text())
-            .then(data => {
-                const modalEl = document.getElementById('modal-estudiantes')
-                modalEl.innerHTML = data
-                modalEl.querySelectorAll('.needs-validation')
-                    .forEach(agregarValidacionGenerica)
-
-                let modal = new bootstrap.Modal(modalEl)
-                modal.show()
-
-                var tabla = new DataTable('#tabla-estudiantes', {
-                    info: false,
-                    lengthChange: false,
-                    pageLength: 15,
-                    language: {
-                        url: '/AppwebMVC/public/lib/datatables/datatable-spanish.json'
-                    },
-                    // Muestra paginacion solo si hay mas de una pagina
-                    drawCallback: function (settings) {
-                        var pagination = $(this).closest('.dataTables_wrapper').find('.dataTables_paginate');
-                        pagination.toggle(this.api().page.info().pages > 1);
-                    }
-                })
-            })
-            .catch(error => console.error(error))
-    }
-
-    function abrirModalNotas(id) {
-        fetch('/AppwebMVC/Grupos/Notas/Consultar?id=' + id)
-            .then(res => res.text())
-            .then(data => {
-                const modalEl = document.getElementById('modal-notas')
-                modalEl.innerHTML = data
-
-                modalEl.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(tooltipEl => {
-                    new bootstrap.Tooltip(tooltipEl)
-                })
-
-                let modal = new bootstrap.Modal(modalEl)
-                modal.show()
-            })
-            .catch(error => console.error(error))
-    }
-</script>
+<?php agregarScript("grupos.js") ?>

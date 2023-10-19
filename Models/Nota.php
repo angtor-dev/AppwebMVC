@@ -18,7 +18,7 @@ class Nota extends Model
         parent::__construct();
     }
 
-    public function registrar() : void
+    public function registrar() : ?int
     {
         $query = "INSERT INTO nota(idClase, idEstudiante, calificacion)
             VALUES(:idClase, :idEstudiante, :calificacion)";
@@ -28,6 +28,28 @@ class Nota extends Model
             $stmt->bindValue("idClase", $this->idClase);
             $stmt->bindValue("idEstudiante", $this->idEstudiante);
             $stmt->bindValue("calificacion", $this->calificacion);
+
+            $stmt->execute();
+
+            return $this->db->pdo()->lastInsertId();
+        } catch (\Throwable $th) {
+            $_SESSION['errores'][] = "Ha ocurrido un error al registrar la nota.";
+            throw $th;
+            return null;
+        }
+    }
+
+    public function actualizar() : void
+    {
+        $query = "UPDATE nota SET idClase = :idClase, idEstudiante = :idEstudiante, calificacion = :calificacion
+            WHERE id = :id";
+
+        try {
+            $stmt = $this->prepare($query);
+            $stmt->bindValue("idClase", $this->idClase);
+            $stmt->bindValue("idEstudiante", $this->idEstudiante);
+            $stmt->bindValue("calificacion", $this->calificacion);
+            $stmt->bindValue("id", $this->id);
 
             $stmt->execute();
         } catch (\Throwable $th) {
@@ -60,7 +82,7 @@ class Nota extends Model
     public function getIdEstudiante() : int {
         return $this->idEstudiante;
     }
-    public function getCalificaion() : float {
+    public function getCalificacion() : float {
         return $this->calificacion;
     }
 
@@ -71,7 +93,7 @@ class Nota extends Model
     public function setIdEstudiante(int $idEstudiante) : void {
         $this->idEstudiante = $idEstudiante;
     }
-    public function setCalificaion(float $calificacion) : void {
+    public function setCalificacion(float $calificacion) : void {
         $this->calificacion = $calificacion;
     }
 }
