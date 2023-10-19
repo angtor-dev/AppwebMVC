@@ -1,4 +1,5 @@
 <?php
+
 /** @var Usuario $usuario */
 ?>
 <aside id="sidebar" class="d-flex flex-column flex-shrink-0 py-3 px-2 bg-white
@@ -18,10 +19,13 @@
                 Sedes
             </a>
         <?php endif ?>
-        <a href="<?= LOCAL_DIR ?>Territorios/Listar" class="nav-link">
-            <i class="fa-sharp fa-solid fa-earth-americas fa-fw me-2"></i>
-            Territorios
-        </a>
+
+        <?php if ($usuario->tienePermiso("territorio", "consultar")) : ?>
+            <a href="<?= LOCAL_DIR ?>Territorios/Listar" class="nav-link">
+                <i class="fa-sharp fa-solid fa-earth-americas fa-fw me-2"></i>
+                Territorios
+            </a>
+        <?php endif ?>
 
         <a href="<?= LOCAL_DIR ?>Agenda/Index" class="nav-link">
             <i class="fa-solid fa-calendar fa-fw me-2"></i>
@@ -30,65 +34,86 @@
 
         <div class="acordeon">
             <div class="nav-link py-0 mt-3 text-uppercase">Celulas</div>
-            <a href="#" class="nav-link acordeon-toggle">
-                <i class="fa-solid fa-people-roof fa-fw me-2"></i>
-                Familiar
-            </a>
-            <div class="acordeon-body">
-                <div class="acordeon-items">
-                    <a href="<?= LOCAL_DIR ?>CelulaFamiliar" class="nav-link">
-                        <i class="fa-solid fa-pen-to-square fa-fw"></i>
-                        Registrar
-                    </a>
-                    <a href="<?= LOCAL_DIR ?>CelulaFamiliar/Reunion" class="nav-link">
-                        <i class="fa-solid fa-clipboard-user fa-fw"></i>
-                        Listar Reuniones
-                    </a>
+            <?php if ($usuario->tienePermiso("celulaFamiliar", "consultar")) : ?>
+                <a href="#" class="nav-link acordeon-toggle">
+                    <i class="fa-solid fa-people-roof fa-fw me-2"></i>
+                    Familiar
+                </a>
+                <div class="acordeon-body">
+                    <div class="acordeon-items">
+                        <?php if ($usuario->tienePermiso("celulaFamiliar", "registrar")) : ?>
+                            <a href="<?= LOCAL_DIR ?>CelulaFamiliar" class="nav-link">
+                                <i class="fa-solid fa-pen-to-square fa-fw"></i>
+                                Registrar
+                            </a>
+                        <?php endif ?>
+
+                        <?php if ($usuario->tienePermiso("celulaFamiliar", "actualizar")) : ?>
+                            <a href="<?= LOCAL_DIR ?>CelulaFamiliar/Reunion" class="nav-link">
+                                <i class="fa-solid fa-clipboard-user fa-fw"></i>
+                                Listar Reuniones
+                            </a>
+                        <?php endif ?>
+                    </div>
                 </div>
-            </div>
+            <?php endif ?>
         </div>
         <div class="acordeon">
-            <a href="#" class="nav-link acordeon-toggle">
-                <i class="fa-solid fa-seedling fa-fw me-2"></i>
-                Crecimiento
-            </a>
-            <div class="acordeon-body">
-                <div class="acordeon-items">
-                    <a href="<?= LOCAL_DIR ?>CelulaCrecimiento" class="nav-link">
-                        <i class="fa-solid fa-pen-to-square fa-fw"></i>
-                        Registrar
-                    </a>
+            <?php if ($usuario->tienePermiso("celulaCrecimiento", "consultar")) : ?>
+                <a href="#" class="nav-link acordeon-toggle">
+                    <i class="fa-solid fa-seedling fa-fw me-2"></i>
+                    Crecimiento
+                </a>
+                <div class="acordeon-body">
+                    <div class="acordeon-items">
+                        <?php if ($usuario->tienePermiso("celulaCrecimiento", "registrar")) : ?>
+                            <a href="<?= LOCAL_DIR ?>CelulaCrecimiento" class="nav-link">
+                                <i class="fa-solid fa-pen-to-square fa-fw"></i>
+                                Registrar
+                            </a>
+                        <?php endif ?>
 
-                    <a href="<?= LOCAL_DIR ?>CelulaCrecimiento/Reunion" class="nav-link">
-                        <i class="fa-solid fa-clipboard-user fa-fw"></i>
-                        Listar Reuniones
-                    </a>
+                        <?php if ($usuario->tienePermiso("celulaCrecimiento", "actualizar")) : ?>
+                            <a href="<?= LOCAL_DIR ?>CelulaCrecimiento/Reunion" class="nav-link">
+                                <i class="fa-solid fa-clipboard-user fa-fw"></i>
+                                Listar Reuniones
+                            </a>
+                        <?php endif ?>
+                    </div>
                 </div>
-            </div>
+            <?php endif ?>
         </div>
         <div class="acordeon">
-            <a href="#" class="nav-link acordeon-toggle">
-                <i class="fa-solid fa-people-line fa-fw me-2"></i>
-                Consolidación
-            </a>
-            <div class="acordeon-body">
-                <div class="acordeon-items">
-                    <a href="<?= LOCAL_DIR ?>CelulaConsolidacion" class="nav-link">
-                        <i class="fa-solid fa-pen-to-square fa-fw"></i>
-                        Registrar
-                    </a>
-                    <a href="<?= LOCAL_DIR ?>CelulaConsolidacion/Reunion" class="nav-link">
-                        <i class="fa-solid fa-clipboard-user fa-fw"></i>
-                        Listar Reuniones
-                    </a>
+            <?php if ($usuario->tienePermiso("celulaConsolidacion", "consultar")) : ?>
+                <a href="#" class="nav-link acordeon-toggle">
+                    <i class="fa-solid fa-people-line fa-fw me-2"></i>
+                    Consolidación
+                </a>
+                <div class="acordeon-body">
+                    <div class="acordeon-items">
+                        <?php if ($usuario->tienePermiso("celulaConsolidacion", "registrar")) : ?>
+                            <a href="<?= LOCAL_DIR ?>CelulaConsolidacion" class="nav-link">
+                                <i class="fa-solid fa-pen-to-square fa-fw"></i>
+                                Registrar
+                            </a>
+                        <?php endif ?>
+                        <?php if ($usuario->tienePermiso("celulaConsolidacion", "actualizar")) : ?>
+                            <a href="<?= LOCAL_DIR ?>CelulaConsolidacion/Reunion" class="nav-link">
+                                <i class="fa-solid fa-clipboard-user fa-fw"></i>
+                                Listar Reuniones
+                            </a>
+                        <?php endif ?>
+                    </div>
                 </div>
-            </div>
+            <?php endif ?>
         </div>
 
-        <a href="<?= LOCAL_DIR ?>Discipulos" class="nav-link">
-            <i class="fa-solid fa-clipboard-user fa-fw me-2"></i>
-            Discípulos
-        </a>
+        <?php if ($usuario->tienePermiso("celulaFamiliar", "consultar")) : ?>
+            <a href="<?= LOCAL_DIR ?>Discipulos" class="nav-link">
+                <i class="fa-solid fa-clipboard-user fa-fw me-2"></i>
+                Discípulos
+            </a>
+        <?php endif ?>
 
         <?php if (
             $usuario->tienePermiso("nivelesCrecimiento", "consultar") || $usuario->tieneRol("Profesor")
@@ -132,24 +157,26 @@
             || $usuario->tienePermiso("bitacora", "consultar")
         ) : ?>
             <div class="nav-link py-0 mt-3 text-uppercase">Sistema</div>
-            <div class="acordeon">
-                <a href="#" class="nav-link acordeon-toggle">
-                    <i class="fa-solid fa-chart-pie fa-fw me-2"></i>
-                    Estadistica
-                </a>
-                <div class="acordeon-body">
-                    <div class="acordeon-items">
-                        <a href="<?= LOCAL_DIR ?>Estadisticas/Iglesia" class="nav-link">
-                            <i class="fa-solid fa-chart-pie fa-fw me-2"></i>
-                            Iglesia
-                        </a>
-                        <a href="<?= LOCAL_DIR ?>Estadisticas/Escuela" class="nav-link">
-                            <i class="fa-solid fa-chart-pie fa-fw me-2"></i>
-                            EID
-                        </a>
+            <?php if ($usuario->tieneRol("Superusuario")) : ?>
+                <div class="acordeon">
+                    <a href="#" class="nav-link acordeon-toggle">
+                        <i class="fa-solid fa-chart-pie fa-fw me-2"></i>
+                        Estadistica
+                    </a>
+                    <div class="acordeon-body">
+                        <div class="acordeon-items">
+                            <a href="<?= LOCAL_DIR ?>Estadisticas/Iglesia" class="nav-link">
+                                <i class="fa-solid fa-chart-pie fa-fw me-2"></i>
+                                Iglesia
+                            </a>
+                            <a href="<?= LOCAL_DIR ?>Estadisticas/Escuela" class="nav-link">
+                                <i class="fa-solid fa-chart-pie fa-fw me-2"></i>
+                                EID
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
+            <?php endif ?>
             <a href="#" class="nav-link">
                 <i class="fa-solid fa-file fa-fw me-2"></i>
                 Reportes
