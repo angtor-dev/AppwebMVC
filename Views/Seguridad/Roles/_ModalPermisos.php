@@ -180,6 +180,29 @@
                                         Eliminar
                                     </label>
                                 </div>
+                                <h5>Discipulos</h5>
+                                <div class="d-flex flex-wrap gap-3 mb-3">
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="discipulos[consultar]" value="true"
+                                            <?= $rol->tienePermiso("discipulos", "consultar") ? "checked" : null ?>>
+                                        Consultar
+                                    </label>
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="discipulos[registrar]" value="true"
+                                            <?= $rol->tienePermiso("discipulos", "registrar") ? "checked" : null ?>>
+                                        Registrar
+                                    </label>
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="discipulos[actualizar]" value="true"
+                                            <?= $rol->tienePermiso("discipulos", "actualizar") ? "checked" : null ?>>
+                                        Actualizar
+                                    </label>
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="discipulos[eliminar]" value="true"
+                                            <?= $rol->tienePermiso("discipulos", "eliminar") ? "checked" : null ?>>
+                                        Eliminar
+                                    </label>
+                                </div>
                             </div>
                             <!-- Permisos de Escuela -->
                             <div class="tab-pane fade" id="tab-escuela" role="tabpanel" tabindex="0">
@@ -206,6 +229,75 @@
                                         Eliminar
                                     </label>
                                 </div>
+                                <h5>Grupos</h5>
+                                <div class="d-flex flex-wrap gap-3 mb-3">
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="grupos[consultar]" value="true"
+                                            <?= $rol->tienePermiso("grupos", "consultar") ? "checked" : null ?>>
+                                        Consultar
+                                    </label>
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="grupos[registrar]" value="true"
+                                            <?= $rol->tienePermiso("grupos", "registrar") ? "checked" : null ?>>
+                                        Registrar
+                                    </label>
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="grupos[actualizar]" value="true"
+                                            <?= $rol->tienePermiso("grupos", "actualizar") ? "checked" : null ?>>
+                                        Actualizar
+                                    </label>
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="grupos[eliminar]" value="true"
+                                            <?= $rol->tienePermiso("grupos", "eliminar") ? "checked" : null ?>>
+                                        Eliminar
+                                    </label>
+                                </div>
+                                <h5>Clases</h5>
+                                <div class="d-flex flex-wrap gap-3 mb-3">
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="clases[consultar]" value="true"
+                                            <?= $rol->tienePermiso("clases", "consultar") ? "checked" : null ?>>
+                                        Consultar
+                                    </label>
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="clases[registrar]" value="true"
+                                            <?= $rol->tienePermiso("clases", "registrar") ? "checked" : null ?>>
+                                        Registrar
+                                    </label>
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="clases[actualizar]" value="true"
+                                            <?= $rol->tienePermiso("clases", "actualizar") ? "checked" : null ?>>
+                                        Actualizar
+                                    </label>
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="clases[eliminar]" value="true"
+                                            <?= $rol->tienePermiso("clases", "eliminar") ? "checked" : null ?>>
+                                        Eliminar
+                                    </label>
+                                </div>
+                                <h5>Inscripciones</h5>
+                                <div class="d-flex flex-wrap gap-3 mb-3">
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="inscripciones[consultar]" value="true"
+                                            <?= $rol->tienePermiso("inscripciones", "consultar") ? "checked" : null ?>>
+                                        Consultar
+                                    </label>
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="inscripciones[registrar]" value="true"
+                                            <?= $rol->tienePermiso("inscripciones", "registrar") ? "checked" : null ?>>
+                                        Registrar
+                                    </label>
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="inscripciones[actualizar]" value="true"
+                                            <?= $rol->tienePermiso("inscripciones", "actualizar") ? "checked" : null ?>>
+                                        Actualizar
+                                    </label>
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="inscripciones[eliminar]" value="true"
+                                            <?= $rol->tienePermiso("inscripciones", "eliminar") ? "checked" : null ?>>
+                                        Eliminar
+                                    </label>
+                                </div>
                                 <h5>Notas</h5>
                                 <div class="d-flex flex-wrap gap-3 mb-3">
                                     <label class="pill-check">
@@ -214,9 +306,19 @@
                                         Consultar
                                     </label>
                                     <label class="pill-check">
+                                        <input type="checkbox" name="notas[registrar]" value="true"
+                                            <?= $rol->tienePermiso("notas", "registrar") ? "checked" : null ?>>
+                                        Registrar
+                                    </label>
+                                    <label class="pill-check">
                                         <input type="checkbox" name="notas[actualizar]" value="true"
                                             <?= $rol->tienePermiso("notas", "actualizar") ? "checked" : null ?>>
-                                        Gestionar
+                                        Actualizar
+                                    </label>
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="notas[eliminar]" value="true"
+                                            <?= $rol->tienePermiso("notas", "eliminar") ? "checked" : null ?>>
+                                        Eliminar
                                     </label>
                                 </div>
                             </div>
