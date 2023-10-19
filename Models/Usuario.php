@@ -192,6 +192,27 @@ class Usuario extends Model
             throw $th;
         }
     }
+
+    public function actualizarClave($claveNueva) : void
+    {
+        $clave = password_hash($claveNueva, PASSWORD_DEFAULT);
+        $query = "UPDATE usuario SET clave = :clave WHERE id = :id";
+
+        try {
+            $stmt = $this->prepare($query);
+            $stmt->bindValue('clave', $clave);
+            $stmt->bindValue('id', $this->id);
+
+            $stmt->execute();
+        } catch (\Throwable $th) {
+            if (DEVELOPER_MODE) {
+                echo $th->getMessage();
+                die;
+            }
+            $_SESSION['errores'][] = "Ha ocurrido un error al actualizar la clave.";
+            throw $th;
+        }
+    }
     
     private function encriptarClave() : void
     {
@@ -396,6 +417,9 @@ class Usuario extends Model
     }
     public function getFechaNacimiento() : string {
         return $this->fechaNacimiento ?? "";
+    }
+    public function getClaveEncriptada() : string {
+        return $this->clave ?? "";
     }
 }
 ?>

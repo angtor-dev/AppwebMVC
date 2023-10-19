@@ -5,7 +5,7 @@ $title = "Niveles de Crecimiento";
 ?>
 
 <div class="d-flex align-items-end justify-content-between mb-2">
-    <h4 class="mb-0 fw-bold">Niveles de Crecimineto</h4>
+    <h4 class="mb-0 fw-bold">Niveles de Crecimiento</h4>
     <div class="d-flex gap-3">
         <?php if (count($nivelesCrecimiento) != 0): ?>
             <div class="buscador">
@@ -53,9 +53,6 @@ $title = "Niveles de Crecimiento";
                     <td><?= $nivel->getNombre() ?></td>
                     <td>
                         <div class="acciones">
-                            <a role="button">
-                                <i class="fa-solid fa-circle-info" title="Ver detalles" data-bs-toggle="tooltip"></i>
-                            </a>
                             <?php if ($usuario->tienePermiso("nivelesCrecimiento", "actualizar")): ?>
                                 <a role="button" onclick="abrirModalNivelCrecimiento(<?= $nivel->id ?>)">
                                     <i class="fa-solid fa-pen" title="Actualizar" data-bs-toggle="tooltip"></i>
@@ -94,6 +91,64 @@ $title = "Niveles de Crecimiento";
             </div>
         </div>
     </div>
+
+    <!-- Confirmar eliminación de subnivel -->
+    <div class="modal fade modal-eliminar" id="confirmar-eliminacion-subnivel" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Eliminar subnivel</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-danger mb-0" role="alert">
+                        ¿Seguro quieres eliminar este subnivel?
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No, cancelar</button>
+                    <a href="#" data-href="/AppwebMVC/NivelesCrecimiento/Subniveles/Eliminar?id=" type="button" class="btn btn-danger btn-eliminar">Si, eliminar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Registrar o actualizar nivel -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvas-nivel">
+        <!-- Contenido cargado desde ajax -->
+    </div>
+                                
+    <script>
+        function abrirModalNivelCrecimiento(id = 0) {
+            fetch('/AppwebMVC/NivelesCrecimiento/Actualizar?id=' + id)
+                .then(res => res.text())
+                .then(data => {
+                    const modalEl = document.getElementById('offcanvas-nivel')
+                    modalEl.innerHTML = data
+                    modalEl.querySelectorAll('.needs-validation')
+                        .forEach(agregarValidacionGenerica)
+                
+                    let modal = new bootstrap.Offcanvas(modalEl)
+                    modal.show()
+                })
+                .catch(error => console.error(error))
+        }
+        
+        function abrirModalSubnivel(id = 0) {
+            fetch('/AppwebMVC/NivelesCrecimiento/Subniveles/Actualizar?id=' + id)
+                .then(res => res.text())
+                .then(data => {
+                    const modalEl = document.getElementById('offcanvas-nivel')
+                    modalEl.innerHTML = data
+                    modalEl.querySelectorAll('.needs-validation')
+                        .forEach(agregarValidacionGenerica)
+                
+                    let modal = new bootstrap.Offcanvas(modalEl)
+                    modal.show()
+                })
+                .catch(error => console.error(error))
+        }
+    </script>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -163,7 +218,7 @@ $title = "Niveles de Crecimiento";
                                 <a role="button" onclick="abrirModalSubnivel(${id})">
                                     <i class="fa-solid fa-pen" title="Actualizar" data-bs-toggle="tooltip"></i>
                                 </a>
-                                <a role="button" data-bs-toggle="modal" data-bs-target="#confirmar-eliminacion"
+                                <a role="button" data-bs-toggle="modal" data-bs-target="#confirmar-eliminacion-subnivel"
                                     data-id="${id}">
                                     <i class="fa-solid fa-trash" title="Eliminar" data-bs-toggle="tooltip"></i>
                                 </a>

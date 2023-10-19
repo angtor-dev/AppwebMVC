@@ -25,7 +25,6 @@ $usuario = $_SESSION['usuario'];
         <tr>
             <th>Nombre</th>
             <th>Descripción</th>
-            <th>Nivel</th>
             <th class="text-center" style="width: 90px;">Acciones</th>
         </tr>
     </thead>
@@ -34,7 +33,6 @@ $usuario = $_SESSION['usuario'];
             <tr>
                 <td><?= $rol->getNombre() ?></td>
                 <td><?= $rol->getDescripcion() ?></td>
-                <td><?= $rol->getNivel() ?></td>
                 <td>
                     <div class="acciones">
                         <?php if ($usuario->tienePermiso("roles", "actualizar") && $rol->getNombre() != "Superusuario"): ?>

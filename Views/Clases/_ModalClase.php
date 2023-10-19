@@ -15,7 +15,7 @@
                 <?php foreach ($grupos as $grupo): ?>
                     <?php if ($grupo->getEstado() == EstadosGrupo::Finalizado->value) continue; ?>
                     <option value="<?= $grupo->id ?>"
-                        <?= $grupo->id == (!empty($clase->grupo) && $clase->grupo->id) ? "selected" : "" ?>>
+                        <?= ($grupo->id == ((!empty($clase->grupo) && $clase->grupo->id) ? $clase->grupo->id : null)) ? "selected" : "" ?>>
                         <?= $grupo->getNombre() ?>
                     </option>
                 <?php endforeach ?>

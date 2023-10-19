@@ -107,17 +107,18 @@ if (isset($_SESSION['usuario'])) {
                             </button>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a class="dropdown-item" href="#">
+                                    <a class="dropdown-item" href="<?= LOCAL_DIR ?>Usuarios/CambiarClave">
                                         <i class="fa-solid fa-key fa-fw me-2"></i>
                                         Cambiar clave
                                     </a>
                                 </li>
                                 <li>
-                                    <?php if (true) : ?>
-                                        <a class="dropdown-item" href="#">
+                                    <!-- Ocultado por ahora -->
+                                    <?php if ($usuario->tieneRol("Superusuario")) : ?>
+                                        <!-- <a class="dropdown-item" href="#">
                                             <i class="fa-solid fa-arrows-rotate fa-fw me-2"></i>
                                             Elegir sede
-                                        </a>
+                                        </a> -->
                                     <?php endif ?>
                                 </li>
                                 <li>

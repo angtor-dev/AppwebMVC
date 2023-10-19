@@ -95,6 +95,27 @@ class NivelCrecimiento extends Model
         }
     }
 
+    public function actualizar() : void
+    {
+        $query = "UPDATE nivelcrecimiento SET nombre = :nombre, nivel = :nivel WHERE id = :id";
+
+        try {
+            $stmt = $this->prepare($query);
+            $stmt->bindValue("nombre", $this->nombre);
+            $stmt->bindValue("nivel", $this->nivel);
+            $stmt->bindValue("id", $this->id);
+
+            $stmt->execute();
+        } catch (\Throwable $th) {
+            if (DEVELOPER_MODE) {
+                echo $th->getMessage();
+                die;
+            }
+            $_SESSION['errores'][] = "Ha ocurrido un error al actualizar el nivel.";
+            throw $th;
+        }
+    }
+
     public function esValido() : bool
     {
         $errores = 0;
@@ -111,7 +132,7 @@ class NivelCrecimiento extends Model
             $_SESSION['errores'][] = "Se debe especificar un nivel.";
             $errores++;
         }
-        if ($this->query("SELECT id FROM nivelcrecimiento WHERE nivel = $this->nivel AND estatus = 1")->rowCount() > 0) {
+        if (empty($this->id) && $this->query("SELECT id FROM nivelcrecimiento WHERE nivel = $this->nivel AND estatus = 1")->rowCount() > 0) {
             $_SESSION['errores'][] = "Ya existe otro Nivel de Crecimiento con el nivel de grado <b>$this->nivel</b>.";
             $errores++;
         }
