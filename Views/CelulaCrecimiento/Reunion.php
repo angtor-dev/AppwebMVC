@@ -17,7 +17,7 @@ $viewScripts = ["CelulaCrecimiento-reunion.js"];
                             <th>Codigo Celula de Crecimiento</th>
                             <th>Nombre de la Celula de Crecimiento</th>
                             <th>Fecha de la reunión</th>
-                            <th>Opciones</th>
+                            <th class="text-center" style="width: 90px;">Opciones</th>
                         </tr>
                     </thead>
                     <tbody>

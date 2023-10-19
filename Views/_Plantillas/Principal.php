@@ -124,7 +124,7 @@ if (isset($_SESSION['usuario'])) {
                                     <hr class="dropdown-divider">
                                 </li>
                                 <li>
-                                    <a class="dropdown-item text-danger" href="<?= LOCAL_DIR ?>login/logout">
+                                    <a class="dropdown-item text-danger" href="<?= LOCAL_DIR ?>Login/Logout">
                                         <i class="fa-solid fa-right-from-bracket fa-fw me-2"></i>
                                         Cerrar sesión
                                     </a>

@@ -14,11 +14,24 @@ $(document).ready(function () {
             { data: 'codigo' },
             { data: 'asistencias' },
             {
-                defaultContent: `
-              <button type="button" id="ver_info" data-bs-toggle="modal" data-bs-target="#modal_verInfo" class="btn btn-secondary">Info</button>
-              <button type="button" id="editar" data-bs-toggle="modal" data-bs-target="#modal_editarInfo" class="btn btn-primary">Editar</button>
-              <button type="button" id="eliminar" class="btn btn-danger delete-btn">Eliminar</button>
-              `}
+                data: null,
+        render: function (data, type, row, meta) {
+
+          let botonInfo = `<button type="button" id="ver_info" data-bs-toggle="modal" data-bs-target="#modal_verInfo" title="Ver detalles" class="btn btn-secondary"><i class="fa-solid fa-circle-info" ></i></button>`;
+
+          let botonEditar = permisos.actualizar ? `<button type="button" id="editar" data-bs-toggle="modal" title="Actualizar" data-bs-target="#modal_editarInfo" class="btn btn-primary"><i class="fa-solid fa-pen" ></i></button>` : '';
+
+          let botonEliminar = permisos.eliminar ? `<button type="button"  id=eliminar class="btn btn-danger delete-btn" title="Eliminar"><i class="fa-solid fa-trash" ></i></button>` : '';
+
+          let div = `
+          <div class="d-flex justify-content-end gap-1">
+                    ${botonInfo}
+                    ${botonEditar}
+                    ${botonEliminar}
+          </div>
+          `
+          return div;
+        }}
         ],
     })
 
@@ -88,7 +101,7 @@ $(document).ready(function () {
 
                 $.ajax({
                     type: "POST",
-                    url: "http://localhost/AppwebMVC/Discipulos/Listar",
+                    url: "http://localhost/AppwebMVC/Discipulos/Index",
                     data: {
 
                         eliminar: 'eliminar',
@@ -305,182 +318,159 @@ $(document).ready(function () {
     };
 
 
-    $("#nombre").on("keyup", function (event) {
-        let nombre = $("#nombre").val();
+    $("#nombre2").on("keyup", function (event) {
+        let nombre = $("#nombre2").val();
         if (/^[a-zA-ZñÑ\s]{1,30}$/.test(nombre)) {
             validaciones.nombre = true;
-            $("#nombre").removeClass("is-invalid");
-            $("#nombre").addClass("is-valid");
+            $("#nombre2").removeClass("is-invalid");
+            $("#nombre2").addClass("is-valid");
 
         } else {
             validaciones.nombre = false;
-            $("#nombre").removeClass("is-valid");
-            $("#nombre").addClass("is-invalid");
+            $("#nombre2").removeClass("is-valid");
+            $("#nombre2").addClass("is-invalid");
 
         }
     })
 
-    $("#apellido").on("keyup", function (event) {
-        let apellido = $("#apellido").val();
+    $("#apellido2").on("keyup", function (event) {
+        let apellido = $("#apellido2").val();
         if (/^[a-zA-ZñÑ\s]{1,30}$/.test(apellido)) {
             validaciones.apellido = true;
-            $("#apellido").removeClass("is-invalid");
-            $("#apellido").addClass("is-valid");
+            $("#apellido2").removeClass("is-invalid");
+            $("#apellido2").addClass("is-valid");
 
         } else {
             validaciones.apellido = false;
-            $("#apellido").removeClass("is-valid");
-            $("#apellido").addClass("is-invalid");
+            $("#apellido2").removeClass("is-valid");
+            $("#apellido2").addClass("is-invalid");
 
         }
     })
 
-    $("#cedula").on("keyup", function (event) {
-        let cedula = $("#cedula").val();
+    $("#cedula2").on("keyup", function (event) {
+        let cedula = $("#cedula2").val();
         if (/^[0-9]{7,8}$/.test(cedula)) {
             validaciones.cedula = true;
-            $("#cedula").removeClass("is-invalid");
-            $("#cedula").addClass("is-valid");
+            $("#cedula2").removeClass("is-invalid");
+            $("#cedula2").addClass("is-valid");
 
         } else {
             validaciones.cedula = false;
-            $("#cedula").removeClass("is-valid");
-            $("#cedula").addClass("is-invalid");
+            $("#cedula2").removeClass("is-valid");
+            $("#cedula2").addClass("is-invalid");
 
         }
     })
 
-    $("#direccion").on("keyup", function (event) {
+    $("#direccion2").on("keyup", function (event) {
         let direccion = $("#direccion").val();
         if (/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/.test(direccion)) {
             validaciones.direccion = true;
-            $("#direccion").removeClass("is-invalid");
-            $("#direccion").addClass("is-valid");
+            $("#direccion2").removeClass("is-invalid");
+            $("#direccion2").addClass("is-valid");
         } else {
             validaciones.direccion = false;
-            $("#direccion").removeClass("is-valid");
-            $("#direccion").addClass("is-invalid");
+            $("#direccion2").removeClass("is-valid");
+            $("#direccion2").addClass("is-invalid");
         }
     })
 
-    $("#motivo").on("keyup", function (event) {
-        let motivo = $("#motivo").val();
+    $("#motivo2").on("keyup", function (event) {
+        let motivo = $("#motivo2").val();
         if (/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/.test(motivo)) {
             validaciones.motivo = true;
-            $("#motivo").removeClass("is-invalid");
-            $("#motivo").addClass("is-valid");
+            $("#motivo2").removeClass("is-invalid");
+            $("#motivo2").addClass("is-valid");
         } else {
             validaciones.motivo = false;
-            $("#motivo").removeClass("is-valid");
-            $("#motivo").addClass("is-invalid");
+            $("#motivo2").removeClass("is-valid");
+            $("#motivo2").addClass("is-invalid");
         }
     })
 
-    $("#telefono").on("keyup", function (event) {
-        let telefono = $("#telefono").val();
+    $("#telefono2").on("keyup", function (event) {
+        let telefono = $("#telefono2").val();
         if (/^(0414|0424|0416|0426|0412)[0-9]{7}/.test(telefono)) {
             validaciones.telefono = true;
-            $("#telefono").removeClass("is-invalid");
-            $("#telefono").addClass("is-valid");
+            $("#telefono2").removeClass("is-invalid");
+            $("#telefono2").addClass("is-valid");
         } else {
             validaciones.telefono = false;
-            $("#telefono").removeClass("is-valid");
-            $("#telefono").addClass("is-invalid");
+            $("#telefono2").removeClass("is-valid");
+            $("#telefono2").addClass("is-invalid");
         }
     })
 
 
-    $("#estadoCivil").on("change", function (event) {
-        let estadoCivil = $("#estadoCivil").val();
+    $("#estadoCivil2").on("change", function (event) {
+        let estadoCivil = $("#estadoCivil2").val();
         let estadosPermitido = ["casado", "soltero", "viudo"];
         if (estadosPermitido.includes(estadoCivil)) {
             validaciones.estadoCivil = true;
-            $("#estadoCivil").removeClass("is-invalid");
-            $("#estadoCivil").addClass("is-valid");
+            $("#estadoCivil2").removeClass("is-invalid");
+            $("#estadoCivil2").addClass("is-valid");
         } else {
             validaciones.estadoCivil = false;
-            $("#estadoCivil").removeClass("is-valid");
-            $("#estadoCivil").addClass("is-invalid");
+            $("#estadoCivil2").removeClass("is-valid");
+            $("#estadoCivil2").addClass("is-invalid");
         }
     })
 
 
-    $("#fechaNacimiento").on("change", function (event) {
-        let fechaNacimiento = $("#fechaNacimiento").val();
+    $("#fechaNacimiento2").on("change", function (event) {
+        let fechaNacimiento = $("#fechaNacimiento2").val();
         if (/^.+$/.test(fechaNacimiento)) {
             validaciones.fechaNacimiento = true;
-            $("#fechaNacimiento").removeClass("is-invalid");
-            $("#fechaNacimiento").addClass("is-valid");
+            $("#fechaNacimiento2").removeClass("is-invalid");
+            $("#fechaNacimiento2").addClass("is-valid");
         } else {
             validaciones.fechaNacimiento = false;
-            $("#fechaNacimiento").removeClass("is-valid");
-            $("#fechaNacimiento").addClass("is-invalid");
+            $("#fechaNacimiento2").removeClass("is-valid");
+            $("#fechaNacimiento2").addClass("is-invalid");
         }
     })
 
 
-    $("#fechaConvercion").on("change", function (event) {
-        let fechaConvercion = $("#fechaConvercion").val();
+    $("#fechaConvercion2").on("change", function (event) {
+        let fechaConvercion = $("#fechaConvercion2").val();
         if (/^.+$/.test(fechaConvercion)) {
             validaciones.fechaConvercion = true;
-            $("#fechaConvercion").removeClass("is-invalid");
-            $("#fechaConvercion").addClass("is-valid");
+            $("#fechaConvercion2").removeClass("is-invalid");
+            $("#fechaConvercion2").addClass("is-valid");
         } else {
             validaciones.fechaConvercion = false;
-            $("#fechaConvercion").removeClass("is-valid");
-            $("#fechaConvercion").addClass("is-invalid");
+            $("#fechaConvercion2").removeClass("is-valid");
+            $("#fechaConvercion2").addClass("is-invalid");
         }
     })
 
 
-    $("#idConsolidador").on("change", function (event) {
+    $("#idConsolidador2").on("change", function (event) {
 
-        let idConsolidador = $("#idConsolidador").val();
+        let idConsolidador = $("#idConsolidador2").val();
         if (/^[1-9]\d*$/.test(idConsolidador)) {
             validaciones.idConsolidador = true;
-            $("#msj_idConsolidador").addClass("d-none");
+            $("#msj_idConsolidador2").addClass("d-none");
         } else {
             console.log(idConsolidador);
             validaciones.idConsolidador = false;
-            $("#msj_idConsolidador").removeClass("d-none");
+            $("#msj_idConsolidador2").removeClass("d-none");
         }
     })
 
 
-    $("#idcelulaconsolidacion").on("change", function (event) {
-        let idcelulaconsolidacion = $("#idcelulaconsolidacion").val();
+    $("#idCelulaConsolidacion2").on("change", function (event) {
+        let idcelulaconsolidacion = $("#idCelulaConsolidacion2").val();
         if (/^[1-9]\d*$/.test(idcelulaconsolidacion)) {
             validaciones.idcelulaconsolidacion = true;
-            $("#msj_idcelulaconsolidacion").addClass("d-none");
+            $("#msj_idCelulaConsolidacion2").addClass("d-none");
         } else {
             validaciones.idcelulaconsolidacion = false;
-            $("#idcelulaconsolidacion").removeClass("is-valid");
-            $("#idcelulaconsolidacion").addClass("is-invalid");
+            $("#idCelulaConsolidacion2").removeClass("is-valid");
+            $("#idCelulaConsolidacion2").addClass("is-invalid");
         }
 
-
-
-        let direccion = $("#direccion").val();
-        if (/^[a-zA-ZñÑ\s]{1,100}$/.test(direccion)) {
-            validaciones.direccion = true;
-            $("#direccion").removeClass("is-invalid");
-            $("#direccion").addClass("is-valid");
-        } else {
-            validaciones.direccion = false;
-            $("#direccion").removeClass("is-valid");
-            $("#direccion").addClass("is-invalid");
-        }
-
-        let motivo = $("#motivo").val();
-        if (/^[a-zA-ZñÑ\s]{1,100}$/.test(motivo)) {
-            validaciones.motivo = true;
-            $("#motivo").removeClass("is-invalid");
-            $("#motivo").addClass("is-valid");
-        } else {
-            validaciones.motivo = false;
-            $("#motivo").removeClass("is-valid");
-            $("#motivo").addClass("is-invalid");
-        }
 
 
     });
@@ -497,31 +487,31 @@ $(document).ready(function () {
             let id = $("#idDiscipulo").text();
             let asisFamiliar
             let asisCrecimiento
-            if (document.getElementById('asisFamiliar').checked == true) {
+            if (document.getElementById('asisFamiliar2').checked == true) {
                 asisFamiliar = 'si'
             } else {
                 asisFamiliar = 'no'
             }
-            if (document.getElementById('asisCrecimiento').checked == true) {
+            if (document.getElementById('asisCrecimiento2').checked == true) {
                 asisCrecimiento = 'si'
             } else {
                 asisCrecimiento = 'no'
             }
-            let nombre = $("#nombre").val();
-            let apellido = $("#apellido").val();
-            let cedula = $("#cedula").val();
-            let telefono = $("#telefono").val();
-            let estadoCivil = $("#estadoCivil").val();
-            let fechaNacimiento = $("#fechaNacimiento").val();
-            let fechaConvercion = $("#fechaConvercion").val();
-            let idConsolidador = $("#idConsolidador").val();
-            let idCelulaConsolidacion = $("#idcelulaconsolidacion").val();
-            let direccion = $("#direccion").val();
-            let motivo = $("#motivo").val();
+            let nombre = $("#nombre2").val();
+            let apellido = $("#apellido2").val();
+            let cedula = $("#cedula2").val();
+            let telefono = $("#telefono2").val();
+            let estadoCivil = $("#estadoCivil2").val();
+            let fechaNacimiento = $("#fechaNacimiento2").val();
+            let fechaConvercion = $("#fechaConvercion2").val();
+            let idConsolidador = $("#idConsolidador2").val();
+            let idCelulaConsolidacion = $("#idCelulaConsolidacion2").val();
+            let direccion = $("#direccion2").val();
+            let motivo = $("#motivo2").val();
 
             $.ajax({
                 type: "POST",
-                url: "http://localhost/AppwebMVC/Discipulos/Listar",
+                url: "http://localhost/AppwebMVC/Discipulos/Index",
                 data: {
 
                     editar: 'editar',
@@ -814,7 +804,7 @@ $(document).ready(function () {
     $("#formulario").submit(function (event) {
         event.preventDefault();
 
-        if (Object.values(validaciones).every(val => val)) {
+        if (Object.values(validaciones2).every(val => val)) {
 
 
             let asisFamiliar;

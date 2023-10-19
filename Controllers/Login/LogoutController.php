@@ -4,5 +4,5 @@ session_destroy();
 
 Bitacora::registrar("Cierre de sesión");
 
-header('location:'.LOCAL_DIR.'login');
+header('location:'.LOCAL_DIR.'Login');
 ?>

@@ -21,7 +21,7 @@ $usuario = $_SESSION['usuario'];
     <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-12">
             <div class="table-responsive">
-                <table id="sedeDatatables" class="table table-hover">
+                <table id="sedeDatatables" class="table table-bordered table-hover">
                     <thead>
                         <div class="d-flex align-items-end justify-content-between mb-2">
                             <h2><strong>Discipulos:</strong></h2>
@@ -38,7 +38,7 @@ $usuario = $_SESSION['usuario'];
                             <th>Apellido</th>
                             <th>Celula de Consolidacion </th>
                             <th>Asistencias</th>
-                            <th>Opciones</th>
+                            <th class="text-center" style="width: 90px;">Opciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -195,7 +195,7 @@ $usuario = $_SESSION['usuario'];
                                 <div class="col-lg-6">
                                     <label for="telefono2" class="form-label fw-bold">Numero de telefono</label>
                                     <input type="number" class="form-control" id="telefono2" aria-describedby="msj_telefono2">
-                                    <div id="msj_telefono" class="invalid-feedback">
+                                    <div id="msj_telefono2" class="invalid-feedback">
                                         escriba correctamente el numero de telefono ej.04145555555
                                     </div>
                                 </div>
@@ -258,7 +258,7 @@ $usuario = $_SESSION['usuario'];
                                     <select class="form-select" id="idConsolidador2">
                                         <option selected value="">Selecciona un consolidador</option>
                                     </select>
-                                    <div id="msj_idConsolidador" class="text-danger d-none">
+                                    <div id="msj_idConsolidador2" class="invalid-feedback">
                                         Escoja el Consolidador.
                                     </div>
                                 </div>
@@ -267,7 +267,7 @@ $usuario = $_SESSION['usuario'];
                                     <select class="form-select" id="idCelulaConsolidacion2">
                                         <option selected value="">Selecciona una celula</option>
                                     </select>
-                                    <div id="msj_idcelulaconsolidacion" class="text-danger d-none">
+                                    <div id="msj_idcelulaconsolidacion2" class="invalid-feedback">
                                         Escoja una Celula de Consolidacion.
                                     </div>
                                 </div>
@@ -277,14 +277,14 @@ $usuario = $_SESSION['usuario'];
                                 <div class="col-lg-12">
                                     <label for="direccion2" class="form-label fw-bold">Dirección</label>
                                     <textarea class="form-control" id="direccion2" placeholder="Escriba su direccion" maxlength="100"></textarea>
-                                    <div class="invalid-feedback">
+                                    <div id="msj_direccion2" class="invalid-feedback">
                                         Este campo no puede estar vacio.
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
                                     <label for="motivo2" class="form-label fw-bold">Motivo</label>
                                     <textarea class="form-control" id="motivo2" placeholder="Escriba el motivo" maxlength="100"></textarea>
-                                    <div class="invalid-feedback">
+                                    <div id="msj_motivo2" class="invalid-feedback">
                                         Este campo no puede estar vacio.
                                     </div>
                                 </div>
@@ -409,7 +409,7 @@ $usuario = $_SESSION['usuario'];
                                     <select class="form-select" id="idConsolidador">
                                         <option selected value="">Selecciona un consolidador</option>
                                     </select>
-                                    <div id="msj_idConsolidador" class="text-danger d-none">
+                                    <div id="msj_idConsolidador" class="invalid-feedback">
                                         Escoja el Consolidador.
                                     </div>
                                 </div>
@@ -418,7 +418,7 @@ $usuario = $_SESSION['usuario'];
                                     <select class="form-select" id="idCelulaConsolidacion">
                                         <option selected value="">Selecciona una celula</option>
                                     </select>
-                                    <div id="msj_idcelulaconsolidacion" class="text-danger d-none">
+                                    <div id="msj_idcelulaconsolidacion" class="invalid-feedback">
                                         Escoja una Celula de Consolidacion.
                                     </div>
                                 </div>
@@ -428,14 +428,14 @@ $usuario = $_SESSION['usuario'];
                                 <div class="col-lg-12">
                                     <label for="direccion" class="form-label fw-bold">Dirección</label>
                                     <textarea class="form-control" id="direccion" placeholder="Ingrese la direccion" maxlength="100"></textarea>
-                                    <div class="invalid-feedback">
+                                    <div id="direccion" class="invalid-feedback">
                                         Este campo no puede estar vacio.
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
                                     <label for="motivo" class="form-label fw-bold">Motivo</label>
                                     <textarea class="form-control" id="motivo" placeholder="Ingrese el motivo" maxlength="100"></textarea>
-                                    <div class="invalid-feedback">
+                                    <div id="motivo" class="invalid-feedback">
                                         Este campo no puede estar vacio.
                                     </div>
                                 </div>

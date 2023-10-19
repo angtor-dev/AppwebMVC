@@ -30,19 +30,25 @@
                             <td><?= $clase->getTitulo() ?></td>
                             <td>
                                 <div class="d-flex align-items-center justify-content-between w-100">
-                                    <span class="nota"><?= isset($nota) ? $nota->getCalificaion() : "<em>Sin nota</em>" ?></span>
-                                    <!-- <input type="number" name="calificación" id="input-nota" min="0" max="20" step="0.01"> -->
+                                    <form action="">
+                                        <input type="hidden" name="id" value="<?= isset($nota) ? $nota->id : "" ?>">
+                                        <input type="hidden" name="idClase" value="<?= $clase->id ?>">
+                                        <input type="hidden" name="idEstudiante" value="<?= $estudiante->id ?>">
+                                        <input type="number" class="d-none" name="calificacion" id="input-nota"
+                                            min="0" max="20" step="0.01" value="<?= isset($nota) ? $nota->getCalificacion() : "0" ?>">
+                                    </form>
+                                    <span class="nota"><?= isset($nota) ? $nota->getCalificacion()." / 20" : "<em>Sin nota</em>" ?></span>
                                     <div class="d-flex gap-2">
                                         <?php if (isset($nota)): ?>
-                                            <button class="btn-small bg-primary" data-bs-toggle="tooltip" title="Actulizar">
+                                            <button class="btn-small bg-primary" title="Actulizar" onclick="agregarNota(this)">
                                                 <i class="fa-solid fa-pen"></i>
                                             </button>
-                                            <button class="btn-small bg-danger" data-bs-toggle="tooltip" title="Eliminar">
+                                            <button class="btn-small bg-danger" title="Eliminar" onclick="eliminarNota(this)">
                                                 <i class="fa-solid fa-trash"></i>
                                             </button>
                                         <?php else: ?>
-                                            <button class="btn-small bg-success" data-bs-toggle="tooltip" title="Agregar"
-                                                onclick="agregarNota()">
+                                            <button class="btn-small bg-success" title="Agregar"
+                                                onclick="agregarNota(this)">
                                                 <i class="fa-solid fa-plus"></i>
                                             </button>
                                         <?php endif ?>

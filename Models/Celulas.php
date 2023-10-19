@@ -519,7 +519,7 @@ class Celulas extends Model
 
                         // Si la cuenta de la consulta es igual a 5, entonces este sera aprobado. Del resto, no hara nada
                         if ($stmt4->rowCount() == 5) {
-                            $update = "UPDATE `discipulo` SET `aprobarUsuario` = '1' WHERE `discipulo`.`id` = :idDiscipulo";
+                            $update = "UPDATE discipulo SET aprobarUsuario = '1' WHERE discipulo.id = :idDiscipulo";
                             $stmt5 = $this->db->pdo()->prepare($update);
                             $stmt5->bindValue(':idDiscipulo', $values);
 
