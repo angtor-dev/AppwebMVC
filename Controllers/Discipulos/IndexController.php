@@ -72,6 +72,7 @@ if (isset($_POST['editar'])) {
     $fechaNacimiento = $_POST['fechaNacimiento'];
     $fechaConvercion = $_POST['fechaConvercion'];
 
+
     $Discipulo->validacion_datos(
         [$idConsolidador, $idCelulaConsolidacion, $cedula, $telefono],
         [$direccion, $motivo],
@@ -83,8 +84,7 @@ if (isset($_POST['editar'])) {
         $estadoCivil,
         $telefono
     );
-    $Discipulo->validacion_existencia($cedula, $id);
-
+    
     $Discipulo->editar_discipulo(
         $id,
         $asisCrecimiento,
