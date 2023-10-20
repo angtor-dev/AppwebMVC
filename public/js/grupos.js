@@ -27,8 +27,8 @@ function abrirModalEstudiantes(id = 0) {
         .catch(error => console.error(error))
 }
 
-function abrirModalNotas(id) {
-    fetch('/AppwebMVC/Grupos/Notas/Consultar?id=' + id)
+function abrirModalNotas(id, idGrupo) {
+    fetch('/AppwebMVC/Grupos/Notas/Consultar?id=' + id + '&idGrupo=' + idGrupo)
         .then(res => res.text())
         .then(data => {
             const modalEl = document.getElementById('modal-notas')

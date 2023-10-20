@@ -56,7 +56,7 @@ $usuario = $_SESSION['usuario'];
                                 <a href="/AppwebMVC/Usuarios/Detalles?id=<?= $estudiante->id ?>">
                                     <i class="fa-solid fa-circle-info" title="Ver detalles" data-bs-toggle="tooltip"></i>
                                 </a>
-                                <a role="button" onclick="abrirModalNotas(<?= $estudiante->id ?>)">
+                                <a role="button" onclick="abrirModalNotas(<?= $estudiante->id ?>, <?= $grupo->id ?>)">
                                     <i class="fa-solid fa-list-ol" title="Gestionar notas" data-bs-toggle="tooltip"></i>
                                 </a>
                             </td>
