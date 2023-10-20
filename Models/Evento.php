@@ -25,8 +25,42 @@ class Evento extends Model
 
             $stmt->execute();
         } catch (\Throwable $th) {
-            redirigir("/AppwebMVC/Agenda");
+            throw $th;
         }
+    }
+
+    // Getters
+    public function getTitulo() : string {
+        return $this->titulo;
+    }
+    public function getDescripcion() : string {
+        return $this->descripcion;
+    }
+    public function getFechaInicio() : string {
+        return $this->fechaInicio;
+    }
+    public function getFechaFinal() : string {
+        return $this->fechaFinal;
+    }
+    public function getColor() : string {
+        return $this->color;
+    }
+    
+    // Setters
+    public function setTitulo($titulo) : void {
+        $this->titulo = $titulo;
+    }
+    public function setDescripcion($descripcion) : void {
+        $this->descripcion = $descripcion;
+    }
+    public function setFechaInicio($fechaInicio) : void {
+        $this->fechaInicio = $fechaInicio;
+    }
+    public function setFechaFinal($fechaFinal) : void {
+        $this->fechaFinal = $fechaFinal;
+    }
+    public function setColor($color) : void {
+        $this->color = $color;
     }
 }
 ?>

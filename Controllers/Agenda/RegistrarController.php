@@ -12,15 +12,18 @@ $fecha_fin         = date('Y-m-d', ($fecha_fin1));
 $color_evento      = $_REQUEST['color_evento'];
 
 $evento = new Evento();
-$evento->color = $color_evento;
-$evento->titulo = $evento_nombre;
-$evento->fechaInicio = $fecha_fin;
-$evento->fechaFinal = $fecha_fin;
-$evento->descripcion = "";
+$evento->setColor($color_evento);
+$evento->setTitulo($evento_nombre);
+$evento->setFechaInicio($fecha_fin);
+$evento->setFechaFinal($fecha_fin);
+$evento->setDescripcion("");
 
 try {
     $evento->registrar();
 } catch (\Throwable $th) {
+    if (DEVELOPER_MODE) {
+        die($th->getMessage());
+    }
     $_SESSION['errores'][] = "Ha ocurrido un error";
 }
 

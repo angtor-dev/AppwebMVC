@@ -161,10 +161,10 @@ document.addEventListener("DOMContentLoaded", () => {
             <?php foreach ($eventos as $evento): ?>
                 {
                     _id: '<?php echo $evento->id; ?>',
-                    title: '<?php echo $evento->titulo; ?>',
-                    start: '<?php echo $evento->fechaInicio; ?>',
-                    end:   '<?php echo $evento->fechaFinal; ?>',
-                    color: '<?php echo $evento->color; ?>'
+                    title: '<?php echo $evento->getTitulo(); ?>',
+                    start: '<?php echo $evento->getFechaInicio(); ?>',
+                    end:   '<?php echo $evento->getFechaFinal(); ?>',
+                    color: '<?php echo $evento->getColor(); ?>'
                 },
             <?php endforeach ?>
         ],
