@@ -186,5 +186,27 @@ class NivelCrecimiento extends Model
     public function setIdEscuela(int $idEscuela) : void {
         $this->idEscuela = $idEscuela;
     }
+
+    // Estadisticas
+    public static function gruposPorNivel() : array
+    {
+        $db = Database::getInstance();
+        $query = "SELECT nivelcrecimiento.nombre, COUNT(nivelcrecimiento.id) AS 'cantidad'
+            FROM nivelcrecimiento, subnivel, grupo
+            WHERE grupo.idSubnivel = subnivel.id && subnivel.idNivelCrecimiento = nivelcrecimiento.id && grupo.estado = 0 && grupo.estatus = 1
+            GROUP BY nivelcrecimiento.id;";
+        
+        try {
+            $stmt = $db->pdo()->query($query);
+
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\Throwable $th) {
+            if (DEVELOPER_MODE) {
+                die($th->getMessage());
+            }
+            $_SESSION['erorres'][] = "Ah ocurrido un error al listar las estadisticas.";
+            throw $th;
+        }
+    }
 }
 ?>

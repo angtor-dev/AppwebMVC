@@ -96,5 +96,25 @@ class Nota extends Model
     public function setCalificacion(float $calificacion) : void {
         $this->calificacion = $calificacion;
     }
+
+    // Estadisticas
+    public static function promedioNotasPorGrupo() : array
+    {
+        $db = Database::getInstance();
+        $query = "SELECT grupo.nombre, AVG(nota.calificacion) AS promedio FROM nota, clase, grupo
+            WHERE nota.idClase = clase.id AND clase.idGrupo = grupo.id GROUP BY grupo.id;";
+        
+        try {
+            $stmt = $db->pdo()->query($query);
+
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\Throwable $th) {
+            if (DEVELOPER_MODE) {
+                die($th->getMessage());
+            }
+            $_SESSION['erorres'][] = "Ah ocurrido un error al listar las estadisticas.";
+            throw $th;
+        }
+    }
 }
 ?>

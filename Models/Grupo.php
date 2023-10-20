@@ -189,5 +189,49 @@ class Grupo extends Model
     public function setEstado(int $estado) : void {
         $this->estado = $estado;
     }
+
+    // Estadisticas
+    public static function estudiantesPorGrupo() : array
+    {
+        $db = Database::getInstance();
+        $query = "SELECT grupo.nombre, COUNT(matricula.idGrupo) AS cantidad FROM matricula, grupo
+            WHERE matricula.idGrupo = grupo.id AND grupo.estatus = 1 AND grupo.estado = 0
+            GROUP BY matricula.idGrupo;";
+        
+        try {
+            $stmt = $db->pdo()->query($query);
+
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\Throwable $th) {
+            if (DEVELOPER_MODE) {
+                die($th->getMessage());
+            }
+            $_SESSION['erorres'][] = "Ah ocurrido un error al listar las estadisticas.";
+            throw $th;
+        }
+    }
+    
+    public static function gruposPorSede() : array
+    {
+        $db = Database::getInstance();
+        $query = "SELECT sede.nombre, COUNT(sede.id) AS cantidad
+            FROM sede, escuela, nivelcrecimiento, subnivel, grupo
+            WHERE grupo.idSubnivel = subnivel.id AND subnivel.idNivelCrecimiento = nivelcrecimiento.id
+                AND nivelcrecimiento.idEscuela = escuela.id AND escuela.idSede = sede.id
+                AND grupo.estado = 0 AND grupo.estatus = 1
+            GROUP BY sede.id;";
+        
+        try {
+            $stmt = $db->pdo()->query($query);
+
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\Throwable $th) {
+            if (DEVELOPER_MODE) {
+                die($th->getMessage());
+            }
+            $_SESSION['erorres'][] = "Ah ocurrido un error al listar las estadisticas.";
+            throw $th;
+        }
+    }
 }
 ?>
