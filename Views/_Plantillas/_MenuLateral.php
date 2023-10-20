@@ -132,16 +132,16 @@
                     Grupos
                 </a>
             <?php endif ?>
-            <?php if ($usuario->tieneRol("Superusuario") || $usuario->tieneRol("Estudiante")) : ?>
-                <a href="<?= LOCAL_DIR ?>Clases" class="nav-link <?= strtolower($uriParts[0]) == "clases" ? "active" : "" ?>">
-                    <i class="fa-solid fa-chalkboard-user fa-fw me-2"></i>
-                    Clases
-                </a>
-            <?php endif ?>
             <?php if ($usuario->tienePermiso("inscripciones", "consultar")) : ?>
                 <a href="<?= LOCAL_DIR ?>Inscripciones" class="nav-link <?= strtolower($uriParts[0]) == "inscripciones" ? "active" : "" ?>">
                     <i class="fa-solid fa-clipboard-list fa-fw me-2"></i>
                     Inscripciones
+                </a>
+            <?php endif ?>
+            <?php if ($usuario->tieneRol("Superusuario") || $usuario->tieneRol("Estudiante")) : ?>
+                <a href="<?= LOCAL_DIR ?>Clases" class="nav-link <?= strtolower($uriParts[0]) == "clases" ? "active" : "" ?>">
+                    <i class="fa-solid fa-chalkboard-user fa-fw me-2"></i>
+                    Clases
                 </a>
             <?php endif ?>
         <?php endif ?>
