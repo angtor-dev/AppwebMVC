@@ -152,18 +152,18 @@
         ) : ?>
             <div class="nav-link py-0 mt-3 text-uppercase">Sistema</div>
             <?php if ($usuario->tieneRol("Superusuario")) : ?>
-                <div class="acordeon">
+                <div class="acordeon <?= strtolower($uriParts[0]) == "estadisticas" ? "show" : "" ?>">
                     <a href="#" class="nav-link acordeon-toggle">
                         <i class="fa-solid fa-chart-pie fa-fw me-2"></i>
                         Estadistica
                     </a>
                     <div class="acordeon-body">
                         <div class="acordeon-items">
-                            <a href="<?= LOCAL_DIR ?>Estadisticas/Iglesia" class="nav-link">
+                            <a href="<?= LOCAL_DIR ?>Estadisticas/Iglesia" class="nav-link <?= strtolower($uriParts[1] ?? "") == "iglesia" ? "active" : "" ?>">
                                 <i class="fa-solid fa-chart-pie fa-fw me-2"></i>
                                 Iglesia
                             </a>
-                            <a href="<?= LOCAL_DIR ?>Estadisticas/Escuela" class="nav-link">
+                            <a href="<?= LOCAL_DIR ?>Estadisticas/Escuela" class="nav-link <?= strtolower($uriParts[1] ?? "") == "escuela" ? "active" : "" ?>">
                                 <i class="fa-solid fa-chart-pie fa-fw me-2"></i>
                                 EID
                             </a>
