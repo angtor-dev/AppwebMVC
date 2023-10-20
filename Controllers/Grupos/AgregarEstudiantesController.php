@@ -4,8 +4,18 @@ necesitaAutenticacion();
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET')
 {
+    /** @var Grupo */
     $grupo = Grupo::cargar($_GET['id']);
-    $estudiantes = Usuario::listarPorRoles('Estudiante');
+    $nivel = $grupo->subnivel->nivelCrecimiento;
+    /** @var Usuario[] */
+    $estudiantesTodos = Usuario::listarPorRoles('Estudiante');
+    $estudiantes = array();
+    foreach ($estudiantesTodos as $estudiante) {
+        $grupoActivo = $estudiante->getGrupoActivo();
+        if (is_null($grupoActivo) || $grupoActivo->id == $grupo->id) {
+            $estudiantes[] = $estudiante;
+        }
+    }
     // TODO: filtrar estudiantes por sede
 
     require_once "Views/Grupos/_AgregarEstudiantes.php";

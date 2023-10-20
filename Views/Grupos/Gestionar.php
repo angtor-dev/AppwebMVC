@@ -10,7 +10,7 @@ $usuario = $_SESSION['usuario'];
         <i class="fa-solid fa-arrow-left"></i>
         Volver
     </a>
-    <?php if ($usuario->tienePermiso("inscripciones", "registrar")): ?>
+    <?php if ($usuario->tienePermiso("inscripciones", "registrar") && $grupo->getEstado() != EstadosGrupo::Finalizado->value): ?>
         <button class="btn btn-accent" onclick="abrirModalEstudiantes(<?= $grupo->id ?>)">
             <i class="fa-solid fa-pen"></i>
             Actualizar matricula

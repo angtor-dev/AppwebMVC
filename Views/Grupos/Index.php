@@ -73,7 +73,7 @@ $title = "Grupos";
                                 <i class="fa-solid fa-pen fa-fw"></i>
                             </a>
                             <a href="/AppwebMVC/Grupos/Gestionar?id=<?= $grupo->id ?>" class="btn btn-secondary px-2">
-                                Estudiantes
+                                Matricula
                             </a>
                         </div>
                     </div>
