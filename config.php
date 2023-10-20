@@ -1,7 +1,7 @@
 <?php
 date_default_timezone_set('America/Caracas');
 define("APP_NAME", "Llamas de Fuego");
-define("DEVELOPER_MODE", true);
+define("DEVELOPER_MODE", false);
 
 // Expresiones regulares
 define("REG_NUMERICO", "/^[0-9]+$/");

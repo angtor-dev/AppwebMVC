@@ -10,11 +10,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET')
     /** @var Usuario[] */
     $estudiantesTodos = Usuario::listarPorRoles('Estudiante');
     $estudiantes = array();
+
     foreach ($estudiantesTodos as $estudiante) {
         $grupoActivo = $estudiante->getGrupoActivo();
-        if (is_null($grupoActivo) || $grupoActivo->id == $grupo->id) {
-            $estudiantes[] = $estudiante;
+        $nivel = $grupoActivo->subnivel->nivelCrecimiento;
+
+        if (!is_null($grupoActivo) && $grupoActivo->id != $grupo->id) {
+            continue;
         }
+        if ($nivel->getNivel() == 1) {
+            if (true) {
+                # code...
+            }
+        }
+        $estudiantes[] = $estudiante;
     }
     // TODO: filtrar estudiantes por sede
 

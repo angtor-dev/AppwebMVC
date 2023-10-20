@@ -20,7 +20,7 @@
             </a>
         <?php endif ?>
 
-        <?php if ($usuario->tienePermiso("territorio", "consultar")) : ?>
+        <?php if ($usuario->tienePermiso("territorios", "consultar")) : ?>
             <a href="<?= LOCAL_DIR ?>Territorios/Listar" class="nav-link">
                 <i class="fa-sharp fa-solid fa-earth-americas fa-fw me-2"></i>
                 Territorios

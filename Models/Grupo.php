@@ -98,6 +98,24 @@ class Grupo extends Model
             }
     }
 
+    /** @return Grupo[] */
+    public function listarConEstudiante(int $idEstudiante) : array
+    {
+        $query = "SELECT grupo.* FROM grupo, matricula WHERE matricula.idEstudiante = $idEstudiante && matricula.idGrupo = grupo.id";
+
+        try {
+            $stmt = $this->query($query);
+
+            return $stmt->fetchAll(PDO::FETCH_CLASS, $this);
+        } catch (\Throwable $th) {
+            if (DEVELOPER_MODE) {
+                die($th->getMessage());
+            }
+            $_SESSION['errores'][] = "Ha ocurrido un error al listar los estudiantes del grupo.";
+            throw $th;
+        }
+    }
+
     public function esValido() : bool
     {
         $errores = 0;
