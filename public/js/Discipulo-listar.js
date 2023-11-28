@@ -589,17 +589,17 @@ $(document).ready(function () {
 
 
     let validaciones2 = {
-        nombre: false,
-        apellido: false,
-        cedula: false,
-        telefono: false,
-        estadoCivil: false,
-        fechaNacimiento: false,
-        fechaConvercion: false,
-        idConsolidador: false,
-        idcelulaconsolidacion: false,
-        direccion: false,
-        motivo: false
+        nombre: true,
+        apellido: true,
+        cedula: true,
+        telefono: true,
+        estadoCivil: true,
+        fechaNacimiento: true,
+        fechaConvercion: true,
+        idConsolidador: true,
+        idcelulaconsolidacion: true,
+        direccion: true,
+        motivo: true
 
     };
 

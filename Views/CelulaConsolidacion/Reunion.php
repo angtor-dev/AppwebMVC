@@ -174,14 +174,15 @@ $viewScripts = ["CelulaConsolidacion-reunion.js"];
 
     <!-- MODAL PARA EDITAR TODOS LOS DATOS DE LA Reunion -->
     <div class="modal fade" id="modal_editarAsistencia" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Editar asistencias de la Reunion</h5>
                 </div>
                 <div class="modal-body">
-                    <div class="row">
-                        <div class="table-responsive">
+                    <div class="container-fluid">
+                        
+
                             <table id="asistenciasDatatables" class="table table-hover">
                                 <thead>
                                     <tr>
@@ -193,25 +194,29 @@ $viewScripts = ["CelulaConsolidacion-reunion.js"];
                                     <!-- AQUI MOSTRARA LA INFORMACION -->
                                 </tbody>
                             </table>
-                        </div>
-                    </div>
 
-                    <div class="row mt-2">
-                        <div class="col">
+                       
+
+
+
+                        <div class="mt-2">
+
                             <select multiple name="discipulosAsistencia" id="discipulos">
 
                             </select>
                             <div class="alert alert-danger d-none" id="msj_discipulosAsistencia" role="alert">
                                 Debes seleccionar discipulos para actualizar.
                             </div>
+
+
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" id="actualizarDiscipulos" class="btn btn-primary">Actualizar</button>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" id="actualizarDiscipulos" class="btn btn-primary">Actualizar</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>

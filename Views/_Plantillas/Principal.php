@@ -27,7 +27,7 @@ if (isset($_SESSION['usuario'])) {
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/lib/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/lib/datatables/datatables.min.css">
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/lib/datatables/choicesjs/choices.css">
-    <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/lib/fullcalendar/fullcalendar.min.css">
+    <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/lib/fullcalendar/dist/index.global.min.js">
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/lib/quill/quill.snow.css">
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/css/utilities.css">
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/css/site.css">

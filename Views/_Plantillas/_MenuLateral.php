@@ -5,10 +5,7 @@
 <aside id="sidebar" class="d-flex flex-column flex-shrink-0 py-3 px-2 bg-white
     position-fixed top-0 bottom-0 border-end">
     <div class="nav flex-column mb-auto pb-5">
-        <a href="<?= LOCAL_DIR ?>" class="nav-link <?= empty($uriParts[0]) || strtolower($uriParts[0]) == "home" ? "active" : "" ?>">
-            <i class="fa-solid fa-house-chimney fa-fw me-2"></i>
-            <span>Inicio</span>
-        </a>
+       
 
         <div class="nav-link py-0 mt-3 text-uppercase">Iglesia</div>
 
@@ -27,7 +24,7 @@
             </a>
         <?php endif ?>
 
-        <a href="<?= LOCAL_DIR ?>Agenda/Index" class="nav-link">
+        <a href="<?= LOCAL_DIR ?>Agenda/Index" class="nav-link <?= empty($uriParts[0]) || strtolower($uriParts[0]) == "agenda" ? "active" : "" ?>">
             <i class="fa-solid fa-calendar fa-fw me-2"></i>
             Agenda
         </a>
@@ -115,36 +112,6 @@
             </a>
         <?php endif ?>
 
-        <?php if (
-            $usuario->tienePermiso("nivelesCrecimiento", "consultar") || $usuario->tieneRol("Profesor")
-            || $usuario->tieneRol("Estudiante")
-        ) : ?>
-            <div class="nav-link py-0 mt-3 text-uppercase">Escuela</div>
-            <?php if ($usuario->tienePermiso("nivelesCrecimiento", "consultar")) : ?>
-                <a href="<?= LOCAL_DIR ?>NivelesCrecimiento" class="nav-link <?= strtolower($uriParts[0]) == "nivelescrecimiento" ? "active" : "" ?>">
-                    <i class="fa-solid fa-graduation-cap fa-fw me-2"></i>
-                    Niv. de crecimiento
-                </a>
-            <?php endif ?>
-            <?php if ($usuario->tieneRol("Profesor") || $usuario->tieneRol("Superusuario")) : ?>
-                <a href="<?= LOCAL_DIR ?>Grupos" class="nav-link <?= strtolower($uriParts[0]) == "grupos" ? "active" : "" ?>">
-                    <i class="fa-solid fa-users-rectangle fa-fw me-2"></i>
-                    Grupos
-                </a>
-            <?php endif ?>
-            <?php if ($usuario->tienePermiso("inscripciones", "consultar")) : ?>
-                <a href="<?= LOCAL_DIR ?>Inscripciones" class="nav-link <?= strtolower($uriParts[0]) == "inscripciones" ? "active" : "" ?>">
-                    <i class="fa-solid fa-clipboard-list fa-fw me-2"></i>
-                    Inscripciones
-                </a>
-            <?php endif ?>
-            <?php if ($usuario->tieneRol("Superusuario") || $usuario->tieneRol("Estudiante")) : ?>
-                <a href="<?= LOCAL_DIR ?>Clases" class="nav-link <?= strtolower($uriParts[0]) == "clases" ? "active" : "" ?>">
-                    <i class="fa-solid fa-chalkboard-user fa-fw me-2"></i>
-                    Clases
-                </a>
-            <?php endif ?>
-        <?php endif ?>
 
         <?php if (
             $usuario->tienePermiso("usuarios", "consultar") || $usuario->tienePermiso("roles", "consultar")

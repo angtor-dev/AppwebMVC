@@ -9,7 +9,7 @@ require_once "Models/Bitacora.php";
 session_start();
 
 $defaultController = "Index";
-$defaultPath = "Home/";
+$defaultPath = "Agenda/";
 
 // Carpeta relativa actual del proyecto
 $relativePath = substr($_SERVER['PHP_SELF'], 0, strpos($_SERVER['PHP_SELF'], "index.php"));
