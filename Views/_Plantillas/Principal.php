@@ -27,7 +27,6 @@ if (isset($_SESSION['usuario'])) {
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/lib/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/lib/datatables/datatables.min.css">
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/lib/datatables/choicesjs/choices.css">
-    <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/lib/fullcalendar/dist/index.global.min.js">
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/lib/quill/quill.snow.css">
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/css/utilities.css">
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/css/site.css">
@@ -179,6 +178,9 @@ if (isset($_SESSION['usuario'])) {
     <script src="<?= LOCAL_DIR ?>public/lib/quill/quill.min.js"></script>
     <script src="<?= LOCAL_DIR ?>public/js/utilities.js"></script>
     <script src="<?= LOCAL_DIR ?>public/js/site.js"></script>
+    
+    <script src="<?= LOCAL_DIR ?>public/lib/fullcalendar/dist/index.global.min.js"></script>
+    
     <?php if (!empty($viewScripts)) : ?>
         <?php foreach ($viewScripts as $script) : ?>
             <script src="<?= LOCAL_DIR ?>public/js/<?= $script ?>"></script>
