@@ -9,59 +9,98 @@ $title = "Agenda"
 ?>
 
 <style>
-
   #calendar {
     font-size: 14px;
     max-width: 1100px;
     margin: 0 auto;
   }
 
-.fc-daygrid-day-number {
-  color: black;
-}
-
-.fc-col-header-cell-cushion {
+  .fc-daygrid-day-number {
     color: black;
-}
+  }
 
-</style>  
+  .fc-col-header-cell-cushion {
+    color: black;
+  }
+</style>
 
 
 <div id="calendar"></div>
 
 
 
-   
+
 <div class="modal fade" id="exampleModal" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Informacion del Territorio</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <!-- AQUI TE ESTA TODA LA INFORAMCION DE MANERA ESTATICA, ES DECIR, SOLO PARA MOSTRAR INFO -->
-                    <ul class="list-group">
-                        <li class="list-group-item "><strong>Codigo:</strong>
-                            <p id="inf_codigo"></p>
-                        </li>
-                        <li class="list-group-item "><strong>Nombre de Territorio:</strong>
-                            <p id="inf_nombre"></p>
-                        </li>
-                        <li class="list-group-item "><strong>Lider a cargo:</strong>
-                            <p id="inf_idLider"></p>
-                        </li>
-                        <li class="list-group-item ">
-                            <h6><strong>Detalles:</strong></h6>
-                            <p id="inf_detalles"></p>
-                        </li>
-                    </ul>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Agregar Evento</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- AQUI TE ESTA TODA LA INFORAMCION DE MANERA ESTATICA, ES DECIR, SOLO PARA MOSTRAR INFO -->
+        <form id="formulario">
 
-                    <div class="d-flex justify-content-end">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    </div>
-                </div>
+
+          <p id="hola"></p>
+          <div class="mb-3">
+            <label for="evento" class="form-label fw-bold">Nombre del Evento:</label>
+            <input type="text" class="form-control" id="evento" maxlength="50" name="evento">
+
+            <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_evento" role="alert">
+              Este campo es obligatorio.
             </div>
-        </div>
-    </div>
+          </div>
 
+          <div class="row my-2">
+            <div class="col-md-6">
+              <label for="fechaInicio" class="form-label fw-bold">Fecha de Inicio:</label>
+              <input type="date" class="form-control" id="fechaInicio" maxlength="50" name="fechaInicio">
+
+              <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_fechaInicio" role="alert">
+                Este campo es obligatorio.
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label for="fechaCierre" class="form-label fw-bold">Fecha de Cierre:</label>
+              <input type="date" class="form-control" id="fechaCierre" maxlength="50" name="fechaCierre">
+
+              <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_fechaCierre" role="alert">
+                Este campo es obligatorio.
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="sedes" class="form-label fw-bold">Sedes</label>
+            <select class="form-select" id="idSede" name="idSede">
+            </select>
+            <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_idSede" role="alert">
+              Debe seleccionar al menos una sede.
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="detalles" class="form-label fw-bold">Detalles sobre el evento:</label>
+            <textarea class="form-control" id="detalles" maxlength="150" name="detalles"></textarea>
+
+            <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_detalles" role="alert">
+              Este campo no puede estar vacio.
+            </div>
+          </div>
+
+
+
+          <div class="modal-footer">
+
+            <button type="button" class="btn btn-secondary">Agregar</button>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+</div>
+</div>
