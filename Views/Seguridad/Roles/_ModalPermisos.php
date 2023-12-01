@@ -85,26 +85,72 @@
                                         Eliminar
                                     </label>
                                 </div>
-                                <h5>Agenda</h5>
+                                <h5>Agenda de Apostol</h5>
                                 <div class="d-flex flex-wrap gap-3 mb-3">
                                     <label class="pill-check">
-                                        <input type="checkbox" name="eventos[consultar]" value="true"
-                                            <?= $rol->tienePermiso("eventos", "consultar") ? "checked" : null ?>>
+                                        <input type="checkbox" name="agendaApostol[consultar]" value="true"
+                                            <?= $rol->tienePermiso("agendaApostol", "consultar") ? "checked" : null ?>>
                                         Consultar
                                     </label>
                                     <label class="pill-check">
-                                        <input type="checkbox" name="eventos[registrar]" value="true"
-                                            <?= $rol->tienePermiso("eventos", "registrar") ? "checked" : null ?>>
+                                        <input type="checkbox" name="agendaApostol[registrar]" value="true"
+                                            <?= $rol->tienePermiso("agendaApostol", "registrar") ? "checked" : null ?>>
                                         Registrar
                                     </label>
                                     <label class="pill-check">
-                                        <input type="checkbox" name="eventos[actualizar]" value="true"
-                                            <?= $rol->tienePermiso("eventos", "actualizar") ? "checked" : null ?>>
+                                        <input type="checkbox" name="agendaApostol[actualizar]" value="true"
+                                            <?= $rol->tienePermiso("agendaApostol", "actualizar") ? "checked" : null ?>>
                                         Actualizar
                                     </label>
                                     <label class="pill-check">
-                                        <input type="checkbox" name="eventos[eliminar]" value="true"
-                                            <?= $rol->tienePermiso("eventos", "eliminar") ? "checked" : null ?>>
+                                        <input type="checkbox" name="agendaApostol[eliminar]" value="true"
+                                            <?= $rol->tienePermiso("agendaApostol", "eliminar") ? "checked" : null ?>>
+                                        Eliminar
+                                    </label>
+                                </div>
+                                <h5>Agenda de Pastor</h5>
+                                <div class="d-flex flex-wrap gap-3 mb-3">
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="agendaPastor[consultar]" value="true"
+                                            <?= $rol->tienePermiso("agendaPastor", "consultar") ? "checked" : null ?>>
+                                        Consultar
+                                    </label>
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="agendaPastor[registrar]" value="true"
+                                            <?= $rol->tienePermiso("agendaPastor", "registrar") ? "checked" : null ?>>
+                                        Registrar
+                                    </label>
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="agendaPastor[actualizar]" value="true"
+                                            <?= $rol->tienePermiso("agendaPastor", "actualizar") ? "checked" : null ?>>
+                                        Actualizar
+                                    </label>
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="agendaPastor[eliminar]" value="true"
+                                            <?= $rol->tienePermiso("agendaPastor", "eliminar") ? "checked" : null ?>>
+                                        Eliminar
+                                    </label>
+                                </div>
+                                <h5>Agenda de Usuario</h5>
+                                <div class="d-flex flex-wrap gap-3 mb-3">
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="agendaUsuario[consultar]" value="true"
+                                            <?= $rol->tienePermiso("agendaUsuario", "consultar") ? "checked" : null ?>>
+                                        Consultar
+                                    </label>
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="agendaUsuario[registrar]" value="true"
+                                            <?= $rol->tienePermiso("agendaUsuario", "registrar") ? "checked" : null ?>>
+                                        Registrar
+                                    </label>
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="agendaUsuario[actualizar]" value="true"
+                                            <?= $rol->tienePermiso("agendaUsuario", "actualizar") ? "checked" : null ?>>
+                                        Actualizar
+                                    </label>
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="agendaUsuario[eliminar]" value="true"
+                                            <?= $rol->tienePermiso("agendaUsuario", "eliminar") ? "checked" : null ?>>
                                         Eliminar
                                     </label>
                                 </div>

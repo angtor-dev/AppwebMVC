@@ -3,10 +3,23 @@ global $viewStyles;
 global $viewScripts;
 $viewScripts = ["agenda.js"];
 
-/** @var Usuario */
-$usuario = $_SESSION['usuario'];
 $title = "Agenda"
 ?>
+
+<script>
+    const permisos = {
+        registrar: <?php echo $usuario->tienePermiso("agendaApostol", "registrar") ? 1 : 0 ?>,
+        consultar: <?php echo $usuario->tienePermiso("agendaApostol", "consultar") ? 1 : 0 ?>,
+        actualizar: <?php echo $usuario->tienePermiso("agendaApostol", "actualizar") ? 1 : 0 ?>,
+        eliminar: <?php echo $usuario->tienePermiso("agendaApostol", "eliminar") ? 1 : 0 ?>,
+        registrarFeedback: <?php echo $usuario->tienePermiso("agendaPastor", "registrar") ? 1 : 0 ?>,
+        consultarFeedback: <?php echo $usuario->tienePermiso("agendaPastor", "consultar") ? 1 : 0 ?>,
+        actualizarFeedback: <?php echo $usuario->tienePermiso("agendaPastor", "actualizar") ? 1 : 0 ?>,
+        eliminarFeedback: <?php echo $usuario->tienePermiso("agendaPastor", "eliminar") ? 1 : 0 ?>
+    }
+
+    console.log(permisos);
+</script>
 
 <style>
   #calendar {
@@ -24,7 +37,7 @@ $title = "Agenda"
   }
 </style>
 
-
+<h1><?php echo $usuario->idSede ?></h1>
 <div id="calendar"></div>
 
 

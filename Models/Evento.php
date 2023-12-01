@@ -8,19 +8,27 @@ class Evento extends Model
     {
 
         try {
+            /** @var Usuario */
+            $usuario = $_SESSION['usuario'];
 
-            $sql = "SELECT id AS id, titulo AS title,
-             fechaInicio AS start, fechaFinal AS end,
-             descripcion AS descripcion FROM Evento";
+            if ($usuario->tienePermiso("agendaApostol", "consultar")) {
+                $sql = "SELECT evento.id, evento.titulo AS `title`, evento.descripcion AS `description`, evento.fechaInicio AS `start`, evento.fechaFinal AS `end`, eventosede.idSede as idSede, eventosede.comentario FROM evento 
+                INNER JOIN eventosede on eventosede.idEvento = evento.id";
+    
+                $stmt = $this->db->pdo()->prepare($sql);
+    
+                $stmt->execute();
+                $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            }else{
+                $sql = 'SELECT evento.id, evento.titulo, evento.descripcion, evento.fechaInicio, evento.fechaFinal, eventosede.idSede as idSede, eventosede.comentario FROM evento 
+                INNER JOIN eventosede on eventosede.idEvento = evento.id AND eventosede.idSede = :idSede';
+                $stmt = $this->db->pdo()->prepare($sql);
+                $stmt->bindValue(":idSede", $usuario->idSede);
+                $stmt->execute();
+                $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            }
 
-
-            $stmt = $this->db->pdo()->prepare($sql);
-
-            $stmt->execute();
-            $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-            Bitacora::registrar("Consulta Agenda de Eventos");
-
+           
             return $resultado;
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(

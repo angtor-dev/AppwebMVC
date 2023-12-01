@@ -455,7 +455,7 @@ class Discipulo extends Model
         $query = "SELECT * FROM discipulo WHERE cedula = :cedula AND estatus = 1 LIMIT 1";
 
         $stmt = $bd->pdo()->prepare($query);
-        $stmt->bindValue("cedula", $cedula);
+        $stmt->bindValue(":cedula", $cedula);
 
         $stmt->execute();
         $stmt->setFetchMode(PDO::FETCH_CLASS, "Discipulo");

@@ -23,7 +23,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST')
     }
 
     $_SESSION['exitos'][] = "Rol registrado con exito.";
-    Bitacora::registrar("Rigstro el rol ".$rol->getNombre());
+    Bitacora::registrar("Registro el rol ".$rol->getNombre());
     header("Location: /AppwebMVC/Seguridad/Roles/");
 }
 else {
