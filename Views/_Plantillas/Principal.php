@@ -180,8 +180,6 @@ if (isset($_SESSION['usuario'])) {
     <script src="<?= LOCAL_DIR ?>public/js/site.js"></script>
     <script src="<?= LOCAL_DIR ?>public/lib/fullcalendar/dist/index.global.min.js"></script>
     <script src="<?= LOCAL_DIR ?>public/lib/fullcalendar/packages/core/locales/es.global.js"></script>
-    
-    
   
     
     <?php if (!empty($viewScripts)) : ?>

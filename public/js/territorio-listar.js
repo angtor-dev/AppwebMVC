@@ -248,7 +248,6 @@ $(document).ready(function () {
                     placeholderValue: 'Selecciona una opción',  // Texto del placeholder
                 });
 
-                choices2.setChoiceByValue('');
 
             },
             error: function (jqXHR, textStatus, errorThrown) {

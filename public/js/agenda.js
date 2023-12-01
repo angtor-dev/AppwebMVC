@@ -1,10 +1,9 @@
-document.addEventListener('DOMContentLoaded', function () {
-  var calendarDiv = document.getElementById('calendar');
+document.addEventListener('DOMContentLoaded', function() {
+    
 
-  const right = permisos.registrar ? 'addEventButton dayGridMonth,listMonth' : 'dayGridMonth,listMonth'
-
-
-  var calendar = new FullCalendar.Calendar(calendarDiv, {
+    let choices1;
+   var calendarDiv = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarDiv, {
 
     headerToolbar: {
       left: 'prev,next today',
@@ -16,11 +15,10 @@ document.addEventListener('DOMContentLoaded', function () {
       addEventButton: {
         text: 'Agregar Evento',
         click: function () {
-
-          $('#exampleModal').modal('show');
-
-        }
-      },
+            $('#agregar').modal('show');
+            Listar_Sedes();
+          }
+        },
     },
 
     locale: 'es',
@@ -28,63 +26,161 @@ document.addEventListener('DOMContentLoaded', function () {
     businessHours: true, // display business hours
     editable: false,
 
-
-    events: {
-
-      url: 'http://localhost/AppwebMVC/Agenda/Index',
-      method: 'GET',
-      extraParams: {
-        listarEventos: 'listarEventos',
+      events: {
+        url: 'http://localhost/AppwebMVC/Agenda/Index',
+        method: 'GET',
+        extraParams: {
+          listarEventos: 'listarEventos',
+        },
+        color: '#FFD28E',   // a non-ajax option
+        textColor: 'black'
       },
-      color: '#FFD28E',   // a non-ajax option
-      textColor: 'black' // a non-ajax option
+
+    eventClick: function(info) {
+   
+      $('#').html(info.event.extendedProps.descripcion);
+      
     },
+    })
 
-    eventClick: function (info) {
-
-      $('#hola').html(info.event.extendedProps.descripcion);
-
-      $('#exampleModal').modal('show');
-      // change the day's background color just for fun
-
-    },
+    
 
 
 
-  });
 
-  
+function Listar_Sedes() {
 
-  calendar.render();
-
-  function Listar_Eventos() {
-
-    $.ajax({
+  $.ajax({
       type: "GET",
       url: "http://localhost/AppwebMVC/Agenda/Index",
       data: {
 
-        listarEventos: 'listarEventos',
+          listaSedes: 'listaSedes',
 
       },
       success: function (response) {
+ 
+          console.log(response);
 
-        console.log(response);
-        let data = JSON.parse(response);
-        calendar.refetchEvents()
+          let data = JSON.parse(response);
+
+          let selector = document.getElementById('sedes');  
+          
+          // Destruir la instancia existente si la hay
+          if (choices1) {
+              choices1.destroy();
+          }
+
+
+          selector.innerHTML = '';
+
+          data.forEach(item => {
+
+              const option = document.createElement('option');
+              option.value = item.id;
+              option.text = `${item.codigo} ${item.nombre}`;
+              selector.appendChild(option);
+
+          });
+
+        
+
+          choices1 = new Choices(selector, {
+              allowHTML: true,
+              searchEnabled: true,  // Habilita la funcionalidad de búsqueda
+              removeItemButton: true,  // Habilita la posibilidad de remover items
+              placeholderValue: 'Selecciona una opción',  // Texto del placeholder
+          }); 
+
+
       },
       error: function (jqXHR, textStatus, errorThrown) {
-        // Aquí puedes manejar errores, por ejemplo:
-        console.error("Error al enviar:", textStatus, errorThrown);
-        alert("Hubo un error al obtener los eventos");
+          // Aquí puedes manejar errores, por ejemplo:
+          console.error("Error al enviar:", textStatus, errorThrown);
+          alert("Hubo un error al realizar el registro. Por favor, inténtalo de nuevo.");
       }
-    })
-  }
+  })
+}
 
-  document.getElementById('hey').addEventListener('click', function name(params) {
-    calendar.destroy()
-  })
-  document.getElementById('otro').addEventListener('click', function name(params) {
-    calendar.getEvents(Listar_Eventos())
-  })
-})
+
+
+//registrar
+
+
+const validacion1 = {
+
+  titulo: false,
+  fechaInicio: false,
+  fechaCierre: false,
+  descripcion: false
+
+}
+
+
+const form = document.getElementById("formulario1");
+console.log(form);
+
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+      const datos = {
+         registroEventos: 'registroEventos',
+             titulo: document.getElementById("titulo").value,
+          fechaInicio: document.getElementById("fechaInicio").value,
+       fechaFinal: document.getElementById("fechaFinal").value,
+       descripcion:  document.getElementById("descripcion").value,
+       sedes: $('#sedes').val() 
+      }
+      
+
+         $.ajax({
+        
+          type: "POST",
+          url: "http://localhost/AppwebMVC/Agenda/Index",
+          data: datos,
+          success: function (response) {
+            console.log(response);
+              let data = JSON.parse(response);
+              
+
+              // Aquí puedes manejar una respuesta exitosa, por ejemplo:
+              console.log("Respuesta del servidor:", data);
+              Swal.fire({
+                  icon: 'success',
+                  title: data.msj,
+                  showConfirmButton: false,
+                  timer: 2000,
+              })
+              calendar.refetchEvents();
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+              if (jqXHR.responseText) {
+                  let jsonResponse = JSON.parse(jqXHR.responseText);
+
+                  if (jsonResponse.msj) {
+                      Swal.fire({
+                          icon: 'error',
+                          title: 'Denegado',
+                          text: jsonResponse.msj,
+                          showConfirmButton: true,
+                      })
+                  } else {
+                      const respuesta = JSON.stringify(jsonResponse, null, 2)
+                      Swal.fire({
+                          background: 'red',
+                          color: '#fff',
+                          title: respuesta,
+                          showConfirmButton: true,
+                      })
+                  }
+              } else {
+                  alert('Error desconocido: ' + textStatus);
+              }}
+          
+      
+
+  }); 
+}); 
+      
+  
+calendar.render();
+});
