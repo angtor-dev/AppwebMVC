@@ -12,9 +12,9 @@ class Evento extends Model
             $usuario = $_SESSION['usuario'];
 
             if ($usuario->tienePermiso("agendaApostol", "consultar")) {
-                /*$sql = "SELECT evento.id, evento.titulo AS `title`, evento.descripcion AS `description`, evento.fechaInicio AS `start`, evento.fechaFinal AS `end`, eventosede.idSede as idSede, eventosede.comentario FROM evento 
+                /*$sql = "SELECT evento.id, evento.titulo AS `title`, evento.descripcion AS `descripcion`, evento.fechaInicio AS `start`, evento.fechaFinal AS `end`, eventosede.idSede AS `idSede`, eventosede.comentario FROM evento 
                 INNER JOIN eventosede on eventosede.idEvento = evento.id";*/
-                $sql = 'SELECT evento.id, evento.titulo AS `title`, evento.descripcion AS `description`, evento.fechaInicio AS `start`, evento.fechaFinal AS `end` FROM evento';
+                $sql = 'SELECT evento.id, evento.titulo AS `title`, evento.descripcion AS `descripcion`, evento.fechaInicio AS `start`, evento.fechaFinal AS `end` FROM evento';
 
                 $stmt = $this->db->pdo()->prepare($sql);
 
@@ -22,7 +22,7 @@ class Evento extends Model
                 $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             } else {
-                $sql = 'SELECT evento.id, evento.titulo, evento.descripcion, evento.fechaInicio, evento.fechaFinal, eventosede.idSede as idSede, eventosede.comentario FROM evento 
+                $sql = 'SELECT evento.id, evento.titulo AS `title`, evento.descripcion AS `descripcion`, evento.fechaInicio AS `start`, evento.fechaFinal AS `end`, eventosede.idSede AS `idSede`, eventosede.comentario FROM evento 
                 INNER JOIN eventosede on eventosede.idEvento = evento.id AND eventosede.idSede = :idSede';
                 $stmt = $this->db->pdo()->prepare($sql);
                 $stmt->bindValue(":idSede", $usuario->idSede);

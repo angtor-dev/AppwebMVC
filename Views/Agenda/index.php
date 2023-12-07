@@ -4,7 +4,7 @@ global $viewScripts;
 $viewScripts = ["agenda.js"];
 
 $title = "Agenda"
-?>
+    ?>
 
 <script>
     const permisos = {
@@ -12,10 +12,10 @@ $title = "Agenda"
         consultar: <?php echo $usuario->tienePermiso("agendaApostol", "consultar") ? 1 : 0 ?>,
         actualizar: <?php echo $usuario->tienePermiso("agendaApostol", "actualizar") ? 1 : 0 ?>,
         eliminar: <?php echo $usuario->tienePermiso("agendaApostol", "eliminar") ? 1 : 0 ?>,
-        registrarFeedback: <?php echo $usuario->tienePermiso("agendaPastor", "registrar") ? 1 : 0 ?>,
-        consultarFeedback: <?php echo $usuario->tienePermiso("agendaPastor", "consultar") ? 1 : 0 ?>,
-        actualizarFeedback: <?php echo $usuario->tienePermiso("agendaPastor", "actualizar") ? 1 : 0 ?>,
-        eliminarFeedback: <?php echo $usuario->tienePermiso("agendaPastor", "eliminar") ? 1 : 0 ?>,
+        registrarComentario: <?php echo $usuario->tienePermiso("agendaPastor", "registrar") ? 1 : 0 ?>,
+        consultarComentario: <?php echo $usuario->tienePermiso("agendaPastor", "consultar") ? 1 : 0 ?>,
+        actualizarComentario: <?php echo $usuario->tienePermiso("agendaPastor", "actualizar") ? 1 : 0 ?>,
+        eliminarComentario: <?php echo $usuario->tienePermiso("agendaPastor", "eliminar") ? 1 : 0 ?>,
         consultarUsuario: <?php echo $usuario->tienePermiso("agendaUsuario", "consultar") ? 1 : 0 ?>
     }
 
@@ -23,19 +23,19 @@ $title = "Agenda"
 </script>
 
 <style>
-#calendar {
-    font-size: 14px;
-    max-width: 1100px;
-    margin: 0 auto;
-}
+    #calendar {
+        font-size: 14px;
+        max-width: 1100px;
+        margin: 0 auto;
+    }
 
-.fc-daygrid-day-number {
-    color: black;
-}
+    .fc-daygrid-day-number {
+        color: black;
+    }
 
-.fc-col-header-cell-cushion {
-    color: black;
-}
+    .fc-col-header-cell-cushion {
+        color: black;
+    }
 </style>
 
 <div id="calendar"></div>
@@ -137,20 +137,22 @@ $title = "Agenda"
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="editarfechaInicio" class="form-label fw-bold">Fecha de Inicio</label>
-                            <input type="date" class="form-control" id="editarfechaInicio" maxlength="50" name="editarfechaInicio">
+                            <input type="date" class="form-control" id="editarfechaInicio" maxlength="50"
+                                name="editarfechaInicio">
 
-                            <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_editarfechaInicio"
-                                role="alert">
+                            <div class="alert alert-danger d-flex align-items-center mt-3 d-none"
+                                id="msj_editarfechaInicio" role="alert">
                                 Este campo es obligatorio.
                             </div>
                         </div>
 
                         <div class="col-md-6">
                             <label for="editarfechaFinal" class="form-label fw-bold">Fecha de Cierre</label>
-                            <input type="date" class="form-control" id="editarfechaFinal" maxlength="50" name="editarfechaFinal">
+                            <input type="date" class="form-control" id="editarfechaFinal" maxlength="50"
+                                name="editarfechaFinal">
 
-                            <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_editarfechaFinal"
-                                role="alert">
+                            <div class="alert alert-danger d-flex align-items-center mt-3 d-none"
+                                id="msj_editarfechaFinal" role="alert">
                                 Este campo es obligatorio.
                             </div>
                         </div>
@@ -158,7 +160,8 @@ $title = "Agenda"
 
                     <div class="mb-3">
                         <label for="editarDescripcion" class="form-label fw-bold">Detalles sobre el evento</label>
-                        <textarea class="form-control" id="editarDescripcion" maxlength="200" name="editarDescripcion"></textarea>
+                        <textarea class="form-control" id="editarDescripcion" maxlength="200"
+                            name="editarDescripcion"></textarea>
 
                         <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_editarDescripcion"
                             role="alert">
@@ -173,8 +176,7 @@ $title = "Agenda"
                                 <thead>
                                     <tr>
                                         <th>Sede</th>
-                                        <th>Comentario</th>
-                                        <th>Opcion</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -186,18 +188,23 @@ $title = "Agenda"
 
                     <div class="mb-3">
                         <label for="sedes_sin_agregar" class="form-label fw-bold">Agregar Sedes</label>
-                        <select multiple class="form-select" id="sedes_sin_agregar" name="sedes_sin_agregar">
-                        </select>
-                        <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_sedes_sin_agregar"
-                            role="alert">
-                            Debe seleccionar al menos una sede.
+                        <div class="d-grid">
+                            <select multiple class="form-select" id="sedes_sin_agregar" name="sedes_sin_agregar">
+                            </select>
+                            <button type="submit" class="btn btn-light border border-black">Agregar</button>
+
+                            <div class="alert alert-danger d-flex align-items-center mt-3 d-none"
+                                id="msj_sedes_sin_agregar" role="alert">
+                                Debe seleccionar al menos una sede.
+                            </div>
                         </div>
                     </div>
 
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary">Actualizar</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary">Actualizar</button>
+                            <button type="button" class="btn btn-danger">Eliminar</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        </div>
                 </form>
             </div>
 
@@ -207,44 +214,44 @@ $title = "Agenda"
 
 
 
-<!--Ver Evento rol Usuario -->
-<div class="modal fade" id="editarEvento" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+<!--Ver Evento rol Pastor -->
+<div class="modal fade" id="verEventoPastor" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Editar Evento</h5>
+                <h5 class="modal-title">Detalles del evento</h5>
             </div>
             <div class="modal-body">
                 <form id="editarFormulario">
                     <div class="mb-3">
-                        <label for="nombreEditar" class="form-label fw-bold">Nombre del Evento</label>
-                        <input type="text" class="form-control" id="nombreEditar" maxlength="50" name="nombreEditar">
+                        <label class="form-label fw-bold">Nombre del Evento</label>
+                        <h6 id="nombre2"></h6>
                     </div>
 
-                    <div class="row my-2">
+                    <div class="row mb-3">
                         <div class="col-md-6">
-                            <label for="editarfechaInicio" class="form-label fw-bold">Fecha de Inicio</label>
-                            <input type="date" class="form-control" id="editarfechaInicio" maxlength="50" name="editarfechaInicio">
+                            <label class="form-label fw-bold">Fecha de Inicio</label>
+                            <h6 id="fechaInicio2"></h6>
                         </div>
 
                         <div class="col-md-6">
-                            <label for="editarfechaFinal" class="form-label fw-bold">Fecha de Cierre</label>
-                            <input type="date" class="form-control" id="editarfechaFinal" maxlength="50" name="editarfechaFinal">
+                            <label class="form-label fw-bold">Fecha de Cierre</label>
+                            <h6 id="fechaCierre2"></h6>
                         </div>
                     </div>
 
                     <div class="mb-3">
-                        <label for="editarDescripcion" class="form-label fw-bold">Detalles sobre el evento:</label>
-                        <textarea class="form-control" id="editarDescripcion" maxlength="200" name="editarDescripcion"></textarea>
+                        <label class="form-label fw-bold">Detalles sobre el evento:</label>
+                        <h6 id="descripcion2"></h6>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="editarSede" class="form-label fw-bold">Comentario</label>
-                        <textarea class="form-control" id="comentarioUsuario" maxlength="200"></textarea>
+                    <div class="mb-3 d-grid">
+                        <label class="form-label fw-bold">Comentario</label>
+                        <textarea class="form-control mb-2" id="comentarioPastor" maxlength="200"></textarea>
+                        <button type="button" class="btn btn-primary">Actualizar comentario</button>
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary">Actualizar comentario</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                     </div>
                 </form>
@@ -254,20 +261,43 @@ $title = "Agenda"
     </div>
 </div>
 
-<!-- Modal de ver comentarios -->
-<div class="modal fade" id="modalComentario" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Comentario de la sede</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <h6 id="comentarioSede"></h6>
-      </div>
-      <div class="modal-footer">
-        <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
-      </div>
+
+
+<div class="modal fade" id="verEventoUsuario" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Detalles del evento</h5>
+            </div>
+            <div class="modal-body">
+                <form id="editarFormulario">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Nombre del Evento</label>
+                        <h6 id="nombre3"></h6>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Fecha de Inicio</label>
+                            <h6 id="fechaInicio3"></h6>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Fecha de Cierre</label>
+                            <h6 id="fechaCierre3"></h6>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Detalles sobre el evento:</label>
+                        <h6 id="descripcion3"></h6>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-  </div>
 </div>

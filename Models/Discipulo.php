@@ -28,7 +28,7 @@ class Discipulo extends Model
     private $expresion_telefono = '/^(0414|0424|0416|0426|0412)[0-9]{7}/';
 
 
-    public  function registrar_discipulo(
+    public function registrar_discipulo(
         $asisCrecimiento,
         $asisFamiliar,
         $idConsolidador,
@@ -111,7 +111,7 @@ class Discipulo extends Model
     }
 
 
-    public  function listar_Consolidador()
+    public function listar_Consolidador()
     {
 
         try {
@@ -136,7 +136,7 @@ class Discipulo extends Model
 
 
 
-    public  function listar_celulas()
+    public function listar_celulas()
     {
 
         try {
@@ -159,12 +159,16 @@ class Discipulo extends Model
         }
     }
 
-    public  function listar_discipulo()
+    public function listar_discipulo()
     {
 
         try {
 
-            $sql = "SELECT 
+            /** @var Usuario */
+            $usuario = $_SESSION['usuario'];
+
+            if ($usuario->tieneRol("Superusuario")) {
+                $sql = "SELECT 
             Consolidador.id AS idConsolidador,
             Consolidador.nombre AS nombreConsolidador,
             Consolidador.apellido AS apellidoConsolidador,
@@ -193,6 +197,38 @@ class Discipulo extends Model
             INNER JOIN celulas ON discipulo.idCelulaConsolidacion = celulas.id
         GROUP BY
             discipulo.id";
+            } else {
+                $sql = "SELECT 
+            Consolidador.id AS idConsolidador,
+            Consolidador.nombre AS nombreConsolidador,
+            Consolidador.apellido AS apellidoConsolidador,
+            Consolidador.cedula AS cedulaConsolidador,
+            celulas.id AS idCelulaConsolidacion,
+            celulas.codigo,
+            discipulo.id,
+            discipulo.asisCrecimiento,
+            discipulo.asisFamiliar,
+            discipulo.idConsolidador,
+            discipulo.idCelulaConsolidacion,
+            discipulo.cedula,
+            discipulo.nombre,
+            discipulo.apellido,
+            discipulo.telefono,
+            discipulo.direccion,
+            discipulo.estadoCivil,
+            discipulo.motivo,
+            discipulo.fechaNacimiento,
+            discipulo.fechaConvercion,
+            COALESCE(COUNT(asistencia.id), 0) AS asistencias
+        FROM
+            discipulo
+            INNER JOIN usuario AS Consolidador ON discipulo.idConsolidador = Consolidador.id
+            LEFT JOIN asistencia ON discipulo.id = asistencia.idDiscipulo
+            INNER JOIN celulas ON discipulo.idCelulaConsolidacion = celulas.id
+            WHERE Consolidador.idSede = " . $usuario->idSede . "
+        GROUP BY
+            discipulo.id";
+            }
 
 
             $stmt = $this->db->pdo()->prepare($sql);
@@ -215,7 +251,7 @@ class Discipulo extends Model
         }
     }
 
-    public  function editar_discipulo(
+    public function editar_discipulo(
         $id,
         $asisCrecimiento,
         $asisFamiliar,
@@ -234,7 +270,7 @@ class Discipulo extends Model
 
         try {
 
-                $sql = "UPDATE discipulo SET
+            $sql = "UPDATE discipulo SET
                         asisCrecimiento = :asisCrecimiento,
                         asisFamiliar = :asisFamiliar,
                         idConsolidador = :idConsolidador,
@@ -252,25 +288,25 @@ class Discipulo extends Model
                         id = :id";
 
 
-                $stmt = $this->db->pdo()->prepare($sql);
+            $stmt = $this->db->pdo()->prepare($sql);
 
-                $stmt->bindValue(':id', $id);
-                $stmt->bindValue(':asisCrecimiento', $asisCrecimiento);
-                $stmt->bindValue(':asisFamiliar', $asisFamiliar);
-                $stmt->bindValue(':idConsolidador', $idConsolidador);
-                $stmt->bindValue(':idCelulaConsolidacion', $idCelulaConsolidacion);
-                $stmt->bindValue(':cedula', $cedula);
-                $stmt->bindValue(':nombre', $nombre);
-                $stmt->bindValue(':apellido', $apellido);
-                $stmt->bindValue(':telefono', $telefono);
-                $stmt->bindValue(':direccion', $direccion);
-                $stmt->bindValue(':estadoCivil', $estadoCivil);
-                $stmt->bindValue(':motivo', $motivo);
-                $stmt->bindValue(':fechaNacimiento', $fechaNacimiento);
-                $stmt->bindValue(':fechaConvercion', $fechaConvercion);
+            $stmt->bindValue(':id', $id);
+            $stmt->bindValue(':asisCrecimiento', $asisCrecimiento);
+            $stmt->bindValue(':asisFamiliar', $asisFamiliar);
+            $stmt->bindValue(':idConsolidador', $idConsolidador);
+            $stmt->bindValue(':idCelulaConsolidacion', $idCelulaConsolidacion);
+            $stmt->bindValue(':cedula', $cedula);
+            $stmt->bindValue(':nombre', $nombre);
+            $stmt->bindValue(':apellido', $apellido);
+            $stmt->bindValue(':telefono', $telefono);
+            $stmt->bindValue(':direccion', $direccion);
+            $stmt->bindValue(':estadoCivil', $estadoCivil);
+            $stmt->bindValue(':motivo', $motivo);
+            $stmt->bindValue(':fechaNacimiento', $fechaNacimiento);
+            $stmt->bindValue(':fechaConvercion', $fechaConvercion);
 
-                $stmt->execute();
-            
+            $stmt->execute();
+
 
             Bitacora::registrar("Actualizacion de datos de discipulo");
 
@@ -289,7 +325,7 @@ class Discipulo extends Model
         }
     }
 
-    public  function eliminar_discipulo($id)
+    public function eliminar_discipulo($id)
     {
 
         try {
@@ -449,7 +485,7 @@ class Discipulo extends Model
         }
     }
 
-    public static function cargarPorCedula(string|int $cedula) : null|Discipulo
+    public static function cargarPorCedula(string|int $cedula): null|Discipulo
     {
         $bd = Database::getInstance();
         $query = "SELECT * FROM discipulo WHERE cedula = :cedula AND estatus = 1 LIMIT 1";
@@ -466,7 +502,7 @@ class Discipulo extends Model
         return $stmt->fetch();
     }
 
-    public function marcarUsuarioCreado() : void
+    public function marcarUsuarioCreado(): void
     {
         try {
             $query = "UPDATE discipulo SET aprobarUsuario = 2 WHERE id = $this->id";
@@ -494,7 +530,7 @@ class Discipulo extends Model
             $stmt->execute();
 
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
-            
+
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -507,46 +543,60 @@ class Discipulo extends Model
     }
 
     // Getters
-    public function getIdConsolidador() : int {
+    public function getIdConsolidador(): int
+    {
         return $this->idConsolidador;
     }
-    public function getIdCelulaConsolidacion() : int {
+    public function getIdCelulaConsolidacion(): int
+    {
         return $this->idCelulaConsolidacion;
     }
-    public function getAsisFamiliar() : string {
+    public function getAsisFamiliar(): string
+    {
         return $this->asisFamiliar;
     }
-    public function getAsisCrecimiento() : string {
+    public function getAsisCrecimiento(): string
+    {
         return $this->asisCrecimiento;
     }
-    public function getCedula() : string {
+    public function getCedula(): string
+    {
         return $this->cedula;
     }
-    public function getNombre() : string {
+    public function getNombre(): string
+    {
         return $this->nombre;
     }
-    public function getApellido() : string {
+    public function getApellido(): string
+    {
         return $this->apellido;
     }
-    public function getTelefono() : string {
+    public function getTelefono(): string
+    {
         return $this->telefono;
     }
-    public function getDireccion() : string {
+    public function getDireccion(): string
+    {
         return $this->direccion;
     }
-    public function getEstadoCivil() : string {
+    public function getEstadoCivil(): string
+    {
         return $this->estadoCivil;
     }
-    public function getFechaNacimiento() : string {
+    public function getFechaNacimiento(): string
+    {
         return $this->fechaNacimiento;
     }
-    public function getMotivo() : string {
+    public function getMotivo(): string
+    {
         return $this->motivo;
     }
-    public function getFechaConvercion() : string {
+    public function getFechaConvercion(): string
+    {
         return $this->fechaConvercion;
     }
-    public function getAprobarUsuario() : int {
+    public function getAprobarUsuario(): int
+    {
         return $this->aprobarUsuario;
     }
 }

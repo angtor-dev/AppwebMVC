@@ -42,19 +42,32 @@ document.addEventListener('DOMContentLoaded', function () {
 
     eventClick: function (info) {
       if (permisos.actualizar) {
+
         $('#editarEvento').modal('show');
         document.getElementById('nombreEditar').value = info.event.title
         document.getElementById('editarfechaInicio').value = info.event.startStr
         document.getElementById('editarfechaFinal').value = info.event.endStr
-        //document.getElementById('editarSede').value = info.event.title
-        document.getElementById('editarDescripcion').value = info.event.extendedProps.description
+        document.getElementById('editarDescripcion').value = info.event.extendedProps.descripcion
         listar_sedes_evento(info.event.id)
         sedes_sin_agregar(info.event.id)
 
-      } else if (permisos.registrarFeedback) {
-        console.log('heh');
+      } else if (permisos.registrarComentario) {
+
+        $('#verEventoPastor').modal('show')
+        document.getElementById('nombre2').textContent = info.event.title 
+        document.getElementById('fechaInicio2').textContent =  info.event.startStr
+        document.getElementById('fechaCierre2').textContent =  info.event.endStr
+        document.getElementById('descripcion2').textContent =  info.event.extendedProps.descripcion
+        document.getElementById('comentarioPastor').textContent = info.event.extendedProps.comentario
+
       } else if (permisos.consultarUsuario) {
-        console.log('hehe');
+        
+        $('#verEventoUsuario').modal('show')
+        document.getElementById('nombre3').textContent = info.event.title 
+        document.getElementById('fechaInicio3').textContent =  info.event.startStr
+        document.getElementById('fechaCierre3').textContent =  info.event.endStr
+        document.getElementById('descripcion3').textContent =  info.event.extendedProps.descripcion
+        
       }
 
     },
@@ -87,17 +100,15 @@ document.addEventListener('DOMContentLoaded', function () {
       },
       columns: [
         { data: 'nombre' },
-        {
-          "data": null,
-          "render": function (data, type, row) {
-            return `<button type="button" id="verComentarioSede" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modalComentario">
-            Ver
-            </button>`
-          }
-        },
+        
         {
           defaultContent: `
+          <div class="d-flex justify-content-end gap-2">
+            <button type="button" id="verComentarioSede" class="btn btn-secondary">
+            Ver
+            </button>
             <button type="button" id="eliminarSede" class="btn btn-danger delete-btn">Eliminar</button>
+            </div>
             `}
       ],
     })
@@ -110,7 +121,13 @@ document.addEventListener('DOMContentLoaded', function () {
   $('#sedesDatatables tbody').on('click', '#verComentarioSede', function () {
     const datos = datatables.row($(this).parents()).data();
 
-    document.getElementById('comentarioSede').textContent = datos.comentario;
+    Swal.fire({
+      title: "Comentario de la sede",
+      text: datos.comentario,
+      showConfirmButton: true,
+      confirmButtonColor: 'grey',
+      confirmButtonText: 'Cerrar'
+    });
   })
 
   
@@ -231,7 +248,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
   const form = document.getElementById("formulario1");
-  console.log(form);
 
   form.addEventListener("submit", (e) => {
     e.preventDefault();

@@ -19,9 +19,9 @@
                             <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-celulas" type="button" role="tab" aria-selected="false">
                                 Células
                             </button>
-                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-escuela" type="button" role="tab" aria-selected="false">
+                            <!-- <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-escuela" type="button" role="tab" aria-selected="false">
                                 Escuela
-                            </button>
+                            </button> -->
                             <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-sistema" type="button" role="tab" aria-selected="false">
                                 Sistema
                             </button>
@@ -251,6 +251,7 @@
                                 </div>
                             </div>
                             <!-- Permisos de Escuela -->
+                            <!--
                             <div class="tab-pane fade" id="tab-escuela" role="tabpanel" tabindex="0">
                                 <h5>Niveles de Crecimiento</h5>
                                 <div class="d-flex flex-wrap gap-3 mb-3">
@@ -368,6 +369,8 @@
                                     </label>
                                 </div>
                             </div>
+                            -->
+
                             <!-- Permisos del Sistema -->
                             <div class="tab-pane fade" id="tab-sistema" role="tabpanel" tabindex="0">
                                 <h5>Usuarios</h5>
