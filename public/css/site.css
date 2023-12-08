@@ -190,3 +190,50 @@ table tbody .acciones i:hover {
 .card:hover .float-buttons {
     opacity: 1;
 }
+
+/* Responsive (768px o menor) */
+@media (max-width: 767.98px) {
+    #main {
+        margin-left: 0;
+    }
+
+    #sidebar {
+        margin-top: 111px;
+        z-index: 999;
+        transform: translateX(-100%);
+        transition: transform .3s;
+    }
+    #sidebar.show {
+        transform: translateX(0);
+    }
+
+    #header-wrapper {
+        flex-direction: column;
+        gap: 8px;
+    }
+    #header-buttons {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    #menu-toggle {
+        display: block!important;
+    }
+    #menu-backdrop {
+        top: 111px;
+        background-color: #000000;
+        opacity: 0;
+        transition: opacity .3s;
+        z-index: 998;
+        width: 0%;
+    }
+    #sidebar.show + #menu-backdrop {
+        opacity: .3;
+        width: 100%;
+    }
+
+    #username {
+        display: none;
+    }
+}
