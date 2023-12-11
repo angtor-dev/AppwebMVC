@@ -110,12 +110,67 @@ $usuarioSesion = $_SESSION['usuario'];
             .then(data => {
                 const modalEl = document.getElementById('offcanvas-usuario')
                 modalEl.innerHTML = data
-                modalEl.querySelectorAll('.needs-validation')
-                    .forEach(agregarValidacionGenerica)
+                let forms = modalEl.querySelectorAll('.needs-validation')
+                forms.forEach(agregarValidacionGenerica)
+                forms.forEach(agregarValidacionUsuario)
 
                 let modal = new bootstrap.Offcanvas(modalEl)
                 modal.show()
             })
             .catch(error => console.error(error))
+    }
+
+    function agregarValidacionUsuario(form) {
+        const correoRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+        const claveRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/
+        form.querySelectorAll('#input-nombre, #input-apellido, #input-direccion').forEach(input => {
+            input.addEventListener('blur', e => {
+                let value = e.target.value
+                if (value == "" || /\d/.test(value) || value.length > 50) {
+                    input.classList.add('is-invalid')
+                }
+            })
+        })
+        form.querySelectorAll('#input-cedula, #input-telefono').forEach(input => {
+            input.addEventListener('blur', e => {
+                let value = e.target.value
+                if (value == "" || !/^\d*$/.test(value)
+                    || (input.id == "input-cedula" && value.length > 9 && value.length < 7)
+                    || (input.id == "input-telefono" && value.length != 11)) {
+                    input.classList.add('is-invalid')
+                }
+            })
+        })
+        form.querySelector('#input-correo').addEventListener('blur', e => {
+            let value = e.target.value
+            if (!correoRegex.test(value)) {
+                e.target.classList.add('is-invalid')
+            }
+        })
+        form.querySelectorAll('select').forEach(select => {
+            select.addEventListener('blur', e => {
+                if (e.target.value == '') {
+                    select.classList.add('is-invalid')
+                }
+            })
+        })
+        form.querySelector('#input-clave').addEventListener('blur', e => {
+            let value = e.target.value
+            if (value == "" || !claveRegex.test(value)) {
+                e.target.classList.add('is-invalid')
+            }
+        })
+        form.querySelector('#input-confirmacion').addEventListener('blur', e => {
+            let value = e.target.value
+            let claveValue = form.querySelector('#input-clave').value
+            if (value != claveValue) {
+                e.target.classList.add('is-invalid')
+            }
+        })
+        form.querySelectorAll('input, select').forEach(input => {
+            input.addEventListener('focus', () => {
+                input.classList.remove('is-invalid')
+            })
+        })
     }
 </script>
