@@ -14,7 +14,7 @@ $usuarioSesion = $_SESSION['usuario'];
     <?php endforeach ?>
 <?php endif ?>
 
-<div class="d-flex align-items-end justify-content-between mb-2">
+<div class="page-top d-flex align-items-end justify-content-between mb-2">
     <h4 class="mb-0 fw-bold">Usuarios</h4>
     <div class="d-flex gap-3">
         <div class="buscador">
@@ -29,51 +29,53 @@ $usuarioSesion = $_SESSION['usuario'];
     </div>
 </div>
 
-<table class="table table-bordered table-rounded table-hover datatable" id="tabla-usuarios">
-    <thead>
-        <tr>
-            <th>Nombre</th>
-            <th>Cedula</th>
-            <th>Correo</th>
-            <th>Roles</th>
-            <th class="text-center" style="width: 90px;">Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach ($usuarios as $usuario) : ?>
+<div class="table-responsive">
+    <table class="table table-bordered table-rounded table-hover datatable" id="tabla-usuarios">
+        <thead>
             <tr>
-                <td><?= $usuario->getNombreCompleto() ?></td>
-                <td><?= $usuario->getCedula() ?></td>
-                <td><?= $usuario->getCorreo() ?></td>
-                <td>
-                    <?=
-                    implode(", ", array_map(function(Rol $rol) {
-                        return $rol->getNombre();
-                    }, $usuario->roles));
-                    ?>
-                </td>
-                <td>
-                    <div class="acciones">
-                        <a href="/AppwebMVC/Usuarios/Detalles?id=<?= $usuario->id ?>">
-                            <i class="fa-solid fa-circle-info" title="Ver detalles" data-bs-toggle="tooltip"></i>
-                        </a>
-                        <?php if ($usuarioSesion->tienePermiso("usuarios", "actualizar")): ?>
-                            <a role="button" onclick="abrirModalUsuario(<?= $usuario->id ?>)">
-                                <i class="fa-solid fa-pen" title="Actualizar" data-bs-toggle="tooltip"></i>
-                            </a>
-                        <?php endif ?>
-                        <?php if ($usuarioSesion->tienePermiso("usuarios", "eliminar") && $usuario->id != $usuarioSesion->id): ?>
-                            <a role="button" data-bs-toggle="modal" data-bs-target="#confirmar-eliminacion"
-                                data-id="<?= $usuario->id ?>">
-                                <i class="fa-solid fa-trash" title="Eliminar" data-bs-toggle="tooltip"></i>
-                            </a>
-                        <?php endif ?>
-                    </div>
-                </td>
+                <th>Nombre</th>
+                <th>Cedula</th>
+                <th>Correo</th>
+                <th>Roles</th>
+                <th class="text-center" style="width: 90px;">Acciones</th>
             </tr>
-        <?php endforeach ?>
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            <?php foreach ($usuarios as $usuario) : ?>
+                <tr>
+                    <td><?= $usuario->getNombreCompleto() ?></td>
+                    <td><?= $usuario->getCedula() ?></td>
+                    <td><?= $usuario->getCorreo() ?></td>
+                    <td>
+                        <?=
+                        implode(", ", array_map(function(Rol $rol) {
+                            return $rol->getNombre();
+                        }, $usuario->roles));
+                        ?>
+                    </td>
+                    <td>
+                        <div class="acciones">
+                            <a href="/AppwebMVC/Usuarios/Detalles?id=<?= $usuario->id ?>">
+                                <i class="fa-solid fa-circle-info" title="Ver detalles" data-bs-toggle="tooltip"></i>
+                            </a>
+                            <?php if ($usuarioSesion->tienePermiso("usuarios", "actualizar")): ?>
+                                <a role="button" onclick="abrirModalUsuario(<?= $usuario->id ?>)">
+                                    <i class="fa-solid fa-pen" title="Actualizar" data-bs-toggle="tooltip"></i>
+                                </a>
+                            <?php endif ?>
+                            <?php if ($usuarioSesion->tienePermiso("usuarios", "eliminar") && $usuario->id != $usuarioSesion->id): ?>
+                                <a role="button" data-bs-toggle="modal" data-bs-target="#confirmar-eliminacion"
+                                    data-id="<?= $usuario->id ?>">
+                                    <i class="fa-solid fa-trash" title="Eliminar" data-bs-toggle="tooltip"></i>
+                                </a>
+                            <?php endif ?>
+                        </div>
+                    </td>
+                </tr>
+            <?php endforeach ?>
+        </tbody>
+    </table>
+</div>
 
 <!-- Confirmar eliminación -->
 <div class="modal fade modal-eliminar" id="confirmar-eliminacion" tabindex="-1" aria-hidden="true">

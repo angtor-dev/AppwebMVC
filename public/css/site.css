@@ -224,16 +224,26 @@ table tbody .acciones i:hover {
         top: 111px;
         background-color: #000000;
         opacity: 0;
-        transition: opacity .3s;
+        transition-property: opacity, width;
+        transition-duration: .3s, 0s;
+        transition-delay: 0s, .3s;
         z-index: 998;
         width: 0%;
     }
     #sidebar.show + #menu-backdrop {
-        opacity: .3;
         width: 100%;
+        opacity: .3;
+        transition-property: opacity, width;
+        transition-delay: 0s;
     }
 
     #username {
         display: none;
+    }
+
+    .page-top {
+        flex-direction: column!important;
+        align-items: start!important;
+        gap: 8px;
     }
 }
