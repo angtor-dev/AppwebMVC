@@ -302,6 +302,23 @@ class Usuario extends Model
         return $stmt->fetch();
     }
 
+    public static function cargarPorCorreo(string $correo) : null|Usuario
+    {
+        $bd = Database::getInstance();
+        $query = "SELECT * FROM usuario WHERE correo = :correo AND estatus = 1 LIMIT 1";
+
+        $stmt = $bd->pdo()->prepare($query);
+        $stmt->bindValue("correo", $correo);
+
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_CLASS, "Usuario");
+
+        if ($stmt->rowCount() == 0) {
+            return null;
+        }
+        return $stmt->fetch();
+    }
+
     /** Retorna un arreglo con los usuarios que tengan alguno de los roles indicados */
     public static function listarPorRoles(string ...$roles) : array
     {
@@ -362,8 +379,6 @@ class Usuario extends Model
     }
 
     // Getters
-    
-
     public function getEdad() : int
     {
         if (empty($this->fechaNacimiento)) {

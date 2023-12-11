@@ -28,7 +28,7 @@
         <div class="col-sm-5">
             <label for="input-cedula">Cédula</label>
             <input class="form-control" type="text" name="cedula" id="input-cedula" required maxlength="15"
-                pattern="[0-9]{7,9}" value="<?= $usuario->getCedula() ?? "" ?>">
+                pattern="[0-9]{7,9}" value="<?= $usuario->getCedula() ?? "" ?>" data-feedback="Cédula inválida">
             <div class="invalid-feedback">
                 Cédula inválida
             </div>
@@ -44,7 +44,7 @@
         <div class="col-sm-12">
             <label for="input-correo">Correo</label>
             <input class="form-control" type="email" name="correo" id="input-correo" required maxlength="255"
-                value="<?= $usuario->getCorreo() ?? "" ?>">
+                value="<?= $usuario->getCorreo() ?? "" ?>" data-feedback="Ingresa un correo válido">
             <div class="invalid-feedback">
                 Ingresa un correo válido
             </div>

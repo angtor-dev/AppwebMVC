@@ -141,10 +141,16 @@ $usuarioSesion = $_SESSION['usuario'];
                 }
             })
         })
-        form.querySelector('#input-correo').addEventListener('blur', e => {
+        form.querySelector('#input-correo').addEventListener('blur', async e => {
             let value = e.target.value
             if (!correoRegex.test(value)) {
                 e.target.classList.add('is-invalid')
+            }
+
+            let res = await fetch("/AppwebMVC/Usuarios/Buscar?tipo=correo&valor="+value)
+            if (res.text() === 'true') {
+                e.target.classList.add('is-invalid')
+                e.target.nextElementSibling.textContent = "El correo ya esta en uso"
             }
         })
         form.querySelectorAll('select').forEach(select => {
@@ -170,6 +176,9 @@ $usuarioSesion = $_SESSION['usuario'];
         form.querySelectorAll('input, select').forEach(input => {
             input.addEventListener('focus', () => {
                 input.classList.remove('is-invalid')
+                if (input.dataset.feedback) {
+                    input.nextElementSibling.textContent = input.dataset.feedback
+                }
             })
         })
     }
