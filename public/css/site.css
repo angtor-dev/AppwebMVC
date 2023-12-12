@@ -180,6 +180,10 @@ table tbody .acciones i:hover {
 .offcanvas .form-select {
     background-color: var(--grey-lighter);
 }
+.offcanvas .form-control:disabled,
+.offcanvas .form-select:disabled {
+    color: gray;
+}
 
 /* Botones flotantes de cartas */
 .card .float-buttons {

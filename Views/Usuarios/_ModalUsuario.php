@@ -28,10 +28,14 @@
         <div class="col-sm-5">
             <label for="input-cedula">Cédula</label>
             <input class="form-control" type="text" name="cedula" id="input-cedula" required maxlength="15"
-                pattern="[0-9]{7,9}" value="<?= $usuario->getCedula() ?? "" ?>" data-feedback="Cédula inválida">
+                pattern="[0-9]{7,9}" value="<?= $usuario->getCedula() ?? "" ?>" data-feedback="Cédula inválida"
+                <?= empty($usuario->id) ? "" : "disabled" ?>>
             <div class="invalid-feedback">
                 Cédula inválida
             </div>
+            <?php if (!empty($usuario->id)): ?>
+                <input type="hidden" name="cedula" value="<?= $usuario->getCedula() ?>">
+            <?php endif ?>
         </div>
         <div class="col-sm-7">
             <label for="input-telefono">Teléfono</label>
@@ -44,7 +48,8 @@
         <div class="col-sm-12">
             <label for="input-correo">Correo</label>
             <input class="form-control" type="email" name="correo" id="input-correo" required maxlength="255"
-                value="<?= $usuario->getCorreo() ?? "" ?>" data-feedback="Ingresa un correo válido">
+                value="<?= $usuario->getCorreo() ?? "" ?>" data-feedback="Ingresa un correo válido"
+                <?= empty($usuario->id) ? "" : 'data-valor="'.$usuario->getCorreo().'"' ?>>
             <div class="invalid-feedback">
                 Ingresa un correo válido
             </div>

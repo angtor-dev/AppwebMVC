@@ -141,6 +141,14 @@ $usuarioSesion = $_SESSION['usuario'];
                 }
             })
         })
+        form.querySelector('#input-cedula').addEventListener('blur', async e => {
+            let value = e.target.value
+            let res = await fetch("/AppwebMVC/Usuarios/Buscar?tipo=cedula&valor="+value)
+            if (await res.text() === 'true') {
+                e.target.classList.add('is-invalid')
+                e.target.nextElementSibling.textContent = "La cédula ya existe"
+            }
+        })
         form.querySelector('#input-correo').addEventListener('blur', async e => {
             let value = e.target.value
             if (!correoRegex.test(value)) {
@@ -148,9 +156,9 @@ $usuarioSesion = $_SESSION['usuario'];
             }
 
             let res = await fetch("/AppwebMVC/Usuarios/Buscar?tipo=correo&valor="+value)
-            if (res.text() === 'true') {
+            if (await res.text() === 'true' && (!e.target.dataset.valor || e.target.dataset.valor != value)) {
                 e.target.classList.add('is-invalid')
-                e.target.nextElementSibling.textContent = "El correo ya esta en uso"
+                e.target.nextElementSibling.textContent = "Ya existe un usuario con este correo"
             }
         })
         form.querySelectorAll('select').forEach(select => {
@@ -160,13 +168,13 @@ $usuarioSesion = $_SESSION['usuario'];
                 }
             })
         })
-        form.querySelector('#input-clave').addEventListener('blur', e => {
+        form.querySelector('#input-clave')?.addEventListener('blur', e => {
             let value = e.target.value
             if (value == "" || !claveRegex.test(value)) {
                 e.target.classList.add('is-invalid')
             }
         })
-        form.querySelector('#input-confirmacion').addEventListener('blur', e => {
+        form.querySelector('#input-confirmacion')?.addEventListener('blur', e => {
             let value = e.target.value
             let claveValue = form.querySelector('#input-clave').value
             if (value != claveValue) {
