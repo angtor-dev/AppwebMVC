@@ -8,8 +8,13 @@ if (empty($_GET['id'])) {
 }
 
 try {
-    $usuario = new Usuario();
-    $usuario->id = $_GET['id'];
+    /** @var Usuario */
+    $usuario = Usuario::cargar($_GET['id']);
+
+    if (!isset($usuario)) {
+        $_SESSION['errores'][] = "El usuario que intenta eliminar no existe.";
+        redirigir("/AppwebMVC/Usuarios/");
+    }
 
     $usuario->eliminar();
 } catch (\Throwable $th) {
