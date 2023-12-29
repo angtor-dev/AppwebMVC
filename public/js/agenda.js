@@ -42,33 +42,43 @@ document.addEventListener('DOMContentLoaded', function () {
 
     eventClick: function (info) {
       if (permisos.actualizar) {
-
         $('#editarEvento').modal('show');
         document.getElementById('idEvento').textContent = info.event.id;
         document.getElementById('tituloEditar').value = info.event.title;
         document.getElementById('fechaInicioEditar').value = info.event.startStr;
-        document.getElementById('fechaFinalEditar').value = info.event.endStr;
+        if (info.event.endStr == '') {
+          document.getElementById('fechaFinalEditar').value = info.event.startStr;
+        }else{
+          document.getElementById('fechaFinalEditar').value = info.event.endStr;
+        }
         document.getElementById('descripcionEditar').value = info.event.extendedProps.descripcion;
         listar_sedes_evento(info.event.id);
         sedes_sin_agregar(info.event.id);
 
 
       } else if (permisos.registrarComentario) {
-
+        console.log(info.event);
         $('#verEventoPastor').modal('show');
         document.getElementById('idEvento2').textContent = info.event.id;
         document.getElementById('nombre2').textContent = info.event.title;
         document.getElementById('fechaInicio2').textContent = info.event.startStr;
-        document.getElementById('fechaCierre2').textContent = info.event.endStr;
+        if (info.event.endStr == '') {
+          document.getElementById('fechaCierre2').textContent = info.event.startStr;
+        }else{
+          document.getElementById('fechaCierre2').textContent = info.event.endStr;
+        }
         document.getElementById('descripcion2').textContent = info.event.extendedProps.descripcion;
         document.getElementById('comentarioPastor').value = info.event.extendedProps.comentario;
 
       } else if (permisos.consultarUsuario) {
-
         $('#verEventoUsuario').modal('show');
         document.getElementById('nombre3').textContent = info.event.title;
         document.getElementById('fechaInicio3').textContent = info.event.startStr;
-        document.getElementById('fechaCierre3').textContent = info.event.endStr;
+        if (info.event.endStr == '') {
+          document.getElementById('fechaCierre3').textContent = info.event.startStr;
+        }else{
+          document.getElementById('fechaCierre3').textContent = info.event.endStr;
+        }
         document.getElementById('descripcion3').textContent = info.event.extendedProps.descripcion;
 
       }
