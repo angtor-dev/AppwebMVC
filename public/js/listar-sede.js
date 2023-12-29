@@ -8,7 +8,7 @@ $(document).ready(function () {
     responsive: true,
     ajax: {
       method: "GET",
-      url: 'http://localhost/AppwebMVC/Sedes/Listar',
+      url: '/AppwebMVC/Sedes/Listar',
       data: { cargar_data: 'cargar_data' }
     },
     columns: [
@@ -89,7 +89,7 @@ $(document).ready(function () {
 
         $.ajax({
           type: "POST",
-          url: "http://localhost/AppwebMVC/Sedes/Listar",
+          url: "/AppwebMVC/Sedes/Listar",
           data: {
 
             eliminar: 'eliminar',
@@ -144,7 +144,7 @@ $(document).ready(function () {
 
     $.ajax({
       type: "GET",
-      url: "http://localhost/AppwebMVC/Sedes/Listar",
+      url: "/AppwebMVC/Sedes/Listar",
       data: {
 
         listaPastores: 'listaPastores',
@@ -202,7 +202,7 @@ $(document).ready(function () {
 
     $.ajax({
       type: "GET",
-      url: "http://localhost/AppwebMVC/Sedes/Listar",
+      url: "/AppwebMVC/Sedes/Listar",
       data: {
 
         listaPastores: 'listaPastores',
@@ -341,7 +341,7 @@ $(document).ready(function () {
       // ... (tu código AJAX va aquí)
       $.ajax({
         type: "POST",
-        url: "http://localhost/AppwebMVC/Sedes/Listar",
+        url: "/AppwebMVC/Sedes/Listar",
         data: {
 
           registrar: 'registrar',
@@ -497,7 +497,7 @@ $(document).ready(function () {
       // ... (tu código AJAX va aquí)
       $.ajax({
         type: "POST",
-        url: "http://localhost/AppwebMVC/Sedes/Listar",
+        url: "/AppwebMVC/Sedes/Listar",
         data: {
 
           editar: 'editar',

@@ -12,7 +12,7 @@ $(document).ready(function () {
         responsive: true,
         ajax: {
             method: "GET",
-            url: 'http://localhost/AppwebMVC/CelulaConsolidacion/Index',
+            url: '/AppwebMVC/CelulaConsolidacion/Index',
             data: { cargar_data: 'cargar_data' }
         },
         columns: [
@@ -107,7 +107,7 @@ $(document).ready(function () {
 
                 $.ajax({
                     type: "POST",
-                    url: "http://localhost/AppwebMVC/CelulaConsolidacion/Index",
+                    url: "/AppwebMVC/CelulaConsolidacion/Index",
                     data: {
 
                         eliminar: 'eliminar',
@@ -161,7 +161,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "GET",
-            url: "http://localhost/AppwebMVC/CelulaConsolidacion/Index",
+            url: "/AppwebMVC/CelulaConsolidacion/Index",
             data: {
                 cargar_discipulos_celula: 'cargar_discipulos_celula',
                 idCelula: idCelula
@@ -211,7 +211,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "GET",
-            url: "http://localhost/AppwebMVC/CelulaConsolidacion/Index",
+            url: "/AppwebMVC/CelulaConsolidacion/Index",
             data: {
 
                 listaLideres: 'listaLideres',
@@ -285,7 +285,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "GET",
-            url: "http://localhost/AppwebMVC/CelulaConsolidacion/Index",
+            url: "/AppwebMVC/CelulaConsolidacion/Index",
             data: {
 
                 listaTerritorio: 'listaTerritorio',
@@ -336,7 +336,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "GET",
-            url: "http://localhost/AppwebMVC/CelulaConsolidacion/Index",
+            url: "/AppwebMVC/CelulaConsolidacion/Index",
             data: {
 
                 listaLideres: 'listaLideres',
@@ -422,7 +422,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "GET",
-            url: "http://localhost/AppwebMVC/CelulaConsolidacion/Index",
+            url: "/AppwebMVC/CelulaConsolidacion/Index",
             data: {
 
                 listaTerritorio: 'listaTerritorio',
@@ -560,7 +560,7 @@ $(document).ready(function () {
             // Aquí puedes agregar el código para enviar el formulario
             $.ajax({
                 type: "POST",
-                url: "http://localhost/AppwebMVC/CelulaConsolidacion/Index",
+                url: "/AppwebMVC/CelulaConsolidacion/Index",
                 data: {
 
                     registrar: 'registrar',
@@ -707,7 +707,7 @@ $(document).ready(function () {
             // Aquí puedes agregar el código para enviar el formulario
             $.ajax({
                 type: "POST",
-                url: "http://localhost/AppwebMVC/CelulaConsolidacion/Index",
+                url: "/AppwebMVC/CelulaConsolidacion/Index",
                 data: {
 
                     editar: 'editar',
@@ -906,7 +906,7 @@ $(document).ready(function () {
             // Aquí puedes agregar el código para enviar el formulario
             $.ajax({
                 type: "POST",
-                url: "http://localhost/AppwebMVC/CelulaConsolidacion/Index",
+                url: "/AppwebMVC/CelulaConsolidacion/Index",
                 data: {
 
                     registroreunion: 'registroreunion',

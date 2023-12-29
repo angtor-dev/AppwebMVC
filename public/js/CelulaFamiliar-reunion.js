@@ -6,7 +6,7 @@ $(document).ready(function () {
         responsive: true,
         ajax: {
             method: "GET",
-            url: 'http://localhost/AppwebMVC/CelulaFamiliar/Reunion',
+            url: '/AppwebMVC/CelulaFamiliar/Reunion',
             data: { cargar_data: 'cargar_data' }
         },
         columns: [
@@ -78,7 +78,7 @@ $(document).ready(function () {
 
                 $.ajax({
                     type: "POST",
-                    url: "http://localhost/AppwebMVC/CelulaFamiliar/Reunion",
+                    url: "/AppwebMVC/CelulaFamiliar/Reunion",
                     data: {
 
                         eliminar: 'eliminar',
@@ -134,7 +134,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "GET",
-            url: "http://localhost/AppwebMVC/CelulaFamiliar/Reunion",
+            url: "/AppwebMVC/CelulaFamiliar/Reunion",
             data: {
 
                 listarcelulas: 'listarcelulas',
@@ -358,7 +358,7 @@ $(document).ready(function () {
             // Aquí puedes agregar el código para enviar el formulario
             $.ajax({
                 type: "POST",
-                url: "http://localhost/AppwebMVC/CelulaFamiliar/reunion",
+                url: "/AppwebMVC/CelulaFamiliar/reunion",
                 data: {
                     editar: 'editar',
                     id: id,

@@ -6,7 +6,7 @@ $(document).ready(function () {
     $('#botonSede1').on('click', function (e) {
         $.ajax({
             type: "GET",
-            url: "http://localhost/AppwebMVC/Estadisticas/Iglesia",
+            url: "/AppwebMVC/Estadisticas/Iglesia",
             data: {
                 cantidad_celulas_sede: 'cantidad_celulas_sede',
             },
@@ -70,7 +70,7 @@ $(document).ready(function () {
     $('#botonSede2').on('click', function (e) {
         $.ajax({
             type: "GET",
-            url: "http://localhost/AppwebMVC/Estadisticas/Iglesia",
+            url: "/AppwebMVC/Estadisticas/Iglesia",
             data: {
                 cantidad_territorios_sede: 'cantidad_territorios_sede',
             },
@@ -130,7 +130,7 @@ $(document).ready(function () {
     $('#botonSede3').on('click', function (e) {
         $.ajax({
             type: "GET",
-            url: "http://localhost/AppwebMVC/Estadisticas/Iglesia",
+            url: "/AppwebMVC/Estadisticas/Iglesia",
             data: {
                 cantidad_sedes_fecha: 'cantidad_sedes_fecha',
             },
@@ -195,7 +195,7 @@ $(document).ready(function () {
     $('#botonTerritorio1').on('click', function (e) {
         $.ajax({
             type: "GET",
-            url: "http://localhost/AppwebMVC/Estadisticas/Iglesia",
+            url: "/AppwebMVC/Estadisticas/Iglesia",
             data: {
                 cantidad_celulas_territorio: 'cantidad_celulas_territorio',
             },
@@ -260,7 +260,7 @@ $(document).ready(function () {
     $('#botonCelulaFamiliar1').on('click', function (e) {
         $.ajax({
             type: "GET",
-            url: "http://localhost/AppwebMVC/Estadisticas/Iglesia",
+            url: "/AppwebMVC/Estadisticas/Iglesia",
             data: {
                 lideres_cantidad_celulas: 'lideres_cantidad_celulas',
                 tipo: 'familiar'
@@ -327,7 +327,7 @@ $(document).ready(function () {
     $('#botonCelulaCrecimiento1').on('click', function (e) {
         $.ajax({
             type: "GET",
-            url: "http://localhost/AppwebMVC/Estadisticas/Iglesia",
+            url: "/AppwebMVC/Estadisticas/Iglesia",
             data: {
                 lideres_cantidad_celulas: 'lideres_cantidad_celulas',
                 tipo: 'crecimiento'
@@ -394,7 +394,7 @@ $(document).ready(function () {
     $('#botonCelulaConsolidacion1').on('click', function (e) {
         $.ajax({
             type: "GET",
-            url: "http://localhost/AppwebMVC/Estadisticas/Iglesia",
+            url: "/AppwebMVC/Estadisticas/Iglesia",
             data: {
                 lideres_cantidad_celulas: 'lideres_cantidad_celulas',
                 tipo: 'consolidacion'
@@ -463,7 +463,7 @@ $(document).ready(function () {
     $('#botonDiscipulos1').on('click', function (e) {
         $.ajax({
             type: "GET",
-            url: "http://localhost/AppwebMVC/Estadisticas/Iglesia",
+            url: "/AppwebMVC/Estadisticas/Iglesia",
             data: {
                 discipulos_consolidados_fecha: 'discipulos_consolidados_fecha',
             },
@@ -564,7 +564,7 @@ $(document).ready(function () {
         const idCelula = document.getElementById('selectorCelulas').value;
         $.ajax({
             type: "GET",
-            url: "http://localhost/AppwebMVC/Estadisticas/Iglesia",
+            url: "/AppwebMVC/Estadisticas/Iglesia",
             data: {
 
                 asistencias_reuniones_celulas: 'asistencias_reuniones_celulas',
@@ -629,7 +629,7 @@ $(document).ready(function () {
     function listar_celulas(tipo) {
         $.ajax({
             type: "GET",
-            url: "http://localhost/AppwebMVC/Estadisticas/Iglesia",
+            url: "/AppwebMVC/Estadisticas/Iglesia",
             data: {
 
                 listar_celulas: 'listar_celulas',

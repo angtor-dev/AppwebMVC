@@ -4,7 +4,7 @@ $(document).ready(function () {
         responsive: true,
         ajax: {
             method: "GET",
-            url: 'http://localhost/AppwebMVC/Discipulos/Index',
+            url: '/AppwebMVC/Discipulos/Index',
             data: { cargar_data: 'cargar_data' }
         },
         columns: [
@@ -101,7 +101,7 @@ $(document).ready(function () {
 
                 $.ajax({
                     type: "POST",
-                    url: "http://localhost/AppwebMVC/Discipulos/Index",
+                    url: "/AppwebMVC/Discipulos/Index",
                     data: {
 
                         eliminar: 'eliminar',
@@ -161,7 +161,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "GET",
-            url: "http://localhost/AppwebMVC/Discipulos/Index",
+            url: "/AppwebMVC/Discipulos/Index",
             data: {
 
                 listaConsolidador: 'listaConsolidador',
@@ -236,7 +236,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "GET",
-            url: "http://localhost/AppwebMVC/Discipulos/Index",
+            url: "/AppwebMVC/Discipulos/Index",
             data: {
 
                 listarcelulas: 'listarcelulas',
@@ -511,7 +511,7 @@ $(document).ready(function () {
 
             $.ajax({
                 type: "POST",
-                url: "http://localhost/AppwebMVC/Discipulos/Index",
+                url: "/AppwebMVC/Discipulos/Index",
                 data: {
 
                     editar: 'editar',
@@ -837,7 +837,7 @@ $(document).ready(function () {
 
             $.ajax({
                 type: "POST",
-                url: "http://localhost/AppwebMVC/Discipulos/Index",
+                url: "/AppwebMVC/Discipulos/Index",
                 data: {
 
                     registrar: 'registrar',

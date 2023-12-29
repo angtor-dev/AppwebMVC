@@ -134,6 +134,8 @@ class Celulas extends Model
                 $stmt->bindValue(':idCoLider', $idCoLider);
                 $stmt->bindValue(':idTerritorio', $idTerritorio);
 
+            
+
                 $stmt->execute();
             } else {
                 $sql = "INSERT INTO celulas (nombre, codigo, identificador, tipo, idLider, idCoLider, idTerritorio, fechaCreacion) 

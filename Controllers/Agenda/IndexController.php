@@ -49,6 +49,19 @@ if (isset($_POST['registroEventos'])) {
     die();
 }
 
+if (isset($_POST['editarEvento'])) {
+
+    $titulo = $_POST['titulo'];
+    $idEvento = $_POST['idEvento'];
+    $fechaInicio = $_POST['fechaInicio'];
+    $fechaFinal = $_POST['fechaFinal'];
+    $descripcion = $_POST['descripcion'];
+
+    $Evento->Editar_evento($titulo, $idEvento, $fechaInicio, $fechaFinal, $descripcion);
+
+    die();
+}
+
 if (isset($_POST['cargar_data_sedes'])) {
     $idEvento = trim($_POST['idEvento']);
     $sedes = $Evento->cargar_data_sedes($idEvento);
@@ -70,6 +83,61 @@ if (isset($_POST['cargar_data_sedes'])) {
     die();
 }
 
+if (isset($_POST['coincidencias'])){
+
+    $titulos = $_POST['titulo'];
+
+    $resultado = $Evento->valida_titulo_evento($titulos);
+
+    echo json_encode($resultado);
+    die();
+
+}
+
+
+if (isset($_POST['eliminarEventoSede'])){
+
+
+    $id = $_POST['id'];
+    
+
+    $Evento->eliminar_evento_sede($id);
+
+    echo json_encode($resultado);
+
+    die();
+}
+
+if (isset($_POST['eliminar'])){
+
+    $id = $_POST['id'];
+
+    $Evento->eliminar_evento($id);
+
+    die();
+}
+
+if (isset($_POST['actualizarSedes'])){
+
+    $arraySedes = $_POST['arraySedes'];
+    $idEvento = $_POST['idEvento'];
+
+    $Evento->actualizarSedes($arraySedes, $idEvento);
+
+
+    die();
+}
+
+if (isset($_POST['actualizarComentario'])){
+
+    $comentario = $_POST['comentario'];
+    $id = $_POST['id'];
+
+    $Evento->actualizarComentario($comentario, $id);
+
+
+    die();
+}
 
 
 

@@ -92,7 +92,7 @@ class Evento extends Model
 
             foreach ($sedes as $sede) {
 
-                $sql3 = "INSERT INTO eventosede (idsede, idevento) VALUES (:sede, :idEvento)";
+                $sql3 = "INSERT INTO eventosede (idSede, idEvento) VALUES (:sede, :idEvento)";
 
                 $stmt3 = $this->db->pdo()->prepare($sql3);
 
@@ -120,11 +120,51 @@ class Evento extends Model
         }
     }
 
+    public function Editar_evento($titulo, $idEvento, $fechaInicio, $fechaFinal, $descripcion)
+    {   
+        try {
+            
+            $sql = "UPDATE evento SET titulo = :titulo,
+             fechaInicio = :fechaInicio,
+              fechaFinal = :fechaFinal,
+               descripcion = :descripcion
+            WHERE id = :idEvento";
+
+            $stmt = $this->db->pdo()->prepare($sql);
+
+            
+            $stmt->bindValue(':titulo', $titulo);
+            $stmt->bindValue(':idEvento', $idEvento);
+            $stmt->bindValue(':fechaInicio', $fechaInicio);
+            $stmt->bindValue(':fechaFinal', $fechaFinal);
+            $stmt->bindValue(':descripcion', $descripcion);
+
+
+            $stmt->execute();
+
+            Bitacora::registrar("Actualizacion de Evento");
+
+            http_response_code(200);
+            echo json_encode(array('msj' => 'Actualizacion  exitosa', 'status' => 200));
+            
+            die();
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
+            $error_data = array(
+                "error_message" => $e->getMessage(),
+                "error_line" => "Linea del error: " . $e->getLine()
+            );
+            //print_r($error_data);
+            http_response_code(422);
+            echo json_encode($error_data);
+            die();
+        }
+
+    }
 
     public function cargar_data_sedes($idEvento)
     {
         try {
-            $sql = 'SELECT eventosede.id, sede.nombre, eventosede.comentario FROM eventosede 
+            $sql = 'SELECT eventosede.id, sede.nombre, eventosede.comentario, eventosede.idEvento FROM eventosede 
             INNER JOIN sede on sede.id = eventosede.idSede WHERE eventosede.idEvento = :idEvento';
 
             $stmt = $this->db->pdo()->prepare($sql);
@@ -134,7 +174,7 @@ class Evento extends Model
 
             http_response_code(200);
             return $resultado;
-            
+
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -148,9 +188,10 @@ class Evento extends Model
     }
 
 
-    public function sedes_sin_agregar($idEvento) {
+    public function sedes_sin_agregar($idEvento)
+    {
         try {
-            $sql = 'SELECT sede.id, sede.nombre FROM sede WHERE sede.id NOT IN (SELECT idSede FROM eventosede WHERE idEvento = :idEvento)';
+            $sql = 'SELECT sede.id, sede.nombre, sede.codigo FROM sede WHERE sede.id NOT IN (SELECT idSede FROM eventosede WHERE idEvento = :idEvento)';
 
             $stmt = $this->db->pdo()->prepare($sql);
             $stmt->bindValue(':idEvento', $idEvento);
@@ -159,7 +200,7 @@ class Evento extends Model
 
             http_response_code(200);
             return $resultado;
-            
+
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -173,6 +214,187 @@ class Evento extends Model
     }
 
 
+    //Validaciones 
+
+    public function valida_titulo_evento($titulos)
+    {
+
+
+        try {
+
+            $sql = "SELECT titulo FROM evento WHERE titulo = :titulos";
+
+            $stmt = $this->db->pdo()->prepare($sql);
+            $stmt->bindValue(':titulos', $titulos);
+
+            $stmt->execute();
+            $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $result = $stmt->rowCount();
+
+            if ($result > 0) {
+                return true;
+            } else {
+                return false;
+            }
+
+
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
+            $error_data = array(
+                "error_message" => $e->getMessage(),
+                "error_line" => "Linea del error: " . $e->getLine()
+            );
+            //print_r($error_data);
+            http_response_code(422);
+            echo json_encode($error_data);
+            die();
+        }
+
+
+
+    }
+
+
+    public function eliminar_evento($id)
+    {
+        try {
+
+            $sql = "DELETE FROM evento WHERE id = :id";
+
+            $stmt = $this->db->pdo()->prepare($sql);
+            $stmt->bindValue(':id', $id);
+
+            $stmt->execute();
+
+            Bitacora::registrar("Eliminar Evento");
+            http_response_code(200);
+            echo json_encode(array('msj' => 'Evento eliminado exitosamente ', 'status' => 200));
+
+            die();
+
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
+            $error_data = array(
+                "error_message" => $e->getMessage(),
+                "error_line" => "Linea del error: " . $e->getLine()
+            );
+            //print_r($error_data);
+            http_response_code(422);
+            echo json_encode($error_data);
+            die();
+        }
+
+
+
+    }
+
+    public function eliminar_evento_sede($id)
+    {
+
+        try {
+
+            $sql = "DELETE FROM eventosede WHERE id = :id";
+
+            $stmt = $this->db->pdo()->prepare($sql);
+            $stmt->bindValue(':id', $id);
+
+
+            $stmt->execute();
+
+            Bitacora::registrar("Eliminar Evento por Sede");
+            http_response_code(200);
+            echo json_encode(array('msj' => 'Evento vinculado a Sede eliminado exitosamente ', 'status' => 200));
+
+            die();
+        } catch (Exception $e) {
+
+            $error_data = array(
+                "error_message" => $e->getMessage(),
+                "error_line" => "Linea del error: " . $e->getLine()
+            );
+            http_response_code(422);
+            echo json_encode($error_data);
+            die();
+        }
+
+
+    }
+
+
+    public function actualizarSedes($arraySedes, $idEvento)
+    {
+
+        try {
+
+
+            foreach ($arraySedes as $sede) {
+
+                $sql = "INSERT INTO eventosede (idSede, idEvento) VALUES (:sede, :idEvento)";
+
+                $stmt = $this->db->pdo()->prepare($sql);
+
+                $stmt->bindValue(':sede', $sede);
+                $stmt->bindValue(':idEvento', $idEvento);
+
+                $stmt->execute();
+            }
+
+
+            Bitacora::registrar("Actualizacion de  sedes por evento");
+
+            http_response_code(200);
+            echo json_encode(array('msj' => 'Registro  exitoso', 'status' => 200));
+            die();
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
+            $error_data = array(
+                "error_message" => $e->getMessage(),
+                "error_line" => "Linea del error: " . $e->getLine()
+            );
+            //print_r($error_data);
+            http_response_code(422);
+            echo json_encode($error_data);
+            die();
+        }
+
+    }
+
+public function actualizarComentario($comentario, $id){
+
+    try {
+
+        /** @var Usuario */
+        $usuario = $_SESSION['usuario'];
+
+        $sql = "UPDATE eventosede SET comentario = :comentario
+        WHERE idEvento = :id AND idSede = :idSede";
+
+        $stmt = $this->db->pdo()->prepare($sql);
+
+        $stmt->bindValue(':comentario', $comentario);
+        $stmt->bindValue(':id', $id);
+        $stmt->bindValue(':idSede', $usuario->idSede);
+
+
+        $stmt->execute();
+
+        Bitacora::registrar("Actualizacion de Comentario");
+
+        http_response_code(200);
+        echo json_encode(array('msj' => 'Se actualizo el comentario con exito', 'status' => 200));
+        
+        die();
+    } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
+        $error_data = array(
+            "error_message" => $e->getMessage(),
+            "error_line" => "Linea del error: " . $e->getLine()
+        );
+        //print_r($error_data);
+        http_response_code(422);
+        echo json_encode($error_data);
+        die();
+    }
+
+
+
+}
 
 }
 ?>

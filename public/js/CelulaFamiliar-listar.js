@@ -11,7 +11,7 @@ $(document).ready(function () {
         responsive: true,
         ajax: {
             method: "GET",
-            url: 'http://localhost/AppwebMVC/CelulaFamiliar/Index',
+            url: '/AppwebMVC/CelulaFamiliar/Index',
             data: { cargar_data: 'cargar_data' }
         },
         columns: [
@@ -107,7 +107,7 @@ $(document).ready(function () {
 
                 $.ajax({
                     type: "POST",
-                    url: "http://localhost/AppwebMVC/CelulaFamiliar/Index",
+                    url: "/AppwebMVC/CelulaFamiliar/Index",
                     data: {
 
                         eliminar: 'eliminar',
@@ -163,7 +163,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "GET",
-            url: "http://localhost/AppwebMVC/CelulaFamiliar/Index",
+            url: "/AppwebMVC/CelulaFamiliar/Index",
             data: {
 
                 listaLideres: 'listaLideres',
@@ -237,7 +237,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "GET",
-            url: "http://localhost/AppwebMVC/CelulaFamiliar/Index",
+            url: "/AppwebMVC/CelulaFamiliar/Index",
             data: {
 
                 listaTerritorio: 'listaTerritorio',
@@ -288,7 +288,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "GET",
-            url: "http://localhost/AppwebMVC/CelulaFamiliar/Index",
+            url: "/AppwebMVC/CelulaFamiliar/Index",
             data: {
 
                 listaLideres: 'listaLideres',
@@ -373,7 +373,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "GET",
-            url: "http://localhost/AppwebMVC/CelulaFamiliar/Index",
+            url: "/AppwebMVC/CelulaFamiliar/Index",
             data: {
 
                 listaTerritorio: 'listaTerritorio',
@@ -511,7 +511,7 @@ $(document).ready(function () {
             // Aquí puedes agregar el código para enviar el formulario
             $.ajax({
                 type: "POST",
-                url: "http://localhost/AppwebMVC/CelulaFamiliar/Index",
+                url: "/AppwebMVC/CelulaFamiliar/Index",
                 data: {
 
                     registrar: 'registrar',
@@ -657,7 +657,7 @@ $(document).ready(function () {
             // Aquí puedes agregar el código para enviar el formulario
             $.ajax({
                 type: "POST",
-                url: "http://localhost/AppwebMVC/CelulaFamiliar/Index",
+                url: "/AppwebMVC/CelulaFamiliar/Index",
                 data: {
 
                     editar: 'editar',
@@ -862,7 +862,7 @@ $(document).ready(function () {
             // Aquí puedes agregar el código para enviar el formulario
             $.ajax({
                 type: "POST",
-                url: "http://localhost/AppwebMVC/CelulaFamiliar/Index",
+                url: "/AppwebMVC/CelulaFamiliar/Index",
                 data: {
 
                     registroreunion: 'registroreunion',

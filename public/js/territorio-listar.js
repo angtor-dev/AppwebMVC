@@ -9,7 +9,7 @@ $(document).ready(function () {
         responsive: true,
         ajax: {
             method: "GET",
-            url: 'http://localhost/AppwebMVC/Territorios/Listar',
+            url: '/AppwebMVC/Territorios/Listar',
             data: { cargar_data: 'cargar_data' }
         },
         columns: [
@@ -93,7 +93,7 @@ $(document).ready(function () {
 
                 $.ajax({
                     type: "POST",
-                    url: "http://localhost/AppwebMVC/Territorios/Listar",
+                    url: "/AppwebMVC/Territorios/Listar",
                     data: {
 
                         eliminar: 'eliminar',
@@ -148,7 +148,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "GET",
-            url: "http://localhost/AppwebMVC/Territorios/Listar",
+            url: "/AppwebMVC/Territorios/Listar",
             data: {
 
                 listaLideres: 'listaLideres',
@@ -207,7 +207,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "GET",
-            url: "http://localhost/AppwebMVC/Territorios/Listar",
+            url: "/AppwebMVC/Territorios/Listar",
             data: {
 
                 listaSedes: 'listaSedes',
@@ -262,7 +262,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "GET",
-            url: "http://localhost/AppwebMVC/Territorios/Listar",
+            url: "/AppwebMVC/Territorios/Listar",
             data: {
 
                 listaLideres: 'listaLideres',
@@ -314,7 +314,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "GET",
-            url: "http://localhost/AppwebMVC/Territorios/Listar",
+            url: "/AppwebMVC/Territorios/Listar",
             data: {
 
                 listaSedes: 'listaSedes',
@@ -432,7 +432,7 @@ $(document).ready(function () {
             // Aquí puedes agregar el código para enviar el formulario
             $.ajax({
                 type: "POST",
-                url: "http://localhost/AppwebMVC/Territorios/Listar",
+                url: "/AppwebMVC/Territorios/Listar",
                 data: {
 
                     registrar: 'registrar',
@@ -553,7 +553,7 @@ $(document).ready(function () {
             // Aquí puedes agregar el código para enviar el formulario
             $.ajax({
                 type: "POST",
-                url: "http://localhost/AppwebMVC/Territorios/Listar",
+                url: "/AppwebMVC/Territorios/Listar",
                 data: {
 
                     editar: 'editar',
