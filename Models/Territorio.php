@@ -380,13 +380,49 @@ class Territorio extends Model
         }
     }
 
+    public function valida_nombre($nombre, $id, $idSede)
+    {
 
-    public function validacion_existencia(string $nombre, $idTerritorio): void
+
+        try {
+
+            $sql = "SELECT nombre FROM territorio WHERE (nombre = :nombre) AND (idSede = :idSede) AND (estatus = '1') AND (id NOT IN (:id))";
+
+            $stmt = $this->db->pdo()->prepare($sql);
+            $stmt->bindValue(':nombre', $nombre);
+            $stmt->bindValue(':idSede', $idSede);
+            $stmt->bindValue(':id', $id);
+
+            $stmt->execute();
+            $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $result = $stmt->rowCount();
+
+            if ($result > 0) {
+                return true;
+            } else {
+                return false;
+            }
+
+
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
+            $error_data = array(
+                "error_message" => $e->getMessage(),
+                "error_line" => "Linea del error: " . $e->getLine()
+            );
+            //print_r($error_data);
+            http_response_code(422);
+            echo json_encode($error_data);
+            die();
+        }
+    }
+
+    public function validacion_existencia(string $nombre, $idSede, $idTerritorio): void
     {
         try {
-            $sql = "SELECT * FROM territorio WHERE nombre = :nombre" . (!empty($idTerritorio) ? " AND id != $idTerritorio" : "");
+            $sql = "SELECT * FROM territorio WHERE idSede = :idSede AND nombre = :nombre" . (!empty($idTerritorio) ? " AND id != $idTerritorio" : "");
             $stmt = $this->db->pdo()->prepare($sql);
             $stmt->bindValue(":nombre", $nombre);
+            $stmt->bindValue(":idSede", $idSede);
             $stmt->execute();
             $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
 

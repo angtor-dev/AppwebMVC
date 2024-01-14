@@ -26,7 +26,8 @@ $usuario = $_SESSION['usuario'];
             <div class="card">
                 <div class="card-body d-flex justify-content-center flex-column gap-2">
                     <h5 class="text-center">Reportes estadisticos territorios</h5>
-                    <button class="btn btn-primary" id="botonTerritorio1" data-bs-toggle="modal" data-bs-target="#modal1">Cantidad de celulas por territorios</button>
+                   <button class="btn btn-primary" id="botonTerritorio1" data-bs-toggle="modal" data-bs-target="#modal1">Cantidad de celulas por territorios</button>
+                    <button class="btn btn-primary" id="botonCrecimientoLider" data-bs-toggle="modal" data-bs-target="#modal3">Crecimiento de Lideres</button>
                 </div>
             </div>
         </div>
@@ -83,17 +84,19 @@ $usuario = $_SESSION['usuario'];
             </div>
             <div class="modal-body">
                 <canvas id="estadistica1"></canvas>
+                <div id="ListarDetalles"></div>
             </div>
         </div>
     </div>
 </div>
+
 
 <!-- Modal consulta celulas-->
 <div class="modal fade" id="modal2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modal2" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-md">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+               
             </div>
             <div class="modal-body">
                 <h5 class="form-label mb-4 text-center" id="nombreSeleccionador"></h5>
@@ -107,4 +110,39 @@ $usuario = $_SESSION['usuario'];
             </div>
         </div>
     </div>
+</div>
+
+
+<!-- Modal consulta celulas-->
+<div class="modal fade" id="modal3" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modal3" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="nombree2"></h5>
+            </div>
+            <div class="modal-body">
+
+                <form>
+                <div class="mb-3">
+                    <label class="form-label fw-bold" for="idLider">Seleccionar Lider a Consultar</label>
+                    <select class="form-select" name="idLider" id="idLider"></select>
+                </div>
+                <div class="row g-3">
+                 <div class="col-6" >
+                        <label class="form-label fw-bold" for="fechaInicio">Desde</label>
+                        <input class="form-control" type="date" name="fechaInicio" id="fechaInicio">
+                 </div> 
+                 <div class="col-6" >
+                        <label class="form-label fw-bold" for="fechaFin">Hasta</label>
+                        <input class="form-control" type="date" name="fechaFin" id="fechaFin">
+
+                 </div>   
+                </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button class="btn btn-primary" id="consultarCrecimiento" type="button">Consultar</button>
+            </div>
+        </div>
+    </div>
+     </div>
 </div>

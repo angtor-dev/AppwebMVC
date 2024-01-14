@@ -58,10 +58,50 @@ if (isset($_GET['asistencias_reuniones_celulas'])) {
     die();
 }
 
+if (isset($_GET['crecimiento_lideres'])) {
+    $idLider = trim($_GET['idLider']);
+    $fecha_inicio = trim($_GET['fechaInicio']);
+    $fecha_fin = trim($_GET['fechaFin']);
+    $resultado = $Celulas->crecimiento_lideres($idLider, $fecha_inicio, $fecha_fin);
+    echo json_encode($resultado);
+    die();
+}
+
+if (isset($_POST['cargar_data'])) {
+    $idLider = trim($_POST['idLider']);
+    $fecha_inicio = trim($_POST['fechaInicio']);
+    $fecha_fin = trim($_POST['fechaFin']);
+    $Lista = $Celulas->celulasLider($idLider, $fecha_inicio, $fecha_fin);
+
+    $json = array();
+
+    if (!empty($Lista)) {
+        foreach ($Lista as $key) {
+            $json['data'][] = $key;
+        }
+    } else {     
+        $json['data'] = array();
+    }    
+    echo json_encode($json);
+    die();
+}
+
+
+
+
 if (isset($_GET['discipulos_consolidados_fecha'])) {
     
     $resultado = $Discipulo->discipulos_consolidados_fecha();
     echo json_encode($resultado);
+    die();
+}
+
+if (isset($_GET['listaLideres'])) {
+
+    $ListaLideres = $Celulas->listar_lideres();
+
+    echo json_encode($ListaLideres);
+
     die();
 }
 

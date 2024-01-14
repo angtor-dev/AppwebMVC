@@ -145,6 +145,21 @@ if (isset($_GET['cargar_discipulos_celula'])) {
     die();
 }
 
+if (isset($_POST['coincidencias'])){
+    
+
+    $nombre = empty($_POST['nombre']) ? '' : $_POST['nombre'];
+    $id = isset($_POST['id']) ? $_POST['id'] : '';
+    $idTerritorio = empty($_POST['idTerritorio']) ? '' : $_POST['idTerritorio'];
+    $tipo = 'crecimiento';
+
+    $resultado = $Celulas->valida_nombre($nombre, $id, $tipo, $idTerritorio);
+
+    echo json_encode($resultado);
+    die();
+
+}
+
 
 
 renderView();

@@ -429,6 +429,51 @@ class Discipulo extends Model
         }
     }
 
+    // Validacion cedula 
+
+    public function valida_cedula_existencia($cedula, $id)
+    {
+       
+        try {
+
+            $sql = "SELECT cedula FROM discipulo WHERE cedula = :cedula AND estatus = '1' AND id NOT IN (:id)";
+
+            $stmt = $this->db->pdo()->prepare($sql);
+            $stmt->bindValue(':cedula', $cedula);
+            $stmt->bindValue(':id', $id);
+
+            $stmt->execute();
+            $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $result = $stmt->rowCount();
+
+            if ($result > 0) {
+
+                $sql2 = "SELECT codigo, celulas.nombre FROM celulas
+                 INNER JOIN discipulo ON celulas.id = discipulo.idCelulaConsolidacion AND discipulo.cedula = :cedula";
+
+               $stmt2 = $this->db->pdo()->prepare($sql2);
+               $stmt2->bindValue(':cedula', $cedula);
+               $stmt->execute();
+               $result2 = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+                return $result2;
+            } else {
+                return false;
+            }
+
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
+            $error_data = array(
+                "error_message" => $e->getMessage(),
+                "error_line" => "Linea del error: " . $e->getLine()
+            );
+            //print_r($error_data);
+            http_response_code(422);
+            echo json_encode($error_data);
+            die();
+        }
+    }
+
 
     //Validando existencia de la cedula enviada
     public function validacion_existencia($cedula, $id)

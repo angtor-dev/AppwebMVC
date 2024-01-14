@@ -84,10 +84,21 @@ if (isset($_POST['cargar_data_sedes'])) {
 }
 
 if (isset($_POST['coincidencias'])){
+    
+    if (isset($_POST['id'])){
+    
+    $titulos = $_POST['titulo'];
+    $id = $_POST['id'];
+
+    $resultado = $Evento->valida_titulo_evento($titulos, $id);
+
+    } else {
 
     $titulos = $_POST['titulo'];
+    $id = '';
 
-    $resultado = $Evento->valida_titulo_evento($titulos);
+    $resultado = $Evento->valida_titulo_evento($titulos, $id);
+    }
 
     echo json_encode($resultado);
     die();

@@ -14,7 +14,7 @@ class Sede extends Model
     private int $estatus;
 
     //Expresiones regulares para validaciones
-    private $expresion_nombre = '/^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]{5,50}$/';
+    private $expresion_nombre = '/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,50}$/';
     private $expresion_texto = '/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/';
     private $expresion_id = '/^\d{1,9}$/';
     private $estados_venezuela = [
@@ -285,6 +285,41 @@ class Sede extends Model
         }
     }
 
+    public function valida_nombre($nombre, $id)
+    {
+
+
+        try {
+
+            $sql = "SELECT nombre FROM sede WHERE (nombre = :nombre) AND (estatus = '1') AND (id NOT IN (:id))";
+
+            $stmt = $this->db->pdo()->prepare($sql);
+            $stmt->bindValue(':nombre', $nombre);
+            $stmt->bindValue(':id', $id);
+
+            $stmt->execute();
+            $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $result = $stmt->rowCount();
+
+            if ($result > 0) {
+                return true;
+            } else {
+                return false;
+            }
+
+
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
+            $error_data = array(
+                "error_message" => $e->getMessage(),
+                "error_line" => "Linea del error: " . $e->getLine()
+            );
+            //print_r($error_data);
+            http_response_code(422);
+            echo json_encode($error_data);
+            die();
+        }
+    }
+
     public function validacion_existencia($nombre, $idSede)
     {
         try {
@@ -318,7 +353,7 @@ class Sede extends Model
 
             if ($stmt->rowCount() > 0) {
                 // Lanzar una excepción si el dato existe en la BD
-                throw new Exception("Esta sede esta asociada a un territorio que esta en uso, la cual posee datos asociados", 422);
+                throw new Exception("Esta Sede posee datos asociados", 422);
             }
         } catch (Exception $e) {
             http_response_code($e->getCode());
@@ -441,16 +476,6 @@ class Sede extends Model
     }
 
 
-
-
-
-
-
-
-    public function getEscuela(): Escuela
-    {
-        return Escuela::cargarRelaciones($this->id, "Sede")[0];
-    }
 
     public function getCodigo(): ?string
     {

@@ -120,16 +120,24 @@ table tbody .acciones {
     justify-content: center;
     gap: 1rem;
     width: 100%;
-    color: var(--color-terceario);
+    color: var(--color-secundario);
 }
 table tbody .acciones a i {
-    color: var(--color-terceario);
+    color: var(--color-secundario);
 }
 table tbody .acciones i {
     cursor: pointer;
 }
 table tbody .acciones i:hover {
     color: var(--color-acento-dark);
+}
+
+table tbody .buttons {
+    display: flex;
+    justify-content: right;
+    gap: 1rem;
+    width: 100%;
+    color: var(--color-acento-darker);
 }
 
 /* Datatable overrides */

@@ -17,21 +17,26 @@ $usuario = $_SESSION['usuario'];
 
 </script>
 
-<div class="container-fluid">
-    <div class="col-sm-12 col-md-12 col-lg-12">
+<div class="page-top d-flex align-items-end justify-content-between mb-2">
+<h2><strong>Sedes</strong></h2>
+    <div class="d-flex gap-3">
+        <div class="buscador">
+            <input type="text" id="search" class="form-control" placeholder="Buscar Sede">
+        </div>
+        <?php if ($usuarioSesion->tienePermiso("sedes", "registrar")): ?>
+            <button class="btn btn-accent text-nowrap" id="registrar" data-bs-toggle="modal" data-bs-target="#modal_registrar">
+                                <i class="fa-solid fa-plus"></i>
+                Nueva Sede
+            </button>
+        <?php endif ?>
+    </div>
+</div>
+
+
         <div class="table-responsive">
-            <table id="sedeDatatables" class="table table-bordered table-hover">
+            <table id="sedeDatatables" class="table table-bordered table-rounded table-hover" style="width:100%"> 
 
                 <thead>
-                    <div class="d-flex align-items-end justify-content-between mb-2">
-                        <h2><strong>Sedes</strong></h2>
-                        <?php if ($usuario->tienePermiso("sedes", "registrar")) : ?>
-                            <button class="btn btn-accent text-nowrap" id="registrar" data-bs-toggle="modal" data-bs-target="#modal_registrar">
-                                <i class="fa-solid fa-plus"></i>
-                                Nueva Sede
-                            </button>
-                        <?php endif ?>
-                    </div>
 
                     <tr>
                         <th>Codigo</th>
@@ -44,8 +49,7 @@ $usuario = $_SESSION['usuario'];
                 </tbody>
             </table>
         </div>
-    </div>
-</div>
+
 
 
 
@@ -71,27 +75,27 @@ $usuario = $_SESSION['usuario'];
 
                     <div class="mb-3">
                         <label for="nombre" class="form-label fw-bold">Nombre de la sede</label>
-                        <input type="text" class="form-control" id="nombre" maxlength="30" name="nombre">
+                        <input type="text" class="form-control" id="nombre" maxlength="30" name="nombre" aria-describedby="msj_nombre">
 
-                        <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_nombre" role="alert">
-                            Este campo no acepta numeros y no puede estar vacio.
+                        <div class="invalid-feedback" id="msj_nombre" role="alert">
+                            
                         </div>
 
 
                     </div>
                     <div class="mb-3">
                         <label for="direccion" class="form-label fw-bold">Dirección</label>
-                        <input type="text" class="form-control" id="direccion" maxlength="100" name="direccion">
+                        <input type="text" class="form-control" id="direccion" maxlength="100" name="direccion" aria-describedby="msj_direccion">
 
-                        <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_direccion" role="alert">
-                            Este campo no puede estar vacio.
+                        <div class="invalid-feedback" id="msj_direccion" role="alert">
+                            
                         </div>
                     </div>
 
                     <div class="mb-3">
                         <label for="estado" class="form-label fw-bold">estado</label>
                         <select class="form-select" id="estado" name="estado">
-                            <option value="" selected>Selecciona un estado</option>
+                            <option value="x" selected>Selecciona un estado</option>
                             <option value="ANZ">Anzoátegui</option>
                             <option value="APUR">Apure</option>
                             <option value="ARA">Aragua</option>
@@ -122,7 +126,7 @@ $usuario = $_SESSION['usuario'];
 
 
                     <div class="d-flex justify-content-end gap-1">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" id="cerrarRegistrar" class="btn btn-secondary">Cancelar</button>
                         <button type="submit" class="btn btn-primary">Registrar</button>
 
                     </div>
@@ -197,27 +201,27 @@ $usuario = $_SESSION['usuario'];
 
                     <div class="mb-3">
                         <label for="nombre2" class="form-label fw-bold">Nombre de la sede</label>
-                        <input type="text" class="form-control" id="nombre2" maxlength="30" name="nombre2">
+                        <input type="text" class="form-control" id="nombre2" maxlength="30" name="nombre2" aria-describedby="msj_nombre2">
 
-                        <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_nombre2" role="alert">
-                            Este campo no acepta numeros y no puede estar vacio.
+                        <div class="invalid-feedback" id="msj_nombre2" role="alert">
+                            
                         </div>
 
 
                     </div>
                     <div class="mb-3">
                         <label for="direccion2" class="form-label fw-bold">Dirección</label>
-                        <input type="text" class="form-control" id="direccion2" maxlength="100" name="direccion2">
+                        <input type="text" class="form-control" id="direccion2" maxlength="100" name="direccion2" aria-describedby="msj_direccion2">
 
-                        <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_direccion2" role="alert">
-                            Este campo no puede estar vacio.
+                        <div class="invalid-feedback" id="msj_direccion2" role="alert">
+                            
                         </div>
                     </div>
 
                     <div class="mb-3">
                         <label for="estado2" class="form-label fw-bold">estado</label>
                         <select class="form-select" id="estado2" name="estado2">
-                            <option value="" selected>Selecciona un estado</option>
+                            <option value="x" selected>Selecciona un estado</option>
                             <option value="ANZ">Anzoátegui</option>
                             <option value="APUR">Apure</option>
                             <option value="ARA">Aragua</option>
@@ -247,7 +251,7 @@ $usuario = $_SESSION['usuario'];
                     </div>
 
                     <div class="d-flex justify-content-end gap-1">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" id="cerrarEditar" class="btn btn-secondary">Cancelar</button>
                         <button type="submit" class="btn btn-primary">Actualizar</button>
 
                     </div>

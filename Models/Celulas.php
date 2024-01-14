@@ -1087,7 +1087,44 @@ class Celulas extends Model
     }
 
 
+    public function valida_nombre($nombre, $id, $tipo, $idTerritorio)
+    {
+        /** @var Usuario */
+        $usuario = $_SESSION['usuario'];
 
+        try {
+
+            $sql = "SELECT nombre FROM celulas WHERE nombre = :nombre AND idTerritorio = :idTerritorio
+            AND tipo = :tipo AND estatus = '1' AND (id NOT IN (:id))";
+
+            $stmt = $this->db->pdo()->prepare($sql);
+            $stmt->bindValue(':nombre', $nombre);
+            $stmt->bindValue(':tipo', $tipo);
+            $stmt->bindValue(':id', $id);
+            $stmt->bindValue(':idTerritorio', $idTerritorio);
+         
+
+            $stmt->execute();
+            $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $result = $stmt->rowCount();
+
+            if ($result > 0) {
+                return true;
+            } else {
+                return false;
+            }
+
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
+            $error_data = array(
+                "error_message" => $e->getMessage(),
+                "error_line" => "Linea del error: " . $e->getLine()
+            );
+            //print_r($error_data);
+            http_response_code(422);
+            echo json_encode($error_data);
+            die();
+        }
+    }
 
     public function validacion_existencia(string $nombre, $id): void
     {
@@ -1262,6 +1299,62 @@ class Celulas extends Model
 
                 return $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
+
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
+            $error_data = array(
+                "error_message" => $e->getMessage(),
+                "error_line" => "Linea del error: " . $e->getLine()
+            );
+            http_response_code(422);
+            echo json_encode($error_data);
+            die();
+        }
+    }
+
+    public function crecimiento_lideres($idLider, $fecha_inicio, $fecha_fin)
+    {   
+        try {
+
+                $sql = "SELECT celulas.codigo, COUNT(celulas.id) AS cantidad_celulas, celulas.fechaCreacion,
+                usuario.nombre, usuario.apellido FROM celulas
+                INNER JOIN usuario ON usuario.id = :idLider
+                WHERE celulas.fechaCreacion BETWEEN :fecha_inicio AND :fecha_fin GROUP BY celulas.fechaCreacion ASC";
+                
+
+                $stmt = $this->db->pdo()->prepare($sql);
+                $stmt->bindValue(":idLider", $idLider);
+                $stmt->bindValue(":fecha_inicio", $fecha_inicio);
+                $stmt->bindValue(":fecha_fin", $fecha_fin);
+                $stmt->execute();
+
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
+            $error_data = array(
+                "error_message" => $e->getMessage(),
+                "error_line" => "Linea del error: " . $e->getLine()
+            );
+            http_response_code(422);
+            echo json_encode($error_data);
+            die();
+        }
+    }
+
+    public function celulasLider($idLider, $fecha_inicio, $fecha_fin)
+    {   
+        try {
+
+                $sql = "SELECT celulas.codigo, celulas.nombre, celulas.fechaCreacion FROM celulas
+                WHERE (celulas.idLider = :idLider) AND (celulas.fechaCreacion BETWEEN :fecha_inicio AND :fecha_fin)";
+                
+
+                $stmt = $this->db->pdo()->prepare($sql);
+                $stmt->bindValue(":idLider", $idLider);
+                $stmt->bindValue(":fecha_inicio", $fecha_inicio);
+                $stmt->bindValue(":fecha_fin", $fecha_fin);
+                $stmt->execute();
+
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(

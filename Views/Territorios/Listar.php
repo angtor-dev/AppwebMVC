@@ -18,22 +18,25 @@ $usuario = $_SESSION['usuario'];
 
 <div class="container-fluid">
 
-    <div class="row">
-        <div class="col-sm-12 col-md-12 col-lg-12">
+<div class="page-top d-flex align-items-end justify-content-between mb-2">
+<h2><strong>Territorios</strong></h2>
+    <div class="d-flex gap-3">
+        <div class="buscador">
+            <input type="text" id="search" class="form-control" placeholder="Buscar Territorio">
+        </div>
+        <?php if ($usuarioSesion->tienePermiso("territorios", "registrar")): ?>
+            <button class="btn btn-accent text-nowrap" id="registrar" data-bs-toggle="modal" data-bs-target="#modal_registrar">
+                                <i class="fa-solid fa-plus"></i>
+                Nuevo Territorio
+            </button>
+        <?php endif ?>
+    </div>
+</div>
+
+
             <div class="table-responsive">
-                <table id="territorioDatatables" class="table table-bordered table-hover">
+                <table id="territorioDatatables" class="table table-bordered table-rounded table-hover" style="width:100%">
                     <thead>
-
-                        <div class="d-flex align-items-end justify-content-between mb-2">
-                            <h2><strong>Territorios</strong></h2>
-                            <?php if ($usuario->tienePermiso("territorios", "registrar")) : ?>
-                                <button class="btn btn-accent text-nowrap" id="registrar" data-bs-toggle="modal" data-bs-target="#modal_registrar">
-                                    <i class="fa-solid fa-plus"></i>
-                                    Nuevo Territorio
-                                </button>
-                            <?php endif ?>
-                        </div>
-
                         <tr>
                             <th>Codigo</th>
                             <th>Nombre de Territorio</th>
@@ -46,9 +49,7 @@ $usuario = $_SESSION['usuario'];
                     </tbody>
                 </table>
             </div>
-        </div>
-    </div>
-
+   
 
     <!-- MODAL PARA VER TODOS LOS DATOS DE LA SEDE -->
     <div class="modal fade" id="modal_verInfo" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
@@ -99,7 +100,7 @@ $usuario = $_SESSION['usuario'];
 
                             <div class="mb-3">
                                 <label for="sede" class="form-label fw-bold">Sede</label>
-                                <select class="form-select" id="idSede" name="idSede">
+                                <select id="idSede" name="idSede">
                                 </select>
                                 <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_idSede" role="alert">
                                     Debe seleccionar una Sede.
@@ -108,10 +109,10 @@ $usuario = $_SESSION['usuario'];
 
                             <div class="mb-3">
                                 <label for="nombre" class="form-label fw-bold">Nombre de el Territorio</label>
-                                <input type="text" class="form-control" id="nombre" maxlength="50" name="nombre">
+                                <input type="text" class="form-control" id="nombre" maxlength="30" name="nombre" aria-describedby="msj_nombre">
 
-                                <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_nombre" role="alert">
-                                    Este campo no acepta numeros y no puede estar vacio.
+                                <div class="invalid-feedback" id="msj_nombre" role="alert">
+    
                                 </div>
 
 
@@ -129,16 +130,16 @@ $usuario = $_SESSION['usuario'];
 
                             <div class="mb-3">
                                 <label for="detalles" class="form-label fw-bold">Detalles</label>
-                                <input type="text" class="form-control" id="detalles" maxlength="100" name="detalles">
+                                <input type="text" class="form-control" id="detalles" maxlength="100" name="detalles" aria-describedby="msj_detalles">
 
-                                <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_detalles" role="alert">
-                                    Este campo no puede estar vacio.
+                                <div class="invalid-feedback" id="msj_detalles" role="alert">
+                                
                                 </div>
                             </div>
 
 
-                            <div class="d-flex justify-content-end">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <div class="d-flex justify-content-end gap-1">
+                                <button type="button" id="cerrarRegistrar" class="btn btn-secondary">Cerrar</button>
                                 <button type="submit" class="btn btn-primary">Registrar</button>
                             </div>
                         </form>
@@ -174,10 +175,9 @@ $usuario = $_SESSION['usuario'];
 
                             <div class="mb-3">
                                 <label for="nombre2" class="form-label fw-bold">Nombre de el Territorio</label>
-                                <input type="text" class="form-control" id="nombre2" maxlength="50" name="nombre2">
+                                <input type="text" class="form-control" id="nombre2" maxlength="30" name="nombre2"  aria-describedby="msj_nombre2">
 
-                                <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_nombre2" role="alert">
-                                    Este campo no acepta numeros y no puede estar vacio.
+                                <div class="invalid-feedback" id="msj_nombre2" role="alert">
                                 </div>
 
 
@@ -195,16 +195,14 @@ $usuario = $_SESSION['usuario'];
 
                             <div class="mb-3">
                                 <label for="detalles2" class="form-label fw-bold">Detalles</label>
-                                <input type="text" class="form-control" id="detalles2" maxlength="100" name="detalles2">
+                                <input type="text" class="form-control" id="detalles2" maxlength="100" name="detalles2" aria-describedby="msj_detalles2">
 
-                                <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_detalles2" role="alert">
-                                    Este campo no puede estar vacio.
+                                <div class="invalid-feedback" id="msj_detalles2" role="alert">
                                 </div>
                             </div>
 
-
-                            <div class="d-flex justify-content-end">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <div class="d-flex justify-content-end gap-1">
+                                <button type="button" id="cerrarEditar" class="btn btn-secondary">Cancelar</button>
                                 <button type="submit" class="btn btn-primary">Editar</button>
                             </div>
                         </form>

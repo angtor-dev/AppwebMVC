@@ -214,46 +214,6 @@ class Evento extends Model
     }
 
 
-    //Validaciones 
-
-    public function valida_titulo_evento($titulos)
-    {
-
-
-        try {
-
-            $sql = "SELECT titulo FROM evento WHERE titulo = :titulos";
-
-            $stmt = $this->db->pdo()->prepare($sql);
-            $stmt->bindValue(':titulos', $titulos);
-
-            $stmt->execute();
-            $stmt->fetchAll(PDO::FETCH_ASSOC);
-            $result = $stmt->rowCount();
-
-            if ($result > 0) {
-                return true;
-            } else {
-                return false;
-            }
-
-
-        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
-            $error_data = array(
-                "error_message" => $e->getMessage(),
-                "error_line" => "Linea del error: " . $e->getLine()
-            );
-            //print_r($error_data);
-            http_response_code(422);
-            echo json_encode($error_data);
-            die();
-        }
-
-
-
-    }
-
-
     public function eliminar_evento($id)
     {
         try {
@@ -394,7 +354,48 @@ public function actualizarComentario($comentario, $id){
 
 
 
-}
+}  
 
+
+
+    //Validaciones 
+  public function valida_titulo_evento($titulos, $id)
+    {
+
+
+        try {
+
+            $sql = "SELECT titulo FROM evento WHERE titulo = :titulos AND id NOT IN (:id)";
+
+            $stmt = $this->db->pdo()->prepare($sql);
+            $stmt->bindValue(':titulos', $titulos);
+            $stmt->bindValue(':id', $id);
+
+
+            $stmt->execute();
+            $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $result = $stmt->rowCount();
+
+            if ($result > 0) {
+                return true;
+            } else {
+                return false;
+            }
+
+
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
+            $error_data = array(
+                "error_message" => $e->getMessage(),
+                "error_line" => "Linea del error: " . $e->getLine()
+            );
+            //print_r($error_data);
+            http_response_code(422);
+            echo json_encode($error_data);
+            die();
+        }
+
+
+
+    }
 }
 ?>

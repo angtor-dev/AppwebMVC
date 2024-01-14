@@ -1,5 +1,6 @@
 $(document).ready(function () {
 
+    let datatables;
 
     ////////////// REPORTES ESTADISTICOS SEDES //////////////
 
@@ -57,6 +58,7 @@ $(document).ready(function () {
 
                 grafico1(config)
 
+                $("#ListarDetalles").html('');
                 document.getElementById('nombreReporte').innerText = e.target.textContent
 
             },
@@ -65,7 +67,7 @@ $(document).ready(function () {
                 console.error("Error al enviar:", textStatus, errorThrown);
             }
         })
-    })
+    });
 
     $('#botonSede2').on('click', function (e) {
         $.ajax({
@@ -117,6 +119,7 @@ $(document).ready(function () {
                 grafico1(config)
 
                 document.getElementById('nombreReporte').innerText = e.target.textContent
+                $("#ListarDetalles").html('');
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -125,7 +128,7 @@ $(document).ready(function () {
                 console.error("Error al enviar:", textStatus, errorThrown);
             }
         })
-    })
+    });
 
     $('#botonSede3').on('click', function (e) {
         $.ajax({
@@ -177,6 +180,7 @@ $(document).ready(function () {
                 grafico1(config)
 
                 document.getElementById('nombreReporte').innerText = e.target.textContent
+                $("#ListarDetalles").html('');
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -185,7 +189,7 @@ $(document).ready(function () {
                 console.error("Error al enviar:", textStatus, errorThrown);
             }
         })
-    })
+    });
 
 
 
@@ -243,6 +247,7 @@ $(document).ready(function () {
                 grafico1(config)
 
                 document.getElementById('nombreReporte').innerText = e.target.textContent
+                $("#ListarDetalles").html('');
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -250,7 +255,7 @@ $(document).ready(function () {
                 console.error("Error al enviar:", textStatus, errorThrown);
             }
         })
-    })
+    });
 
 
 
@@ -309,6 +314,7 @@ $(document).ready(function () {
                 grafico1(config)
 
                 document.getElementById('nombreReporte').innerText = e.target.textContent
+                $("#ListarDetalles").html('');
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -316,7 +322,7 @@ $(document).ready(function () {
                 console.error("Error al enviar:", textStatus, errorThrown);
             }
         })
-    })
+    });
 
 
 
@@ -375,7 +381,9 @@ $(document).ready(function () {
 
                 grafico1(config)
 
-                document.getElementById('nombreReporte').innerText = e.target.textContent
+                document.getElementById('nombreReporte').innerText = e.target.textContent;
+                $("#ListarDetalles").html('');
+                
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -383,21 +391,30 @@ $(document).ready(function () {
                 console.error("Error al enviar:", textStatus, errorThrown);
             }
         })
-    })
+    });
 
 
 
-
+   $('#botonCrecimientoLider').on('click', function (e) {
+        document.getElementById('nombree2').innerText = 'Consulta crecimineto de Lideres';
+        listarLideres();
+    
+    });
 
     ////////////// REPORTES ESTADISTICOS CELULA CONSOLIDACION //////////////
 
-    $('#botonCelulaConsolidacion1').on('click', function (e) {
+    $('#consultarCrecimiento').on('click', function (e) {
+        let idLider = document.getElementById('idLider').value;
+        let fechaInicio = document.getElementById('fechaInicio').value;
+        let fechaFin = document.getElementById('fechaFin').value;
         $.ajax({
             type: "GET",
             url: "/AppwebMVC/Estadisticas/Iglesia",
             data: {
-                lideres_cantidad_celulas: 'lideres_cantidad_celulas',
-                tipo: 'consolidacion'
+                crecimiento_lideres: 'crecimiento_lideres',
+                idLider: idLider,
+                fechaInicio: fechaInicio,
+                fechaFin: fechaFin
             },
             success: function (response) {
                 console.log(response);
@@ -407,10 +424,11 @@ $(document).ready(function () {
                 let labels = [];
                 let valores = [];
                 let colores = [];
+                let label = json.nombre + ' ' + json.apellido;
 
                 json.forEach(element => {
-                    labels.push(element.nombre + ' ' + element.apellido)
-                    valores.push(element.cantidadCelulas)
+                    valores.push(element.cantidad_celulas)
+                    labels.push(element.fechaCreacion)
                     colores.push(colorRGB())
                 });
 
@@ -418,6 +436,7 @@ $(document).ready(function () {
                     labels: labels,
                     datasets: [
                         {
+                            label: label,
                             data: valores,
                             backgroundColor: colores,
                             borderColor: colores,
@@ -427,35 +446,149 @@ $(document).ready(function () {
                 }
 
                 const config = {
-                    type: 'bar',
+                    type: 'line',
                     data: data,
-                    options: {
-                        indexAxis: 'y',
-                        responsive: true,
-                        plugins: {
-                            legend: {
-                                display: false,
-                            },
-                        }
-                    },
+                       
                 };
+
 
                 grafico1(config)
 
-                document.getElementById('nombreReporte').innerText = e.target.textContent
+                $("#ListarDetalles").html(`
+                    <div class="table-responsive">
+                    <h4>Detalles</h4>
+                <table id="detallesDatatables" class="table table-hover display" style="width:100%">
+                <thead>
+                    <tr>
+                    <th>Codigo</th>
+                    <th>Nombre</th>
+                    <th>Fecha Creacion</th>
+                    </tr>
+                </thead>
+                <tbody>
+               
+                </tbody>
+            </table>
+           </div>`);
+
+            
+           listardetalles(idLider, fechaInicio, fechaFin);
+            
+                  
+              $('#modal3').modal('hide');
+                $('#modal1').modal('show');
+                // document.getElementById('nombreReporte').innerText = e.target.textContent
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 // Aquí puedes manejar errores, por ejemplo:
+                
                 console.error("Error al enviar:", textStatus, errorThrown);
             }
         })
+
+        
+    });
+
+    function listardetalles(idLider, fechaInicio, fechaFin){
+
+              if (datatables) {
+                datatables.destroy();
+              }
+
+                datatables = $('#detallesDatatables').DataTable({
+                    language: {
+                      info: "",         // para ocultar "Showing x to y of z entries"
+                      infoEmpty: ""     // para ocultar "Showing 0 to 0 of 0 entries"
+                    },
+                    paging: false,
+                    searching: false,
+                    responsive: true,
+                    info: false,
+                    ordering: false,
+                    ajax: {
+                      method: "POST",
+                      url: '/AppwebMVC/Estadisticas/Iglesia',
+                      data: { cargar_data: 'cargar_data',
+                      idLider: idLider,
+                      fechaInicio: fechaInicio,
+                      fechaFin: fechaFin}
+                    },
+                    columns: [
+                        { data: 'codigo' },
+                        { data: 'nombre' },
+                        { data: 'fechaCreacion'}
+                    ],
+            
+                  });
+      
+    }
+
+    /////////////////////// REPORTE CRECIMIENTO LIDER ////////////////////////////////
+
+
+////////////// REPORTES ESTADISTICOS CELULA CONSOLIDACION //////////////
+
+$('#botonCelulaConsolidacion1').on('click', function (e) {
+    $.ajax({
+        type: "GET",
+        url: "/AppwebMVC/Estadisticas/Iglesia",
+        data: {
+            lideres_cantidad_celulas: 'lideres_cantidad_celulas',
+            tipo: 'consolidacion'
+        },
+        success: function (response) {
+            console.log(response);
+
+            let json = JSON.parse(response);
+
+            let labels = [];
+            let valores = [];
+            let colores = [];
+
+            json.forEach(element => {
+                labels.push(element.nombre + ' ' + element.apellido)
+                valores.push(element.cantidadCelulas)
+                colores.push(colorRGB())
+            });
+
+            const data = {
+                labels: labels,
+                datasets: [
+                    {
+                        data: valores,
+                        backgroundColor: colores,
+                        borderColor: colores,
+                        borderWidth: 1,
+                    },
+                ],
+            }
+
+            const config = {
+                type: 'bar',
+                data: data,
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false,
+                        },
+                    }
+                },
+            };
+
+            grafico1(config)
+
+            document.getElementById('nombreReporte').innerText = e.target.textContent
+
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            // Aquí puedes manejar errores, por ejemplo:
+            console.error("Error al enviar:", textStatus, errorThrown);
+        }
     })
-
-    ///////////////////////////////////////////////////////
-
-
-
+})
 
 
     ////////////// REPORTES ESTADISTICOS DISCIPULOS //////////////
@@ -523,7 +656,8 @@ $(document).ready(function () {
 
                 grafico1(config)
 
-                document.getElementById('nombreReporte').innerText = e.target.textContent
+                document.getElementById('nombreReporte').innerText = e.target.textContent;
+                $("#ListarDetalles").html('');
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -531,34 +665,36 @@ $(document).ready(function () {
                 console.error("Error al enviar:", textStatus, errorThrown);
             }
         })
-    })
+    });
 
 
     ////////////////////////////////////////////////////////
 
 
-
+    
 
 
 
     let tipoCelula;
     $('#botonCelulaFamiliar2').on('click', function (e) {
-        document.getElementById('nombreSeleccionador').innerText = 'Seleccione la celula familiar'
-        listar_celulas('familiar')
-        tipoCelula = 'familiar'
-    })
+        document.getElementById('nombreSeleccionador').innerText = 'Seleccione la celula familiar';
+        listar_celulas('familiar');
+        tipoCelula = 'familiar';
+    });
 
     $('#botonCelulaCrecimiento2').on('click', function (e) {
-        document.getElementById('nombreSeleccionador').innerText = 'Seleccione la celula crecimiento'
-        listar_celulas('crecimiento')
-        tipoCelula = 'crecimiento'
-    })
+        document.getElementById('nombreSeleccionador').innerText = 'Seleccione la celula crecimiento';
+        listar_celulas('crecimiento');
+        tipoCelula = 'crecimiento';
+    });
 
     $('#botonCelulaConsolidacion2').on('click', function (e) {
-        document.getElementById('nombreSeleccionador').innerText = 'Seleccione la celula consolidacion'
-        listar_celulas('consolidacion')
-        tipoCelula = 'consolidacion'
-    })
+        document.getElementById('nombreSeleccionador').innerText = 'Seleccione la celula consolidacion';
+        listar_celulas('consolidacion');
+        tipoCelula = 'consolidacion';
+    });
+
+   
 
     $('#consultaAsistencia').on('click', function (e) {
         const idCelula = document.getElementById('selectorCelulas').value;
@@ -610,8 +746,9 @@ $(document).ready(function () {
 
                 grafico1(config)
 
-                $('#modal2').modal('hide')
-                $('#modal1').modal('show')
+                $('#modal2').modal('hide');
+                $('#modal1').modal('show');
+                $("#ListarDetalles").html('');
 
                 //document.getElementById('nombreReporte').innerText = e.target.textContent
 
@@ -622,7 +759,7 @@ $(document).ready(function () {
                 alert("Hubo un error al realizar el registro. Por favor, inténtalo de nuevo.");
             }
         })
-    })
+    });
 
 
     let choices;
@@ -679,7 +816,68 @@ $(document).ready(function () {
                 alert("Hubo un error al realizar el registro. Por favor, inténtalo de nuevo.");
             }
         })
-    }
+    };
+
+
+    let choices2;
+    function listarLideres() {
+
+        $.ajax({
+            type: "GET",
+            url: "/AppwebMVC/Estadisticas/Iglesia",
+            data: {
+
+                listaLideres: 'listaLideres',
+
+            },
+            success: function (response) {
+
+                let data = JSON.parse(response);
+
+                let selector = document.getElementById('idLider');
+                selector.innerHTML = '';
+                // Limpiar el selector antes de agregar nuevas opciones
+                const placeholderOption = document.createElement('option');
+                placeholderOption.value = '';
+                placeholderOption.text = 'Seleccione un Lider';
+                placeholderOption.disabled = true;
+                placeholderOption.selected = true;
+                selector.appendChild(placeholderOption);
+
+                data.forEach(item => {
+
+                    const option = document.createElement('option');
+                    option.value = item.id;
+                    option.text = `${item.cedula} ${item.nombre} ${item.apellido}`;
+                    selector.appendChild(option);
+
+                });
+
+                // Destruir la instancia existente si la hay
+                if (choices2) {
+                    choices2.destroy();
+                }
+
+                choices2 = new Choices(selector, {
+                    allowHTML: true,
+                    searchEnabled: true,  // Habilita la funcionalidad de búsqueda
+                    removeItemButton: true,  // Habilita la posibilidad de remover items
+                    placeholderValue: 'Selecciona una opción',  // Texto del placeholder
+                });
+
+                choices2.setChoiceByValue('');
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                // Aquí puedes manejar errores, por ejemplo:
+                console.error("Error al enviar:", textStatus, errorThrown);
+                alert("Hubo un error al realizar el registro. Por favor, inténtalo de nuevo.");
+            }
+        })
+
+      
+    };
+
 
 
 
@@ -698,7 +896,7 @@ $(document).ready(function () {
         }
 
         chart1 = new Chart(ctx, config)
-    }
+    };
 
 
     // Funciones para generar colores aleatorios para el Chart JS
@@ -709,6 +907,6 @@ $(document).ready(function () {
     function colorRGB() {
         var color = "(" + generarNumero(255) + "," + generarNumero(255) + "," + generarNumero(255) + ", 0.5)";
         return "rgb" + color;
-    }
+    };
 
 })

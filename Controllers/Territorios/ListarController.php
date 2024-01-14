@@ -42,7 +42,7 @@ if (isset($_POST['registrar'])) {
     $detalles = trim(strtolower($_POST['detalles']));
     
     $Territorio->validacion_datos($idSede, $nombre, $idLider, $detalles);
-    $Territorio->validacion_existencia($nombre, $idTerritorio = '');
+    $Territorio->validacion_existencia($nombre, $idSede, $idTerritorio = '');
     $Territorio->registrar_territorio($idSede, $nombre, $idLider, $detalles);
 
     echo json_encode('Lo logramos!!');
@@ -84,7 +84,7 @@ if (isset($_POST['editar'])) {
     $detalles = trim(strtolower($_POST['detalles']));
 
     $Territorio->validacion_datos($idSede, $nombre, $idLider, $detalles);
-    $Territorio->validacion_existencia($nombre, $id);
+    $Territorio->validacion_existencia($nombre, $idSede, $id);
     $Territorio->editar_territorio($id, $idSede, $nombre, $idLider, $detalles);
 
     die();
@@ -100,6 +100,21 @@ if (isset($_POST['eliminar'])) {
     $Territorio->eliminar_territorio($id);
 
     die();
+}
+
+
+if (isset($_POST['coincidencias'])){
+    
+
+    $nombre = empty($_POST['nombre']) ? '' : $_POST['nombre'];
+    $id = isset($_POST['id']) ? $_POST['id'] : '';
+    $idSede = empty($_POST['idSede']) ? '' : $_POST['idSede'];
+
+    $resultado = $Territorio->valida_nombre($nombre, $id, $idSede);
+
+    echo json_encode($resultado);
+    die();
+
 }
 
 renderView();

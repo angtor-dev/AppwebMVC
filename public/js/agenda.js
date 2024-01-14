@@ -210,6 +210,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
+
+
   $('#sedesDatatables tbody').on('click', '#verComentarioSede', function () {
     const datos = datatables.row($(this).parents()).data();
 
@@ -719,7 +721,9 @@ const validacionEditar = {
     url: "/AppwebMVC/Agenda/Index",
     data: {
       coincidencias: 'coincidencias',
-      titulo: tituloEditar
+      titulo: tituloEditar,
+      id : document.getElementById('idEvento').textContent,
+
     },
     success: function (response) {
 

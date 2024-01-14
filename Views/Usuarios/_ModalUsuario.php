@@ -116,7 +116,7 @@
         <?php if (empty($usuario->id)): ?>
             <div class="col-sm-6">
                 <label for="input-clave">Contraseña</label>
-                <input class="form-control" type="password" name="clave" id="input-clave" required maxlength="50"
+                <input class="form-control" type="password" name="clave" id="input-clave" required maxlength="10"
                     pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$">
                 <div class="invalid-feedback">
                     Ingresa una contraseña válida
@@ -124,7 +124,7 @@
             </div>
             <div class="col-sm-6">
                 <label for="input-confirmacion">Repetir contraseña</label>
-                <input class="form-control" type="password" name="confirmacion" id="input-confirmacion" required maxlength="50">
+                <input class="form-control" type="password" name="confirmacion" id="input-confirmacion" required maxlength="10">
                 <div class="invalid-feedback">
                     Las contraseñas deben coincidir
                 </div>

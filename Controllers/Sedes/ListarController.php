@@ -86,4 +86,26 @@ if (isset($_POST['eliminar'])) {
     die();
 }
 
+if (isset($_POST['coincidencias'])){
+    
+    if (isset($_POST['id'])){
+    
+    $nombre = $_POST['nombre'];
+    $id = $_POST['id'];
+
+    $resultado = $Sede->valida_nombre($nombre, $id);
+
+    } else {
+
+    $nombre = $_POST['nombre'];
+    $id = '';
+
+    $resultado = $Sede->valida_nombre($nombre, $id);
+    }
+
+    echo json_encode($resultado);
+    die();
+
+}
+
 renderView();

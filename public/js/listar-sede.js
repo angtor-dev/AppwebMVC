@@ -5,7 +5,20 @@ $(document).ready(function () {
 
 
   const dataTable = $('#sedeDatatables').DataTable({
-    responsive: true,
+   
+    info: false,
+        lengthChange: false,
+        pageLength: 15,
+        dom: 'ltipB',
+        searching: true,
+        language: {
+            url: '/AppwebMVC/public/lib/datatables/datatable-spanish.json'
+        },
+        // Muestra paginacion solo si hay mas de una pagina
+        drawCallback: function (settings) {
+            var pagination = $(this).closest('.dataTables_wrapper').find('.dataTables_paginate');
+            pagination.toggle(this.api().page.info().pages > 1);
+        },
     ajax: {
       method: "GET",
       url: '/AppwebMVC/Sedes/Listar',
@@ -19,14 +32,14 @@ $(document).ready(function () {
         data: null,
         render: function (data, type, row, meta) {
 
-          let botonInfo = `<button type="button" id="ver_info" data-bs-toggle="modal" data-bs-target="#modal_verInfo" title="Ver detalles" class="btn btn-secondary"><i class="fa-solid fa-circle-info" ></i></button>`;
+          let botonInfo = `<a role="button" id="ver_info" data-bs-toggle="modal" data-bs-target="#modal_verInfo" title="Ver detalles" ><i class="fa-solid fa-circle-info" ></i></a>`;
 
-          let botonEditar = permisos.actualizar ? `<button type="button" id="editar" data-bs-toggle="modal" title="Actualizar" data-bs-target="#modal_editarInfo" class="btn btn-primary"><i class="fa-solid fa-pen" ></i></button>` : '';
+          let botonEditar = permisos.actualizar ? `<a role="button" id="editar" data-bs-toggle="modal" title="Actualizar" data-bs-target="#modal_editarInfo" ><i class="fa-solid fa-pen" ></i></a>` : '';
 
-          let botonEliminar = permisos.eliminar ? `<button type="button"  id=eliminar class="btn btn-danger delete-btn" title="Eliminar"><i class="fa-solid fa-trash" ></i></button>` : '';
+          let botonEliminar = permisos.eliminar ? `<a role="button"  id=eliminar title="Eliminar"><i class="fa-solid fa-trash" ></i></a>` : '';
 
           let div = `
-          <div class="d-flex justify-content-end gap-1">
+          <div class="acciones">
                     ${botonInfo}
                     ${botonEditar}
                     ${botonEliminar}
@@ -36,7 +49,16 @@ $(document).ready(function () {
         }
       },
     ],
+
+    
   })
+
+ 
+    $('#search').keyup(function () {
+        dataTable.search($(this).val()).draw();
+    });
+
+
 
   $('#sedeDatatables tbody').on('click', '#ver_info', function () {
     const datos = dataTable.row($(this).parents()).data();
@@ -66,11 +88,9 @@ $(document).ready(function () {
 
     Listar_PastoresRegistrar();
 
-  })
+  });
 
-
-
-
+  
 
   $('#sedeDatatables tbody').on('click', '#eliminar', function () {
     const datos = dataTable.row($(this).parents()).data();
@@ -263,16 +283,17 @@ $(document).ready(function () {
   };
 
   const expresiones = {
-    nombre: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]{5,50}$/,
+    nombre: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,50}$/,
     id: /^\d{1,9}$/,
     texto: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/,
     estado: ["ANZ", "APUR", "ARA", "BAR", "BOL", "CAR", "COJ", "DELTA", "FAL", "GUA",
-      "LAR", "MER", "MIR", "MON", "ESP", "POR", "SUC", "TÁCH", "TRU", "VAR", "YAR", "ZUL"]
+      "LAR", "MER", "MIR", "MON", "ESP", "POR", "SUC", "TACH", "TRU", "VAR", "YAR", "ZUL"]
   }
 
   // Validación del ID del pastor
-  const idPastor = document.getElementById('idPastor');
-  idPastor.addEventListener('change', (e) => {
+  
+  $("#idPastor").on("change", function (event) {
+   const idPastor = document.getElementById('idPastor');
     if (expresiones.id.test(idPastor.value)) {
       validaciones.idPastor = true;
       $("#idPastor").removeClass("is-invalid");
@@ -284,47 +305,88 @@ $(document).ready(function () {
     }
   })
 
-
   // Validación del nombre de la sede
-  const nombre = document.getElementById('nombre');
-  nombre.addEventListener('keyup', (e) => {
-    if (expresiones.nombre.test(nombre.value)) {
-      validaciones.nombre = true;
-      $("#nombre").removeClass("is-invalid");
-      $("#msj_nombre").addClass("d-none");
-    } else {
-      validaciones.nombre = false;
-      $("#nombre").addClass("is-invalid");
-      $("#msj_nombre").removeClass("d-none");
-    }
-  })
+  $("#nombre").on("keyup", function (event) {
+    const nombre = document.getElementById("nombre").value
+    $.ajax({
+      type: "POST",
+      url: "/AppwebMVC/Sedes/Listar",
+      data: {
+        coincidencias: 'coincidencias',
+        nombre: nombre
+      },
+      success: function (response) {
+  
+        let data = JSON.parse(response);
+  
+        if (data != true) {
+          validaciones.nombre = true;
+          $("#nombre").removeClass("is-invalid");
+          $("#nombre").addClass("is-valid");
+          document.getElementById('msj_nombre').textContent = '';
+          if (expresiones.nombre.test(nombre)) {
+            validaciones.nombre = true;
+            $("#nombre").removeClass("is-invalid");
+            $("#nombre").addClass("is-valid");
+            document.getElementById('msj_nombre').textContent = '';
+  
+          } else {
+            validaciones.nombre = false;
+            $("#nombre").removeClass("is-valid");
+            $("#nombre").addClass("is-invalid");
+            document.getElementById('msj_nombre').textContent = 'El nombre es obligatorio y debe poseer mas de 5 caracteres';
+  
+          }
+        } else {
+          validaciones.nombre = false;
+          $("#nombre").removeClass("is-valid");
+          $("#nombre").addClass("is-invalid");
+          document.getElementById('msj_nombre').textContent = 'Ya existe una Sede con este nombre';
+  
+        }
+  
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        // Aquí puedes manejar errores, por ejemplo:
+        console.error("Error al enviar:", textStatus, errorThrown);
+      }
+    })
+  
+  
+  });
+  
+  
 
 
   // Validación de la dirección
-  const direccion = document.getElementById('direccion');
-  direccion.addEventListener('keyup', (e) => {
+  
+  $("#direccion").on("keyup", function (event) {
+    const direccion = document.getElementById('direccion');
     if (expresiones.texto.test(direccion.value)) {
       validaciones.direccion = true;
-      $("#direccion").removeClass("is-invalid");
-      $("#msj_direccion").addClass("d-none");
+            $("#direccion").removeClass("is-invalid");
+            $("#direccion").addClass("is-valid");
+            document.getElementById('msj_direccion').textContent = '';
     } else {
       validaciones.direccion = false;
-      $("#direccion").addClass("is-invalid");
-      $("#msj_direccion").removeClass("d-none");
+            $("#direccion").removeClass("is-valid");
+            $("#direccion").addClass("is-invalid");
+            document.getElementById('msj_direccion').textContent = 'Este campo debe poseer mas de 5 caracteres';
     }
   })
 
 
   // Validación del estado
-  const estado = document.getElementById('estado');
-  estado.addEventListener('change', (e) => {
-    if (expresiones.estado.includes(estado.value)) {
+  
+  $("#estado").on("change", function (event) {
+    const estado = document.getElementById('estado');
+   if (expresiones.estado.includes(estado.value)) {
       validaciones.estado = true;
-      $("#estado").removeClass("is-invalid");
+   
       $("#msj_estado").addClass("d-none");
     } else {
       validaciones.estado = false;
-      $("#estado").addClass("is-invalid");
+      
       $("#msj_estado").removeClass("d-none");
     }
   })
@@ -336,7 +398,7 @@ $(document).ready(function () {
     event.preventDefault();
 
     // Verificar si todas las validaciones son correctas
-    if (Object.values(validaciones).every(val => val)) {
+    if (Object.values(validaciones).every(status => status === true)) {
       // Si todas las validaciones son correctas, realiza la petición AJAX
       // ... (tu código AJAX va aquí)
       $.ajax({
@@ -345,10 +407,10 @@ $(document).ready(function () {
         data: {
 
           registrar: 'registrar',
-          idPastor: idPastor.value,
-          nombre: nombre.value,
-          direccion: direccion.value,
-          estado: estado.value
+          idPastor: document.getElementById("idPastor").value,
+          nombre: document.getElementById("nombre").value,
+          direccion: document.getElementById("direccion").value,
+          estado: $('#estado').val()
         },
         success: function (response) {
           console.log(response);
@@ -360,12 +422,18 @@ $(document).ready(function () {
             title: data.msj,
             showConfirmButton: false,
             timer: 2000,
-          })
+          });
 
-          document.getElementById('nombre').value = ''
-          document.getElementById('direccion').value = ''
-          document.getElementById('estado').value = ''
-          choices.setChoiceByValue('')
+          $('#agregar').modal('hide');
+          document.getElementById('formulario').reset();
+
+        for (const key in validaciones) {
+          validaciones[key] = false;
+        }
+        $("#nombre").removeClass("is-valid");
+        $("#direccion").removeClass("is-valid");
+        Listar_PastoresRegistrar();
+          
         },
         error: function (jqXHR, textStatus, errorThrown) {
           if (jqXHR.responseText) {
@@ -418,17 +486,18 @@ $(document).ready(function () {
   };
 
   const expresiones2 = {
-    nombre2: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]{5,50}$/,
+    nombre2: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,50}$/,
     id2: /^\d{1,9}$/,
     texto2: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/,
     estado2: ["ANZ", "APUR", "ARA", "BAR", "BOL", "CAR", "COJ", "DELTA", "FAL", "GUA",
-      "LAR", "MER", "MIR", "MON", "ESP", "POR", "SUC", "TÁCH", "TRU", "VAR", "YAR", "ZUL"]
+      "LAR", "MER", "MIR", "MON", "ESP", "POR", "SUC", "TACH", "TRU", "VAR", "YAR", "ZUL"]
   }
 
   // Validación del ID del pastor
-  const idPastor2 = document.getElementById('idPastor2');
-  idPastor2.addEventListener('change', (e) => {
-    if (expresiones2.id.test(idPastor2.value)) {
+  
+  $("#idPastor2").on("change", function (event) {
+    const idPastor2 = document.getElementById('idPastor2');
+    if (expresiones2.id2.test(idPastor2.value)) {
       validaciones2.idPastor2 = true;
       $("#idPastor2").removeClass("is-invalid");
       $("#msj_idPastor2").addClass("d-none");
@@ -439,47 +508,92 @@ $(document).ready(function () {
     }
   })
 
+ 
+   // Validación del nombre de la sede
+   $("#nombre2").on("keyup", function (event) {
+    const nombre2 = document.getElementById("nombre2").value
+    $.ajax({
+      type: "POST",
+      url: "/AppwebMVC/Sedes/Listar",
+      data: {
+        coincidencias: 'coincidencias',
+        nombre: nombre2,
+        id: document.getElementById('idSede').textContent
 
-  // Validación del nombre de la sede
-  const nombre2 = document.getElementById('nombre2');
-  nombre2.addEventListener('keyup', (e) => {
-    if (expresiones2.nombre2.test(nombre2.value)) {
-      validaciones2.nombre2 = true;
-      $("#nombre2").removeClass("is-invalid");
-      $("#msj_nombre2").addClass("d-none");
-    } else {
-      validaciones2.nombre2 = false;
-      $("#nombre2").addClass("is-invalid");
-      $("#msj_nombre2").removeClass("d-none");
-    }
-  })
+      },
+      success: function (response) {
+  
+        let data = JSON.parse(response);
+  
+        if (data != true) {
+          validaciones2.nombre2 = true;
+          $("#nombre2").removeClass("is-invalid");
+          $("#nombre2").addClass("is-valid");
+          document.getElementById('msj_nombre2').textContent = '';
+          if (expresiones2.nombre2.test(nombre2)) {
+            validaciones2.nombre2 = true;
+            $("#nombre2").removeClass("is-invalid");
+            $("#nombre2").addClass("is-valid");
+            document.getElementById('msj_nombre2').textContent = '';
+  
+          } else {
+            validaciones2.nombre2 = false;
+            $("#nombre2").removeClass("is-valid");
+            $("#nombre2").addClass("is-invalid");
+            document.getElementById('msj_nombre2').textContent = 'El nombre es obligatorio y debe poseer mas de 5 caracteres';
+  
+          }
+        } else {
+          validaciones2.nombre2 = false;
+          $("#nombre2").removeClass("is-valid");
+          $("#nombre2").addClass("is-invalid");
+          document.getElementById('msj_nombre2').textContent = 'Ya existe una Sede con este nombre';
+  
+        }
+  
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        // Aquí puedes manejar errores, por ejemplo:
+        console.error("Error al enviar:", textStatus, errorThrown);
+      }
+    })
+  
+  
+  });
+  
+  
 
 
   // Validación de la dirección
-  const direccion2 = document.getElementById('direccion2');
-  direccion2.addEventListener('keyup', (e) => {
-    if (expresiones2.texto.test(direccion2.value)) {
+  
+  $("#direccion2").on("keyup", function (event) {
+    const direccion2 = document.getElementById('direccion2');
+    if (expresiones2.texto2.test(direccion2.value)) {
       validaciones2.direccion2 = true;
-      $("#direccion2").removeClass("is-invalid");
-      $("#msj_direccion2").addClass("d-none");
+            $("#direccion2").removeClass("is-invalid");
+            $("#direccion2").addClass("is-valid");
+            document.getElementById('msj_direccion2').textContent = '';
     } else {
       validaciones2.direccion2 = false;
-      $("#direccion2").addClass("is-invalid");
-      $("#msj_direccion2").removeClass("d-none");
+            $("#direccion2").removeClass("is-valid");
+            $("#direccion2").addClass("is-invalid");
+            document.getElementById('msj_direccion2').textContent = 'Este campo debe poseer mas de 5 caracteres';
     }
   })
 
 
+
   // Validación del estado
-  const estado2 = document.getElementById('estado2');
-  estado2.addEventListener('change', (e) => {
+  
+  $("#estado2").on("keyup", function (event) {
+    const estado2 = document.getElementById('estado2');
     if (expresiones2.estado2.includes(estado2.value)) {
       validaciones2.estado2 = true;
-      $("#estado2").removeClass("is-invalid");
+  
       $("#msj_estado2").addClass("d-none");
     } else {
       validaciones2.estado2 = false;
-      $("#estado2").addClass("is-invalid");
+      
       $("#msj_estado2").removeClass("d-none");
     }
   })
@@ -489,10 +603,10 @@ $(document).ready(function () {
     // Previene el comportamiento predeterminado del formulario
     event.preventDefault();
 
-    let id2 = document.getElementById('idSede').textContent;
+    
 
     // Verificar si todas las validaciones son correctas
-    if (Object.values(validaciones2).every(val => val)) {
+    if (Object.values(validaciones2).every(val => val === true)) {
       // Si todas las validaciones son correctas, realiza la petición AJAX
       // ... (tu código AJAX va aquí)
       $.ajax({
@@ -501,11 +615,11 @@ $(document).ready(function () {
         data: {
 
           editar: 'editar',
-          id: id2,
-          idPastor: idPastor2.value,
-          nombre: nombre2.value,
-          direccion: direccion2.value,
-          estado: estado2.value
+          id: document.getElementById('idSede').textContent,
+          idPastor: document.getElementById("idPastor2").value,
+          nombre: document.getElementById("nombre2").value,
+          direccion: document.getElementById("direccion2").value,
+          estado: document.getElementById("estado2").value
         },
         success: function (response) {
           console.log(response);
@@ -517,7 +631,11 @@ $(document).ready(function () {
             title: 'Actualizado correctamente',
             showConfirmButton: false,
             timer: 2000,
-          })
+          });
+    
+        $("#nombre2").removeClass("is-valid");
+        $("#direccion2").removeClass("is-valid");
+ 
 
         },
         error: function (jqXHR, textStatus, errorThrown) {
@@ -557,6 +675,33 @@ $(document).ready(function () {
     }
   });
 
+
+  $('#cerrarRegistrar').on('click', function () {
+    
+    document.getElementById('formulario').reset();
+
+    
+    $("#msj_estado").addClass("d-none");
+    $("#msj_idPastor").addClass("d-none");
+    $("#direccion").removeClass("is-valid");
+    $("#direccion").removeClass("is-invalid");
+    $("#nombre").removeClass("is-valid");
+    $("#nombre").removeClass("is-invalid");
+    $('#modal_registrar').modal('hide');
+
+  });
+
+  $('#cerrarEditar').on('click', function () {
+    
+    $("#msj_estado2").addClass("d-none");
+    $("#msj_idPastor2").addClass("d-none");
+    $("#direccion2").removeClass("is-valid");
+    $("#direccion2").removeClass("is-invalid");
+    $("#nombre2").removeClass("is-valid");
+    $("#nombre2").removeClass("is-invalid");
+    $('#modal_editarInfo').modal('hide');
+
+  });
 
 });
 
