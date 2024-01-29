@@ -46,7 +46,7 @@ if (isset($_POST['registrar'])) {
     $idTerritorio = trim($_POST['idTerritorio']);
     
     $Celulas->validacion_datos($nombre, [$idLider, $idCoLider, $idTerritorio]);
-    $Celulas->validacion_existencia($nombre, $id='');
+    $Celulas->validacion_existencia($nombre, $id='', $tipo, $idTerritorio);
     $Celulas->registrar_Celula($tipo, $nombre, $idLider, $idCoLider, $idTerritorio);
 
     die();
@@ -65,7 +65,7 @@ if (isset($_POST['editar'])) {
     $idTerritorio = trim($_POST['idTerritorio2']);
 
     $Celulas->validacion_datos($nombre, [$idLider, $idCoLider, $idTerritorio]);
-    $Celulas->validacion_existencia($nombre, $id);
+    $Celulas->validacion_existencia($nombre, $id, $tipo, $idTerritorio);
     $Celulas->validacion_accion($id, $accion = 'actualizar');
     $Celulas->editar_Celula($id, $tipo, $nombre, $idLider, $idCoLider, $idTerritorio);
 

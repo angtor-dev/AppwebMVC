@@ -1,7 +1,22 @@
 $(document).ready(function () {
+    
+    let choices1;
+    let choices2;
 
     const dataTable = $('#sedeDatatables').DataTable({
-        responsive: true,
+        info: false,
+        lengthChange: false,
+        pageLength: 15,
+        dom: 'ltipB',
+        searching: true,
+        language: {
+            url: '/AppwebMVC/public/lib/datatables/datatable-spanish.json'
+        },
+   
+        drawCallback: function (settings) {
+            var pagination = $(this).closest('.dataTables_wrapper').find('.dataTables_paginate');
+            pagination.toggle(this.api().page.info().pages > 1);
+        },
         ajax: {
             method: "GET",
             url: '/AppwebMVC/Discipulos/Index',
@@ -17,24 +32,31 @@ $(document).ready(function () {
                 data: null,
         render: function (data, type, row, meta) {
 
-          let botonInfo = `<button type="button" id="ver_info" data-bs-toggle="modal" data-bs-target="#modal_verInfo" title="Ver detalles" class="btn btn-secondary"><i class="fa-solid fa-circle-info" ></i></button>`;
+            let botonInfo = `<a type="button" id="ver_info" data-bs-toggle="modal" data-bs-target="#modal_verInfo" title="Ver detalles" ,><i class="fa-solid fa-circle-info" ></i></a>`;
 
-          let botonEditar = permisos.actualizar ? `<button type="button" id="editar" data-bs-toggle="modal" title="Actualizar" data-bs-target="#modal_editarInfo" class="btn btn-primary"><i class="fa-solid fa-pen" ></i></button>` : '';
-
-          let botonEliminar = permisos.eliminar ? `<button type="button"  id=eliminar class="btn btn-danger delete-btn" title="Eliminar"><i class="fa-solid fa-trash" ></i></button>` : '';
+            let botonEditar = permisos.actualizar ? `<a type="button" id="editar" data-bs-toggle="modal" title="Actualizar" data-bs-target="#modal_editarInfo" ,><i class="fa-solid fa-pen" ></i></a>` : '';
+  
+            let botonEliminar = permisos.eliminar ? `<a type="button"  id=eliminar , title="Eliminar"><i class="fa-solid fa-trash" ></i></a>` : '';
+  
+          
 
           let div = `
-          <div class="d-flex justify-content-end gap-1">
+          <div class="acciones">
                     ${botonInfo}
                     ${botonEditar}
                     ${botonEliminar}
           </div>
           `
           return div;
-        }}
+        }},
         ],
-    })
+    });
 
+    $('#search').keyup(function () {
+        dataTable.search($(this).val()).draw();
+    });
+
+    
     $('#registrar').on('click', function () {
         Listar_Consolidador('', 1);
         Listar_celulas('', 1);
@@ -152,10 +174,7 @@ $(document).ready(function () {
         });
     });
 
-
-
-    let choices1;
-    let choices2;
+   
 
     function Listar_Consolidador(idConsolidador, opcion) {
 
@@ -245,6 +264,7 @@ $(document).ready(function () {
             success: function (response) {
 
                 let data = JSON.parse(response);
+                
 
                 let selector;
                 if (opcion == 1) {
@@ -300,7 +320,7 @@ $(document).ready(function () {
 
 
 
-
+// editar desicipulos 
 
     let validaciones = {
         nombre: true,
@@ -349,22 +369,59 @@ $(document).ready(function () {
     })
 
     $("#cedula2").on("keyup", function (event) {
-        let cedula = $("#cedula2").val();
-        if (/^[0-9]{7,8}$/.test(cedula)) {
-            validaciones.cedula = true;
-            $("#cedula2").removeClass("is-invalid");
-            $("#cedula2").addClass("is-valid");
+        const cedula = document.getElementById("cedula2").value
+        $.ajax({
+          type: "POST",
+          url: "/AppwebMVC/Discipulos/Index",
+          data: {
+            coincidencias: 'coincidencias',
+            cedula: cedula,
+            id: $("#idDiscipulo").text()
+          },
+          success: function (response) {
+                  
+          var data = JSON.parse(response);
+      
+            if (data != true) {
+              validaciones.cedula = true;
+              $("#cedula2").removeClass("is-invalid");
+              $("#cedula2").addClass("is-valid");
+              document.getElementById('msj_cedula2').textContent = '';
+              if (/^[0-9]{7,8}$/.test(cedula)) {
+                validaciones.cedula = true;
+                $("#cedula2").removeClass("is-invalid");
+                $("#cedula2").addClass("is-valid");
+                document.getElementById('msj_cedula2').textContent = '';
+      
+              } else {
+                validaciones.cedula = false;
+                $("#cedula2").removeClass("is-valid");
+                $("#cedula2").addClass("is-invalid");
+                document.getElementById('msj_cedula2').textContent = 'La Cedula es obligatoria';
+      
+              }
+            } else {
 
-        } else {
-            validaciones.cedula = false;
-            $("#cedula2").removeClass("is-valid");
-            $("#cedula2").addClass("is-invalid");
-
-        }
-    })
+             
+              validaciones.cedula = false;
+              $("#cedula2").removeClass("is-valid");
+              $("#cedula2").addClass("is-invalid");
+              document.getElementById('msj_cedula2').textContent = 'Este Discipulo ya se encuentra inscrito en la Sede:';
+      
+            }
+      
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            // Aquí puedes manejar errores, por ejemplo:
+            console.error("Error al enviar:", textStatus, errorThrown);
+          }
+        })
+      
+      
+      });
 
     $("#direccion2").on("keyup", function (event) {
-        let direccion = $("#direccion").val();
+        let direccion = $("#direccion2").val();
         if (/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/.test(direccion)) {
             validaciones.direccion = true;
             $("#direccion2").removeClass("is-invalid");
@@ -405,7 +462,7 @@ $(document).ready(function () {
 
     $("#estadoCivil2").on("change", function (event) {
         let estadoCivil = $("#estadoCivil2").val();
-        let estadosPermitido = ["casado", "soltero", "viudo"];
+        let estadosPermitido = ["casado/a", "soltero/a", "viudo/a"];
         if (estadosPermitido.includes(estadoCivil)) {
             validaciones.estadoCivil = true;
             $("#estadoCivil2").removeClass("is-invalid");
@@ -419,8 +476,13 @@ $(document).ready(function () {
 
 
     $("#fechaNacimiento2").on("change", function (event) {
-        let fechaNacimiento = $("#fechaNacimiento2").val();
-        if (/^.+$/.test(fechaNacimiento)) {
+
+        const fechaNacimiento = $("#fechaNacimiento2").val();
+        const hoy = new Date();
+        const cumpleanos18 = new Date(fechaNacimiento);
+        cumpleanos18.setFullYear(cumpleanos18.getFullYear() + 18);
+
+        if (hoy >= cumpleanos18) {
             validaciones.fechaNacimiento = true;
             $("#fechaNacimiento2").removeClass("is-invalid");
             $("#fechaNacimiento2").addClass("is-valid");
@@ -467,8 +529,8 @@ $(document).ready(function () {
             $("#msj_idCelulaConsolidacion2").addClass("d-none");
         } else {
             validaciones.idcelulaconsolidacion = false;
-            $("#idCelulaConsolidacion2").removeClass("is-valid");
-            $("#idCelulaConsolidacion2").addClass("is-invalid");
+            $("#msj_idCelulaConsolidacion2").removeClass("d-none");
+           
         }
 
 
@@ -476,13 +538,10 @@ $(document).ready(function () {
     });
 
 
-
-
-
     $("#formulario2").submit(function (event) {
         event.preventDefault();
 
-        if (Object.values(validaciones).every(val => val)) {
+        if (Object.values(validaciones).every(status => status === true)) {
 
             let id = $("#idDiscipulo").text();
             let asisFamiliar
@@ -497,18 +556,20 @@ $(document).ready(function () {
             } else {
                 asisCrecimiento = 'no'
             }
-            let nombre = $("#nombre2").val();
-            let apellido = $("#apellido2").val();
-            let cedula = $("#cedula2").val();
-            let telefono = $("#telefono2").val();
-            let estadoCivil = $("#estadoCivil2").val();
-            let fechaNacimiento = $("#fechaNacimiento2").val();
-            let fechaConvercion = $("#fechaConvercion2").val();
-            let idConsolidador = $("#idConsolidador2").val();
-            let idCelulaConsolidacion = $("#idCelulaConsolidacion2").val();
-            let direccion = $("#direccion2").val();
-            let motivo = $("#motivo2").val();
 
+            const dato = {
+                 apellido: $("#apellido2"),
+                 cedula: $("#cedula2"),
+                 telefono: $("#telefono2"),
+                 estadoCivil: $("#estadoCivil2"),
+                 fechaNacimiento: $("#fechaNacimiento2"),
+                 fechaConvercion: $("#fechaConvercion2"),
+                 idConsolidador: $("#idConsolidador2"),
+                 idCelulaConsolidacion: $("#idCelulaConsolidacion2"),
+                 nombre: $("#nombre2"),
+                 direccion: $("#direccion2"),
+                 motivo: $("#motivo2")
+              }
             $.ajax({
                 type: "POST",
                 url: "/AppwebMVC/Discipulos/Index",
@@ -516,19 +577,19 @@ $(document).ready(function () {
 
                     editar: 'editar',
                     id: id,
-                    nombre: nombre,
-                    apellido: apellido,
-                    cedula: cedula,
-                    telefono: telefono,
-                    estadoCivil: estadoCivil,
-                    fechaNacimiento: fechaNacimiento,
-                    fechaConvercion: fechaConvercion,
+                    nombre: dato.nombre.val(),
+                    apellido: dato.apellido.val(),
+                    cedula: dato.cedula.val(),
+                    telefono: dato.telefono.val(),
+                    estadoCivil: dato.estadoCivil.val(),
+                    fechaNacimiento: dato.fechaNacimiento.val(),
+                    fechaConvercion: dato.fechaConvercion.val(),
                     asisCrecimiento: asisCrecimiento,
                     asisFamiliar: asisFamiliar,
-                    idConsolidador: idConsolidador,
-                    idCelulaConsolidacion: idCelulaConsolidacion,
-                    direccion: direccion,
-                    motivo: motivo
+                    idConsolidador: dato.idConsolidador.val(),
+                    idCelulaConsolidacion: dato.idCelulaConsolidacion.val(),
+                    direccion: dato.direccion.val(),
+                    motivo: dato.motivo.val()
                 },
                 success: function (response) {
 
@@ -541,6 +602,11 @@ $(document).ready(function () {
                         showConfirmButton: false,
                         timer: 2000,
                     })
+
+                    for (const key in dato) {
+                        const input = dato[key];
+                        input.removeClass("is-valid");
+                      }
 
 
                 },
@@ -589,38 +655,29 @@ $(document).ready(function () {
 
 
     let validaciones2 = {
-        nombre: true,
-        apellido: true,
-        cedula: true,
-        telefono: true,
-        estadoCivil: true,
-        fechaNacimiento: true,
-        fechaConvercion: true,
-        idConsolidador: true,
-        idcelulaconsolidacion: true,
-        direccion: true,
-        motivo: true
+        nombre: false,
+        apellido: false,
+        cedula: false,
+        telefono: false,
+        estadoCivil: false,
+        fechaNacimiento: false,
+        fechaConvercion: false,
+        idConsolidador: false,
+        idcelulaconsolidacion: false,
+        direccion: false,
+        motivo: false
 
     };
 
-    const expresiones = {
-        nombrePersona: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ]{1,50}$/,
-        apellidoPersona: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ]{1,50}$/,
-        texto: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/,
-        telefono: /^(0414|0424|0416|0426|0412)[0-9]{7}/,
-        cedula: /^[0-9]{7,8}$/
-    }
-
-
     $("#nombre").on("keyup", function (event) {
         let nombre = $("#nombre").val();
-        if (expresiones.nombrePersona.test(nombre)) {
-            validaciones.nombre = true;
+        if (/^[a-zA-ZñÑ\s]{1,30}$/.test(nombre)) {
+            validaciones2.nombre = true;
             $("#nombre").removeClass("is-invalid");
             $("#nombre").addClass("is-valid");
 
         } else {
-            validaciones.nombre = false;
+            validaciones2.nombre = false;
             $("#nombre").removeClass("is-valid");
             $("#nombre").addClass("is-invalid");
 
@@ -629,13 +686,13 @@ $(document).ready(function () {
 
     $("#apellido").on("keyup", function (event) {
         let apellido = $("#apellido").val();
-        if (expresiones.apellidoPersona.test(apellido)) {
-            validaciones.apellido = true;
+        if (/^[a-zA-ZñÑ\s]{1,30}$/.test(apellido)) {
+            validaciones2.apellido = true;
             $("#apellido").removeClass("is-invalid");
             $("#apellido").addClass("is-valid");
 
         } else {
-            validaciones.apellido = false;
+            validaciones2.apellido = false;
             $("#apellido").removeClass("is-valid");
             $("#apellido").addClass("is-invalid");
 
@@ -643,28 +700,64 @@ $(document).ready(function () {
     })
 
     $("#cedula").on("keyup", function (event) {
-        let cedula = $("#cedula").val();
-        if (expresiones.cedula.test(cedula)) {
-            validaciones.cedula = true;
-            $("#cedula").removeClass("is-invalid");
-            $("#cedula").addClass("is-valid");
+        const cedula = document.getElementById("cedula").value
+        $.ajax({
+          type: "POST",
+          url: "/AppwebMVC/Discipulos/Index",
+          data: {
+            coincidencias: 'coincidencias',
+            cedula: cedula,
+          },
+          success: function (response) {
+                  
+          var data = JSON.parse(response);
+      
+            if (data != true) {
+              validaciones2.cedula = true;
+              $("#cedula").removeClass("is-invalid");
+              $("#cedula").addClass("is-valid");
+              document.getElementById('msj_cedula').textContent = '';
+              if (/^[0-9]{7,8}$/.test(cedula)) {
+                validaciones2.cedula = true;
+                $("#cedula").removeClass("is-invalid");
+                $("#cedula").addClass("is-valid");
+                document.getElementById('msj_cedula').textContent = '';
+      
+              } else {
+                validaciones2.cedula = false;
+                $("#cedula").removeClass("is-valid");
+                $("#cedula").addClass("is-invalid");
+                document.getElementById('msj_cedula').textContent = 'La Cedula es obligatoria';
+      
+              }
+            } else {
 
-        } else {
-            validaciones.cedula = false;
-            $("#cedula").removeClass("is-valid");
-            $("#cedula").addClass("is-invalid");
-
-        }
-    })
+             
+              validaciones2.cedula = false;
+              $("#cedula").removeClass("is-valid");
+              $("#cedula").addClass("is-invalid");
+              document.getElementById('msj_cedula').textContent = 'Este Discipulo ya se encuentra inscrito en la Sede:';
+      
+            }
+      
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            // Aquí puedes manejar errores, por ejemplo:
+            console.error("Error al enviar:", textStatus, errorThrown);
+          }
+        })
+      
+      
+      });
 
     $("#direccion").on("keyup", function (event) {
         let direccion = $("#direccion").val();
-        if (expresiones.texto.test(direccion)) {
-            validaciones.direccion = true;
+        if (/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/.test(direccion)) {
+            validaciones2.direccion = true;
             $("#direccion").removeClass("is-invalid");
             $("#direccion").addClass("is-valid");
         } else {
-            validaciones.direccion = false;
+            validaciones2.direccion = false;
             $("#direccion").removeClass("is-valid");
             $("#direccion").addClass("is-invalid");
         }
@@ -672,12 +765,12 @@ $(document).ready(function () {
 
     $("#motivo").on("keyup", function (event) {
         let motivo = $("#motivo").val();
-        if (expresiones.texto.test(motivo)) {
-            validaciones.motivo = true;
+        if (/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/.test(motivo)) {
+            validaciones2.motivo = true;
             $("#motivo").removeClass("is-invalid");
             $("#motivo").addClass("is-valid");
         } else {
-            validaciones.motivo = false;
+            validaciones2.motivo = false;
             $("#motivo").removeClass("is-valid");
             $("#motivo").addClass("is-invalid");
         }
@@ -685,12 +778,12 @@ $(document).ready(function () {
 
     $("#telefono").on("keyup", function (event) {
         let telefono = $("#telefono").val();
-        if (expresiones.telefono.test(telefono)) {
-            validaciones.telefono = true;
+        if (/^(0414|0424|0416|0426|0412)[0-9]{7}/.test(telefono)) {
+            validaciones2.telefono = true;
             $("#telefono").removeClass("is-invalid");
             $("#telefono").addClass("is-valid");
         } else {
-            validaciones.telefono = false;
+            validaciones2.telefono = false;
             $("#telefono").removeClass("is-valid");
             $("#telefono").addClass("is-invalid");
         }
@@ -701,44 +794,26 @@ $(document).ready(function () {
         let estadoCivil = $("#estadoCivil").val();
         let estadosPermitido = ["casado/a", "soltero/a", "viudo/a"];
         if (estadosPermitido.includes(estadoCivil)) {
-            validaciones.estadoCivil = true;
+            validaciones2.estadoCivil = true;
             $("#estadoCivil").removeClass("is-invalid");
             $("#estadoCivil").addClass("is-valid");
         } else {
-            validaciones.estadoCivil = false;
+            validaciones2.estadoCivil = false;
             $("#estadoCivil").removeClass("is-valid");
             $("#estadoCivil").addClass("is-invalid");
         }
     })
 
 
-    $("#fechaNacimiento").on("change", function (event) {
-
-        const fechaNacimiento = $("#fechaNacimiento").val();
-        const hoy = new Date();
-        const cumpleanos18 = new Date(fechaNacimiento);
-        cumpleanos18.setFullYear(cumpleanos18.getFullYear() + 18);
-
-        if (hoy >= cumpleanos18) {
-            validaciones.fechaNacimiento = true;
-            $("#fechaNacimiento").removeClass("is-invalid");
-            $("#fechaNacimiento").addClass("is-valid");
-        } else {
-            validaciones.fechaNacimiento = false;
-            $("#fechaNacimiento").removeClass("is-valid");
-            $("#fechaNacimiento").addClass("is-invalid");
-        }
-    })
-
 
     $("#fechaConvercion").on("change", function (event) {
         let fechaConvercion = $("#fechaConvercion").val();
-        if (fechaConvercion.value !== '') {
-            validaciones.fechaConvercion = true;
+        if (/^.+$/.test(fechaConvercion)) {
+            validaciones2.fechaConvercion = true;
             $("#fechaConvercion").removeClass("is-invalid");
             $("#fechaConvercion").addClass("is-valid");
         } else {
-            validaciones.fechaConvercion = false;
+            validaciones2.fechaConvercion = false;
             $("#fechaConvercion").removeClass("is-valid");
             $("#fechaConvercion").addClass("is-invalid");
         }
@@ -749,52 +824,51 @@ $(document).ready(function () {
 
         let idConsolidador = $("#idConsolidador").val();
         if (/^[1-9]\d*$/.test(idConsolidador)) {
-            validaciones.idConsolidador = true;
+            validaciones2.idConsolidador = true;
             $("#msj_idConsolidador").addClass("d-none");
         } else {
             console.log(idConsolidador);
-            validaciones.idConsolidador = false;
+            validaciones2.idConsolidador = false;
             $("#msj_idConsolidador").removeClass("d-none");
         }
     })
 
 
-    $("#idcelulaconsolidacion").on("change", function (event) {
-        let idcelulaconsolidacion = $("#idcelulaconsolidacion").val();
+    $("#idCelulaConsolidacion").on("change", function (event) {
+        let idcelulaconsolidacion = $("#idCelulaConsolidacion").val();
         if (/^[1-9]\d*$/.test(idcelulaconsolidacion)) {
-            validaciones.idcelulaconsolidacion = true;
-            $("#msj_idcelulaconsolidacion").addClass("d-none");
+            validaciones2.idcelulaconsolidacion = true;
+            $("#msj_idCelulaConsolidacion").addClass("d-none");
         } else {
-            validaciones.idcelulaconsolidacion = false;
-            $("#idcelulaconsolidacion").removeClass("is-valid");
-            $("#idcelulaconsolidacion").addClass("is-invalid");
+            validaciones2.idcelulaconsolidacion = false;
+            $("#msj_idCelulaConsolidacion").removeClass("d-none");
+           
         }
 
 
-
-        let direccion = $("#direccion").val();
-        if (/^[a-zA-ZñÑ\s]{1,100}$/.test(direccion)) {
-            validaciones.direccion = true;
-            $("#direccion").removeClass("is-invalid");
-            $("#direccion").addClass("is-valid");
-        } else {
-            validaciones.direccion = false;
-            $("#direccion").removeClass("is-valid");
-            $("#direccion").addClass("is-invalid");
-        }
-
-        let motivo = $("#motivo").val();
-        if (/^[a-zA-ZñÑ\s]{1,100}$/.test(motivo)) {
-            validaciones.motivo = true;
-            $("#motivo").removeClass("is-invalid");
-            $("#motivo").addClass("is-valid");
-        } else {
-            validaciones.motivo = false;
-            $("#motivo").removeClass("is-valid");
-            $("#motivo").addClass("is-invalid");
-        }
 
     });
+
+
+    $("#fechaNacimiento").on("change", function (event) {
+
+        const fechaNacimiento = $("#fechaNacimiento").val();
+        const hoy = new Date();
+        const cumpleanos18 = new Date(fechaNacimiento);
+        cumpleanos18.setFullYear(cumpleanos18.getFullYear() + 18);
+
+        if (hoy >= cumpleanos18) {
+            validaciones2.fechaNacimiento = true;
+            $("#fechaNacimiento").removeClass("is-invalid");
+            $("#fechaNacimiento").addClass("is-valid");
+        } else {
+            validaciones2.fechaNacimiento = false;
+            $("#fechaNacimiento").removeClass("is-valid");
+            $("#fechaNacimiento").addClass("is-invalid");
+        }
+    })
+
+
 
 
 
@@ -804,7 +878,7 @@ $(document).ready(function () {
     $("#formulario").submit(function (event) {
         event.preventDefault();
 
-        if (Object.values(validaciones2).every(val => val)) {
+        if (Object.values(validaciones2).every(status => status === true)) {
 
 
             let asisFamiliar;
@@ -823,17 +897,19 @@ $(document).ready(function () {
             }
 
 
-            let nombre = $("#nombre").val();
-            let apellido = $("#apellido").val();
-            let cedula = $("#cedula").val();
-            let telefono = $("#telefono").val();
-            let estadoCivil = $("#estadoCivil").val();
-            let fechaNacimiento = $("#fechaNacimiento").val();
-            let fechaConvercion = $("#fechaConvercion").val();
-            let idConsolidador = $("#idConsolidador").val();
-            let idcelulaconsolidacion = $("#idCelulaConsolidacion").val();
-            let direccion = $("#direccion").val();
-            let motivo = $("#motivo").val();
+            const dato = {
+                apellido: $("#apellido"),
+                cedula: $("#cedula"),
+                telefono: $("#telefono"),
+                estadoCivil: $("#estadoCivil"),
+                fechaNacimiento: $("#fechaNacimiento"),
+                fechaConvercion: $("#fechaConvercion"),
+                idConsolidador: $("#idConsolidador"),
+                idCelulaConsolidacion: $("#idCelulaConsolidacion"),
+                nombre: $("#nombre"),
+                direccion: $("#direccion"),
+                motivo: $("#motivo")
+             }
 
             $.ajax({
                 type: "POST",
@@ -841,26 +917,27 @@ $(document).ready(function () {
                 data: {
 
                     registrar: 'registrar',
-                    nombre: nombre,
-                    apellido: apellido,
-                    cedula: cedula,
-                    telefono: telefono,
-                    estadoCivil: estadoCivil,
-                    fechaNacimiento: fechaNacimiento,
-                    fechaConvercion: fechaConvercion,
+                    nombre: dato.nombre.val(),
+                    apellido: dato.apellido.val(),
+                    cedula: dato.cedula.val(),
+                    telefono: dato.telefono.val(),
+                    estadoCivil: dato.estadoCivil.val(),
+                    fechaNacimiento: dato.fechaNacimiento.val(),
+                    fechaConvercion: dato.fechaConvercion.val(),
                     asisCrecimiento: asisCrecimiento,
                     asisFamiliar: asisFamiliar,
-                    idConsolidador: idConsolidador,
-                    idcelulaconsolidacion: idcelulaconsolidacion,
-                    direccion: direccion,
-                    motivo: motivo
+                    idConsolidador: dato.idConsolidador.val(),
+                    idCelulaConsolidacion: dato.idCelulaConsolidacion.val(),
+                    direccion: dato.direccion.val(),
+                    motivo: dato.motivo.val()
                 },
                 success: function (response) {
                     console.log(response);
                     let data = JSON.parse(response);
 
                     dataTable.ajax.reload();
-
+                    document.getElementById('formulario').reset()
+                
                     Swal.fire({
                         icon: 'success',
                         title: 'Registrado Correctamente',
@@ -868,10 +945,15 @@ $(document).ready(function () {
                         timer: 2000,
                     })
 
-                    document.getElementById('formulario').reset()
-                    Listar_Consolidador('');
-                    Listar_celulas('');
+                    for (const key in dato) {
+                        const input = dato[key];
+                        input.removeClass("is-valid");
+                      }
 
+                      choices1.destroy();
+                      choices2.destroy();
+                    
+                      $('#modal_registrar').modal('hide');
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR.responseText);
@@ -910,6 +992,68 @@ $(document).ready(function () {
 
 
     });
+
+
+
+    $('#cerrarRegistrar').on('click', function () {
+    
+        document.getElementById('formulario').reset();
+    
+        const dato = {
+            apellido: $("#apellido"),
+            cedula: $("#cedula"),
+            telefono: $("#telefono"),
+            estadoCivil: $("#estadoCivil"),
+            fechaNacimiento: $("#fechaNacimiento"),
+            fechaConvercion: $("#fechaConvercion"),
+            nombre: $("#nombre"),
+            direccion: $("#direccion"),
+            motivo: $("#motivo")
+         }
+
+         for (const key in dato) {
+            const input = dato[key];
+            input.removeClass("is-valid");
+            input.removeClass("is-invalid")
+          }
+
+          $("#idConsolidador").addClass("d-none");
+          $("#idCelulaConsolidacion").addClass("d-none");
+
+    
+    
+        $('#modal_registrar').modal('hide');
+        
+      });
+    
+      $('#cerrarEditar').on('click', function () {
+        
+        const dato = {
+            apellido: $("#apellido2"),
+            cedula: $("#cedula2"),
+            telefono: $("#telefono2"),
+            estadoCivil: $("#estadoCivil2"),
+            fechaNacimiento: $("#fechaNacimiento2"),
+            fechaConvercion: $("#fechaConvercion2"),
+            nombre: $("#nombre2"),
+            direccion: $("#direccion2"),
+            motivo: $("#motivo2")
+         }
+
+
+         for (const key in dato) {
+            const input = dato[key];
+            input.removeClass("is-valid");
+            input.removeClass("is-invalid")
+          }
+
+          $("#idConsolidador2").addClass("d-none");
+          $("#idCelulaConsolidacion2").addClass("d-none");
+    
+        $('#modal_editarInfo').modal('hide');
+    
+      });
+
 
 });
 

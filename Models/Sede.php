@@ -320,10 +320,12 @@ class Sede extends Model
         }
     }
 
+    
+
     public function validacion_existencia($nombre, $idSede)
     {
         try {
-            $sql = "SELECT * FROM sede WHERE nombre = :nombre" . (!empty($idSede) ? " AND id != $idSede" : "");
+            $sql = "SELECT * FROM sede WHERE estatus = '1' AND nombre = :nombre" . (!empty($idSede) ? " AND id != $idSede" : "");
             $stmt = $this->db->pdo()->prepare($sql);
             $stmt->bindValue(":nombre", $nombre);
             $stmt->execute();

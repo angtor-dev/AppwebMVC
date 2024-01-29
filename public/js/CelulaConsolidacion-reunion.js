@@ -4,7 +4,19 @@ $(document).ready(function () {
     let choices2;
 
     const dataTable = $('#celulaDatatables').DataTable({
-        responsive: true,
+        info: false,
+        lengthChange: false,
+        pageLength: 15,
+        dom: 'ltipB',
+        searching: true,
+        language: {
+            url: '/AppwebMVC/public/lib/datatables/datatable-spanish.json'
+        },
+   
+        drawCallback: function (settings) {
+            var pagination = $(this).closest('.dataTables_wrapper').find('.dataTables_paginate');
+            pagination.toggle(this.api().page.info().pages > 1);
+        },
         ajax: {
             method: "GET",
             url: '/AppwebMVC/CelulaConsolidacion/Reunion',
@@ -15,15 +27,20 @@ $(document).ready(function () {
             { data: 'nombre' },
             { data: 'fecha' },
             {
-                defaultContent: `
-                <button type="button" id="ver_info" data-bs-toggle="modal" data-bs-target="#modal_verInfo" title="Ver detalles" class="btn btn-secondary"><i class="fa-solid fa-circle-info" ></i></button>
-            <button type="button" id="editar" data-bs-toggle="modal" title="Actualizar" data-bs-target="#modal_editarInfo" class="btn btn-primary"><i class="fa-solid fa-pen" ></i></button>
-            <button type="button" id="asistencias" data-bs-toggle="modal" data-bs-target="#modal_editarAsistencia" class="btn btn-info">Asistencias</button>
-            <button type="button"  id=eliminar class="btn btn-danger delete-btn" title="Eliminar"><i class="fa-solid fa-trash" ></i></button>
-            `}
-                                                                                    
+                defaultContent:
+
+           `<div class="acciones"><a role="button" id="ver_info" data-bs-toggle="modal" data-bs-target="#modal_verInfo" title="Ver detalles" ><i class="fa-solid fa-circle-info" ></i></a>
+            <a role="button" id="editar" data-bs-toggle="modal" title="Actualizar" data-bs-target="#modal_editarInfo" ><i class="fa-solid fa-pen" ></i></a>
+             <a role="button"  id=eliminar title="Eliminar"><i class="fa-solid fa-trash" ></i></a>
+           <a role="button" id="asistencias" data-bs-toggle="modal" "Asistencia" data-bs-target="#modal_editarAsistencia" title=><i class="fa-solid fa-users"></i></a>
+           </div>` 
+          },
         ],
-    })
+    });
+
+    $('#search').keyup(function () {
+        dataTable.search($(this).val()).draw();
+    });
 
 
     $('#celulaDatatables tbody').on('click', '#ver_info', function () {
@@ -53,18 +70,6 @@ $(document).ready(function () {
         document.getElementById('observaciones').value = datos.observaciones;
         Listar_celulas(datos.idCelula);
 
-    })
-
-
-    let idReunionAsistencia;
-    let idCelulaConsolidacionDatatable;
-    $('#celulaDatatables tbody').on('click', '#asistencias', function () {
-        const datos = dataTable.row($(this).parents()).data();
-
-        idReunionAsistencia = datos.id
-        idCelulaConsolidacionDatatable = datos.idCelula
-        Listar_asistencia(datos.id)
-        Listar_discipulos_reunion(datos.idCelula, datos.id)
     })
 
 
@@ -188,207 +193,156 @@ $(document).ready(function () {
         })
     }
 
+    let idReunionAsistencia;
+let idCelulaConsolidacionDatatable;
+$('#celulaDatatables tbody').on('click', '#asistencias', function () {
+    const datos = dataTable.row($(this).parents()).data();
 
-    function Listar_discipulos_reunion(idCelulaConsolidacion, idReunion) {
-        $.ajax({
-            type: "GET",
-            url: "/AppwebMVC/CelulaConsolidacion/Reunion",
+    idReunionAsistencia = datos.id
+    idCelulaConsolidacionDatatable = datos.idCelula
+    Listar_asistencia(datos.id)
+    Listar_discipulos_reunion(datos.idCelula, datos.id)
+})
+
+
+
+function Listar_discipulos_reunion(idCelulaConsolidacion, idReunion) {
+    $.ajax({
+        type: "GET",
+        url: "/AppwebMVC/CelulaConsolidacion/Reunion",
+        data: {
+            cargar_discipulos_reunion: 'cargar_discipulos_reunion',
+            idCelulaConsolidacion: idCelulaConsolidacion,
+            idReunion: idReunion
+        },
+        success: function (response) {
+            console.log(response);
+            let data = JSON.parse(response);
+
+            let selector = document.getElementById('discipulos');
+
+            // Destruir la instancia existente si la hay
+            if (choices2) {
+                choices2.destroy();
+            }
+
+            // Limpiar el select
+            selector.innerHTML = "";
+
+            data.forEach(item => {
+
+                const option = document.createElement('option');
+                option.value = item.id;
+                option.text = `${item.cedula} ${item.nombre} ${item.apellido}`;
+                selector.appendChild(option);
+
+            });
+
+            choices2 = new Choices(selector, {
+                allowHTML: true,
+                searchEnabled: true,  // Habilita la funcionalidad de búsqueda
+                removeItemButton: true,  // Habilita la posibilidad de remover items
+                placeholderValue: 'Selecciona los discipulos',  // Texto del placeholder
+            });
+
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(jqXHR.responseText);
+            // Aquí puedes manejar errores, por ejemplo:
+            console.error("Error al enviar:", textStatus, errorThrown);
+            alert("Hubo un error al realizar el registro. Por favor, inténtalo de nuevo.");
+        }
+    })
+}
+
+function Listar_asistencia(idReunion) {
+
+    if (dataTable2) {
+        dataTable2.destroy();
+    }
+
+    dataTable2 = $('#asistenciasDatatables').DataTable({
+        info: false,
+        lengthChange: false,
+        pageLength: 15,
+        searching: false,
+        bSort: false,
+        language: {
+            url: '/AppwebMVC/public/lib/datatables/datatable-spanish.json'
+        },
+   
+        drawCallback: function (settings) {
+            var pagination = $(this).closest('.dataTables_wrapper').find('.dataTables_paginate');
+            pagination.toggle(this.api().page.info().pages > 1);
+        },
+        ajax: {
+            method: "GET",
+            url: '/AppwebMVC/CelulaConsolidacion/Reunion',
             data: {
-                cargar_discipulos_reunion: 'cargar_discipulos_reunion',
-                idCelulaConsolidacion: idCelulaConsolidacion,
+                cargar_data_asistencia: 'cargar_data_asistencia',
                 idReunion: idReunion
-            },
-            success: function (response) {
-                console.log(response);
-                let data = JSON.parse(response);
-
-                let selector = document.getElementById('discipulos');
-
-                // Destruir la instancia existente si la hay
-                if (choices2) {
-                    choices2.destroy();
-                }
-
-                // Limpiar el select
-                selector.innerHTML = "";
-
-                data.forEach(item => {
-
-                    const option = document.createElement('option');
-                    option.value = item.id;
-                    option.text = `${item.cedula} ${item.nombre} ${item.apellido}`;
-                    selector.appendChild(option);
-
-                });
-
-                choices2 = new Choices(selector, {
-                    allowHTML: true,
-                    searchEnabled: true,  // Habilita la funcionalidad de búsqueda
-                    removeItemButton: true,  // Habilita la posibilidad de remover items
-                    placeholderValue: 'Selecciona los discipulos',  // Texto del placeholder
-                });
-
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                console.log(jqXHR.responseText);
-                // Aquí puedes manejar errores, por ejemplo:
-                console.error("Error al enviar:", textStatus, errorThrown);
-                alert("Hubo un error al realizar el registro. Por favor, inténtalo de nuevo.");
             }
-        })
-    }
-
-    function Listar_asistencia(idReunion) {
-
-        if (dataTable2) {
-            dataTable2.destroy();
-        }
-
-        dataTable2 = $('#asistenciasDatatables').DataTable({
-            language: {
-                info: "",         // para ocultar "Showing x to y of z entries"
-                infoEmpty: ""     // para ocultar "Showing 0 to 0 of 0 entries"
-            },
-            paging: false,
-            searching: false,
-            responsive: true,
-            ajax: {
-                method: "GET",
-                url: '/AppwebMVC/CelulaConsolidacion/Reunion',
-                data: {
-                    cargar_data_asistencia: 'cargar_data_asistencia',
-                    idReunion: idReunion
+        },
+        columns: [
+            {
+                "data": null,
+                "render": function (data, type, row) {
+                    return data.cedula + ' ' + data.nombre + ' ' + data.apellido;
                 }
             },
-            columns: [
-                {
-                    "data": null,
-                    "render": function (data, type, row) {
-                        return data.cedula + ' ' + data.nombre + ' ' + data.apellido;
-                    }
-                },
-                {
-                    defaultContent: `
-                <button type="button" id="eliminarAsistencia" class="btn btn-danger delete-btn">Eliminar</button>
-                `}
+            {
+                defaultContent: `
+            <div class="d-flex justify-content-end">
+            <button type="button" id="eliminarAsistencia" class="btn btn-danger"><i class="fa-solid fa-trash" ></i></button>
+            </div>
 
-            ],
-        })
-    }
+            `}
 
-
-    $('#asistenciasDatatables tbody').on('click', '#eliminarAsistencia', function () {
-        const datos = dataTable2.row($(this).parents()).data();
-
-        Swal.fire({
-            title: '¿Estas Seguro?',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: '¡Si, estoy seguro!',
-            confirmButtonColor: '#007bff',
-            cancelButtonText: '¡No, cancelar!',
-            reverseButtons: true
-        }).then((result) => {
-            if (result.isConfirmed) {
-
-                $.ajax({
-                    type: "POST",
-                    url: "/AppwebMVC/CelulaConsolidacion/Reunion",
-                    data: {
-
-                        eliminarAsistencia: 'eliminarAsistencia',
-                        id: datos.idAsistencia,
-                    },
-                    success: function (response) {
-                        //console.log(response);
-                        let data = JSON.parse(response);
-
-                        dataTable2.ajax.reload();
-
-                        Swal.fire({
-                            icon: 'success',
-                            title: '¡Borrado!',
-                            text: data.msj,
-                            showConfirmButton: false,
-                            timer: 2000,
-                        })
-
-                        Listar_discipulos_reunion(idCelulaConsolidacionDatatable, datos.idReunion)
-
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        if (jqXHR.responseText) {
-                            let jsonResponse = JSON.parse(jqXHR.responseText);
-
-                            if (jsonResponse.msj) {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Denegado',
-                                    text: jsonResponse.msj,
-                                    showConfirmButton: true,
-                                })
-                            } else {
-                                const respuesta = JSON.stringify(jsonResponse, null, 2)
-                                Swal.fire({
-                                    background: 'red',
-                                    color: '#fff',
-                                    title: respuesta,
-                                    showConfirmButton: true,
-                                })
-                            }
-                        } else {
-                            alert('Error desconocido: ' + textStatus);
-                        }
-                    }
-                })
-            }
-        });
+        ],
     })
+}
 
 
-    let validation_selecteDiscipulos = false;
 
-    const selectorDiscipulos = document.getElementById('discipulos');
-    selectorDiscipulos.addEventListener('change', () => {
 
-        const valoresSeleccionados = $("#discipulos").val();
 
-        if (!valoresSeleccionados || valoresSeleccionados.length == 0) {
-            document.getElementById("msj_discipulosAsistencia").classList.remove("d-none");
-            validation_selecteDiscipulos = false;
-        } else {
-            document.getElementById("msj_discipulosAsistencia").classList.add("d-none");
-            validation_selecteDiscipulos = true;
-        }
-    })
+$('#asistenciasDatatables tbody').on('click', '#eliminarAsistencia', function () {
+    const datos = dataTable2.row($(this).parents()).data();
 
-    let actualizarDiscipulos = document.getElementById('actualizarDiscipulos')
-    actualizarDiscipulos.addEventListener('click', () => {
-        if (validation_selecteDiscipulos) {
+    Swal.fire({
+        title: '¿Estas Seguro?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: '¡Si, estoy seguro!',
+        confirmButtonColor: '#007bff',
+        cancelButtonText: '¡No, cancelar!',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+
             $.ajax({
                 type: "POST",
                 url: "/AppwebMVC/CelulaConsolidacion/Reunion",
                 data: {
 
-                    actualizarAsistencia: 'actualizarAsistencia',
-                    idReunion: idReunionAsistencia,
-                    discipulos: $("#discipulos").val()
+                    eliminarAsistencia: 'eliminarAsistencia',
+                    id: datos.idAsistencia,
                 },
                 success: function (response) {
-
+                    //console.log(response);
                     let data = JSON.parse(response);
+
                     dataTable2.ajax.reload();
 
-                    // Aquí puedes manejar una respuesta exitosa, por ejemplo:
-                    console.log("Respuesta del servidor:", data);
                     Swal.fire({
                         icon: 'success',
-                        title: 'Se actualizaron correctamente las asistencias',
+                        title: '¡Borrado!',
+                        text: data.msj,
                         showConfirmButton: false,
                         timer: 2000,
                     })
 
-                    Listar_discipulos_reunion(idCelulaConsolidacionDatatable, idReunionAsistencia)
+                    Listar_discipulos_reunion(idCelulaConsolidacionDatatable, datos.idReunion)
 
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -415,16 +369,91 @@ $(document).ready(function () {
                         alert('Error desconocido: ' + textStatus);
                     }
                 }
-            });
-        } else {
-            Swal.fire({
-                icon: 'error',
-                title: 'Formulario invalido. Por favor, verifique sus datos',
-                showConfirmButton: false,
-                timer: 2000,
             })
         }
-    })
+    });
+})
+
+
+let validation_selecteDiscipulos = false;
+
+const selectorDiscipulos = document.getElementById('discipulos');
+selectorDiscipulos.addEventListener('change', () => {
+
+    const valoresSeleccionados = $("#discipulos").val();
+
+    if (!valoresSeleccionados || valoresSeleccionados.length == 0) {
+       
+        validation_selecteDiscipulos = false;
+    } else {
+        
+        validation_selecteDiscipulos = true;
+    }
+})
+
+let actualizarDiscipulos = document.getElementById('actualizarDiscipulos')
+actualizarDiscipulos.addEventListener('click', () => {
+    if (validation_selecteDiscipulos) {
+        $.ajax({
+            type: "POST",
+            url: "/AppwebMVC/CelulaConsolidacion/Reunion",
+            data: {
+
+                actualizarAsistencia: 'actualizarAsistencia',
+                idReunion: idReunionAsistencia,
+                discipulos: $("#discipulos").val()
+            },
+            success: function (response) {
+
+                let data = JSON.parse(response);
+                dataTable2.ajax.reload();
+
+                // Aquí puedes manejar una respuesta exitosa, por ejemplo:
+                console.log("Respuesta del servidor:", data);
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Se actualizaron correctamente las asistencias',
+                    showConfirmButton: false,
+                    timer: 2000,
+                })
+
+                Listar_discipulos_reunion(idCelulaConsolidacionDatatable, idReunionAsistencia)
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                if (jqXHR.responseText) {
+                    let jsonResponse = JSON.parse(jqXHR.responseText);
+
+                    if (jsonResponse.msj) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Denegado',
+                            text: jsonResponse.msj,
+                            showConfirmButton: true,
+                        })
+                    } else {
+                        const respuesta = JSON.stringify(jsonResponse, null, 2)
+                        Swal.fire({
+                            background: 'red',
+                            color: '#fff',
+                            title: respuesta,
+                            showConfirmButton: true,
+                        })
+                    }
+                } else {
+                    alert('Error desconocido: ' + textStatus);
+                }
+            }
+        });
+    } else {
+        Swal.fire({
+            icon: 'error',
+            title: 'Formulario invalido. Por favor, verifique sus datos',
+            showConfirmButton: false,
+            timer: 2000,
+        })
+    }
+})
 
 
 
@@ -434,154 +463,209 @@ $(document).ready(function () {
 
 
     /////////////////////////////////// ACTUALIZAR DATOS DE REUNION //////////////////////////////////      
-
-    const expresiones_regulares2 = {
-
-        idCelula: /^[1-9]\d*$/, // Números enteros mayores a 0
-        tematica: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/, // Letras, números, espacios, puntos y comas con un máximo de 100 caracteres
-        semana: /^[1-9]\d*$/, // Números enteros mayores a 0
+    const ex_re = {
+        idCelula: /^[1-9]\d*$/, 
+        semana: /^[1-9]\d*$/,
+        fecha: /^.+$/,
         generosidad: /^[0-9]+(\.[0-9]{2})?$/,
-        actividad: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/, // Letras, números, espacios, puntos y comas con un máximo de 100 caracteres
-        observaciones: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/, // Letras, números, espacios, puntos y comas con un máximo de 100 caracteres
-        fecha: /^\d{4}-\d{2}-\d{2}$/
+        asistencia: /^[0-9]\d*$/,
+        info: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/ // Letras, números, espacios, puntos y comas con un máximo de 100 caracteres
     };
 
-    const validationStatus2 = {
-
-        idCelula: true,
+    const validationStatus3 = {
+        idCelula: true, 
+        fecha: true,
         tematica: true,
         semana: true,
         generosidad: true,
         actividad: true,
-        observaciones: true,
-        fecha: true
+        observaciones: true
     };
 
 
 
-    // Validar idCelula
-    const idCelula = document.getElementById("idCelula");
-    idCelula.addEventListener('change', () => {
-        if (!expresiones_regulares2.idCelula.test(idCelula.value)) {
-            document.getElementById("msj_idCelula").classList.remove("d-none");
-            validationStatus2.idCelula = false;
+    $("#idCelula").on("change", function (event) {
+        const idCelula = document.getElementById("idCelula").value;
+        const div = document.getElementById("msj_idCelula");
+        if (!ex_re.idCelula.test(idCelula)) {
+            div.classList.remove("d-none");
+            div.innerText = "Este campo es obligatorio";
+     
+            validationStatus.idCelula = false;
         } else {
-            document.getElementById("msj_idCelula").classList.add("d-none");
-            validationStatus2.idCelula = true;
+            div.classList.add("d-none");
+            div.innerText = "";
+
+            validationStatus.idCelula = true;
         }
     })
 
 
-    // Validar fecha
-    const fecha = document.getElementById("fecha");
-    fecha.addEventListener('change', () => {
-        if (!expresiones_regulares2.fecha.test(fecha.value)) {
-            document.getElementById("msj_fecha").classList.remove("d-none");
-            validationStatus2.fecha = false;
-        }else{
-            document.getElementById("msj_fecha").classList.add("d-none");
-            validationStatus2.fecha = true;
-        }
-    })
-
-    // Validar tematica
-    const tematica = document.getElementById("tematica");
-    tematica.addEventListener('keyup', () => {
-        if (!expresiones_regulares2.tematica.test(tematica.value)) {
-            document.getElementById("msj_tematica").classList.remove("d-none");
-            validationStatus2.tematica = false;
+    $("#fecha").on("change", function (event) {
+        const fecha = document.getElementById("fecha");
+        const div = document.getElementById("msj_fecha");
+        if (!ex_re.fecha.test(fecha.value)) {
+            fecha.classList.remove("is-valid");
+            fecha.classList.add("is-invalid");
+            div.innerText = "Este campo es obligatorio";
+     
+            validationStatus3.fecha = false;
         } else {
-            document.getElementById("msj_tematica").classList.add("d-none");
-            validationStatus2.tematica = true;
+            fecha.classList.remove("is-invalid");
+            fecha.classList.add("is-valid");
+            div.innerText = "";
+
+            validationStatus3.fecha = true;
         }
     })
-    
-    // Validar semana
-    const semana = document.getElementById("semana");
-    semana.addEventListener('keyup', () => {
-        if (!expresiones_regulares2.semana.test(semana.value)) {
-            document.getElementById("msj_semana").classList.remove("d-none");
-            validationStatus2.semana = false;
+
+    $("#tematica").on("keyup", function (event) {
+        const tematica = document.getElementById("tematica");
+        const div = document.getElementById("msj_tematica");
+        if (!ex_re.info.test(tematica.value)) {
+            tematica.classList.remove("is-valid");
+            tematica.classList.add("is-invalid");
+            div.innerText = "Este campo es obligatorio, debe poseer mas  de 5 caracteres";
+     
+            validationStatus3.tematica = false;
         } else {
-            document.getElementById("msj_semana").classList.add("d-none");
-            validationStatus2.semana = true;
+            tematica.classList.remove("is-invalid");
+            tematica.classList.add("is-valid");
+            div.innerText = "";
+
+            validationStatus3.tematica = true;
         }
     })
-    
-    // Validar generosidad
-    const generosidad = document.getElementById("generosidad");
-    generosidad.addEventListener('keyup', () => {
-        if (!expresiones_regulares2.generosidad.test(generosidad.value)) {
-            document.getElementById("msj_generosidad").classList.remove("d-none");
-            validationStatus2.generosidad = false;
+
+    $("#semana").on("change", function (event) {
+        const input = document.getElementById("semana");
+        const div = document.getElementById("msj_semana");
+        if (!ex_re.semana.test(input.value)) {
+            input.classList.remove("is-valid");
+            input.classList.add("is-invalid");
+            div.innerText = "Este campo es obligatorio";
+     
+            validationStatus3.semana = false;
         } else {
-            document.getElementById("msj_generosidad").classList.add("d-none");
-            validationStatus2.generosidad = true;
+            input.classList.remove("is-invalid");
+            input.classList.add("is-valid");
+            div.innerText = "";
+
+            validationStatus3.semana = true;
         }
     })
 
-    // Validar actividad
-    const actividad = document.getElementById("actividad");
-    actividad.addEventListener('keyup', () => {
-        if (!expresiones_regulares2.actividad.test(actividad.value)) {
-            document.getElementById("msj_actividad").classList.remove("d-none");
-            validationStatus2.actividad = false;
+    $("#generosidad").on("keyup", function (event) {
+        const generosidad = document.getElementById("generosidad");
+        const div = document.getElementById("msj_generosidad");
+        if (!ex_re.generosidad.test(generosidad.value)) {
+            generosidad.classList.remove("is-valid");
+            generosidad.classList.add("is-invalid");
+            div.innerText = "Este campo es obligatorio, y su formato correcto es 00,00";
+     
+            validationStatus3.generosidad = false;
         } else {
-            document.getElementById("msj_actividad").classList.add("d-none");
-            validationStatus2.actividad = true;
+            generosidad.classList.remove("is-invalid");
+            generosidad.classList.add("is-valid");
+            div.innerText = "";
+
+            validationStatus3.generosidad = true;
         }
     })
-    
 
-    // Validar observaciones
-    const observaciones = document.getElementById("observaciones");
-    observaciones.addEventListener('keyup', () => {
-        if (!expresiones_regulares2.observaciones.test(observaciones.value)) {
-            document.getElementById("msj_juvenil").classList.remove("d-none");
-            validationStatus2.observaciones = false;
+    $("#actividad").on("keyup", function (event) {
+        const input = document.getElementById("actividad");
+        const div = document.getElementById("msj_actividad");
+        if (!ex_re.info.test(input.value)) {
+            input.classList.remove("is-valid");
+            input.classList.add("is-invalid");
+            div.innerText = "Este campo es obligatorio, y debe poseer mas de 5 caracteres";
+     
+            validationStatus3.actividad = false;
         } else {
-            document.getElementById("msj_observaciones").classList.add("d-none");
-            validationStatus2.observaciones = true;
+            input.classList.remove("is-invalid");
+            input.classList.add("is-valid");
+            div.innerText = "";
+
+            validationStatus3.actividad = true;
+        }
+    })
+
+    $("#observaciones").on("keyup", function (event) {
+        const input = document.getElementById("observaciones");
+        const div = document.getElementById("msj_observaciones");
+        if (!ex_re.info.test(input.value)) {
+            input.classList.remove("is-valid");
+            input.classList.add("is-invalid");
+            div.innerText = "Este campo es obligatorio, y debe poseer mas de 5 caracteres";
+     
+            validationStatus3.observaciones = false;
+        } else {
+            input.classList.remove("is-invalid");
+            input.classList.add("is-valid");
+            div.innerText = "";
+
+            validationStatus3.observaciones = true;
         }
     })
 
 
-    const form2 = document.getElementById("formularioReunion");
 
-    form2.addEventListener("submit", (e) => {
+
+
+    const form3 = document.getElementById("formularioReunion");
+
+    form3.addEventListener("submit", (e) => {
         e.preventDefault();
+        const dato = {
 
-        const id = document.getElementById('idreunion').textContent
-
+            id: $("#idreunion"),
+            idCelula: $("#idCelula"),
+            fecha: $("#fecha"),
+            tematica: $("#tematica"),
+            semana: $("#semana"),
+            generosidad: $("#generosidad"),
+            actividad: $("#actividad"),
+            observaciones: $("#observaciones")
+        }
         // Verifica si todos los campos son válidos antes de enviar el formulario
-        if (Object.values(validationStatus2).every(status => status === true)) {
-            console.log("Formulario válido. Puedes enviar los datos al servidor");
+        if (Object.values(validationStatus3).every(status => status === true)) {
             // Aquí puedes agregar el código para enviar el formulario
             $.ajax({
                 type: "POST",
-                url: "/AppwebMVC/CelulaConsolidacion/reunion",
+                url: "/AppwebMVC/CelulaConsolidacion/Reunion",
                 data: {
+
                     editar: 'editar',
-                    id: id,
-                    idCelula: idCelula.value,
-                    fecha: fecha.value,
-                    tematica: tematica.value,
-                    semana: semana.value,
-                    generosidad: generosidad.value,
-                    actividad: actividad.value,
-                    observaciones: observaciones.value
+                    id: dato.id.text(),
+                    idCelula: dato.idCelula.val(),
+                    fecha: dato.fecha.val(),
+                    tematica: dato.tematica.val(),
+                    semana: dato.semana.val(),
+                    generosidad: dato.generosidad.val(),
+                    actividad: dato.actividad.val(),
+                    observaciones: dato.observaciones.val()
                 },
                 success: function (response) {
-                    console.log(response);
+
                     let data = JSON.parse(response);
                     dataTable.ajax.reload();
 
+                    // Aquí puedes manejar una respuesta exitosa, por ejemplo:
+                    console.log("Respuesta del servidor:", data);
                     Swal.fire({
                         icon: 'success',
-                        title: 'Se actualizo correctamente la reunion',
+                        title: 'Actualizado Correctamente',
                         showConfirmButton: false,
                         timer: 2000,
-                    })
+                    });
+
+
+                      for (const key in dato) {
+                        const input = dato[key];
+                        input.removeClass("is-valid");
+                      }
+
 
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -589,7 +673,7 @@ $(document).ready(function () {
                         let jsonResponse = JSON.parse(jqXHR.responseText);
 
                         if (jsonResponse.msj) {
-                             Swal.fire({
+                            Swal.fire({
                                 icon: 'error',
                                 title: 'Denegado',
                                 text: jsonResponse.msj,
@@ -609,16 +693,52 @@ $(document).ready(function () {
                     }
                 }
             });
+
         } else {
             Swal.fire({
                 icon: 'error',
-                title: 'Formulario invalido. Verifique sus datos',
+                title: 'Verifique bien el formulario antes de ser enviado',
                 showConfirmButton: false,
                 timer: 2000,
-            });
+            })
         }
     });
+   
+
+    $('#cerrarReunion').on('click', function () {
+    
+        document.getElementById('formularioReunion').reset();
+    
+        const dato = {
+    
+            idCelula: $("#idCelulaConsolidacionR"),
+            fecha: $("#fecha"),
+            tematica: $("#tematica"),
+            semana: $("#semana"),
+            generosidad: $("#generosidad"),
+            actividad: $("#actividad"),
+            observaciones: $("#observaciones")
+        }
+    
+        for (const key in dato) {
+            const input = dato[key];
+            input.removeClass("is-valid");
+            input.removeClass("is-invalid")
+          }
+
+        $('#msj_idCelula').addClass("d-none");
+    
+        $('#modal_editarInfo').modal('hide');
+    
+      });
+
+      $('#cerrarAsistencia').on('click', function () {
+
+        $('#msj_discipulosAsistencia').addClass("d-none");
+    
+        $('#modal_editarAsistencia').modal('hide');
+    
+      });
 
 });
-
 

@@ -2,13 +2,26 @@ $(document).ready(function () {
 
     let choices1;
     let choices2;
-    let choices3;
+    let choices3; 
     let choices4;
     let choices5;
     let choices6;
 
+
     const dataTable = $('#celulaDatatables').DataTable({
-        responsive: true,
+        info: false,
+        lengthChange: false,
+        pageLength: 15,
+        dom: 'ltipB',
+        searching: true,
+        language: {
+            url: '/AppwebMVC/public/lib/datatables/datatable-spanish.json'
+        },
+   
+        drawCallback: function (settings) {
+            var pagination = $(this).closest('.dataTables_wrapper').find('.dataTables_paginate');
+            pagination.toggle(this.api().page.info().pages > 1);
+        },
         ajax: {
             method: "GET",
             url: '/AppwebMVC/CelulaCrecimiento/Index',
@@ -27,15 +40,16 @@ $(document).ready(function () {
                 data: null,
         render: function (data, type, row, meta) {
 
-          let botonInfo = `<button type="button" id="ver_info" data-bs-toggle="modal" data-bs-target="#modal_verInfo" title="Ver detalles" class="btn btn-secondary"><i class="fa-solid fa-circle-info" ></i></button>`;
+            let botonInfo = `<a role="button" id="ver_info" data-bs-toggle="modal" data-bs-target="#modal_verInfo" title="Ver detalles" ><i class="fa-solid fa-circle-info" ></i></a>`;
 
-          let botonEditar = permisos.actualizar ? `<button type="button" id="editar" data-bs-toggle="modal" title="Actualizar" data-bs-target="#modal_editarInfo" class="btn btn-primary"><i class="fa-solid fa-pen" ></i></button>` : '';
+            let botonEditar = permisos.actualizar ? `<a role="button" id="editar" data-bs-toggle="modal" title="Actualizar" data-bs-target="#modal_editarInfo" ><i class="fa-solid fa-pen" ></i></a>` : '';
+  
+            let botonEliminar = permisos.eliminar ? `<a role="button"  id=eliminar title="Eliminar"><i class="fa-solid fa-trash" ></i></a>` : '';
+            let botonReunion = `<a role="button" id="reunion" data-bs-toggle="modal" data-bs-target="#modal_registroreunion" title="Réunion"><i class="fa-solid fa-users"></i></a>`;
+          
 
-          let botonEliminar = permisos.eliminar ? `<button type="button"  id=eliminar class="btn btn-danger delete-btn" title="Eliminar"><i class="fa-solid fa-trash" ></i></button>` : '';
-
-          let botonReunion = permisos.actualizar ? `<button type="button" id="reunion" data-bs-toggle="modal" data-bs-target="#modal_registroreunion" class="btn btn-info" title="Reunión"><i class="fa-solid fa-users"></i></button>` : '';
           let div = `
-          <div>
+          <div class="acciones">
                     ${botonInfo}
                     ${botonEditar}
                     ${botonEliminar}
@@ -43,12 +57,15 @@ $(document).ready(function () {
           </div>
           `
           return div;
-        }}
+        }},
         ],
-    })
+    });
 
+    $('#search').keyup(function () {
+        dataTable.search($(this).val()).draw();
+    });
 
-
+   
     $('#celulaDatatables tbody').on('click', '#ver_info', function () {
         const datos = dataTable.row($(this).parents()).data();
 
@@ -382,6 +399,7 @@ $(document).ready(function () {
 
                 let data = JSON.parse(response);
 
+
                 let selector = document.getElementById('idTerritorio');
 
                 const placeholderOption = document.createElement('option');
@@ -430,11 +448,10 @@ $(document).ready(function () {
 
     const regexObj = {
 
-        nombre: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]{5,50}$/, // Letras, números, espacios, puntos y comas con un máximo de 20 caracteres
-        idLider: /^[1-9]\d*$/, // Números enteros mayores a 0
-        idCoLider: /^[1-9]\d*$/, // Números enteros mayores a 0
-        idTerritorio: /^[1-9]\d*$/, // Números enteros mayores a 0
-
+        nombre: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,50}$/, 
+        idLider: /^[1-9]\d*$/, 
+        idCoLider: /^[1-9]\d*$/, 
+        idTerritorio: /^[1-9]\d*$/, 
     };
 
     const validationStatus = {
@@ -445,56 +462,134 @@ $(document).ready(function () {
     };
 
 
-    //Validar nombre
-    const nombre = document.getElementById("nombre");
-    nombre.addEventListener('keyup', (e) => {
-        // Validar nombre
-        if (!regexObj.nombre.test(e.target.value)) {
-            document.getElementById("msj_nombre").classList.remove("d-none");
-            validationStatus.nombre = false;
-        } else {
-            document.getElementById("msj_nombre").classList.add("d-none");
+
+      // Validación del nombre de la Celula
+  $("#nombre").on("keyup", function (event) {
+      const idTerritorio = document.getElementById("idTerritorio").value;
+      const nombre = document.getElementById("nombre").value;  
+    validar_nombre_registrar(idTerritorio, nombre);
+  });
+
+  function validar_nombre_registrar(idTerritorio, nombre){
+
+    if(nombre !== ''){
+    $.ajax({
+      type: "POST",
+      url: "/AppwebMVC/CelulaCrecimiento/Index",
+      data: {
+        coincidencias: 'coincidencias',
+        nombre: nombre,
+        idTerritorio: idTerritorio
+      },
+      success: function (response) {
+  
+        let data = JSON.parse(response);
+  
+        if (data != true) {
+          validationStatus.nombre = true;
+          $("#nombre").removeClass("is-invalid");
+          $("#nombre").addClass("is-valid");
+          document.getElementById('msj_nombre').textContent = '';
+          if (regexObj.nombre.test(nombre)) {
             validationStatus.nombre = true;
-        }
-    })
-
-
-    // Validacion de idLider y idCoLider
-
-    const idLider = document.getElementById("idLider");
-    const idCoLider = document.getElementById("idCoLider");
-
-    idLider.addEventListener('change', (e) => {
-        if (!regexObj.idLider.test(e.target.value) || e.target.value === idCoLider.value) {
-            document.getElementById("msj_idLider").classList.remove("d-none");
-            validationStatus.idLider = false;
+            $("#nombre").removeClass("is-invalid");
+            $("#nombre").addClass("is-valid");
+            document.getElementById('msj_nombre').textContent = '';
+  
+          } else {
+            validationStatus.nombre = false;
+            $("#nombre").removeClass("is-valid");
+            $("#nombre").addClass("is-invalid");
+            document.getElementById('msj_nombre').textContent = 'El nombre es obligatorio y debe poseer mas de 5 caracteres';
+  
+          }
         } else {
-            document.getElementById("msj_idLider").classList.add("d-none");
-            validationStatus.idLider = true;
+          validationStatus.nombre = false;
+          $("#nombre").removeClass("is-valid");
+          $("#nombre").addClass("is-invalid");
+          document.getElementById('msj_nombre').textContent = 'Ya existe una Celula Crecimiento con este nombre en este Territorio';
+  
         }
+  
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        // Aquí puedes manejar errores, por ejemplo:
+        console.error("Error al enviar:", textStatus, errorThrown);
+      }
     })
 
-    idCoLider.addEventListener('change', (e) => {
-        if (!regexObj.idCoLider.test(e.target.value) || e.target.value === idLider.value) {
-            document.getElementById("msj_idCoLider").classList.remove("d-none");
-            validationStatus.idCoLider = false;
-        } else {
-            document.getElementById("msj_idCoLider").classList.add("d-none");
-            validationStatus.idCoLider = true;
-        }
-    })
+  }}
+
+
+    // Validacion de idLider 
+
+    
+    $("#idLider").on("change", function (event) {
+        const idLider = document.getElementById("idLider");
+       const idCoLider = document.getElementById("idCoLider");
+       const div = document.getElementById("msj_idLider");
+       
+           if (regexObj.idLider.test(idLider.value)) {
+               validationStatus.idLider = true;
+               div.classList.add("d-none");
+               div.innerText = "";
+     
+               if(idLider.value === idCoLider.value){
+                   validationStatus.idLider = false;
+                   div.classList.remove("d-none");
+                   div.innerText = "Lider y CoLider no pueden ser la misma persona";
+                   } 
+           } else {
+               validationStatus.idLider = false;
+               div.classList.remove("d-none");
+             div.innerText = "este campo es obligatorio";
+           }
+       })
+   
+       // Validacion  idCoLider
+    $("#idCoLider").on("change", function (event) {
+        const idLider = document.getElementById("idLider");
+       const idCoLider = document.getElementById("idCoLider");
+       const div = document.getElementById("msj_idCoLider");
+       
+           if (regexObj.idCoLider.test(idCoLider.value)) {
+               validationStatus.idCoLider = true;
+               div.classList.add("d-none");
+               div.innerText = "";
+     
+               if(idLider.value === idCoLider.value){
+                   validationStatus.idCoLider = false;
+                   div.classList.remove("d-none");
+                   div.innerText = "Lider y CoLider no pueden ser la misma persona";
+                   }
+           } else {
+               validationStatus.idCoLider = false;
+               div.classList.remove("d-none");
+             div.innerText = "este campo es obligatorio";
+           }
+       })
+
+  
 
 
     // Validar idTerritorio
-    const idTerritorio = document.getElementById("idTerritorio");
-    idTerritorio.addEventListener('change', (e) => {
-        if (!regexObj.idTerritorio.test(e.target.value)) {
-            document.getElementById("msj_idTerritorio").classList.remove("d-none");
-            validationStatus.idSede = false;
+    
+    $("#idTerritorio").on("change", function (event) {
+        const idTerritorio = document.getElementById("idTerritorio").value;
+        const nombre = document.getElementById("nombre").value;
+        const div = document.getElementById("msj_idTerritorio");
+        if (!regexObj.idTerritorio.test(idTerritorio)) {
+            div.classList.remove("d-none");
+            div.innerText = "Este campo es obligatorio";
+     
+            validationStatus.idTerritorio = false;
         } else {
-            document.getElementById("msj_idTerritorio").classList.add("d-none");
+            div.classList.add("d-none");
+            div.innerText = "";
+
             validationStatus.idTerritorio = true;
         }
+        validar_nombre_registrar(idTerritorio, nombre);
     })
 
 
@@ -513,14 +608,16 @@ $(document).ready(function () {
                 data: {
 
                     registrar: 'registrar',
-                    nombre: nombre.value,
-                    idLider: idLider.value,
-                    idCoLider: idCoLider.value,
-                    idTerritorio: idTerritorio.value
+                    nombre: document.getElementById("nombre").value,
+                    idLider: document.getElementById("idLider").value,
+                    idCoLider: document.getElementById("idCoLider").value,
+                    idTerritorio: document.getElementById("idTerritorio").value
                 },
                 success: function (response) {
                     console.log(response);
                     dataTable.ajax.reload();
+                    $('#modal_registrar').modal('hide');
+                    document.getElementById('formulario').reset();
 
                     let data = JSON.parse(response);
                     Swal.fire({
@@ -528,15 +625,13 @@ $(document).ready(function () {
                         title: 'Registrado Correctamente',
                         showConfirmButton: false,
                         timer: 2000,
-                    })
+                    });
 
                     nombre.value = '';
-                    choices4.setChoiceByValue('');
-                    choices5.setChoiceByValue('');
-                    choices6.setChoiceByValue('');
+                    $("#nombre").removeClass("is-valid");
+                    
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR.responseText);
                     if (jqXHR.responseText) {
                         let jsonResponse = JSON.parse(jqXHR.responseText);
 
@@ -590,58 +685,136 @@ $(document).ready(function () {
         idTerritorio: true
     };
 
-
-    //Validar nombre
-    const nombre2 = document.getElementById("nombre2");
-    nombre2.addEventListener('keyup', (e) => {
-        // Validar nombre
-        if (!regexObj.nombre.test(e.target.value)) {
-            document.getElementById("msj_nombre2").classList.remove("d-none");
-            validationStatus2.nombre = false;
-        } else {
-            document.getElementById("msj_nombre2").classList.add("d-none");
-            validationStatus2.nombre = true;
-        }
-    })
+    $("#nombre2").on("keyup", function (event) {
+        const idTerritorio = document.getElementById("idTerritorio2").value;
+        const nombre = document.getElementById("nombre2").value;  
+      validar_nombre_editar(idTerritorio, nombre);
+    });
 
 
-    // Validacion de idLider y idCoLider
+    function validar_nombre_editar(idTerritorio, nombre){
 
-    const idLider2 = document.getElementById("idLider2");
-    const idCoLider2 = document.getElementById("idCoLider2");
-
-    idLider2.addEventListener('change', (e) => {
-        if (!regexObj.idLider.test(e.target.value) || e.target.value === idCoLider2.value) {
-            document.getElementById("msj_idLider2").classList.remove("d-none");
-            validationStatus2.idLider = false;
-        } else {
-            document.getElementById("msj_idLider2").classList.add("d-none");
-            validationStatus2.idLider = true;
-        }
-    })
-
-    idCoLider2.addEventListener('change', (e) => {
-        if (!regexObj.idCoLider.test(e.target.value) || e.target.value === idLider2.value) {
-            document.getElementById("msj_idCoLider2").classList.remove("d-none");
-            validationStatus2.idCoLider = false;
-        } else {
-            document.getElementById("msj_idCoLider2").classList.add("d-none");
-            validationStatus2.idCoLider = true;
-        }
-    })
-
-
-    // Validar idTerritorio
-    const idTerritorio2 = document.getElementById("idTerritorio2");
-    idTerritorio2.addEventListener('change', (e) => {
-        if (!regexObj.idTerritorio.test(e.target.value)) {
-            document.getElementById("msj_idTerritorio2").classList.remove("d-none");
-            validationStatus2.idSede = false;
-        } else {
-            document.getElementById("msj_idTerritorio2").classList.add("d-none");
-            validationStatus2.idTerritorio = true;
-        }
-    })
+        if(nombre !== ''){
+        $.ajax({
+          type: "POST",
+          url: "/AppwebMVC/CelulaCrecimiento/Index",
+          data: {
+            coincidencias: 'coincidencias',
+            nombre: nombre,
+            idTerritorio: idTerritorio,
+            id: document.getElementById('idCelulaCrecimiento').textContent
+          },
+          success: function (response) {
+      
+            let data = JSON.parse(response);
+      
+            if (data != true) {
+              validationStatus2.nombre = true;
+              $("#nombre2").removeClass("is-invalid");
+              $("#nombre2").addClass("is-valid");
+              document.getElementById('msj_nombre2').textContent = '';
+              if (regexObj.nombre.test(nombre)) {
+                validationStatus2.nombre = true;
+                $("#nombre2").removeClass("is-invalid");
+                $("#nombre2").addClass("is-valid");
+                document.getElementById('msj_nombre2').textContent = '';
+      
+              } else {
+                validationStatus2.nombre = false;
+                $("#nombre2").removeClass("is-valid");
+                $("#nombre2").addClass("is-invalid");
+                document.getElementById('msj_nombre2').textContent = 'El nombre es obligatorio y debe poseer mas de 5 caracteres';
+      
+              }
+            } else {
+              validationStatus2.nombre = false;
+              $("#nombre2").removeClass("is-valid");
+              $("#nombre2").addClass("is-invalid");
+              document.getElementById('msj_nombre2').textContent = 'Ya existe una Celula Crecimiento con este nombre en este Territorio';
+      
+            }
+      
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            // Aquí puedes manejar errores, por ejemplo:
+            console.error("Error al enviar:", textStatus, errorThrown);
+          }
+        })
+    
+      }}
+    
+    
+        // Validacion de idLider 
+    
+        
+        $("#idLider2").on("change", function (event) {
+            const idLider = document.getElementById("idLider2");
+           const idCoLider = document.getElementById("idCoLider2");
+           const div = document.getElementById("msj_idLider2");
+           
+               if (regexObj.idLider.test(idLider.value)) {
+                   validationStatus2.idLider = true;
+                   div.classList.add("d-none");
+                   div.innerText = "";
+         
+                   if(idLider.value === idCoLider.value){
+                       validationStatus2.idLider = false;
+                       div.classList.remove("d-none");
+                       div.innerText = "Lider y CoLider no pueden ser la misma persona";
+                       } 
+               } else {
+                   validationStatus2.idLider = false;
+                   div.classList.remove("d-none");
+                 div.innerText = "este campo es obligatorio";
+               }
+           })
+       
+           // Validacion  idCoLider
+        $("#idCoLider2").on("change", function (event) {
+            const idLider = document.getElementById("idLider2");
+           const idCoLider = document.getElementById("idCoLider2");
+           const div = document.getElementById("msj_idCoLider2");
+           
+               if (regexObj.idCoLider.test(idCoLider.value)) {
+                   validationStatus2.idCoLider = true;
+                   div.classList.add("d-none");
+                   div.innerText = "";
+         
+                   if(idLider.value === idCoLider.value){
+                       validationStatus2.idCoLider = false;
+                       div.classList.remove("d-none");
+                       div.innerText = "Lider y CoLider no pueden ser la misma persona";
+                       }
+               } else {
+                   validationStatus2.idCoLider = false;
+                   div.classList.remove("d-none");
+                 div.innerText = "este campo es obligatorio";
+               }
+           })
+    
+      
+    
+    
+        // Validar idTerritorio
+        
+        $("#idTerritorio2").on("change", function (event) {
+            const idTerritorio = document.getElementById("idTerritorio2").value;
+            const nombre = document.getElementById("nombre2").value;
+            const div = document.getElementById("msj_idTerritorio2");
+            if (!regexObj.idTerritorio.test(idTerritorio)) {
+                div.classList.remove("d-none");
+                div.innerText = "Este campo es obligatorio";
+         
+                validationStatus2.idTerritorio = false;
+            } else {
+                div.classList.add("d-none");
+                div.innerText = "";
+    
+                validationStatus2.idTerritorio = true;
+            }
+            validar_nombre_editar(idTerritorio, nombre);
+        })
+    
 
 
     const form2 = document.getElementById("formulario2");
@@ -661,10 +834,10 @@ $(document).ready(function () {
 
                     editar: 'editar',
                     id2: id2,
-                    nombre2: nombre2.value,
-                    idLider2: idLider2.value,
-                    idCoLider2: idCoLider2.value,
-                    idTerritorio2: idTerritorio2.value
+                    nombre2: document.getElementById("nombre2").value,
+                    idLider2: document.getElementById("idLider2").value,
+                    idCoLider2: document.getElementById("idCoLider2").value,
+                    idTerritorio2: document.getElementById("idTerritorio2").value
                 },
                 success: function (response) {
                     console.log(response);
@@ -726,20 +899,18 @@ $(document).ready(function () {
     //////////////////////////// REGISTRO DE REUNION ////////////////////////////////   
 
 
-    const expresiones_regulares2 = {
+    const ex_re = {
 
-        tematica: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/, // Letras, números, espacios, puntos y comas con un máximo de 100 caracteres
         semana: /^[1-9]\d*$/, // Números enteros mayores a 0
+        fecha: /^.+$/,
         generosidad: /^[0-9]+(\.[0-9]{2})?$/,
-        infantil: /^[0-9]\d*$/,
-        juvenil: /^[0-9]\d*$/,
-        adulto: /^[0-9]\d*$/,
-        actividad: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/, // Letras, números, espacios, puntos y comas con un máximo de 100 caracteres
-        observaciones: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/ // Letras, números, espacios, puntos y comas con un máximo de 100 caracteres
+        asistencia: /^[0-9]\d*$/,
+        info: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/ // Letras, números, espacios, puntos y comas con un máximo de 100 caracteres
     };
 
     const validationStatus3 = {
 
+        fecha: false,
         tematica: false,
         semana: false,
         generosidad: false,
@@ -751,111 +922,189 @@ $(document).ready(function () {
     };
 
 
+    $("#fecha").on("change", function (event) {
+        const fecha = document.getElementById("fecha");
+        const div = document.getElementById("msj_fecha");
+        if (!ex_re.fecha.test(fecha.value)) {
+            fecha.classList.remove("is-valid");
+            fecha.classList.add("is-invalid");
+            div.innerText = "Este campo es obligatorio";
+     
+            validationStatus3.fecha = false;
+        } else {
+            fecha.classList.remove("is-invalid");
+            fecha.classList.add("is-valid");
+            div.innerText = "";
+
+            validationStatus3.fecha = true;
+        }
+    })
+
+    $("#tematica").on("keyup", function (event) {
+        const tematica = document.getElementById("tematica");
+        const div = document.getElementById("msj_tematica");
+        if (!ex_re.info.test(tematica.value)) {
+            tematica.classList.remove("is-valid");
+            tematica.classList.add("is-invalid");
+            div.innerText = "Este campo es obligatorio, debe poseer mas  de 5 caracteres";
+     
+            validationStatus3.tematica = false;
+        } else {
+            tematica.classList.remove("is-invalid");
+            tematica.classList.add("is-valid");
+            div.innerText = "";
+
+            validationStatus3.tematica = true;
+        }
+    })
+
+    $("#semana").on("change", function (event) {
+        const input = document.getElementById("semana");
+        const div = document.getElementById("msj_semana");
+        if (!ex_re.semana.test(input.value)) {
+            input.classList.remove("is-valid");
+            input.classList.add("is-invalid");
+            div.innerText = "Este campo es obligatorio";
+     
+            validationStatus3.semana = false;
+        } else {
+            input.classList.remove("is-invalid");
+            input.classList.add("is-valid");
+            div.innerText = "";
+
+            validationStatus3.semana = true;
+        }
+    })
+
+    $("#generosidad").on("keyup", function (event) {
+        const generosidad = document.getElementById("generosidad");
+        const div = document.getElementById("msj_generosidad");
+        if (!ex_re.generosidad.test(generosidad.value)) {
+            generosidad.classList.remove("is-valid");
+            generosidad.classList.add("is-invalid");
+            div.innerText = "Este campo es obligatorio, y su formato correcto es 00,00";
+     
+            validationStatus3.generosidad = false;
+        } else {
+            generosidad.classList.remove("is-invalid");
+            generosidad.classList.add("is-valid");
+            div.innerText = "";
+
+            validationStatus3.generosidad = true;
+        }
+    })
+
+    $("#juvenil").on("change", function (event) {
+        const input = document.getElementById("juvenil");
+        const div = document.getElementById("msj_juvenil");
+        if (!ex_re.asistencia.test(input.value)) {
+            input.classList.remove("is-valid");
+            input.classList.add("is-invalid");
+            div.innerText = "Este campo es obligatorio";
+     
+            validationStatus3.juvenil = false;
+        } else {
+            input.classList.remove("is-invalid");
+            input.classList.add("is-valid");
+            div.innerText = "";
+
+            validationStatus3.juvenil = true;
+        }
+    })
+
+    $("#adulto").on("change", function (event) {
+        const input = document.getElementById("adulto");
+        const div = document.getElementById("msj_adulto");
+        if (!ex_re.asistencia.test(input.value)) {
+            input.classList.remove("is-valid");
+            input.classList.add("is-invalid");
+            div.innerText = "Este campo es obligatorio";
+     
+            validationStatus3.adulto = false;
+        } else {
+            input.classList.remove("is-invalid");
+            input.classList.add("is-valid");
+            div.innerText = "";
+
+            validationStatus3.adulto = true;
+        }
+    })
+
+    $("#infantil").on("change", function (event) {
+        const input = document.getElementById("infantil");
+        const div = document.getElementById("msj_infantil");
+        if (!ex_re.asistencia.test(input.value)) {
+            input.classList.remove("is-valid");
+            input.classList.add("is-invalid");
+            div.innerText = "Este campo es obligatorio";
+     
+            validationStatus3.infantil = false;
+        } else {
+            input.classList.remove("is-invalid");
+            input.classList.add("is-valid");
+            div.innerText = "";
+
+            validationStatus3.infantil = true;
+        }
+    })
+
+    $("#actividad").on("keyup", function (event) {
+        const input = document.getElementById("actividad");
+        const div = document.getElementById("msj_actividad");
+        if (!ex_re.info.test(input.value)) {
+            input.classList.remove("is-valid");
+            input.classList.add("is-invalid");
+            div.innerText = "Este campo es obligatorio, y debe poseer mas de 5 caracteres";
+     
+            validationStatus3.actividad = false;
+        } else {
+            input.classList.remove("is-invalid");
+            input.classList.add("is-valid");
+            div.innerText = "";
+
+            validationStatus3.actividad = true;
+        }
+    })
+
+    $("#observaciones").on("keyup", function (event) {
+        const input = document.getElementById("observaciones");
+        const div = document.getElementById("msj_observaciones");
+        if (!ex_re.info.test(input.value)) {
+            input.classList.remove("is-valid");
+            input.classList.add("is-invalid");
+            div.innerText = "Este campo es obligatorio, y debe poseer mas de 5 caracteres";
+     
+            validationStatus3.observaciones = false;
+        } else {
+            input.classList.remove("is-invalid");
+            input.classList.add("is-valid");
+            div.innerText = "";
+
+            validationStatus3.observaciones = true;
+        }
+    })
+
+
+
+
+
     const form3 = document.getElementById("formularioReunion");
 
     form3.addEventListener("submit", (e) => {
         e.preventDefault();
+        const dato = {
 
-        const idCelula = document.getElementById('idCelulaCrecimientoR').textContent;
-
-        // Validar fecha
-        const fecha = document.getElementById("fecha").value;
-        /* if (fecha === "") {
-             document.getElementById("msj_fecha").classList.remove("d-none");
-             validationStatus3.fecha = false;
-         } else {
-             // Comprobar que la fecha esté en un formato válido
-             if (!expresiones_regulares2.actividad.test(fecha)) {
-                 document.getElementById("msj_fecha").classList.remove("d-none");
-                 validationStatus3.fecha = false;
-             } else {
-                 document.getElementById("msj_fecha").classList.add("d-none");
-                 validationStatus3.fecha = true;
-             }
-         }*/
-
-        // Validar tematica
-        const tematica = document.getElementById("tematica").value;
-        if (!expresiones_regulares2.tematica.test(tematica)) {
-            document.getElementById("msj_tematica").classList.remove("d-none");
-            validationStatus3.tematica = false;
-        } else {
-            document.getElementById("msj_tematica").classList.add("d-none");
-            validationStatus3.tematica = true;
+            idCelula: $("#idCelulaCrecimientoR"),
+            fecha: $("#fecha"),
+            tematica: $("#tematica"),
+            semana: $("#semana"),
+            generosidad: $("#generosidad"),
+            infantil: $("#infantil"),
+            juvenil: $("#juvenil"),
+            adulto: $("#adulto"),
+            actividad: $("#actividad"),
+            observaciones: $("#observaciones")
         }
-
-        // Validar semana
-        const semana = document.getElementById("semana").value;
-        if (!expresiones_regulares2.semana.test(semana)) {
-            document.getElementById("msj_semana").classList.remove("d-none");
-            validationStatus3.semana = false;
-        } else {
-            document.getElementById("msj_semana").classList.add("d-none");
-            validationStatus3.semana = true;
-        }
-
-        // Validar generosidad
-        const generosidad = document.getElementById("generosidad").value;
-        if (!expresiones_regulares2.generosidad.test(generosidad)) {
-            document.getElementById("msj_generosidad").classList.remove("d-none");
-            validationStatus3.generosidad = false;
-        } else {
-            document.getElementById("msj_generosidad").classList.add("d-none");
-            validationStatus3.generosidad = true;
-        }
-
-        // Validar infantil
-        const infantil = document.getElementById("infantil").value;
-        if (!expresiones_regulares2.infantil.test(infantil)) {
-            document.getElementById("msj_infantil").classList.remove("d-none");
-            validationStatus3.infantil = false;
-        } else {
-            document.getElementById("msj_infantil").classList.add("d-none");
-            validationStatus3.infantil = true;
-        }
-
-        // Validar juvenil
-        const juvenil = document.getElementById("juvenil").value;
-        if (!expresiones_regulares2.juvenil.test(juvenil)) {
-            document.getElementById("msj_juvenil").classList.remove("d-none");
-            validationStatus3.juvenil = false;
-        } else {
-            document.getElementById("msj_juvenil").classList.add("d-none");
-            validationStatus3.juvenil = true;
-        }
-
-        // Validar adulto
-        const adulto = document.getElementById("adulto").value;
-        if (!expresiones_regulares2.adulto.test(adulto)) {
-            document.getElementById("msj_adulto").classList.remove("d-none");
-            validationStatus3.adulto = false;
-        } else {
-            document.getElementById("msj_adulto").classList.add("d-none");
-            validationStatus3.adulto = true;
-        }
-
-        // Validar actividad
-        const actividad = document.getElementById("actividad").value;
-        if (!expresiones_regulares2.actividad.test(actividad)) {
-            document.getElementById("msj_actividad").classList.remove("d-none");
-            validationStatus3.actividad = false;
-        } else {
-            document.getElementById("msj_actividad").classList.add("d-none");
-            validationStatus3.actividad = true;
-        }
-
-        // Validar observaciones
-        const observaciones = document.getElementById("observaciones").value;
-        if (!expresiones_regulares2.observaciones.test(observaciones)) {
-            document.getElementById("msj_juvenil").classList.remove("d-none");
-            validationStatus3.observaciones = false;
-        } else {
-            document.getElementById("msj_observaciones").classList.add("d-none");
-            validationStatus3.observaciones = true;
-        }
-
-
-
         // Verifica si todos los campos son válidos antes de enviar el formulario
         if (Object.values(validationStatus3).every(status => status === true)) {
             // Aquí puedes agregar el código para enviar el formulario
@@ -865,16 +1114,16 @@ $(document).ready(function () {
                 data: {
 
                     registroreunion: 'registroreunion',
-                    idCelula: idCelula,
-                    fecha: fecha,
-                    tematica: tematica,
-                    semana: semana,
-                    generosidad: generosidad,
-                    infantil: infantil,
-                    juvenil: juvenil,
-                    adulto: adulto,
-                    actividad: actividad,
-                    observaciones: observaciones
+                    idCelula: dato.idCelula.text(),
+                    fecha: dato.fecha.val(),
+                    tematica: dato.tematica.val(),
+                    semana: dato.semana.val(),
+                    generosidad: dato.generosidad.val(),
+                    infantil: dato.infantil.val(),
+                    juvenil: dato.juvenil.val(),
+                    adulto: dato.adulto.val(),
+                    actividad: dato.actividad.val(),
+                    observaciones: dato.observaciones.val()
                 },
                 success: function (response) {
 
@@ -888,7 +1137,17 @@ $(document).ready(function () {
                         title: 'Se registro correctamente la Reunion',
                         showConfirmButton: false,
                         timer: 2000,
-                    })
+                    });
+
+
+                      for (const key in dato) {
+                        const input = dato[key];
+                        input.removeClass("is-valid");
+                      }
+
+                      for (const key in validationStatus3) {
+                        validationStatus3[key] = false;
+                      }
 
                     form3.reset()
 
@@ -928,8 +1187,67 @@ $(document).ready(function () {
             })
         }
     });
+$('#cerrarRegistrar').on('click', function () {
+    
+    document.getElementById('formulario').reset();
 
+    $("#nombre").removeClass("is-valid");
+    $("#nombre").removeClass("is-invalid");
+    $("#msj_idLider").addClass("d-none");
+    $("#msj_idCoLider").addClass("d-none");
+    $("#msj_idTerritorio").addClass("d-none");
+
+
+    $('#modal_registrar').modal('hide');
+    
+  });
+
+  $('#cerrarEditar').on('click', function () {
+    
+    $("#nombre2").removeClass("is-valid");
+    $("#nombre2").removeClass("is-invalid");
+    $("#msj_idLider2").addClass("d-none");
+    $("#msj_idCoLider2").addClass("d-none");
+    $("#msj_idTerritorio2").addClass("d-none");
+
+    $('#modal_editarInfo').modal('hide');
+
+  });
+
+  $('#cerrarReunion').on('click', function () {
+    
+    document.getElementById('formularioReunion').reset();
+
+    const dato = {
+
+        idCelula: $("#idCelulaCrecimientoR"),
+        fecha: $("#fecha"),
+        tematica: $("#tematica"),
+        semana: $("#semana"),
+        generosidad: $("#generosidad"),
+        infantil: $("#infantil"),
+        juvenil: $("#juvenil"),
+        adulto: $("#adulto"),
+        actividad: $("#actividad"),
+        observaciones: $("#observaciones")
+    }
+
+    for (const key in dato) {
+        const input = dato[key];
+        input.removeClass("is-valid");
+        input.removeClass("is-invalid")
+      }
+
+    $('#modal_registroreunion').modal('hide');
+
+  });
+
+
+
+  
 });
+
+
 
 
 

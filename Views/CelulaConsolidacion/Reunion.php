@@ -4,29 +4,36 @@ global $viewScripts;
 $viewScripts = ["CelulaConsolidacion-reunion.js"];
 ?>
 
-<h2>Reuniones Celulas de Consolidacion:</h2>
-
-<div class="container-fluid">
-
-    <div class="row mt-4">
-        <div class="col-sm-12 col-md-12 col-lg-12">
-            <div class="table-responsive">
-                <table id="celulaDatatables" class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>Codigo Celula Consolidacion</th>
-                            <th>Nombre de la Celula Consolidacion</th>
-                            <th>Fecha de la reunión</th>
-                            <th class="text-center" style="width: 200px;">Opciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- AQUI MOSTRARA LA INFORMACION -->
-                    </tbody>
-                </table>
-            </div>
+<div class="page-top d-flex align-items-end justify-content-between mb-2">
+<h2><strong>Reuniones de Celula Consolidacion</strong></h2>
+    <div class="d-flex gap-3">
+        <div class="buscador">
+            <input type="text" id="search" class="form-control" placeholder="Buscar Reunion">
         </div>
     </div>
+</div>
+
+
+
+     <div class="table-responsive">
+            <table id="celulaDatatables" class="table table-bordered table-rounded table-hover" style="width:100%"> 
+
+                <thead>
+                        <tr>
+                        <th>Codigo</th>
+                            <th>Nombre</th>
+                            <th>Fecha de la reunión</th>
+                            <th class="text-center" style="width: 170px;">Opciones</th>
+                        </tr>
+                </thead>
+                <!-- AQUI MOSTRARA LA INFORMACION -->
+                </tbody>
+            </table>
+        </div>
+
+
+
+
 
 
     <!-- MODAL PARA VER TODA LA Informacion de la reunion REUNION -->
@@ -35,7 +42,7 @@ $viewScripts = ["CelulaConsolidacion-reunion.js"];
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Informacion de la reunion</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <!-- AQUI TE ESTA TODA LA INFORAMCION DE MANERA ESTATICA, ES DECIR, SOLO PARA MOSTRAR INFO -->
@@ -89,7 +96,10 @@ $viewScripts = ["CelulaConsolidacion-reunion.js"];
     </div>
 
 
-    <!-- MODAL PARA EDITAR TODOS LOS DATOS DE LA Reunion -->
+
+
+    
+    <!-- MODAL PARA EDITAR TODOS LOS DATOS DE LA REUNION -->
     <div class="modal fade" id="modal_editarInfo" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -98,71 +108,70 @@ $viewScripts = ["CelulaConsolidacion-reunion.js"];
                 </div>
                 <div class="modal-body">
                     <form id="formularioReunion">
+                        <div class="row">
 
-                        <div class="mb-3">
                             <div class="mb-3">
                                 <input type="hidden" id="idreunion">
-                                <label for="idCelula" class="form-label fw-bold">Celula de Consolidacion</label>
+                                <label for="idCelula" class="form-label fw-bold">Celula Consolidacion</label>
                                 <select class="form-select" id="idCelula" name="idCelula">
+                                    <option selected value="">Seleccione</option>
                                 </select>
                                 <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_idCelula" role="alert">
-                                    Debe seleccionar una Celula de Consolidacion.
                                 </div>
                             </div>
 
-                            <label for="fecha" class="form-label fw-bold">Fecha</label>
-                            <input type="date" class="form-control" id="fecha" name="fecha">
-                            <div class="alert alert-danger d-none" id="msj_fecha" role="alert"> Debe seleccionar la fecha de la reunión</div>
-                        </div>
-
-
-                        <div class="mb-3">
-                            <label for="tematica" class="form-label fw-bold">Tematica</label>
-                            <input type="text" class="form-control" id="tematica" name="tematica" maxlength="100">
-                            <div class="alert alert-danger d-none" id="msj_tematica" role="alert">Este campo no puede estar vacio</div>
-                        </div>
-
-
-                        <div class="mb-3">
-                            <div class="row g-3">
-                                <div class="col-4">
-                                    <label for="tematica" class="form-label fw-bold">Semana del Ciclo</label>
-                                    <input type="number" class="form-control" id="semana" name="tematica">
-                                    <div class="alert alert-danger d-none" id="msj_semana" role="alert">Este campo no puede estar vacio</div>
+                            <div class="mb-3">
+                                    <label for="fecha" class="form-label fw-bold">Fecha</label>
+                                    <input type="date" class="form-control" id="fecha" name="fecha" aria-describedby="msj_fecha">
+                                    <div class="invalid-feedback" id="msj_fecha" role="alert"></div>
                                 </div>
 
 
-                                <div class="col-8">
-                                    <label class="form-label fw-bold">Generosidad</label>
-                                    <input type="number" class="form-control" id="generosidad" name="tematica" step="0.01">
-                                    <div class="alert alert-danger d-none" id="msj_generosidad" role="alert">Este campo no puede estar vacio</div>
+                                <div class="mb-3">
+                                    <label for="tematica" class="form-label fw-bold">Tematica</label>
+                                    <textarea class="form-control" id="tematica" name="tematica" maxlength="100" aria-describedby="msj_tematica"></textarea>
+                                    <div class="invalid-feedback" id="msj_tematica" role="alert"></div>
                                 </div>
+
+
+                                <div class="mb-3">
+                                    <div class="row g-3">
+                                        <div class="col-4">
+                                            <label for="semana" class="form-label fw-bold">Semana del ciclo</label>
+                                            <input type="number" class="form-control" id="semana" min="0" aria-describedby="msj_semana">
+                                            <div class="invalid-feedback" id="msj_semana" role="alert"></div>
+                                        </div>
+
+
+                                        <div class="col-8">
+                                            <label class="form-label fw-bold">Generosidad</label>
+                                            <input type="number" class="form-control" id="generosidad"  step="0.01" min="0" aria-describedby="msj_generosidad">
+                                            <div class="invalid-feedback" id="msj_generosidad" role="alert"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                              
+                                <div class="mb-3">
+                                    <label for="actividad" class="form-label fw-bold">Actividad</label>
+                                    <textarea class="form-control" id="actividad" name="actividad" maxlength="100" aria-describedby="msj_actividad"></textarea>
+
+                                    <div class="invalid-feedback" id="msj_actividad" role="alert"></div>
+                                </div>
+
+
+                                <div class="mb-3">
+                                    <label for="observaciones" class="form-label fw-bold">Observaciones</label>
+                                    <textarea class="form-control" id="observaciones" name="observaciones" maxlength="100" rows="3" aria-describedby="msj_observaciones"></textarea>
+
+                                    <div class="invalid-feedback" id="msj_observaciones" role="alert"></div>
+                                </div>
+
+                            <div class="d-flex justify-content-end gap-1">
+                                <button type="button" class="btn btn-secondary" id="cerrarReunion">Cancelar</button>
+                                <button type="submit" class="btn btn-primary">Registrar</button>
                             </div>
+
                         </div>
-
-
-                        <div class="mb-3">
-                            <label for="actividad" class="form-label fw-bold">Actividad</label>
-                            <input type="text" class="form-control" id="actividad" name="actividad" maxlength="100">
-
-                            <div class="alert alert-danger d-none" id="msj_actividad" role="alert">Este campo no puede estar vacio</div>
-                        </div>
-
-
-                        <div class="mb-3">
-                            <label for="observaciones" class="form-label fw-bold">Observaciones</label>
-                            <input type="100" class="form-control" id="observaciones" name="observaciones" rows="3"></textarea>
-
-                            <div class="alert alert-danger d-none" id="msj_observaciones" role="alert">Este campo no puede estar vacio</div>
-                        </div>
-
-
-
-                        <div class="d-flex justify-content-end gap-1">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-primary">Actualizar</button>
-                        </div>
-
                     </form>
 
                 </div>
@@ -171,52 +180,49 @@ $viewScripts = ["CelulaConsolidacion-reunion.js"];
     </div>
 
 
-
-    <!-- MODAL PARA EDITAR TODOS LOS DATOS DE LA Reunion -->
-    <div class="modal fade" id="modal_editarAsistencia" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Editar asistencias de la Reunion</h5>
-                </div>
-                <div class="modal-body">
-                    <div class="container-fluid">
-                        
-
-                            <table id="asistenciasDatatables" class="table table-hover">
-                                <thead>
+    <!-- MODAL PARA EDITAR TODOS LOS DATOS DE LA ASISTENCIA -->
+<div class="modal fade" id="modal_editarAsistencia" aria-hidden="true" data-bs-backdrop="static"
+    data-bs-keyboard="false">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Editar asistencias de la Reunion</h5>
+            </div>
+            <div class="modal-body">
+                
+                    <div class="table-responsive">
+                        <table id="asistenciasDatatables" class="table" style="width:100%"> 
+            
+                            <thead>
                                     <tr>
-                                        <th>Discipulos</th>
-                                        <th>Opcion</th>
+                                        <th style="width: 170px;">Discipulos</th>
+                                        <th class="text-center" style="width: 30px;"></th>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- AQUI MOSTRARA LA INFORMACION -->
-                                </tbody>
-                            </table>
+                            </thead>
+                            <tbody>
+                            <!-- AQUI MOSTRARA LA INFORMACION -->
+                            </tbody>
+                        </table>
+                    </div>
+                
+                  <div class="mt-2">
 
-                       
+                        <select multiple name="discipulosAsistencia" id="discipulos">
 
-
-
-                        <div class="mt-2">
-
-                            <select multiple name="discipulosAsistencia" id="discipulos">
-
-                            </select>
-                            <div class="alert alert-danger d-none" id="msj_discipulosAsistencia" role="alert">
-                                Debes seleccionar discipulos para actualizar.
-                            </div>
-
-
+                        </select>
+                        <div class="alert alert-danger d-none" id="msj_discipulosAsistencia" role="alert">
+                        
                         </div>
-                    </div>
 
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" id="actualizarDiscipulos" class="btn btn-primary">Actualizar</button>
+
                     </div>
+                
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cerrarAsistencia">Cancelar</button>
+                    <button type="submit" id="actualizarDiscipulos" class="btn btn-primary">Actualizar</button>
                 </div>
             </div>
         </div>
     </div>
+</div>

@@ -16,39 +16,42 @@ $usuario = $_SESSION['usuario'];
     }
 </script>
 
-<div class="container-fluid">
 
-    <div class="row">
-        <div class="col-sm-12 col-md-12 col-lg-12">
-            <div class="table-responsive">
-                <table id="sedeDatatables" class="table table-bordered table-hover">
-                    <thead>
-                        <div class="d-flex align-items-end justify-content-between mb-2">
-                            <h2><strong>Discipulos:</strong></h2>
-                            <?php if ($usuario->tienePermiso("discipulos", "registrar")) : ?>
-                                <button class="btn btn-accent text-nowrap" id="registrar" data-bs-toggle="modal" data-bs-target="#modal_registrar">
-                                    <i class="fa-solid fa-plus"></i>
-                                    Nuevo Discipulo
-                                </button>
-                            <?php endif ?>
-                        </div>
+<div class="page-top d-flex align-items-end justify-content-between mb-2">
+<h2><strong>Discipulos</strong></h2>
+    <div class="d-flex gap-3">
+        <div class="buscador">
+            <input type="text" id="search" class="form-control" placeholder="Buscar Discipulo">
+        </div>
+        <?php if ($usuarioSesion->tienePermiso("discipulos", "registrar")): ?>
+            <button class="btn btn-accent text-nowrap" id="registrar" data-bs-toggle="modal" data-bs-target="#modal_registrar">
+                                <i class="fa-solid fa-plus"></i>
+                Nuevo Discipulo
+            </button>
+        <?php endif ?>
+    </div>
+</div>
+
+
+
+     <div class="table-responsive">
+            <table id="sedeDatatables" class="table table-bordered table-rounded table-hover" style="width:100%"> 
+
+                <thead>
                         <tr>
-                            <th>Cedula</th>
+                        <th>Cedula</th>
                             <th>Nombre</th>
                             <th>Apellido</th>
                             <th>Celula de Consolidacion </th>
                             <th>Asistencias</th>
                             <th class="text-center" style="width: 90px;">Opciones</th>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <!-- AQUI MOSTRARA LA INFORMACION -->
-
-                    </tbody>
-                </table>
-            </div>
+                </thead>
+                <!-- AQUI MOSTRARA LA INFORMACION -->
+                </tbody>
+            </table>
         </div>
-    </div>
+
 
 
     <!-- MODAL PARA VER TODOS LOS DATOS DE LA SEDE -->
@@ -183,9 +186,8 @@ $usuario = $_SESSION['usuario'];
                                     <label for="cedula2" class="form-label fw-bold">Cedula de Identidad</label>
                                     <div class="input-group has-validation">
                                         <span class="input-group-text" id="inputGroupPrepend">CI</span>
-                                        <input type="number" class="form-control" id="cedula2" aria-describedby="msj_cedula2">
+                                        <input type="number" class="form-control" min="0" maxlength="8" id="cedula2" aria-describedby="msj_cedula2">
                                         <div id="msj_cedula2" class="invalid-feedback">
-                                            este campo no puede estar vacio, escriba correctamente la cedula.
                                         </div>
                                     </div>
                                 </div>
@@ -194,7 +196,7 @@ $usuario = $_SESSION['usuario'];
                             <div class="row my-2">
                                 <div class="col-lg-6">
                                     <label for="telefono2" class="form-label fw-bold">Numero de telefono</label>
-                                    <input type="number" class="form-control" id="telefono2" aria-describedby="msj_telefono2">
+                                    <input type="number" class="form-control" min="0" maxlength="11" id="telefono2" aria-describedby="msj_telefono2">
                                     <div id="msj_telefono2" class="invalid-feedback">
                                         escriba correctamente el numero de telefono ej.04145555555
                                     </div>
@@ -258,16 +260,16 @@ $usuario = $_SESSION['usuario'];
                                     <select class="form-select" id="idConsolidador2">
                                         <option selected value="">Selecciona un consolidador</option>
                                     </select>
-                                    <div id="msj_idConsolidador2" class="invalid-feedback">
+                                    <div id="msj_idConsolidador2" class="alert alert-danger d-flex align-items-center mt-3 d-none">
                                         Escoja el Consolidador.
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
-                                    <label for="idcelulaconsolidacion2" class="form-label fw-bold">Celula de Consolidacion</label>
+                                    <label for="idCelulaConsolidacion2" class="form-label fw-bold">Celula de Consolidacion</label>
                                     <select class="form-select" id="idCelulaConsolidacion2">
                                         <option selected value="">Selecciona una celula</option>
                                     </select>
-                                    <div id="msj_idcelulaconsolidacion2" class="invalid-feedback">
+                                    <div id="msj_idCelulaConsolidacion2" class="alert alert-danger d-flex align-items-center mt-3 d-none">
                                         Escoja una Celula de Consolidacion.
                                     </div>
                                 </div>
@@ -291,7 +293,7 @@ $usuario = $_SESSION['usuario'];
                             </div>
 
                             <div class="d-flex justify-content-end gap-1 mt-3">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                <button type="button" class="btn btn-secondary" id="cerrarEditar" >Cerrar</button>
                                 <button type="submit" class="btn btn-primary">Actualizar</button>
                             </div>
                         </form>
@@ -334,9 +336,8 @@ $usuario = $_SESSION['usuario'];
                                     <label for="cedula" class="form-label fw-bold">Cedula de Identidad</label>
                                     <div class="input-group has-validation">
                                         <span class="input-group-text" id="inputGroupPrepend">CI</span>
-                                        <input type="number" class="form-control" id="cedula" aria-describedby="msj_cedula">
+                                        <input type="number" class="form-control" min="0" maxlength="8" id="cedula" aria-describedby="msj_cedula">
                                         <div id="msj_cedula" class="invalid-feedback">
-                                            este campo no puede estar vacio, escriba correctamente la cedula.
                                         </div>
                                     </div>
                                 </div>
@@ -345,7 +346,7 @@ $usuario = $_SESSION['usuario'];
                             <div class="row my-2">
                                 <div class="col-lg-6">
                                     <label for="telefono" class="form-label fw-bold">Numero de telefono</label>
-                                    <input type="number" class="form-control" id="telefono" aria-describedby="msj_telefono">
+                                    <input type="number" class="form-control" min="0" maxlength="11" id="telefono" aria-describedby="msj_telefono">
                                     <div id="msj_telefono" class="invalid-feedback">
                                         escriba correctamente el numero de telefono ej.04145555555
                                     </div>
@@ -409,16 +410,16 @@ $usuario = $_SESSION['usuario'];
                                     <select class="form-select" id="idConsolidador">
                                         <option selected value="">Selecciona un consolidador</option>
                                     </select>
-                                    <div id="msj_idConsolidador" class="invalid-feedback">
+                                    <div id="msj_idConsolidador" class="alert alert-danger d-flex align-items-center mt-3 d-none">
                                         Escoja el Consolidador.
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
-                                    <label for="idcelulaconsolidacion" class="form-label fw-bold">Celula de Consolidacion</label>
+                                    <label for="idCelulaConsolidacion" class="form-label fw-bold">Celula de Consolidacion</label>
                                     <select class="form-select" id="idCelulaConsolidacion">
                                         <option selected value="">Selecciona una celula</option>
                                     </select>
-                                    <div id="msj_idcelulaconsolidacion" class="invalid-feedback">
+                                    <div id="msj_idCelulaConsolidacion" class="alert alert-danger d-flex align-items-center mt-3 d-none">
                                         Escoja una Celula de Consolidacion.
                                     </div>
                                 </div>
@@ -442,7 +443,7 @@ $usuario = $_SESSION['usuario'];
                             </div>
 
                             <div class="d-flex justify-content-end gap-1 mt-3">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                <button type="button" class="btn btn-secondary" id="cerrarRegistrar" >Cerrar</button>
                                 <button type="submit" class="btn btn-primary">Registrar</button>
                             </div>
                         </form>
@@ -452,4 +453,3 @@ $usuario = $_SESSION['usuario'];
         </div>
     <?php endif ?>
 
-</div>

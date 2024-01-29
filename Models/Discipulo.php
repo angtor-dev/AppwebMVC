@@ -448,16 +448,16 @@ class Discipulo extends Model
 
             if ($result > 0) {
 
-                $sql2 = "SELECT codigo, celulas.nombre FROM celulas
-                 INNER JOIN discipulo ON celulas.id = discipulo.idCelulaConsolidacion AND discipulo.cedula = :cedula";
+            //     $sql2 = "SELECT codigo FROM celulas
+            //      INNER JOIN discipulo ON celulas.id = discipulo.idCelulaConsolidacion AND discipulo.cedula = :cedula";
 
-               $stmt2 = $this->db->pdo()->prepare($sql2);
-               $stmt2->bindValue(':cedula', $cedula);
-               $stmt->execute();
-               $result2 = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            //    $stmt2 = $this->db->pdo()->prepare($sql2);
+            //    $stmt2->bindValue(':cedula', $cedula);
+            //    $stmt2->execute();
+            //    $result2 = $stmt2->fetchAll(PDO::FETCH_ASSOC);
 
 
-                return $result2;
+                return true;
             } else {
                 return false;
             }

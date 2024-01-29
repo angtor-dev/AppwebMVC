@@ -15,13 +15,13 @@ class Celulas extends Model
     private int $estatus;
 
     //Expresiones regulares
-    private $expresion_nombre = '/^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]{5,50}$/';
+    private $expresion_nombre = '/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,50}$/';
     private $expresion_texto = '/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/';
     private $expresion_id = '/^[1-9]\d*$/';
     private $expresion_fecha = '/^\d{4}-\d{2}-\d{2}$/';
 
 
-    public  function registrar_Celula($tipo, $nombre, $idLider, $idCoLider, $idTerritorio)
+    public function registrar_Celula($tipo, $nombre, $idLider, $idCoLider, $idTerritorio)
     {
         try {
 
@@ -134,7 +134,7 @@ class Celulas extends Model
                 $stmt->bindValue(':idCoLider', $idCoLider);
                 $stmt->bindValue(':idTerritorio', $idTerritorio);
 
-            
+
 
                 $stmt->execute();
             } else {
@@ -176,7 +176,7 @@ class Celulas extends Model
 
 
 
-    public  function listar_CelulaFamiliar()
+    public function listar_CelulaFamiliar()
     {
 
         try {
@@ -221,7 +221,7 @@ class Celulas extends Model
     }
 
 
-    public  function listar_CelulaCrecimiento()
+    public function listar_CelulaCrecimiento()
     {
 
         try {
@@ -267,7 +267,7 @@ class Celulas extends Model
     }
 
 
-    public  function listar_CelulaConsolidacion()
+    public function listar_CelulaConsolidacion()
     {
 
         try {
@@ -315,7 +315,7 @@ class Celulas extends Model
 
 
 
-    public  function editar_Celula($id, $tipo, $nombre, $idLider, $idCoLider, $idTerritorio)
+    public function editar_Celula($id, $tipo, $nombre, $idLider, $idCoLider, $idTerritorio)
     {
         try {
 
@@ -433,7 +433,7 @@ class Celulas extends Model
 
 
 
-    public  function eliminar_Celula($id)
+    public function eliminar_Celula($id)
     {
 
         try {
@@ -535,8 +535,11 @@ class Celulas extends Model
                             $usuarios = Usuario::listar(1);
                             foreach ($usuarios as $usuario) {
                                 if ($usuario->tieneRol("Superusuario") || $usuario->tieneRol("Administrador") || $usuario->tienePermiso("inscripciones", "consultar")) {
-                                    Notificacion::registrar($usuario->id, "Discipulo consolidado",
-                                        "El discipulo ".$discipulo->getNombre()." ".$discipulo->getApellido()." ha alcanzado las 5 asistencias de consolidación.");
+                                    Notificacion::registrar(
+                                        $usuario->id,
+                                        "Discipulo consolidado",
+                                        "El discipulo " . $discipulo->getNombre() . " " . $discipulo->getApellido() . " ha alcanzado las 5 asistencias de consolidación."
+                                    );
                                 }
                             }
                         }
@@ -582,7 +585,7 @@ class Celulas extends Model
     }
 
 
-    public  function listar_lideres()
+    public function listar_lideres()
     {
 
         try {
@@ -609,7 +612,7 @@ class Celulas extends Model
         }
     }
 
-    public  function listar_territorios()
+    public function listar_territorios()
     {
 
         try {
@@ -634,7 +637,7 @@ class Celulas extends Model
     }
 
 
-    public  function listar_reunionesFamiliar()
+    public function listar_reunionesFamiliar()
     {
 
         try {
@@ -679,7 +682,7 @@ class Celulas extends Model
     }
 
 
-    public  function listar_reunionesCrecimiento()
+    public function listar_reunionesCrecimiento()
     {
 
         try {
@@ -723,7 +726,7 @@ class Celulas extends Model
         }
     }
 
-    public  function listar_reunionesConsolidacion()
+    public function listar_reunionesConsolidacion()
     {
 
         try {
@@ -850,7 +853,7 @@ class Celulas extends Model
 
 
 
-    public  function eliminar_reuniones($id)
+    public function eliminar_reuniones($id)
     {
         try {
 
@@ -880,7 +883,7 @@ class Celulas extends Model
     }
 
 
-    public  function listar_celulas($tipo)
+    public function listar_celulas($tipo)
     {
         try {
 
@@ -1086,7 +1089,7 @@ class Celulas extends Model
         }
     }
 
-
+   
     public function valida_nombre($nombre, $id, $tipo, $idTerritorio)
     {
         /** @var Usuario */
@@ -1102,7 +1105,7 @@ class Celulas extends Model
             $stmt->bindValue(':tipo', $tipo);
             $stmt->bindValue(':id', $id);
             $stmt->bindValue(':idTerritorio', $idTerritorio);
-         
+
 
             $stmt->execute();
             $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -1126,12 +1129,14 @@ class Celulas extends Model
         }
     }
 
-    public function validacion_existencia(string $nombre, $id): void
+    public function validacion_existencia(string $nombre, $id, $tipo, $idTerritorio): void
     {
         try {
-            $sql = "SELECT * FROM celulas WHERE nombre = :nombre" . (!empty($id) ? " AND id != $id" : "");
+            $sql = "SELECT * FROM celulas WHERE idTerritorio = :idTerritorio AND tipo = :tipo AND estatus = '1' AND nombre = :nombre" . (!empty($id) ? " AND id != $id" : "");
             $stmt = $this->db->pdo()->prepare($sql);
             $stmt->bindValue(":nombre", $nombre);
+            $stmt->bindValue(":tipo", $tipo);
+            $stmt->bindValue(':idTerritorio', $idTerritorio);
             $stmt->execute();
             $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -1222,7 +1227,7 @@ class Celulas extends Model
         try {
             foreach ($arrayNumeros as $valor) {
                 if (!is_numeric($valor)) {
-                    throw new Exception("Los datos numericos que has enviado son invalidos. Ingrese nuevamente", 422);
+                    throw new Exception("Los datos numericos que has enviado son invalidos." . $valor . "Ingrese nuevamente", 422);
                 }
             }
 
@@ -1312,22 +1317,22 @@ class Celulas extends Model
     }
 
     public function crecimiento_lideres($idLider, $fecha_inicio, $fecha_fin)
-    {   
+    {
         try {
 
-                $sql = "SELECT celulas.codigo, COUNT(celulas.id) AS cantidad_celulas, celulas.fechaCreacion,
+            $sql = "SELECT celulas.codigo, COUNT(celulas.id) AS cantidad_celulas, celulas.fechaCreacion,
                 usuario.nombre, usuario.apellido FROM celulas
                 INNER JOIN usuario ON usuario.id = :idLider
                 WHERE celulas.fechaCreacion BETWEEN :fecha_inicio AND :fecha_fin GROUP BY celulas.fechaCreacion ASC";
-                
 
-                $stmt = $this->db->pdo()->prepare($sql);
-                $stmt->bindValue(":idLider", $idLider);
-                $stmt->bindValue(":fecha_inicio", $fecha_inicio);
-                $stmt->bindValue(":fecha_fin", $fecha_fin);
-                $stmt->execute();
 
-                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $stmt = $this->db->pdo()->prepare($sql);
+            $stmt->bindValue(":idLider", $idLider);
+            $stmt->bindValue(":fecha_inicio", $fecha_inicio);
+            $stmt->bindValue(":fecha_fin", $fecha_fin);
+            $stmt->execute();
+
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
@@ -1341,20 +1346,20 @@ class Celulas extends Model
     }
 
     public function celulasLider($idLider, $fecha_inicio, $fecha_fin)
-    {   
+    {
         try {
 
-                $sql = "SELECT celulas.codigo, celulas.nombre, celulas.fechaCreacion FROM celulas
+            $sql = "SELECT celulas.codigo, celulas.nombre, celulas.fechaCreacion FROM celulas
                 WHERE (celulas.idLider = :idLider) AND (celulas.fechaCreacion BETWEEN :fecha_inicio AND :fecha_fin)";
-                
 
-                $stmt = $this->db->pdo()->prepare($sql);
-                $stmt->bindValue(":idLider", $idLider);
-                $stmt->bindValue(":fecha_inicio", $fecha_inicio);
-                $stmt->bindValue(":fecha_fin", $fecha_fin);
-                $stmt->execute();
 
-                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $stmt = $this->db->pdo()->prepare($sql);
+            $stmt->bindValue(":idLider", $idLider);
+            $stmt->bindValue(":fecha_inicio", $fecha_inicio);
+            $stmt->bindValue(":fecha_fin", $fecha_fin);
+            $stmt->execute();
+
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(

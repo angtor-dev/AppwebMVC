@@ -8,8 +8,21 @@ $(document).ready(function () {
     let choices6;
     let choices7;
 
+
     const dataTable = $('#celulaDatatables').DataTable({
-        responsive: true,
+        info: false,
+        lengthChange: false,
+        pageLength: 15,
+        dom: 'ltipB',
+        searching: true,
+        language: {
+            url: '/AppwebMVC/public/lib/datatables/datatable-spanish.json'
+        },
+   
+        drawCallback: function (settings) {
+            var pagination = $(this).closest('.dataTables_wrapper').find('.dataTables_paginate');
+            pagination.toggle(this.api().page.info().pages > 1);
+        },
         ajax: {
             method: "GET",
             url: '/AppwebMVC/CelulaConsolidacion/Index',
@@ -28,15 +41,16 @@ $(document).ready(function () {
                 data: null,
         render: function (data, type, row, meta) {
 
-          let botonInfo = `<button type="button" id="ver_info" data-bs-toggle="modal" data-bs-target="#modal_verInfo" title="Ver detalles" class="btn btn-secondary"><i class="fa-solid fa-circle-info" ></i></button>`;
+            let botonInfo = `<a role="button" id="ver_info" data-bs-toggle="modal" data-bs-target="#modal_verInfo" title="Ver detalles" ><i class="fa-solid fa-circle-info" ></i></a>`;
 
-          let botonEditar = permisos.actualizar ? `<button type="button" id="editar" data-bs-toggle="modal" title="Actualizar" data-bs-target="#modal_editarInfo" class="btn btn-primary"><i class="fa-solid fa-pen" ></i></button>` : '';
+            let botonEditar = permisos.actualizar ? `<a role="button" id="editar" data-bs-toggle="modal" title="Actualizar" data-bs-target="#modal_editarInfo" ><i class="fa-solid fa-pen" ></i></a>` : '';
+  
+            let botonEliminar = permisos.eliminar ? `<a role="button"  id=eliminar title="Eliminar"><i class="fa-solid fa-trash" ></i></a>` : '';
+            let botonReunion = `<a role="button" id="reunion" data-bs-toggle="modal" data-bs-target="#modal_registroreunion" title="Réunion"><i class="fa-solid fa-users"></i></a>`;
+          
 
-          let botonEliminar = permisos.eliminar ? `<button type="button"  id=eliminar class="btn btn-danger delete-btn" title="Eliminar"><i class="fa-solid fa-trash" ></i></button>` : '';
-
-          let botonReunion = `<button type="button" id="reunion" data-bs-toggle="modal" data-bs-target="#modal_registroreunion" class="btn btn-info" title="Réunion"><i class="fa-solid fa-users"></i></button>`;
           let div = `
-          <div>
+          <div class="acciones">
                     ${botonInfo}
                     ${botonEditar}
                     ${botonEliminar}
@@ -44,12 +58,15 @@ $(document).ready(function () {
           </div>
           `
           return div;
-        }}
+        }},
         ],
-    })
+    });
 
+    $('#search').keyup(function () {
+        dataTable.search($(this).val()).draw();
+    });
 
-
+   
     $('#celulaDatatables tbody').on('click', '#ver_info', function () {
         const datos = dataTable.row($(this).parents()).data();
 
@@ -86,7 +103,8 @@ $(document).ready(function () {
     $('#celulaDatatables tbody').on('click', '#reunion', function () {
         const datos = dataTable.row($(this).parents()).data();
         document.getElementById('idCelulaConsolidacionR').textContent = datos.id;
-        Listar_discipulos_celula(datos.id);
+        Listar_discipulos_celula(datos.id) 
+
     })
 
 
@@ -157,54 +175,7 @@ $(document).ready(function () {
         });
     });
 
-    function Listar_discipulos_celula(idCelula) {
 
-        $.ajax({
-            type: "GET",
-            url: "/AppwebMVC/CelulaConsolidacion/Index",
-            data: {
-                cargar_discipulos_celula: 'cargar_discipulos_celula',
-                idCelula: idCelula
-            },
-            success: function (response) {
-
-                console.log(response);
-                let data = JSON.parse(response);
-
-                let selector = document.getElementById('discipulos');
-                // Destruir la instancia existente si la hay
-                if (choices7) {
-                    choices7.destroy();
-                }
-
-                // Limpiar el select
-                selector.innerHTML = "";
-
-                data.forEach(item => {
-
-                    const option = document.createElement('option');
-                    option.value = item.id;
-                    option.text = `${item.cedula} ${item.nombre} ${item.apellido}`;
-                    selector.appendChild(option);
-
-                });
-
-                choices7 = new Choices(selector, {
-                    allowHTML: true,
-                    searchEnabled: true,  // Habilita la funcionalidad de búsqueda
-                    removeItemButton: true,  // Habilita la posibilidad de remover items
-                    placeholderValue: 'Selecciona una opción',  // Texto del placeholder
-                });
-
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                console.log(jqXHR.responseText);
-                // Aquí puedes manejar errores, por ejemplo:
-                console.error("Error al enviar:", textStatus, errorThrown);
-                alert("Hubo un error al realizar el registro. Por favor, inténtalo de nuevo.");
-            }
-        })
-    }
 
 
     function Listar_LideresEditar(idLider, idCoLider) {
@@ -406,7 +377,6 @@ $(document).ready(function () {
                 choices4.setChoiceByValue('')
                 choices5.setChoiceByValue('')
 
-
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 // Aquí puedes manejar errores, por ejemplo:
@@ -460,6 +430,7 @@ $(document).ready(function () {
                     searchEnabled: true,  // Habilita la funcionalidad de búsqueda
                     removeItemButton: true,  // Habilita la posibilidad de remover items
                     placeholderValue: 'Selecciona una opción',  // Texto del placeholder
+                    noResultsMessage:  'No hay valores disponibles',
                 });
 
                 choices6.setChoiceByValue('')
@@ -474,6 +445,54 @@ $(document).ready(function () {
     }
 
 
+function Listar_discipulos_celula(idCelula) {
+
+    $.ajax({
+        type: "GET",
+        url: "/AppwebMVC/CelulaConsolidacion/Index",
+        data: {
+            cargar_discipulos_celula: 'cargar_discipulos_celula',
+            idCelula: idCelula
+        },
+        success: function (response) {
+
+            console.log(response);
+            let data = JSON.parse(response);
+
+            let selector = document.getElementById('discipulos');
+            // Destruir la instancia existente si la hay
+            if (choices7) {
+                choices7.destroy();
+            }
+
+            // Limpiar el select
+            selector.innerHTML = "";
+
+            data.forEach(item => {
+
+                const option = document.createElement('option');
+                option.value = item.id;
+                option.text = `${item.cedula} ${item.nombre} ${item.apellido}`;
+                selector.appendChild(option);
+
+            });
+
+            choices7 = new Choices(selector, {
+                allowHTML: true,
+                searchEnabled: true,  // Habilita la funcionalidad de búsqueda
+                removeItemButton: true,  // Habilita la posibilidad de remover items
+                placeholderValue: 'Selecciona una opción',  // Texto del placeholder
+            });
+
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(jqXHR.responseText);
+            // Aquí puedes manejar errores, por ejemplo:
+            console.error("Error al enviar:", textStatus, errorThrown);
+            alert("Hubo un error al realizar el registro. Por favor, inténtalo de nuevo.");
+        }
+    })
+}
 
 
 
@@ -481,11 +500,10 @@ $(document).ready(function () {
 
     const regexObj = {
 
-        nombre: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]{5,50}$/, // Letras, números, espacios, puntos y comas con un máximo de 20 caracteres
-        idLider: /^[1-9]\d*$/, // Números enteros mayores a 0
-        idCoLider: /^[1-9]\d*$/, // Números enteros mayores a 0
-        idTerritorio: /^[1-9]\d*$/, // Números enteros mayores a 0
-
+        nombre: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,50}$/, 
+        idLider: /^[1-9]\d*$/, 
+        idCoLider: /^[1-9]\d*$/, 
+        idTerritorio: /^[1-9]\d*$/, 
     };
 
     const validationStatus = {
@@ -496,56 +514,134 @@ $(document).ready(function () {
     };
 
 
-    //Validar nombre
-    const nombre = document.getElementById("nombre");
-    nombre.addEventListener('keyup', (e) => {
-        // Validar nombre
-        if (!regexObj.nombre.test(e.target.value)) {
-            document.getElementById("msj_nombre").classList.remove("d-none");
-            validationStatus.nombre = false;
-        } else {
-            document.getElementById("msj_nombre").classList.add("d-none");
+
+      // Validación del nombre de la Celula
+  $("#nombre").on("keyup", function (event) {
+      const idTerritorio = document.getElementById("idTerritorio").value;
+      const nombre = document.getElementById("nombre").value;  
+    validar_nombre_registrar(idTerritorio, nombre);
+  });
+
+  function validar_nombre_registrar(idTerritorio, nombre){
+
+    if(nombre !== ''){
+    $.ajax({
+      type: "POST",
+      url: "/AppwebMVC/CelulaConsolidacion/Index",
+      data: {
+        coincidencias: 'coincidencias',
+        nombre: nombre,
+        idTerritorio: idTerritorio
+      },
+      success: function (response) {
+  
+        let data = JSON.parse(response);
+  
+        if (data != true) {
+          validationStatus.nombre = true;
+          $("#nombre").removeClass("is-invalid");
+          $("#nombre").addClass("is-valid");
+          document.getElementById('msj_nombre').textContent = '';
+          if (regexObj.nombre.test(nombre)) {
             validationStatus.nombre = true;
-        }
-    })
-
-
-    // Validacion de idLider y idCoLider
-
-    const idLider = document.getElementById("idLider");
-    const idCoLider = document.getElementById("idCoLider");
-
-    idLider.addEventListener('change', (e) => {
-        if (!regexObj.idLider.test(e.target.value) || e.target.value === idCoLider.value) {
-            document.getElementById("msj_idLider").classList.remove("d-none");
-            validationStatus.idLider = false;
+            $("#nombre").removeClass("is-invalid");
+            $("#nombre").addClass("is-valid");
+            document.getElementById('msj_nombre').textContent = '';
+  
+          } else {
+            validationStatus.nombre = false;
+            $("#nombre").removeClass("is-valid");
+            $("#nombre").addClass("is-invalid");
+            document.getElementById('msj_nombre').textContent = 'El nombre es obligatorio y debe poseer mas de 5 caracteres';
+  
+          }
         } else {
-            document.getElementById("msj_idLider").classList.add("d-none");
-            validationStatus.idLider = true;
+          validationStatus.nombre = false;
+          $("#nombre").removeClass("is-valid");
+          $("#nombre").addClass("is-invalid");
+          document.getElementById('msj_nombre').textContent = 'Ya existe una Celula Consolidacion con este nombre en este Territorio';
+  
         }
+  
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        // Aquí puedes manejar errores, por ejemplo:
+        console.error("Error al enviar:", textStatus, errorThrown);
+      }
     })
 
-    idCoLider.addEventListener('change', (e) => {
-        if (!regexObj.idCoLider.test(e.target.value) || e.target.value === idLider.value) {
-            document.getElementById("msj_idCoLider").classList.remove("d-none");
-            validationStatus.idCoLider = false;
-        } else {
-            document.getElementById("msj_idCoLider").classList.add("d-none");
-            validationStatus.idCoLider = true;
-        }
-    })
+  }}
+
+
+    // Validacion de idLider 
+
+    
+    $("#idLider").on("change", function (event) {
+        const idLider = document.getElementById("idLider");
+       const idCoLider = document.getElementById("idCoLider");
+       const div = document.getElementById("msj_idLider");
+       
+           if (regexObj.idLider.test(idLider.value)) {
+               validationStatus.idLider = true;
+               div.classList.add("d-none");
+               div.innerText = "";
+     
+               if(idLider.value === idCoLider.value){
+                   validationStatus.idLider = false;
+                   div.classList.remove("d-none");
+                   div.innerText = "Lider y CoLider no pueden ser la misma persona";
+                   } 
+           } else {
+               validationStatus.idLider = false;
+               div.classList.remove("d-none");
+             div.innerText = "este campo es obligatorio";
+           }
+       })
+   
+       // Validacion  idCoLider
+    $("#idCoLider").on("change", function (event) {
+        const idLider = document.getElementById("idLider");
+       const idCoLider = document.getElementById("idCoLider");
+       const div = document.getElementById("msj_idCoLider");
+       
+           if (regexObj.idCoLider.test(idCoLider.value)) {
+               validationStatus.idCoLider = true;
+               div.classList.add("d-none");
+               div.innerText = "";
+     
+               if(idLider.value === idCoLider.value){
+                   validationStatus.idCoLider = false;
+                   div.classList.remove("d-none");
+                   div.innerText = "Lider y CoLider no pueden ser la misma persona";
+                   }
+           } else {
+               validationStatus.idCoLider = false;
+               div.classList.remove("d-none");
+             div.innerText = "este campo es obligatorio";
+           }
+       })
+
+  
 
 
     // Validar idTerritorio
-    const idTerritorio = document.getElementById("idTerritorio");
-    idTerritorio.addEventListener('change', (e) => {
-        if (!regexObj.idTerritorio.test(e.target.value)) {
-            document.getElementById("msj_idTerritorio").classList.remove("d-none");
-            validationStatus.idSede = false;
+    
+    $("#idTerritorio").on("change", function (event) {
+        const idTerritorio = document.getElementById("idTerritorio").value;
+        const nombre = document.getElementById("nombre").value;
+        const div = document.getElementById("msj_idTerritorio");
+        if (!regexObj.idTerritorio.test(idTerritorio)) {
+            div.classList.remove("d-none");
+            div.innerText = "Este campo es obligatorio";
+     
+            validationStatus.idTerritorio = false;
         } else {
-            document.getElementById("msj_idTerritorio").classList.add("d-none");
+            div.classList.add("d-none");
+            div.innerText = "";
+
             validationStatus.idTerritorio = true;
         }
+        validar_nombre_registrar(idTerritorio, nombre);
     })
 
 
@@ -564,14 +660,16 @@ $(document).ready(function () {
                 data: {
 
                     registrar: 'registrar',
-                    nombre: nombre.value,
-                    idLider: idLider.value,
-                    idCoLider: idCoLider.value,
-                    idTerritorio: idTerritorio.value
+                    nombre: document.getElementById("nombre").value,
+                    idLider: document.getElementById("idLider").value,
+                    idCoLider: document.getElementById("idCoLider").value,
+                    idTerritorio: document.getElementById("idTerritorio").value
                 },
                 success: function (response) {
                     console.log(response);
                     dataTable.ajax.reload();
+                    $('#modal_registrar').modal('hide');
+                    document.getElementById('formulario').reset();
 
                     let data = JSON.parse(response);
                     Swal.fire({
@@ -579,15 +677,13 @@ $(document).ready(function () {
                         title: 'Registrado Correctamente',
                         showConfirmButton: false,
                         timer: 2000,
-                    })
+                    });
 
                     nombre.value = '';
-                    choices4.setChoiceByValue('');
-                    choices5.setChoiceByValue('');
-                    choices6.setChoiceByValue('');
+                    $("#nombre").removeClass("is-valid");
+                    
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR.responseText);
                     if (jqXHR.responseText) {
                         let jsonResponse = JSON.parse(jqXHR.responseText);
 
@@ -641,58 +737,136 @@ $(document).ready(function () {
         idTerritorio: true
     };
 
-
-    //Validar nombre
-    const nombre2 = document.getElementById("nombre2");
-    nombre2.addEventListener('keyup', (e) => {
-        // Validar nombre
-        if (!regexObj.nombre.test(e.target.value)) {
-            document.getElementById("msj_nombre2").classList.remove("d-none");
-            validationStatus2.nombre = false;
-        } else {
-            document.getElementById("msj_nombre2").classList.add("d-none");
-            validationStatus2.nombre = true;
-        }
-    })
+    $("#nombre2").on("keyup", function (event) {
+        const idTerritorio = document.getElementById("idTerritorio2").value;
+        const nombre = document.getElementById("nombre2").value;  
+      validar_nombre_editar(idTerritorio, nombre);
+    });
 
 
-    // Validacion de idLider y idCoLider
+    function validar_nombre_editar(idTerritorio, nombre){
 
-    const idLider2 = document.getElementById("idLider2");
-    const idCoLider2 = document.getElementById("idCoLider2");
-
-    idLider2.addEventListener('change', (e) => {
-        if (!regexObj.idLider.test(e.target.value) || e.target.value === idCoLider2.value) {
-            document.getElementById("msj_idLider2").classList.remove("d-none");
-            validationStatus2.idLider = false;
-        } else {
-            document.getElementById("msj_idLider2").classList.add("d-none");
-            validationStatus2.idLider = true;
-        }
-    })
-
-    idCoLider2.addEventListener('change', (e) => {
-        if (!regexObj.idCoLider.test(e.target.value) || e.target.value === idLider2.value) {
-            document.getElementById("msj_idCoLider2").classList.remove("d-none");
-            validationStatus2.idCoLider = false;
-        } else {
-            document.getElementById("msj_idCoLider2").classList.add("d-none");
-            validationStatus2.idCoLider = true;
-        }
-    })
-
-
-    // Validar idTerritorio
-    const idTerritorio2 = document.getElementById("idTerritorio2");
-    idTerritorio2.addEventListener('change', (e) => {
-        if (!regexObj.idTerritorio.test(e.target.value)) {
-            document.getElementById("msj_idTerritorio2").classList.remove("d-none");
-            validationStatus2.idSede = false;
-        } else {
-            document.getElementById("msj_idTerritorio2").classList.add("d-none");
-            validationStatus2.idTerritorio = true;
-        }
-    })
+        if(nombre !== ''){
+        $.ajax({
+          type: "POST",
+          url: "/AppwebMVC/CelulaConsolidacion/Index",
+          data: {
+            coincidencias: 'coincidencias',
+            nombre: nombre,
+            idTerritorio: idTerritorio,
+            id: document.getElementById('idCelulaConsolidacion').textContent
+          },
+          success: function (response) {
+      
+            let data = JSON.parse(response);
+      
+            if (data != true) {
+              validationStatus2.nombre = true;
+              $("#nombre2").removeClass("is-invalid");
+              $("#nombre2").addClass("is-valid");
+              document.getElementById('msj_nombre2').textContent = '';
+              if (regexObj.nombre.test(nombre)) {
+                validationStatus2.nombre = true;
+                $("#nombre2").removeClass("is-invalid");
+                $("#nombre2").addClass("is-valid");
+                document.getElementById('msj_nombre2').textContent = '';
+      
+              } else {
+                validationStatus2.nombre = false;
+                $("#nombre2").removeClass("is-valid");
+                $("#nombre2").addClass("is-invalid");
+                document.getElementById('msj_nombre2').textContent = 'El nombre es obligatorio y debe poseer mas de 5 caracteres';
+      
+              }
+            } else {
+              validationStatus2.nombre = false;
+              $("#nombre2").removeClass("is-valid");
+              $("#nombre2").addClass("is-invalid");
+              document.getElementById('msj_nombre2').textContent = 'Ya existe una Celula Consolidacion con este nombre en este Territorio';
+      
+            }
+      
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            // Aquí puedes manejar errores, por ejemplo:
+            console.error("Error al enviar:", textStatus, errorThrown);
+          }
+        })
+    
+      }}
+    
+    
+        // Validacion de idLider 
+    
+        
+        $("#idLider2").on("change", function (event) {
+            const idLider = document.getElementById("idLider2");
+           const idCoLider = document.getElementById("idCoLider2");
+           const div = document.getElementById("msj_idLider2");
+           
+               if (regexObj.idLider.test(idLider.value)) {
+                   validationStatus2.idLider = true;
+                   div.classList.add("d-none");
+                   div.innerText = "";
+         
+                   if(idLider.value === idCoLider.value){
+                       validationStatus2.idLider = false;
+                       div.classList.remove("d-none");
+                       div.innerText = "Lider y CoLider no pueden ser la misma persona";
+                       } 
+               } else {
+                   validationStatus2.idLider = false;
+                   div.classList.remove("d-none");
+                 div.innerText = "este campo es obligatorio";
+               }
+           })
+       
+           // Validacion  idCoLider
+        $("#idCoLider2").on("change", function (event) {
+            const idLider = document.getElementById("idLider2");
+           const idCoLider = document.getElementById("idCoLider2");
+           const div = document.getElementById("msj_idCoLider2");
+           
+               if (regexObj.idCoLider.test(idCoLider.value)) {
+                   validationStatus2.idCoLider = true;
+                   div.classList.add("d-none");
+                   div.innerText = "";
+         
+                   if(idLider.value === idCoLider.value){
+                       validationStatus2.idCoLider = false;
+                       div.classList.remove("d-none");
+                       div.innerText = "Lider y CoLider no pueden ser la misma persona";
+                       }
+               } else {
+                   validationStatus2.idCoLider = false;
+                   div.classList.remove("d-none");
+                 div.innerText = "este campo es obligatorio";
+               }
+           })
+    
+      
+    
+    
+        // Validar idTerritorio
+        
+        $("#idTerritorio2").on("change", function (event) {
+            const idTerritorio = document.getElementById("idTerritorio2").value;
+            const nombre = document.getElementById("nombre2").value;
+            const div = document.getElementById("msj_idTerritorio2");
+            if (!regexObj.idTerritorio.test(idTerritorio)) {
+                div.classList.remove("d-none");
+                div.innerText = "Este campo es obligatorio";
+         
+                validationStatus2.idTerritorio = false;
+            } else {
+                div.classList.add("d-none");
+                div.innerText = "";
+    
+                validationStatus2.idTerritorio = true;
+            }
+            validar_nombre_editar(idTerritorio, nombre);
+        })
+    
 
 
     const form2 = document.getElementById("formulario2");
@@ -712,10 +886,10 @@ $(document).ready(function () {
 
                     editar: 'editar',
                     id2: id2,
-                    nombre2: nombre2.value,
-                    idLider2: idLider2.value,
-                    idCoLider2: idCoLider2.value,
-                    idTerritorio2: idTerritorio2.value
+                    nombre2: document.getElementById("nombre2").value,
+                    idLider2: document.getElementById("idLider2").value,
+                    idCoLider2: document.getElementById("idCoLider2").value,
+                    idTerritorio2: document.getElementById("idTerritorio2").value
                 },
                 success: function (response) {
                     console.log(response);
@@ -777,19 +951,18 @@ $(document).ready(function () {
     //////////////////////////// REGISTRO DE REUNION ////////////////////////////////   
 
 
-    const expresiones_regulares2 = {
+    const ex_re = {
 
         semana: /^[1-9]\d*$/, // Números enteros mayores a 0
+        fecha: /^.+$/,
         generosidad: /^[0-9]+(\.[0-9]{2})?$/,
-        infantil: /^[0-9]\d*$/,
-        juvenil: /^[0-9]\d*$/,
-        adulto: /^[0-9]\d*$/,
-        texto: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/, // Letras, números, espacios, puntos y comas con un máximo de 100 caracteres
-        fecha: /^\d{4}-\d{2}-\d{2}$/
+        asistencia: /^[0-9]\d*$/,
+        info: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/ // Letras, números, espacios, puntos y comas con un máximo de 100 caracteres
     };
 
     const validationStatus3 = {
 
+        fecha: false,
         tematica: false,
         semana: false,
         generosidad: false,
@@ -799,98 +972,131 @@ $(document).ready(function () {
     };
 
 
-    // Validar fecha
-    const fecha = document.getElementById("fecha");
-    fecha.addEventListener('change', (e) => {
-        // Comprobar que la fecha esté en un formato válido
-        if (!expresiones_regulares2.fecha.test(fecha.value)) {
-            document.getElementById("msj_fecha").classList.remove("d-none");
+    $("#fecha").on("change", function (event) {
+        const fecha = document.getElementById("fecha");
+        const div = document.getElementById("msj_fecha");
+        if (!ex_re.fecha.test(fecha.value)) {
+            fecha.classList.remove("is-valid");
+            fecha.classList.add("is-invalid");
+            div.innerText = "Este campo es obligatorio";
+     
             validationStatus3.fecha = false;
         } else {
-            document.getElementById("msj_fecha").classList.add("d-none");
+            fecha.classList.remove("is-invalid");
+            fecha.classList.add("is-valid");
+            div.innerText = "";
+
             validationStatus3.fecha = true;
         }
     })
 
-
-    // Validar tematica
-    const tematica = document.getElementById("tematica");
-    tematica.addEventListener('keyup', (e) => {
-        if (!expresiones_regulares2.texto.test(tematica.value)) {
-            document.getElementById("msj_tematica").classList.remove("d-none");
+    $("#tematica").on("keyup", function (event) {
+        const tematica = document.getElementById("tematica");
+        const div = document.getElementById("msj_tematica");
+        if (!ex_re.info.test(tematica.value)) {
+            tematica.classList.remove("is-valid");
+            tematica.classList.add("is-invalid");
+            div.innerText = "Este campo es obligatorio, debe poseer mas  de 5 caracteres";
+     
             validationStatus3.tematica = false;
         } else {
-            document.getElementById("msj_tematica").classList.add("d-none");
+            tematica.classList.remove("is-invalid");
+            tematica.classList.add("is-valid");
+            div.innerText = "";
+
             validationStatus3.tematica = true;
         }
     })
 
-
-    // Validar semana
-    const semana = document.getElementById("semana");
-    semana.addEventListener('change', (e) => {
-        if (!expresiones_regulares2.semana.test(semana.value)) {
-            document.getElementById("msj_semana").classList.remove("d-none");
+    $("#semana").on("change", function (event) {
+        const input = document.getElementById("semana");
+        const div = document.getElementById("msj_semana");
+        if (!ex_re.semana.test(input.value)) {
+            input.classList.remove("is-valid");
+            input.classList.add("is-invalid");
+            div.innerText = "Este campo es obligatorio";
+     
             validationStatus3.semana = false;
         } else {
-            document.getElementById("msj_semana").classList.add("d-none");
+            input.classList.remove("is-invalid");
+            input.classList.add("is-valid");
+            div.innerText = "";
+
             validationStatus3.semana = true;
         }
     })
 
-
-    // Validar generosidad
-    const generosidad = document.getElementById("generosidad");
-    generosidad.addEventListener('change', (e) => {
-        if (!expresiones_regulares2.generosidad.test(generosidad.value)) {
-            document.getElementById("msj_generosidad").classList.remove("d-none");
+    $("#generosidad").on("keyup", function (event) {
+        const generosidad = document.getElementById("generosidad");
+        const div = document.getElementById("msj_generosidad");
+        if (!ex_re.generosidad.test(generosidad.value)) {
+            generosidad.classList.remove("is-valid");
+            generosidad.classList.add("is-invalid");
+            div.innerText = "Este campo es obligatorio, y su formato correcto es 00,00";
+     
             validationStatus3.generosidad = false;
         } else {
-            document.getElementById("msj_generosidad").classList.add("d-none");
+            generosidad.classList.remove("is-invalid");
+            generosidad.classList.add("is-valid");
+            div.innerText = "";
+
             validationStatus3.generosidad = true;
         }
     })
 
-
-    //Validar asistencia
+   //Validar asistencia
     const asistencia = document.querySelector("#discipulos");
     let selectedValues;
     asistencia.addEventListener('change', (e) => {
-        selectedValues = Array.from(asistencia.selectedOptions).map(option => option.value);
-        if (selectedValues.length === 0) {
-            document.getElementById("msj_discipulos").classList.remove("d-none");
-            validationStatus3.asistencia = false;
-        } else {
-            document.getElementById("msj_discipulos").classList.add("d-none");
-            validationStatus3.asistencia = true;
-        }
-    })
+    selectedValues = Array.from(asistencia.selectedOptions).map(option => option.value);
+    if (selectedValues.length === 0) {
+        document.getElementById("msj_discipulos").classList.remove("d-none");
+        document.getElementById("msj_discipulos").innerText = "Este campo es obligatorio";
+        validationStatus3.asistencia = false;
+    } else {
+        document.getElementById("msj_discipulos").classList.add("d-none");
+        document.getElementById("msj_discipulos").innerText = "";
+        validationStatus3.asistencia = true;
+    }
+})
 
-
-    // Validar actividad
-    const actividad = document.getElementById("actividad");
-    actividad.addEventListener('keyup', (e) => {
-        if (!expresiones_regulares2.texto.test(actividad.value)) {
-            document.getElementById("msj_actividad").classList.remove("d-none");
+    $("#actividad").on("keyup", function (event) {
+        const input = document.getElementById("actividad");
+        const div = document.getElementById("msj_actividad");
+        if (!ex_re.info.test(input.value)) {
+            input.classList.remove("is-valid");
+            input.classList.add("is-invalid");
+            div.innerText = "Este campo es obligatorio, y debe poseer mas de 5 caracteres";
+     
             validationStatus3.actividad = false;
         } else {
-            document.getElementById("msj_actividad").classList.add("d-none");
+            input.classList.remove("is-invalid");
+            input.classList.add("is-valid");
+            div.innerText = "";
+
             validationStatus3.actividad = true;
         }
     })
 
-
-    // Validar observaciones
-    const observaciones = document.getElementById("observaciones");
-    observaciones.addEventListener('keyup', (e) => {
-        if (!expresiones_regulares2.texto.test(observaciones.value)) {
-            document.getElementById("msj_observaciones").classList.remove("d-none");
+    $("#observaciones").on("keyup", function (event) {
+        const input = document.getElementById("observaciones");
+        const div = document.getElementById("msj_observaciones");
+        if (!ex_re.info.test(input.value)) {
+            input.classList.remove("is-valid");
+            input.classList.add("is-invalid");
+            div.innerText = "Este campo es obligatorio, y debe poseer mas de 5 caracteres";
+     
             validationStatus3.observaciones = false;
         } else {
-            document.getElementById("msj_observaciones").classList.add("d-none");
+            input.classList.remove("is-invalid");
+            input.classList.add("is-valid");
+            div.innerText = "";
+
             validationStatus3.observaciones = true;
         }
     })
+
+
 
 
 
@@ -898,9 +1104,17 @@ $(document).ready(function () {
 
     form3.addEventListener("submit", (e) => {
         e.preventDefault();
+        const dato = {
 
-        const idCelula = document.getElementById('idCelulaConsolidacionR').textContent;
-
+            idCelula: $("#idCelulaConsolidacionR"),
+            fecha: $("#fecha"),
+            tematica: $("#tematica"),
+            semana: $("#semana"),
+            generosidad: $("#generosidad"),
+            selectedValues: selectedValues,
+            actividad: $("#actividad"),
+            observaciones: $("#observaciones")
+        }
         // Verifica si todos los campos son válidos antes de enviar el formulario
         if (Object.values(validationStatus3).every(status => status === true)) {
             // Aquí puedes agregar el código para enviar el formulario
@@ -910,14 +1124,14 @@ $(document).ready(function () {
                 data: {
 
                     registroreunion: 'registroreunion',
-                    idCelula: idCelula,
-                    fecha: fecha.value,
-                    tematica: tematica.value,
-                    semana: semana.value,
-                    generosidad: generosidad.value,
-                    selectedValues: selectedValues,
-                    actividad: actividad.value,
-                    observaciones: observaciones.value
+                    idCelula: dato.idCelula.text(),
+                    fecha: dato.fecha.val(),
+                    tematica: dato.tematica.val(),
+                    semana: dato.semana.val(),
+                    generosidad: dato.generosidad.val(),
+                    selectedValues: dato.selectedValues,
+                    actividad: dato.actividad.val(),
+                    observaciones: dato.observaciones.val()
                 },
                 success: function (response) {
 
@@ -931,14 +1145,19 @@ $(document).ready(function () {
                         title: 'Se registro correctamente la Reunion',
                         showConfirmButton: false,
                         timer: 2000,
-                    })
-
-                    Object.keys(validationStatus3).forEach((key) => {
-                        validationStatus3[key] = true;
                     });
 
-                    document.getElementById("formularioReunion").reset();
-                    Listar_discipulos_celula(idCelula);
+
+                      for (const key in dato) {
+                        const input = dato[key];
+                        input.removeClass("is-valid");
+                      }
+
+                      for (const key in validationStatus3) {
+                        validationStatus3[key] = false;
+                      }
+
+                    form3.reset()
 
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -976,8 +1195,66 @@ $(document).ready(function () {
             })
         }
     });
+$('#cerrarRegistrar').on('click', function () {
+    
+    document.getElementById('formulario').reset();
 
+    $("#nombre").removeClass("is-valid");
+    $("#nombre").removeClass("is-invalid");
+    $("#msj_idLider").addClass("d-none");
+    $("#msj_idCoLider").addClass("d-none");
+    $("#msj_idTerritorio").addClass("d-none");
+
+
+    $('#modal_registrar').modal('hide');
+    
+  });
+
+  $('#cerrarEditar').on('click', function () {
+    
+    $("#nombre2").removeClass("is-valid");
+    $("#nombre2").removeClass("is-invalid");
+    $("#msj_idLider2").addClass("d-none");
+    $("#msj_idCoLider2").addClass("d-none");
+    $("#msj_idTerritorio2").addClass("d-none");
+
+    $('#modal_editarInfo').modal('hide');
+
+  });
+
+  $('#cerrarReunion').on('click', function () {
+    
+    document.getElementById('formularioReunion').reset();
+
+    const dato = {
+
+        idCelula: $("#idCelulaConsolidacionR"),
+        fecha: $("#fecha"),
+        tematica: $("#tematica"),
+        semana: $("#semana"),
+        generosidad: $("#generosidad"),
+        actividad: $("#actividad"),
+        observaciones: $("#observaciones")
+    }
+
+    for (const key in dato) {
+        const input = dato[key];
+        input.removeClass("is-valid");
+        input.removeClass("is-invalid")
+      }
+
+      document.getElementById("msj_discipulos").classList.add("d-none");
+
+    $('#modal_registroreunion').modal('hide');
+
+  });
+
+
+
+  
 });
+
+
 
 
 

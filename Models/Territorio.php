@@ -419,7 +419,7 @@ class Territorio extends Model
     public function validacion_existencia(string $nombre, $idSede, $idTerritorio): void
     {
         try {
-            $sql = "SELECT * FROM territorio WHERE idSede = :idSede AND nombre = :nombre" . (!empty($idTerritorio) ? " AND id != $idTerritorio" : "");
+            $sql = "SELECT * FROM territorio WHERE idSede = :idSede AND estatus = '1' AND nombre = :nombre" . (!empty($idTerritorio) ? " AND id != $idTerritorio" : "");
             $stmt = $this->db->pdo()->prepare($sql);
             $stmt->bindValue(":nombre", $nombre);
             $stmt->bindValue(":idSede", $idSede);

@@ -52,6 +52,7 @@ if (isset($_POST['editar'])) {
     $adulto = trim($_POST['adulto']);
     $actividad = trim(strtolower($_POST['actividad']));
     $observaciones = trim(strtolower($_POST['observaciones']));
+    
 
     $Celulas->validacion_datos_reunion([$id, $idCelula, $semana, $generosidad, $infantil, $juvenil, $adulto], [$tematica, $actividad, $observaciones], $fecha);
     $Celulas->editar_reuniones($id, $idCelula, $fecha, $tematica, $semana, $generosidad, $infantil, $juvenil, $adulto, $actividad, $observaciones);

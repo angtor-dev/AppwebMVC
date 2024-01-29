@@ -120,7 +120,7 @@ if (isset($_POST['registrar'])) {
     $asisCrecimiento = trim(strtolower($_POST['asisCrecimiento']));
     $asisFamiliar = trim(strtolower($_POST['asisFamiliar']));
     $idConsolidador = $_POST['idConsolidador'];
-    $idCelulaConsolidacion = $_POST['idcelulaconsolidacion'];
+    $idCelulaConsolidacion = $_POST['idCelulaConsolidacion'];
     $cedula = $_POST['cedula'];
     $nombre = trim(strtolower($_POST['nombre']));
     $apellido = trim(strtolower($_POST['apellido']));
@@ -161,6 +161,19 @@ if (isset($_POST['registrar'])) {
     );
 
     die();
+}
+
+if (isset($_POST['coincidencias'])){
+    
+
+    $cedula = empty($_POST['cedula']) ? '' : $_POST['cedula'];
+    $id = isset($_POST['id']) ? $_POST['id'] : '';
+
+    $resultado = $Discipulo->valida_cedula_existencia($cedula, $id);
+
+        echo json_encode($resultado);
+        die();
+
 }
 
 
