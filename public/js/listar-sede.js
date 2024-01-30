@@ -62,9 +62,12 @@ $(document).ready(function () {
 
   $('#sedeDatatables tbody').on('click', '#ver_info', function () {
     const datos = dataTable.row($(this).parents()).data();
+
+    let text = `${datos.nombrePastor} ${datos.apellido}`;
+    
     document.getElementById('inf_codigo').textContent = datos.codigo;
     document.getElementById('inf_nombre').textContent = datos.nombre;
-    document.getElementById('inf_idPastor').textContent = datos.idPastor;
+    document.getElementById('inf_idPastor').textContent = text;
     document.getElementById('inf_direccion').textContent = datos.direccion;
     document.getElementById('inf_estado').textContent = datos.estado;
   })
@@ -73,7 +76,7 @@ $(document).ready(function () {
 
   $('#sedeDatatables tbody').on('click', '#editar', function () {
     const datos = dataTable.row($(this).parents()).data();
-
+ 
     document.getElementById('idSede').textContent = datos.id;
     document.getElementById('nombre2').value = datos.nombre;
     document.getElementById('direccion2').value = datos.direccion;

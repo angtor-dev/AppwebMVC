@@ -43,6 +43,7 @@ if (isset($_POST['registrar'])) {
     
     $Territorio->validacion_datos($idSede, $nombre, $idLider, $detalles);
     $Territorio->validacion_existencia($nombre, $idSede, $idTerritorio = '');
+    $Territorio->valida_lider($idLider, $id = '');
     $Territorio->registrar_territorio($idSede, $nombre, $idLider, $detalles);
 
     echo json_encode('Lo logramos!!');
@@ -85,6 +86,7 @@ if (isset($_POST['editar'])) {
 
     $Territorio->validacion_datos($idSede, $nombre, $idLider, $detalles);
     $Territorio->validacion_existencia($nombre, $idSede, $id);
+    $Territorio->valida_lider($idLider, $id);
     $Territorio->editar_territorio($id, $idSede, $nombre, $idLider, $detalles);
 
     die();

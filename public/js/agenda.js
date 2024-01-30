@@ -192,11 +192,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         {
           defaultContent: `
-          <div class="d-flex justify-content-end gap-2">
-            <button type="button" id="verComentarioSede" class="btn btn-secondary">
-            Ver
-            </button>
-            <button type="button" id="eliminarSede" class="btn btn-danger delete-btn">Eliminar</button>
+
+          <div class="d-flex justify-content-end gap-1" >
+            <button type="button" id="verComentarioSede" class="btn btn-secondary" title="Eliminar"><i class="fa-solid fa-comment"></i></button>
+            <button type="button" id="eliminarSede" class="btn btn-danger" title="Eliminar"><i class="fa-solid fa-trash" ></i></button>
             </div>
             `}
       ],

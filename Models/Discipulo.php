@@ -115,14 +115,47 @@ class Discipulo extends Model
     {
 
         try {
-            $sql = "SELECT usuario.id, usuario.cedula, usuario.nombre, usuario.apellido 
-            FROM usuariorol INNER JOIN usuario ON usuario.id = usuariorol.idUsuario WHERE usuariorol.idRol IN (1, 2, 3, 4)";
+            /** @var Usuario */
+            $usuario = $_SESSION['usuario'];
 
-            $stmt = $this->db->pdo()->prepare($sql);
+            if ($usuario->tieneRol('SuperUsuario')) {
+                $sql = "SELECT usuario.id, usuario.cedula, usuario.nombre, usuario.apellido 
+             FROM usuariorol INNER JOIN usuario ON usuario.id = usuariorol.idUsuario WHERE usuario.estatus = '1' AND usuariorol.idRol IN (1, 2, 3, 4)";
 
-            $stmt->execute();
-            $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $resultado;
+                $stmt = $this->db->pdo()->prepare($sql);
+
+                $stmt->execute();
+                $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                return $resultado;
+            }
+
+            if ($usuario->tieneRol('Pastor') || $usuario->tieneRol('LiderTerritorio')) {
+
+                $sql = "SELECT usuario.id, usuario.cedula, usuario.nombre, usuario.apellido 
+             FROM usuariorol INNER JOIN usuario ON usuario.id = usuariorol.idUsuario WHERE usuario.idSede = :idSede AND usuario.estatus = '1' AND usuariorol.idRol IN (1, 2, 3, 4)";
+
+                $stmt = $this->db->pdo()->prepare($sql);
+
+                $stmt->bindValue(':idSede', $usuario->idSede);
+
+                $stmt->execute();
+                $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                return $resultado;
+            }
+
+            if ($usuario->tieneRol('Lider')) {
+
+                $sql = "SELECT usuario.id, usuario.cedula, usuario.nombre, usuario.apellido 
+             FROM usuariorol INNER JOIN usuario ON usuario.idS = :idLider AND usuario.estatus = '1'";
+
+                $stmt = $this->db->pdo()->prepare($sql);
+
+                $stmt->bindValue(':idLider', $usuario->id);
+
+                $stmt->execute();
+                $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                return $resultado;
+            }
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -141,13 +174,144 @@ class Discipulo extends Model
 
         try {
 
-            $sql = "SELECT * FROM celulas WHERE celulas.estatus = '1' AND celulas.tipo = 'consolidacion'";
+            /** @var Usuario */
+            $usuario = $_SESSION['usuario'];
 
-            $stmt = $this->db->pdo()->prepare($sql);
+            if ($usuario->tieneRol('SuperUsuario')) {
+                $sql = "SELECT Lider.id AS idLider,
+            CoLider.id AS idCoLider,
+            Lider.nombre AS nombreLider,
+            CoLider.nombre AS nombreCoLider,
+            Lider.apellido AS apellidoLider,
+            CoLider.apellido AS apellidoCoLider,
+            Lider.cedula AS cedulaLider,
+            CoLider.cedula AS cedulaCoLider,
+            celulas.id,
+            celulas.idLider,
+            celulas.idCoLider,
+            celulas.idTerritorio,
+            celulas.codigo,
+            celulas.nombre,
+            celulas.estatus
+            FROM celulas
+            INNER JOIN usuario AS Lider ON celulas.idLider = Lider.id
+            INNER JOIN usuario AS CoLider ON celulas.idCoLider = CoLider.id
+            WHERE celulas.estatus = '1' AND celulas.tipo = 'consolidacion'";
 
-            $stmt->execute();
-            $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $resultado;
+
+                $stmt = $this->db->pdo()->prepare($sql);
+
+
+                $stmt->execute();
+                $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+                return $resultado;
+            }
+
+            if ($usuario->tieneRol('Pastor')) {
+                $sql = "SELECT Lider.id AS idLider,
+                CoLider.id AS idCoLider,
+                Lider.nombre AS nombreLider,
+                CoLider.nombre AS nombreCoLider,
+                Lider.apellido AS apellidoLider,
+                CoLider.apellido AS apellidoCoLider,
+                Lider.cedula AS cedulaLider,
+                CoLider.cedula AS cedulaCoLider,
+                celulas.id,
+                celulas.idLider,
+                celulas.idCoLider,
+                celulas.idTerritorio,
+                celulas.codigo,
+                celulas.nombre,
+                celulas.estatus
+                FROM celulas
+                INNER JOIN usuario AS Lider ON celulas.idLider = Lider.id 
+                INNER JOIN usuario AS CoLider ON celulas.idCoLider = CoLider.id
+                INNER JOIN territorio ON territorio.id = celulas.idterritorio AND territorio.idSede = :idSede
+                WHERE celulas.estatus = '1' AND celulas.tipo = 'consolidacion'";
+
+
+                $stmt = $this->db->pdo()->prepare($sql);
+
+                $stmt->bindValue(':idSede', $usuario->idSede);
+
+
+                $stmt->execute();
+                $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+                return $resultado;
+            }
+
+            if ($usuario->tieneRol('LiderTerritorio')) {
+                $sql = "SELECT Lider.id AS idLider,
+                    CoLider.id AS idCoLider,
+                    Lider.nombre AS nombreLider,
+                    CoLider.nombre AS nombreCoLider,
+                    Lider.apellido AS apellidoLider,
+                    CoLider.apellido AS apellidoCoLider,
+                    Lider.cedula AS cedulaLider,
+                    CoLider.cedula AS cedulaCoLider,
+                    celulas.id,
+                    celulas.idLider,
+                    celulas.idCoLider,
+                    celulas.idTerritorio,
+                    celulas.codigo,
+                    celulas.nombre,
+                    celulas.estatus
+                    FROM celulas
+                    INNER JOIN usuario AS Lider ON celulas.idLider = Lider.id 
+                    INNER JOIN usuario AS CoLider ON celulas.idCoLider = CoLider.id
+                    INNER JOIN territorio ON territorio.id = celulas.idterritorio AND territorio.idLider = :idLider
+                    WHERE celulas.estatus = '1' AND celulas.tipo = 'consolidacion'";
+
+
+                $stmt = $this->db->pdo()->prepare($sql);
+
+                $stmt->bindValue(':idLider', $usuario->id);
+
+
+                $stmt->execute();
+                $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+                return $resultado;
+            }
+
+            if ($usuario->tieneRol('Lider')) {
+                $sql = "SELECT Lider.id AS idLider,
+                        CoLider.id AS idCoLider,
+                        Lider.nombre AS nombreLider,
+                        CoLider.nombre AS nombreCoLider,
+                        Lider.apellido AS apellidoLider,
+                        CoLider.apellido AS apellidoCoLider,
+                        Lider.cedula AS cedulaLider,
+                        CoLider.cedula AS cedulaCoLider,
+                        celulas.id,
+                        celulas.idLider,
+                        celulas.idCoLider,
+                        celulas.idTerritorio,
+                        celulas.codigo,
+                        celulas.nombre,
+                        celulas.estatus
+                        FROM celulas
+                        INNER JOIN usuario AS Lider ON celulas.idLider = Lider.id 
+                        INNER JOIN usuario AS CoLider ON celulas.idCoLider = CoLider.id
+                        WHERE celulas.idLider = :idLider AND celulas.estatus = '1' AND celulas.tipo = :tipo";
+
+
+                $stmt = $this->db->pdo()->prepare($sql);
+
+                $stmt->bindValue(':idLider', $usuario->id);
+
+
+                $stmt->execute();
+                $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                return $resultado;
+            }
+
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -197,7 +361,20 @@ class Discipulo extends Model
             INNER JOIN celulas ON discipulo.idCelulaConsolidacion = celulas.id
         GROUP BY
             discipulo.id";
-            } else {
+
+                $stmt = $this->db->pdo()->prepare($sql);
+
+                $stmt->execute();
+                $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                Bitacora::registrar("Consulta de discipulo");
+
+                return $resultado;
+
+
+            } 
+            
+           if ($usuario->tieneRol("Pastor")) {
                 $sql = "SELECT 
             Consolidador.id AS idConsolidador,
             Consolidador.nombre AS nombreConsolidador,
@@ -225,20 +402,106 @@ class Discipulo extends Model
             INNER JOIN usuario AS Consolidador ON discipulo.idConsolidador = Consolidador.id
             LEFT JOIN asistencia ON discipulo.id = asistencia.idDiscipulo
             INNER JOIN celulas ON discipulo.idCelulaConsolidacion = celulas.id
-            WHERE Consolidador.idSede = " . $usuario->idSede . "
-        GROUP BY
-            discipulo.id";
-            }
-
+            INNER JOIN territorio ON territorio.id = celulas.idterritorio AND territorio.idSede = :idSede GROUP BY discipulo.id";
+            
 
             $stmt = $this->db->pdo()->prepare($sql);
 
-            $stmt->execute();
-            $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $stmt->bindValue(':idSede', $usuario->idSede);
 
-            Bitacora::registrar("Consulta de discipulo");
+                $stmt->execute();
+                $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            return $resultado;
+                Bitacora::registrar("Consulta de discipulo");
+
+                return $resultado;
+            }
+
+            if ($usuario->tieneRol("LiderTerritorio")) {
+                $sql = "SELECT 
+            Consolidador.id AS idConsolidador,
+            Consolidador.nombre AS nombreConsolidador,
+            Consolidador.apellido AS apellidoConsolidador,
+            Consolidador.cedula AS cedulaConsolidador,
+            celulas.id AS idCelulaConsolidacion,
+            celulas.codigo,
+            discipulo.id,
+            discipulo.asisCrecimiento,
+            discipulo.asisFamiliar,
+            discipulo.idConsolidador,
+            discipulo.idCelulaConsolidacion,
+            discipulo.cedula,
+            discipulo.nombre,
+            discipulo.apellido,
+            discipulo.telefono,
+            discipulo.direccion,
+            discipulo.estadoCivil,
+            discipulo.motivo,
+            discipulo.fechaNacimiento,
+            discipulo.fechaConvercion,
+            COALESCE(COUNT(asistencia.id), 0) AS asistencias
+        FROM
+            discipulo
+            INNER JOIN usuario AS Consolidador ON discipulo.idConsolidador = Consolidador.id
+            LEFT JOIN asistencia ON discipulo.id = asistencia.idDiscipulo
+            INNER JOIN celulas ON discipulo.idCelulaConsolidacion = celulas.id
+            INNER JOIN territorio ON territorio.id = celulas.idterritorio AND territorio.idLider = :idLider GROUP BY discipulo.id";
+            
+
+            $stmt = $this->db->pdo()->prepare($sql);
+
+            $stmt->bindValue(':idLider', $usuario->id);
+
+                $stmt->execute();
+                $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                Bitacora::registrar("Consulta de discipulo");
+
+                return $resultado;
+            }
+
+            if ($usuario->tieneRol("Pastor")) {
+                $sql = "SELECT 
+            Consolidador.id AS idConsolidador,
+            Consolidador.nombre AS nombreConsolidador,
+            Consolidador.apellido AS apellidoConsolidador,
+            Consolidador.cedula AS cedulaConsolidador,
+            celulas.id AS idCelulaConsolidacion,
+            celulas.codigo,
+            discipulo.id,
+            discipulo.asisCrecimiento,
+            discipulo.asisFamiliar,
+            discipulo.idConsolidador,
+            discipulo.idCelulaConsolidacion,
+            discipulo.cedula,
+            discipulo.nombre,
+            discipulo.apellido,
+            discipulo.telefono,
+            discipulo.direccion,
+            discipulo.estadoCivil,
+            discipulo.motivo,
+            discipulo.fechaNacimiento,
+            discipulo.fechaConvercion,
+            COALESCE(COUNT(asistencia.id), 0) AS asistencias
+        FROM
+            discipulo
+            INNER JOIN usuario AS Consolidador ON discipulo.idConsolidador = Consolidador.id
+            LEFT JOIN asistencia ON discipulo.id = asistencia.idDiscipulo
+            INNER JOIN celulas ON discipulo.idCelulaConsolidacion = celulas.id
+            INNER JOIN territorio ON territorio.id = celulas.idterritorio AND territorio.idSede = :idSede GROUP BY discipulo.id";
+            
+
+            $stmt = $this->db->pdo()->prepare($sql);
+
+            $stmt->bindValue(':idSede', $usuario->idSede);
+
+                $stmt->execute();
+                $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                Bitacora::registrar("Consulta de discipulo");
+
+                return $resultado;
+            }
 
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
@@ -433,7 +696,7 @@ class Discipulo extends Model
 
     public function valida_cedula_existencia($cedula, $id)
     {
-       
+
         try {
 
             $sql = "SELECT cedula FROM discipulo WHERE cedula = :cedula AND estatus = '1' AND id NOT IN (:id)";
@@ -448,13 +711,13 @@ class Discipulo extends Model
 
             if ($result > 0) {
 
-            //     $sql2 = "SELECT codigo FROM celulas
-            //      INNER JOIN discipulo ON celulas.id = discipulo.idCelulaConsolidacion AND discipulo.cedula = :cedula";
+                //     $sql2 = "SELECT codigo FROM celulas
+                //      INNER JOIN discipulo ON celulas.id = discipulo.idCelulaConsolidacion AND discipulo.cedula = :cedula";
 
-            //    $stmt2 = $this->db->pdo()->prepare($sql2);
-            //    $stmt2->bindValue(':cedula', $cedula);
-            //    $stmt2->execute();
-            //    $result2 = $stmt2->fetchAll(PDO::FETCH_ASSOC);
+                //    $stmt2 = $this->db->pdo()->prepare($sql2);
+                //    $stmt2->bindValue(':cedula', $cedula);
+                //    $stmt2->execute();
+                //    $result2 = $stmt2->fetchAll(PDO::FETCH_ASSOC);
 
 
                 return true;

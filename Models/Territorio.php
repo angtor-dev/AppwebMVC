@@ -17,7 +17,7 @@ class Territorio extends Model
     public Usuario $lider;
 
     //Expresiones regulares
-    private $expresion_nombre = '/^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]{5,50}$/';
+    private $expresion_nombre = '/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,50}$/';
     private $expresion_texto = '/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/';
     private $expresion_id = '/^[1-9]\d*$/';
 
@@ -154,6 +154,11 @@ class Territorio extends Model
 
         try {
 
+            /** @var Usuario */
+        $usuario = $_SESSION['usuario'];
+
+           if ($usuario->tieneRol('SuperUsuario') ){
+
             $sql = "SELECT usuario.id, usuario.nombre AS nombreLider, usuario.cedula, usuario.apellido, territorio.idLider, territorio.id, territorio.idSede,
              territorio.detalles, territorio.codigo, territorio.nombre, territorio.estatus 
              FROM territorio INNER JOIN usuario ON usuario.id = territorio.idLider WHERE territorio.estatus = '1'";
@@ -166,7 +171,25 @@ class Territorio extends Model
 
             Bitacora::registrar("Consulta de Territorios");
 
-            return $resultado;
+            return $resultado;} 
+            
+            if ($usuario->tieneRol('Pastor')){
+
+
+                $sql = "SELECT usuario.id, usuario.nombre AS nombreLider, usuario.cedula, usuario.apellido, territorio.idLider, territorio.id, territorio.idSede,
+                territorio.detalles, territorio.codigo, territorio.nombre, territorio.estatus 
+                FROM territorio INNER JOIN usuario ON usuario.id = territorio.idLider WHERE territorio.idSede = :idSede AND territorio.estatus = '1'";
+
+               
+               $stmt = $this->db->pdo()->prepare($sql);
+               $stmt->bindValue(':idSede', $usuario->idSede);
+   
+               $stmt->execute();
+               $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+   
+               Bitacora::registrar("Consulta de Territorios");
+               return $resultado;
+            }
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -299,14 +322,31 @@ class Territorio extends Model
     {
 
         try {
+
+            /** @var Usuario */
+            $usuario = $_SESSION['usuario'];
+
+            if ($usuario->tieneRol('SuperUsuario')){
             $sql = "SELECT usuario.id, usuario.cedula, usuario.nombre, usuario.apellido 
-            FROM usuariorol INNER JOIN usuario ON usuario.id = usuariorol.idUsuario WHERE usuariorol.idRol IN (3, 4)";
+            FROM usuariorol INNER JOIN usuario ON usuario.id = usuariorol.idUsuario WHERE usuario.estatus = '1' AND usuariorol.idRol IN (4, 5)";
 
             $stmt = $this->db->pdo()->prepare($sql);
 
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $resultado;} else {
+
+                $sql = "SELECT usuario.id, usuario.cedula, usuario.nombre, usuario.apellido 
+            FROM usuariorol INNER JOIN usuario ON usuario.id = usuariorol.idUsuario WHERE usuario.idSede = :idSede AND usuario.estatus = '1' AND usuariorol.idRol IN (4, 5)";
+
+            $stmt = $this->db->pdo()->prepare($sql);
+
+            $stmt->bindValue(':idSede', $usuario->idSede);
+
+            $stmt->execute();
+            $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $resultado;
+            }
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -323,13 +363,31 @@ class Territorio extends Model
     {
         try {
 
+            /** @var Usuario */
+            $usuario = $_SESSION['usuario'];
+
+            if ($usuario->tieneRol('SuperUsuario')){
             $sql = "SELECT * FROM sede WHERE sede.estatus = '1'";
 
             $stmt = $this->db->pdo()->prepare($sql);
 
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $resultado;
+            return $resultado; } else {
+
+        
+
+                $sql = "SELECT * FROM sede WHERE id = :idSede AND sede.estatus = '1'";
+
+                $stmt = $this->db->pdo()->prepare($sql);
+
+                $stmt->bindValue(':idSede', $usuario->idSede);
+    
+                $stmt->execute();
+                $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                return $resultado;
+
+            }
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -468,6 +526,36 @@ class Territorio extends Model
                 }
             }
         } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+            die();
+        }
+    }
+
+    public function valida_lider($idLider, $id)
+    {
+
+
+        try {
+
+            $sql = "SELECT nombre FROM territorio WHERE (idLider = :idLider) AND (estatus = '1') AND (id NOT IN (:id))";
+            
+
+            $stmt = $this->db->pdo()->prepare($sql);
+            $stmt->bindValue(':idLider', $idLider);
+            $stmt->bindValue(':id', $id);
+
+            $stmt->execute();
+            $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $stmt->rowCount();
+
+            
+                if ($stmt->rowCount() == 1) {
+                    throw new Exception("Este Usuario ya es Lider de un Territorio", 422);
+                }
+
+
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             http_response_code($e->getCode());
             echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
             die();
