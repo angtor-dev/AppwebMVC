@@ -85,7 +85,7 @@ class Sede extends Model
             $nombreEstado = $this->getNombreEstado($estadoCodigo);
             //Aqui puedes declarar una variable con el nombre que quieras. Puede ser $sql, $consulta, $query. Como desees
             //Lo unico que tienes que tomar en cuenta que hay nombras que si estan predefinidos, pero relah, ya el editor te avisa
-            $sql = "INSERT INTO sede (id, idpastor, codigo, identificador, nombre, estado, estadoCodigo, direccion, fechaCreacion) 
+            $sql = "INSERT INTO sede (id, idPastor, codigo, identificador, nombre, estado, estadoCodigo, direccion, fechaCreacion) 
             VALUES (:id, :idPastor, :codigo, :identificador, :nombre, :estado, :estadoCodigo, :direccion, CURDATE())";
 
             //no se pueden enviar los valores por variables  parametrizacion y evita inyeccion de slq':nombrequetuquieres'
@@ -127,7 +127,9 @@ class Sede extends Model
 
         try {
 
-            $sql = "SELECT * FROM sede WHERE sede.estatus = '1'";
+            $sql = "SELECT usuario.nombre AS nombrePastor, usuario.cedula, usuario.apellido,
+            sede.id, sede.idPastor, sede.codigo, sede.identificador, sede.nombre,
+            sede.estado, sede.estadoCodigo, sede.direccion FROM sede INNER JOIN usuario ON usuario.id = sede.idPastor  WHERE sede.estatus = '1'";
 
             $stmt = $this->db->pdo()->prepare($sql);
 
@@ -230,7 +232,7 @@ class Sede extends Model
 
         try {
             $sql = "SELECT usuario.id, usuario.cedula, usuario.nombre, usuario.apellido 
-            FROM usuariorol INNER JOIN usuario ON usuario.id = usuariorol.idUsuario WHERE usuariorol.idRol = '4'";
+            FROM usuariorol INNER JOIN usuario ON usuario.id = usuariorol.idUsuario WHERE usuario.estatus = '1' AND usuariorol.idRol = '4'";
 
             $stmt = $this->db->pdo()->prepare($sql);
 
@@ -278,6 +280,12 @@ class Sede extends Model
                 // Lanzar una excepción si el string no es válido
                 throw new Exception("El estado que ha seleccionado no existe. Seleccione nuevamente", 422);
             }
+
+            if (!in_array($estado, $this->estados_venezuela)) {
+                // Lanzar una excepción si el string no es válido
+                throw new Exception("El estado que ha seleccionado no existe. Seleccione nuevamente", 422);
+            }
+
         } catch (Exception $e) {
             http_response_code($e->getCode());
             echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
@@ -389,6 +397,36 @@ class Sede extends Model
             die();
         }
     }
+
+    public function valida_pastor($idPastor, $id)
+    {
+
+
+        try {
+
+            $sql = "SELECT nombre FROM sede WHERE ($idPastor = :idPastor) AND (estatus = '1')AND (id NOT IN (:id))";
+
+            $stmt = $this->db->pdo()->prepare($sql);
+            $stmt->bindValue(':idPastor', $idPastor);
+            $stmt->bindValue(':id', $id);
+
+            $stmt->execute();
+            $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $stmt->rowCount();
+
+            
+                if ($stmt->rowCount() > 0) {
+                    throw new Exception("Este Usuario ya es Pastor de una Sede", 422);
+                }
+
+
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+            die();
+        }
+    }
+
 
 
 

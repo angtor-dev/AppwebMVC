@@ -221,7 +221,7 @@ $usuario = $_SESSION['usuario'];
                                     <label for="fechaNacimiento2" class="form-label fw-bold">Fecha de nacimiento</label>
                                     <input type="date" class="form-control" id="fechaNacimiento2">
                                     <div id="msj_fechaNacimiento2" class="invalid-feedback">
-                                        Este campo es obligatorio.
+                                        Este campo es obligatorio y debe ser mayor de edad.
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
@@ -371,7 +371,7 @@ $usuario = $_SESSION['usuario'];
                                     <label for="fechaNacimiento" class="form-label fw-bold">Fecha de nacimiento</label>
                                     <input type="date" class="form-control" id="fechaNacimiento">
                                     <div id="msj_fechaNacimiento" class="invalid-feedback">
-                                        Este campo es obligatorio.
+                                        Este campo es obligatorio y debe ser mayor de edad.
                                     </div>
                                 </div>
                                 <div class="col-lg-6">

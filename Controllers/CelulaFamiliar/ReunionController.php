@@ -14,7 +14,7 @@ $Celulas = new Celulas();
 
 if (isset($_GET['cargar_data'])) {
     //Primero inicializamos las variables
-    $Lista = $Celulas->listar_reunionesFamiliar();
+    $Lista = $Celulas->listar_reuniones($tipo = 'familiar');
     //Variable json solamente para guardar el array de datos
     $json = array();
 
@@ -77,7 +77,7 @@ if (isset($_GET['listarcelulas'])) {
 
     requierePermiso("celulaFamiliar", "actualizar");
 
-    $listaCelulas = $Celulas->listar_celulaFamiliar();
+    $listaCelulas = $Celulas->listar_Celula($tipo = 'familiar');
 
     echo json_encode($listaCelulas);
 

@@ -4,6 +4,12 @@ require_once "Models/Model.php";
 class Evento extends Model
 {
 
+
+    public int $id;
+    private string $titulo;
+    private string $descripcion;
+    private string $fechaInicio;
+    private string $fechaFinal;
     public function listar_Eventos()
     {
 
@@ -100,8 +106,28 @@ class Evento extends Model
                 $stmt3->bindValue(':idEvento', $idEvento['idEvento']);
 
                 $stmt3->execute();
+
+                $id = $idEvento['idEvento'];
+
+
+                /** @var Evento */
+             $evento = Evento::cargar($id);
+             /** @var Usuario[] */
+             $usuarios = Usuario::listar(1);
+             foreach ($usuarios as $usuario) {
+                 if ($usuario->idSede == $sede) {
+                     Notificacion::registrar(
+                         $usuario->id,
+                         "Nuevo evento",
+                         "Titulo del evento: " . $evento->getTitulo() . ", Revisa tu agenda."
+                     );
+                 }}
+
+                
             }
 
+
+             
 
             Bitacora::registrar("Registro de Evento");
 
@@ -335,6 +361,17 @@ public function actualizarComentario($comentario, $id){
 
         $stmt->execute();
 
+         /** @var Evento */
+         $evento= Evento::cargar($id);
+         /** @var Sede */
+         $sede = Sede::cargar($usuario->idSede);
+                 Notificacion::registrar(
+                     1,
+                     "Se registro un Comentario",
+                     "la Sede: " . $sede->getNombre() . ", En el vento: " . $evento->getTitulo() . "."
+                 );
+
+
         Bitacora::registrar("Actualizacion de Comentario");
 
         http_response_code(200);
@@ -397,5 +434,28 @@ public function actualizarComentario($comentario, $id){
 
 
     }
+
+
+    // Getters
+
+    
+    public function getTitulo(): string
+    {
+        return $this->titulo;
+    }
+
+    public function getFechaInicio(): string
+    {
+        return $this->fechaInicio;
+    }
+
+    public function getFechaFinal(): string
+    {
+        return $this->fechaFinal;
+    }
+
+    public function getDescripcion(): string
+    {
+        return $this->descripcion;
+    }
 }
-?>

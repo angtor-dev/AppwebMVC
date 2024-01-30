@@ -32,7 +32,7 @@ $(document).ready(function () {
            `<div class="acciones"><a role="button" id="ver_info" data-bs-toggle="modal" data-bs-target="#modal_verInfo" title="Ver detalles" ><i class="fa-solid fa-circle-info" ></i></a>
             <a role="button" id="editar" data-bs-toggle="modal" title="Actualizar" data-bs-target="#modal_editarInfo" ><i class="fa-solid fa-pen" ></i></a>
              <a role="button"  id=eliminar title="Eliminar"><i class="fa-solid fa-trash" ></i></a>
-           <a role="button" id="asistencias" data-bs-toggle="modal" "Asistencia" data-bs-target="#modal_editarAsistencia" title=><i class="fa-solid fa-users"></i></a>
+           <a role="button" id="asistencias" data-bs-toggle="modal" "Asistencia" data-bs-target="#modal_editarAsistencia" title="Asistencia" ><i class="fa-solid fa-users"></i></a>
            </div>` 
           },
         ],

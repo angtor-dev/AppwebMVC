@@ -13,7 +13,7 @@ $Celulas = new Celulas();
 
 if (isset($_GET['cargar_data'])) {
     //Primero inicializamos las variables
-    $Lista = $Celulas->listar_CelulaFamiliar();
+    $Lista = $Celulas->listar_Celula($tipo = 'familiar');
     //Variable json solamente para guardar el array de datos
     $json = array();
 
@@ -47,6 +47,7 @@ if (isset($_POST['registrar'])) {
     
     $Celulas->validacion_datos($nombre, [$idLider, $idCoLider, $idTerritorio]);
     $Celulas->validacion_existencia($nombre, $id='', $tipo, $idTerritorio);
+    $Celulas->valida_celulascantidad($idLider, $tipo, $id='');
     $Celulas->registrar_Celula($tipo, $nombre, $idLider, $idCoLider, $idTerritorio);
 
     die();
@@ -67,6 +68,7 @@ if (isset($_POST['editar'])) {
     $Celulas->validacion_datos($nombre, [$idLider, $idCoLider, $idTerritorio]);
     $Celulas->validacion_existencia($nombre, $id, $tipo, $idTerritorio);
     $Celulas->validacion_accion($id, $accion = 'actualizar');
+    $Celulas->valida_celulascantidad($idLider, $tipo, $id);
     $Celulas->editar_Celula($id, $tipo, $nombre, $idLider, $idCoLider, $idTerritorio);
 
     die();

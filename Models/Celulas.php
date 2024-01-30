@@ -176,12 +176,16 @@ class Celulas extends Model
 
 
 
-    public function listar_CelulaFamiliar()
+    public function listar_Celula($tipo)
     {
 
         try {
 
-            $sql = "SELECT Lider.id AS idLider,
+            /** @var Usuario */
+            $usuario = $_SESSION['usuario'];
+
+            if ($usuario->tieneRol('SuperUsuario')) {
+                $sql = "SELECT Lider.id AS idLider,
             CoLider.id AS idCoLider,
             Lider.nombre AS nombreLider,
             CoLider.nombre AS nombreCoLider,
@@ -199,16 +203,126 @@ class Celulas extends Model
             FROM celulas
             INNER JOIN usuario AS Lider ON celulas.idLider = Lider.id
             INNER JOIN usuario AS CoLider ON celulas.idCoLider = CoLider.id
-            WHERE celulas.estatus = '1' AND celulas.tipo = 'familiar'";
+            WHERE celulas.estatus = '1' AND celulas.tipo = :tipo";
 
 
-            $stmt = $this->db->pdo()->prepare($sql);
+                $stmt = $this->db->pdo()->prepare($sql);
 
-            $stmt->execute();
-            $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            Bitacora::registrar("Consulta de celula familiar");
+                $stmt->bindValue(':tipo', $tipo);
 
-            return $resultado;
+                $stmt->execute();
+                $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                Bitacora::registrar("Consulta de celula familiar");
+
+                return $resultado;
+            }
+
+            if ($usuario->tieneRol('Pastor')) {
+                $sql = "SELECT Lider.id AS idLider,
+                CoLider.id AS idCoLider,
+                Lider.nombre AS nombreLider,
+                CoLider.nombre AS nombreCoLider,
+                Lider.apellido AS apellidoLider,
+                CoLider.apellido AS apellidoCoLider,
+                Lider.cedula AS cedulaLider,
+                CoLider.cedula AS cedulaCoLider,
+                celulas.id,
+                celulas.idLider,
+                celulas.idCoLider,
+                celulas.idTerritorio,
+                celulas.codigo,
+                celulas.nombre,
+                celulas.estatus
+                FROM celulas
+                INNER JOIN usuario AS Lider ON celulas.idLider = Lider.id 
+                INNER JOIN usuario AS CoLider ON celulas.idCoLider = CoLider.id
+                INNER JOIN territorio ON territorio.id = celulas.idterritorio AND territorio.idSede = :idSede
+                WHERE celulas.estatus = '1' AND celulas.tipo = :tipo";
+
+
+                $stmt = $this->db->pdo()->prepare($sql);
+
+                $stmt->bindValue(':idSede', $usuario->idSede);
+                $stmt->bindValue(':tipo', $tipo);
+
+                $stmt->execute();
+                $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                Bitacora::registrar("Consulta de celula familiar");
+
+                return $resultado;
+            }
+
+            if ($usuario->tieneRol('LiderTerritorio')) {
+                $sql = "SELECT Lider.id AS idLider,
+                    CoLider.id AS idCoLider,
+                    Lider.nombre AS nombreLider,
+                    CoLider.nombre AS nombreCoLider,
+                    Lider.apellido AS apellidoLider,
+                    CoLider.apellido AS apellidoCoLider,
+                    Lider.cedula AS cedulaLider,
+                    CoLider.cedula AS cedulaCoLider,
+                    celulas.id,
+                    celulas.idLider,
+                    celulas.idCoLider,
+                    celulas.idTerritorio,
+                    celulas.codigo,
+                    celulas.nombre,
+                    celulas.estatus
+                    FROM celulas
+                    INNER JOIN usuario AS Lider ON celulas.idLider = Lider.id 
+                    INNER JOIN usuario AS CoLider ON celulas.idCoLider = CoLider.id
+                    INNER JOIN territorio ON territorio.id = celulas.idterritorio AND territorio.idLider = :idLider
+                    WHERE celulas.estatus = '1' AND celulas.tipo = :tipo";
+
+
+                $stmt = $this->db->pdo()->prepare($sql);
+
+                $stmt->bindValue(':idLider', $usuario->id);
+                $stmt->bindValue(':tipo', $tipo);
+
+                $stmt->execute();
+                $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                Bitacora::registrar("Consulta de celula familiar");
+
+                return $resultado;
+            }
+
+            if ($usuario->tieneRol('Lider')) {
+                $sql = "SELECT Lider.id AS idLider,
+                        CoLider.id AS idCoLider,
+                        Lider.nombre AS nombreLider,
+                        CoLider.nombre AS nombreCoLider,
+                        Lider.apellido AS apellidoLider,
+                        CoLider.apellido AS apellidoCoLider,
+                        Lider.cedula AS cedulaLider,
+                        CoLider.cedula AS cedulaCoLider,
+                        celulas.id,
+                        celulas.idLider,
+                        celulas.idCoLider,
+                        celulas.idTerritorio,
+                        celulas.codigo,
+                        celulas.nombre,
+                        celulas.estatus
+                        FROM celulas
+                        INNER JOIN usuario AS Lider ON celulas.idLider = Lider.id 
+                        INNER JOIN usuario AS CoLider ON celulas.idCoLider = CoLider.id
+                        WHERE celulas.idLider = :idLider AND celulas.estatus = '1' AND celulas.tipo = :tipo";
+
+
+                $stmt = $this->db->pdo()->prepare($sql);
+
+                $stmt->bindValue(':idLider', $usuario->id);
+                $stmt->bindValue(':tipo', $tipo);
+
+                $stmt->execute();
+                $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                Bitacora::registrar("Consulta de celula familiar");
+
+                return $resultado;
+            }
+
+
+
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -221,96 +335,6 @@ class Celulas extends Model
     }
 
 
-    public function listar_CelulaCrecimiento()
-    {
-
-        try {
-
-            $sql = "SELECT Lider.id AS idLider,
-            CoLider.id AS idCoLider,
-            Lider.nombre AS nombreLider,
-            CoLider.nombre AS nombreCoLider,
-            Lider.apellido AS apellidoLider,
-            CoLider.apellido AS apellidoCoLider,
-            Lider.cedula AS cedulaLider,
-            CoLider.cedula AS cedulaCoLider,
-            celulas.id,
-            celulas.idLider,
-            celulas.idCoLider,
-            celulas.idTerritorio,
-            celulas.codigo,
-            celulas.nombre,
-            celulas.estatus
-            FROM celulas
-            INNER JOIN usuario AS Lider ON celulas.idLider = Lider.id
-            INNER JOIN usuario AS CoLider ON celulas.idCoLider = CoLider.id
-            WHERE celulas.estatus = '1' AND celulas.tipo = 'crecimiento'";
-
-
-            $stmt = $this->db->pdo()->prepare($sql);
-
-            $stmt->execute();
-            $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            /** @var Bitacora **/
-            Bitacora::registrar("Consulta de celula crecimiento");
-
-            return $resultado;
-        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
-            $error_data = array(
-                "error_message" => $e->getMessage(),
-                "error_line" => "Linea del error: " . $e->getLine()
-            );
-            http_response_code(422);
-            echo json_encode($error_data);
-            die();
-        }
-    }
-
-
-    public function listar_CelulaConsolidacion()
-    {
-
-        try {
-
-            $sql = "SELECT Lider.id AS idLider,
-            CoLider.id AS idCoLider,
-            Lider.nombre AS nombreLider,
-            CoLider.nombre AS nombreCoLider,
-            Lider.apellido AS apellidoLider,
-            CoLider.apellido AS apellidoCoLider,
-            Lider.cedula AS cedulaLider,
-            CoLider.cedula AS cedulaCoLider,
-            celulas.id,
-            celulas.idLider,
-            celulas.idCoLider,
-            celulas.idTerritorio,
-            celulas.codigo,
-            celulas.nombre,
-            celulas.estatus
-            FROM celulas
-            INNER JOIN usuario AS Lider ON celulas.idLider = Lider.id
-            INNER JOIN usuario AS CoLider ON celulas.idCoLider = CoLider.id
-            WHERE celulas.estatus = '1' AND celulas.tipo = 'consolidacion'";
-
-
-            $stmt = $this->db->pdo()->prepare($sql);
-
-            $stmt->execute();
-            $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            /** @var Bitacora **/
-            Bitacora::registrar("Consulta de celula consolidacion");
-
-            return $resultado;
-        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
-            $error_data = array(
-                "error_message" => $e->getMessage(),
-                "error_line" => "Linea del error: " . $e->getLine()
-            );
-            http_response_code(422);
-            echo json_encode($error_data);
-            die();
-        }
-    }
 
 
 
@@ -589,17 +613,49 @@ class Celulas extends Model
     {
 
         try {
-            //Esta consulta esta sujeto a cambios hasta que se consiga un mejor logica para traer los usuarios con el nivel requerido
 
-            $sql = "SELECT usuario.id, usuario.cedula, usuario.nombre, usuario.apellido 
-            FROM usuariorol INNER JOIN usuario ON usuario.id = usuariorol.idUsuario 
-            WHERE usuariorol.idRol IN (1, 2, 3, 4)";
 
-            $stmt = $this->db->pdo()->prepare($sql);
+            /** @var Usuario */
+            $usuario = $_SESSION['usuario'];
 
-            $stmt->execute();
-            $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $resultado;
+            if ($usuario->tieneRol('SuperUsuario')) {
+                $sql = "SELECT usuario.id, usuario.cedula, usuario.nombre, usuario.apellido 
+            FROM usuariorol INNER JOIN usuario ON usuario.id = usuariorol.idUsuario WHERE usuario.estatus = '1' AND usuariorol.idRol IN (1, 2, 3, 4)";
+
+                $stmt = $this->db->pdo()->prepare($sql);
+
+                $stmt->execute();
+                $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                return $resultado;
+            } 
+            
+            if ($usuario->tieneRol('Pastor') || $usuario->tieneRol('LiderTerritorio'))  {
+
+                $sql = "SELECT usuario.id, usuario.cedula, usuario.nombre, usuario.apellido 
+            FROM usuariorol INNER JOIN usuario ON usuario.id = usuariorol.idUsuario WHERE usuario.idSede = :idSede AND usuario.estatus = '1' AND usuariorol.idRol IN (1, 2, 3, 4)";
+
+                $stmt = $this->db->pdo()->prepare($sql);
+
+                $stmt->bindValue(':idSede', $usuario->idSede);
+
+                $stmt->execute();
+                $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                return $resultado;
+            }
+
+            if ($usuario->tieneRol('Lider'))  {
+
+                $sql = "SELECT usuario.id, usuario.cedula, usuario.nombre, usuario.apellido 
+            FROM usuariorol INNER JOIN usuario ON usuario.idS = :idLider AND usuario.estatus = '1'";
+
+                $stmt = $this->db->pdo()->prepare($sql);
+
+                $stmt->bindValue(':idLider', $usuario->id);
+
+                $stmt->execute();
+                $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                return $resultado;
+            }
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -617,13 +673,38 @@ class Celulas extends Model
 
         try {
 
-            $sql = "SELECT * FROM territorio WHERE territorio.estatus = '1'";
+            /** @var Usuario */
+            $usuario = $_SESSION['usuario'];
 
-            $stmt = $this->db->pdo()->prepare($sql);
+            if ($usuario->tieneRol('SuperUsuario')) {
 
-            $stmt->execute();
-            $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $resultado;
+                $sql = "SELECT * FROM territorio WHERE territorio.estatus = '1'";
+
+
+                $stmt = $this->db->pdo()->prepare($sql);
+
+                $stmt->execute();
+                $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                Bitacora::registrar("Consulta de Territorios");
+
+                return $resultado;
+            } else {
+
+
+                $sql = "SELECT * FROM territorio WHERE territorio.idSede = :idSede AND territorio.estatus = '1'";
+
+
+                $stmt = $this->db->pdo()->prepare($sql);
+                $stmt->bindValue(':idSede', $usuario->idSede);
+
+                $stmt->execute();
+                $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                Bitacora::registrar("Consulta de Territorios");
+                return $resultado;
+            }
+
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -637,12 +718,16 @@ class Celulas extends Model
     }
 
 
-    public function listar_reunionesFamiliar()
+    public function listar_reuniones($tipo)
     {
 
         try {
 
-            $sql = "SELECT
+            /** @var Usuario */
+            $usuario = $_SESSION['usuario'];
+
+            if ($usuario->tieneRol('SuperUsuario')) {
+                $sql = "SELECT
                     reunioncelula.id,
                     reunioncelula.fecha,
                     reunioncelula.tematica,
@@ -658,18 +743,127 @@ class Celulas extends Model
                     celulas.id AS idCelula
                 FROM reunioncelula
                 INNER JOIN celulas
-                ON reunioncelula.idcelula = celulas.id AND celulas.tipo = 'familiar'
+                ON reunioncelula.idcelula = celulas.id AND celulas.tipo = :tipo
                 ORDER BY reunioncelula.fecha DESC;";
 
 
-            $stmt = $this->db->pdo()->prepare($sql);
+                $stmt = $this->db->pdo()->prepare($sql);
 
-            $stmt->execute();
-            $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            Bitacora::registrar("Consulta de reuniones de celula familiar");
+                $stmt->bindValue(':tipo', $tipo);
 
-            return $resultado;
+                $stmt->execute();
+                $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                Bitacora::registrar("Consulta de reuniones de celula familiar");
+
+                return $resultado;
+            }
+
+            if ($usuario->tieneRol('Pastor')) {
+                $sql = "SELECT
+                        reunioncelula.id,
+                        reunioncelula.fecha,
+                        reunioncelula.tematica,
+                        reunioncelula.semana,
+                        reunioncelula.generosidad,
+                        reunioncelula.infantil,
+                        reunioncelula.juvenil,
+                        reunioncelula.adulto,
+                        reunioncelula.actividad,
+                        reunioncelula.observaciones,
+                        celulas.codigo,
+                        celulas.nombre,
+                        celulas.id AS idCelula
+                    FROM reunioncelula
+                    INNER JOIN celulas
+                    ON reunioncelula.idcelula = celulas.id AND celulas.tipo = :tipo
+                    INNER JOIN territorio ON territorio.id = celulas.idterritorio AND territorio.idSede = :idSede
+                    ORDER BY reunioncelula.fecha DESC;";
+
+
+                $stmt = $this->db->pdo()->prepare($sql);
+
+                $stmt->bindValue(':idSede', $usuario->idSede);
+                $stmt->bindValue(':tipo', $tipo);
+
+                $stmt->execute();
+                $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                Bitacora::registrar("Consulta de reuniones de celula familiar");
+
+                return $resultado;
+            }
+
+
+            if ($usuario->tieneRol('LiderTerritorio')) {
+                $sql = "SELECT
+                            reunioncelula.id,
+                            reunioncelula.fecha,
+                            reunioncelula.tematica,
+                            reunioncelula.semana,
+                            reunioncelula.generosidad,
+                            reunioncelula.infantil,
+                            reunioncelula.juvenil,
+                            reunioncelula.adulto,
+                            reunioncelula.actividad,
+                            reunioncelula.observaciones,
+                            celulas.codigo,
+                            celulas.nombre,
+                            celulas.id AS idCelula
+                        FROM reunioncelula
+                        INNER JOIN celulas
+                        ON reunioncelula.idcelula = celulas.id AND celulas.tipo = :tipo
+                        INNER JOIN territorio ON territorio.id = celulas.idterritorio AND territorio.idLider = :idLider
+                        ORDER BY reunioncelula.fecha DESC;";
+
+
+                $stmt = $this->db->pdo()->prepare($sql);
+
+                $stmt->bindValue(':idLider', $usuario->id);
+                $stmt->bindValue(':tipo', $tipo);
+
+                $stmt->execute();
+                $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                Bitacora::registrar("Consulta de reuniones de celula familiar");
+
+                return $resultado;
+            }
+
+            if ($usuario->tieneRol('Lider')) {
+                $sql = "SELECT
+                                reunioncelula.id,
+                                reunioncelula.fecha,
+                                reunioncelula.tematica,
+                                reunioncelula.semana,
+                                reunioncelula.generosidad,
+                                reunioncelula.infantil,
+                                reunioncelula.juvenil,
+                                reunioncelula.adulto,
+                                reunioncelula.actividad,
+                                reunioncelula.observaciones,
+                                celulas.codigo,
+                                celulas.nombre,
+                                celulas.id AS idCelula
+                            FROM reunioncelula
+                            INNER JOIN celulas
+                            ON reunioncelula.idcelula = celulas.id AND celulas.idLider = :idLider AND celulas.tipo = :tipo
+                            ORDER BY reunioncelula.fecha DESC;";
+
+
+                $stmt = $this->db->pdo()->prepare($sql);
+
+                $stmt->bindValue(':idLider', $usuario->id);
+                $stmt->bindValue(':tipo', $tipo);
+
+                $stmt->execute();
+                $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                Bitacora::registrar("Consulta de reuniones de celula familiar");
+
+                return $resultado;
+            }
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -682,93 +876,7 @@ class Celulas extends Model
     }
 
 
-    public function listar_reunionesCrecimiento()
-    {
-
-        try {
-
-            $sql = "SELECT
-            reunioncelula.id,
-            reunioncelula.fecha,
-            reunioncelula.tematica,
-            reunioncelula.semana,
-            reunioncelula.generosidad,
-            reunioncelula.infantil,
-            reunioncelula.juvenil,
-            reunioncelula.adulto,
-            reunioncelula.actividad,
-            reunioncelula.observaciones,
-            celulas.codigo,
-            celulas.nombre,
-            celulas.id AS idCelula
-        FROM reunioncelula
-        INNER JOIN celulas
-        ON reunioncelula.idcelula = celulas.id AND celulas.tipo = 'crecimiento'
-        ORDER BY reunioncelula.fecha DESC;";
-
-
-            $stmt = $this->db->pdo()->prepare($sql);
-
-            $stmt->execute();
-            $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-            Bitacora::registrar("Consulta de reuniones de celula Crecimiento");
-
-            return $resultado;
-        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
-            $error_data = array(
-                "error_message" => $e->getMessage(),
-                "error_line" => "Linea del error: " . $e->getLine()
-            );
-            http_response_code(422);
-            echo json_encode($error_data);
-            die();
-        }
-    }
-
-    public function listar_reunionesConsolidacion()
-    {
-
-        try {
-
-            $sql = "SELECT
-                    reunioncelula.id,
-                    reunioncelula.fecha,
-                    reunioncelula.tematica,
-                    reunioncelula.semana,
-                    reunioncelula.generosidad,
-                    reunioncelula.actividad,
-                    reunioncelula.observaciones,
-                    celulas.codigo,
-                    celulas.nombre,
-                    celulas.id AS idCelula
-                FROM reunioncelula
-                INNER JOIN celulas
-                ON reunioncelula.idcelula = celulas.id AND celulas.tipo = 'consolidacion'
-                ORDER BY reunioncelula.fecha DESC;";
-
-
-            $stmt = $this->db->pdo()->prepare($sql);
-
-            $stmt->execute();
-            $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-            Bitacora::registrar("Consulta de reuniones de celula Consolidacion");
-
-            return $resultado;
-        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
-            $error_data = array(
-                "error_message" => $e->getMessage(),
-                "error_line" => "Linea del error: " . $e->getLine()
-            );
-            http_response_code(422);
-            echo json_encode($error_data);
-            die();
-        }
-    }
-
-
-
+    
 
     public function editar_reuniones($id, $idCelula, $fecha, $tematica, $semana, $generosidad, $infantil, $juvenil, $adulto, $actividad, $observaciones)
     {
@@ -883,29 +991,7 @@ class Celulas extends Model
     }
 
 
-    public function listar_celulas($tipo)
-    {
-        try {
 
-            $sql = "SELECT * FROM celulas WHERE celulas.estatus = '1' AND celulas.tipo = :tipo";
-
-            $stmt = $this->db->pdo()->prepare($sql);
-            $stmt->bindValue(":tipo", $tipo);
-
-            $stmt->execute();
-            $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $resultado;
-        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
-            $error_data = array(
-                "error_message" => $e->getMessage(),
-                "error_line" => "Linea del error: " . $e->getLine()
-            );
-            //print_r($error_data);
-            http_response_code(422);
-            echo json_encode($error_data);
-            die();
-        }
-    }
 
     public function listarDiscipulados_celula($idCelula)
     {
@@ -1044,6 +1130,31 @@ class Celulas extends Model
                 $stmt->bindValue(":discipulo", $valor);
 
                 $stmt->execute();
+
+                // Si la cuenta de la consulta es igual a 5, entonces este sera aprobado. Del resto, no hara nada
+                if ($stmt->rowCount() == 5) {
+                    $update = "UPDATE discipulo SET aprobarUsuario = '1' WHERE discipulo.id = :idDiscipulo";
+                    $stmt5 = $this->db->pdo()->prepare($update);
+                    $stmt5->bindValue(':idDiscipulo', $valor);
+
+                    $stmt5->execute();
+
+                    // Esto tal vez deba ir en el controlador pero no quiero refactorizar nada más antes de la defensa (y)
+                    // Envia la notificación de que el discipulo alcanzo las 5 reuniones
+                    /** @var Discipulo */
+                    $discipulo = Discipulo::cargar($valor);
+                    /** @var Usuario[] */
+                    $usuarios = Usuario::listar(1);
+                    foreach ($usuarios as $usuario) {
+                        if ($usuario->tieneRol("Superusuario") || $usuario->tieneRol("Administrador") || $usuario->tienePermiso("inscripciones", "consultar")) {
+                            Notificacion::registrar(
+                                $usuario->id,
+                                "Discipulo consolidado",
+                                "El discipulo " . $discipulo->getNombre() . " " . $discipulo->getApellido() . " ha alcanzado las 5 asistencias de consolidación."
+                            );
+                        }
+                    }
+                }
             }
 
             Bitacora::registrar("Eliminacion de asistencia en reunion de celula de consolidacion");
@@ -1089,11 +1200,10 @@ class Celulas extends Model
         }
     }
 
-   
+
     public function valida_nombre($nombre, $id, $tipo, $idTerritorio)
     {
-        /** @var Usuario */
-        $usuario = $_SESSION['usuario'];
+
 
         try {
 
@@ -1242,6 +1352,45 @@ class Celulas extends Model
                 throw new Exception("La fecha no tiene el formato correcto o no es válida.", 422);
             }
         } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+            die();
+        }
+    }
+
+    public function valida_celulascantidad($idLider, $tipo, $id)
+    {
+
+
+        try {
+
+            $sql = "SELECT nombre FROM celulas WHERE ($idLider = :idLider) AND (estatus = '1') AND (tipo = :tipo) AND (id NOT IN (:id))";
+
+            $stmt = $this->db->pdo()->prepare($sql);
+            $stmt->bindValue(':idLider', $idLider);
+            $stmt->bindValue(':id', $id);
+            $stmt->bindValue(':tipo', $tipo);
+
+            $stmt->execute();
+            $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $stmt->rowCount();
+
+            /** @var Usuario */
+            $usuario = Usuario::cargar($idLider);
+            if ($usuario->tieneRol("Superusuario")) {
+                if ($stmt->rowCount() == 1) {
+                    throw new Exception("Este usuario ya posee el limite de Celulas permitido como Apostol", 422);
+                }
+
+            }
+
+            if ($usuario->tieneRol("Pastor")) {
+                if ($stmt->rowCount() == 3) {
+                    throw new Exception("Este usuario ya posee el limite de Celulas permitido como Pastor", 422);
+                }
+            }
+
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             http_response_code($e->getCode());
             echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
             die();

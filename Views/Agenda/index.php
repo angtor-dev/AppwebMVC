@@ -260,13 +260,12 @@ $title = "Agenda"
                     <div class="mb-3">
                         <label class="form-label fw-bold">Sedes vinculadas</label>
                         <div class="table-responsive">
-                        
-                            <table id="sedesDatatables" class="table table-hover">
-                                <thead>
+                        <table id="sedesDatatables" class="table" style="width:100%"> 
+            
+                            <thead>
                                     <tr>
-                                        <th>Sede</th>
-                                        <th></th>
-
+                                        <th style="width: 170px;">Sedes</th>
+                                        <th class="text-center" style="width: 30px;"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
