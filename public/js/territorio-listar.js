@@ -9,7 +9,7 @@ $(document).ready(function () {
         info: false,
         lengthChange: false,
         pageLength: 15,
-        dom: 'ltip',
+        dom: 'ltipB',
         searching: true,
         language: {
             url: '/AppwebMVC/public/lib/datatables/datatable-spanish.json'
