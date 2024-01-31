@@ -12,6 +12,7 @@ $title = "Bitacora";
     </div>
 </div>
 
+<div class="table-responsive">
 <table class="table table-bordered table-rounded table-hover datatable" id="tabla-bitacora">
     <thead>
         <tr>
@@ -27,14 +28,15 @@ $title = "Bitacora";
                 <td><?= ($bitacora->usuario?->getCedula() ?? "")." - ".($bitacora->usuario?->getNombre() ?? "") ?></td>
                 <td><?= $bitacora->getRegistro() ?></td>
                 <td><?= $bitacora->getRuta() ?></td>
-                <td><?= date("d/m/Y H:i a", strtotime($bitacora->getFecha())) ?></td>
+                <td><?= date("d/m/Y H:i:s a", strtotime($bitacora->getFecha())) ?></td>
             </tr>
         <?php endforeach ?>
     </tbody>
 </table>
+</div>
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        datatables['tabla-bitacora'].order(3, 'desc')
+        datatables['tabla-bitacora'].order([[3, 'desc']])
     })
 </script>

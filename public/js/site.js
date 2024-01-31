@@ -3,6 +3,7 @@ var datatables = []
 
 document.querySelectorAll('.datatable[id]').forEach(t => {
     datatables[t.id] = new DataTable(t, {
+        order: [[0, false]],
         info: false,
         lengthChange: false,
         pageLength: 15,
