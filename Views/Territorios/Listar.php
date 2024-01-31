@@ -39,8 +39,8 @@ $usuario = $_SESSION['usuario'];
                     <thead>
                         <tr>
                             <th>Codigo</th>
-                            <th>Nombre de Territorio</th>
-                            <th>Lider Responsable</th>
+                            <th>Nombre</th>
+                            <th>Lider</th>
                             <th class="text-center" style="width: 90px;">Opciones</th>
                         </tr>
                     </thead>

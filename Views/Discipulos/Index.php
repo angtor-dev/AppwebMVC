@@ -42,7 +42,7 @@ $usuario = $_SESSION['usuario'];
                         <th>Cedula</th>
                             <th>Nombre</th>
                             <th>Apellido</th>
-                            <th>Celula de Consolidacion </th>
+                            <th>Celula</th>
                             <th>Asistencias</th>
                             <th class="text-center" style="width: 90px;">Opciones</th>
                         </tr>

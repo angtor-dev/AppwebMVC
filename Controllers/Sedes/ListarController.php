@@ -55,7 +55,7 @@ if (isset($_POST['registrar'])) {
 
     $Sede->validacion_datos($idPastor, $nombre, $direccion, $estado);
     $Sede->validacion_existencia($nombre, $idSede = '');
-    $Sede->valida_pastor($idPastor, $id='');
+    $Sede->valida_pastor($idPastor, $id = '');
     $Sede->registrar_Sede($idPastor, $nombre, $direccion, $estado);
     die();
 }
@@ -72,7 +72,7 @@ if (isset($_POST['editar'])) {
     $Sede->validacion_datos($idPastor, $nombre, $direccion, $estado);
     $Sede->validacion_existencia($nombre, $idSede);
     $Sede->validacion_editar_estado($idSede, $estado);
-    $Sede->valida_pastor($idPastor, $id);
+    $Sede->valida_pastor($idPastor, $idSede);
     $Sede->editar_Sede($idSede, $idPastor, $nombre, $direccion, $estado);
 
     die();

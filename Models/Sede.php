@@ -404,7 +404,7 @@ class Sede extends Model
 
         try {
 
-            $sql = "SELECT nombre FROM sede WHERE ($idPastor = :idPastor) AND (estatus = '1')AND (id NOT IN (:id))";
+            $sql = "SELECT nombre FROM sede WHERE (idPastor = :idPastor) AND (estatus = '1') AND (id NOT IN (:id))";
 
             $stmt = $this->db->pdo()->prepare($sql);
             $stmt->bindValue(':idPastor', $idPastor);
@@ -415,7 +415,7 @@ class Sede extends Model
             $stmt->rowCount();
 
             
-                if ($stmt->rowCount() > 0) {
+                if ($stmt->rowCount() == 1) {
                     throw new Exception("Este Usuario ya es Pastor de una Sede", 422);
                 }
 

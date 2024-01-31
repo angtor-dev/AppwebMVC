@@ -20,9 +20,9 @@ $viewScripts = ["CelulaCrecimiento-reunion.js"];
 
                 <thead>
                         <tr>
-                        <th>Codigo Celula Crecimiento</th>
-                            <th>Nombre de la Celula Crecimiento</th>
-                            <th>Fecha de la reunión</th>
+                        <th>Codigo Celula</th>
+                            <th>Nombre</th>
+                            <th>Fecha</th>
                             <th class="text-center" style="width: 170px;">Opciones</th>
                         </tr>
                 </thead>
