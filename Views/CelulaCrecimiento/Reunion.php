@@ -218,7 +218,7 @@ $viewScripts = ["CelulaCrecimiento-reunion.js"];
 
                             <div class="d-flex justify-content-end gap-1">
                                 <button type="button" class="btn btn-secondary" id="cerrarReunion">Cancelar</button>
-                                <button type="submit" class="btn btn-primary">Registrar</button>
+                                <button type="submit" class="btn btn-primary">Actualizar</button>
                             </div>
 
                         </div>

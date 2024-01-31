@@ -79,7 +79,7 @@ $(document).ready(function () {
 
         Swal.fire({
             title: '¿Estas Seguro?',
-            text: "No podras acceder a esta celula otra vez!",
+            text: "No podras acceder a esta reunion otra vez",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: '¡Si, estoy seguro!',
