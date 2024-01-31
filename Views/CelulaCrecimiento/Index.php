@@ -41,7 +41,7 @@ $usuario = $_SESSION['usuario'];
                 <thead>
                         <tr>
                             <th>Codigo</th>
-                            <th>Nombre de la Celula Crecimiento</th>
+                            <th>Nombre</th>
                             <th>Lider</th>
                             <th class="text-center" style="width: 170px;">Opciones</th>
                         </tr>

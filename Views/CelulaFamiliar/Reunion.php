@@ -21,9 +21,9 @@ $viewScripts = ["CelulaFamiliar-reunion.js"];
 
                 <thead>
                         <tr>
-                        <th>Codigo Celula Familiar</th>
-                            <th>Nombre de la Celula Familiar</th>
-                            <th>Fecha de la reunión</th>
+                        <th>Codigo Celula</th>
+                            <th>Nombre</th>
+                            <th>Fecha</th>
                             <th class="text-center" style="width: 170px;">Opciones</th>
                         </tr>
                 </thead>

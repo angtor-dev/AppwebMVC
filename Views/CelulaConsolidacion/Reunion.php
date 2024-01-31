@@ -20,9 +20,9 @@ $viewScripts = ["CelulaConsolidacion-reunion.js"];
 
                 <thead>
                         <tr>
-                        <th>Codigo</th>
+                        <th>Codigo Celula</th>
                             <th>Nombre</th>
-                            <th>Fecha de la reunión</th>
+                            <th>Fecha</th>
                             <th class="text-center" style="width: 170px;">Opciones</th>
                         </tr>
                 </thead>
