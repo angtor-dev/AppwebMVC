@@ -436,6 +436,7 @@ $(document).ready(function () {
         $("#nombre").removeClass("is-valid");
         $("#direccion").removeClass("is-valid");
         Listar_PastoresRegistrar();
+        $('#modal_registrar').modal('hide');
           
         },
         error: function (jqXHR, textStatus, errorThrown) {
@@ -638,6 +639,7 @@ $(document).ready(function () {
     
         $("#nombre2").removeClass("is-valid");
         $("#direccion2").removeClass("is-valid");
+        $('#modal_editarInfo').modal('hide');
  
 
         },

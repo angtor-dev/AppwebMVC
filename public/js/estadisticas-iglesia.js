@@ -424,7 +424,7 @@ $(document).ready(function () {
                 let labels = [];
                 let valores = [];
                 let colores = [];
-                let label = json.nombre + ' ' + json.apellido;
+                let label = json.nombreUsuario + ' ' + json.apellidoUsuario;
 
                 json.forEach(element => {
                     valores.push(element.cantidad_celulas)

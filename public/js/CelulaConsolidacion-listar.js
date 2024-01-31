@@ -1147,18 +1147,29 @@ function Listar_discipulos_celula(idCelula) {
                         timer: 2000,
                     });
 
+                     document.getElementById('formularioReunion').reset();
 
-                      for (const key in dato) {
-                        const input = dato[key];
+                     const d = {
+
+                        idCelula: $("#idCelulaConsolidacionR"),
+                        fecha: $("#fecha"),
+                        tematica: $("#tematica"),
+                        semana: $("#semana"),
+                        generosidad: $("#generosidad"),
+                        actividad: $("#actividad"),
+                        observaciones: $("#observaciones")
+                    }
+
+                      for (const key in d) {
+                        const input = d[key];
+
+
                         input.removeClass("is-valid");
                       }
 
                       for (const key in validationStatus3) {
                         validationStatus3[key] = false;
                       }
-
-                    form3.reset()
-
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     if (jqXHR.responseText) {

@@ -620,7 +620,7 @@ class Celulas extends Model
 
             if ($usuario->tieneRol('SuperUsuario')) {
                 $sql = "SELECT usuario.id, usuario.cedula, usuario.nombre, usuario.apellido 
-            FROM usuariorol INNER JOIN usuario ON usuario.id = usuariorol.idUsuario WHERE usuario.estatus = '1' AND usuariorol.idRol IN (1, 2, 3, 4)";
+            FROM usuariorol INNER JOIN usuario ON usuario.id = usuariorol.idUsuario WHERE usuario.estatus = '1' AND usuariorol.idRol IN (1, 2, 3, 4, 5, 6)";
 
                 $stmt = $this->db->pdo()->prepare($sql);
 
@@ -632,7 +632,7 @@ class Celulas extends Model
             if ($usuario->tieneRol('Pastor') || $usuario->tieneRol('LiderTerritorio'))  {
 
                 $sql = "SELECT usuario.id, usuario.cedula, usuario.nombre, usuario.apellido 
-            FROM usuariorol INNER JOIN usuario ON usuario.id = usuariorol.idUsuario WHERE usuario.idSede = :idSede AND usuario.estatus = '1' AND usuariorol.idRol IN (1, 2, 3, 4)";
+            FROM usuariorol INNER JOIN usuario ON usuario.id = usuariorol.idUsuario WHERE usuario.idSede = :idSede AND usuario.estatus = '1' AND usuariorol.idRol IN (1, 2, 3, 4, 5,6)";
 
                 $stmt = $this->db->pdo()->prepare($sql);
 
@@ -1469,10 +1469,8 @@ class Celulas extends Model
     {
         try {
 
-            $sql = "SELECT celulas.codigo, COUNT(celulas.id) AS cantidad_celulas, celulas.fechaCreacion,
-                usuario.nombre, usuario.apellido FROM celulas
-                INNER JOIN usuario ON usuario.id = :idLider
-                WHERE celulas.fechaCreacion BETWEEN :fecha_inicio AND :fecha_fin GROUP BY celulas.fechaCreacion ASC";
+            $sql = "SELECT celulas.codigo, COUNT(celulas.id) AS cantidad_celulas, celulas.fechaCreacion FROM celulas 
+              WHERE celulas.idLider = :idLider AND celulas.fechaCreacion BETWEEN :fecha_inicio AND :fecha_fin GROUP BY celulas.fechaCreacion ASC";
 
 
             $stmt = $this->db->pdo()->prepare($sql);
