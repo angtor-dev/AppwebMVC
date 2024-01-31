@@ -30,8 +30,6 @@ class Usuario extends Model
     public ?array $roles;
     /** @var ?array<Notificacion> */
     public ?array $notificaciones;
-    /** @var array<Nota> */
-    public array $notas;
 
     public function __construct()
     {
@@ -81,10 +79,9 @@ class Usuario extends Model
             http_response_code(500);
             throw $th;
         }
-        return true;
     }
 
-    public function registrar() : void
+    public function registrar() : bool | null
     {
         $sql = "INSERT INTO usuario(idSede, cedula, correo, clave, nombre, apellido, telefono, direccion, estadoCivil, fechaNacimiento)
             VALUES(:idSede, :cedula, :correo, :clave, :nombre, :apellido, :telefono, :direccion, :estadoCivil, :fechaNacimiento)";
@@ -128,7 +125,7 @@ class Usuario extends Model
             // Guarda los cambios
             $this->db->pdo()->commit();
 
-            return;
+            return true;
         } catch (\Throwable $th) {
             // Revierte los cambios en la bd
             if ($this->db->pdo()->inTransaction()) {
