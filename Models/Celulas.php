@@ -437,10 +437,11 @@ class Celulas extends Model
                 $stmt->execute();
             }
             /** @var Bitacora **/
-            //Bitacora::registrar("Actualizacion de celula familiar");
+            Bitacora::registrar("Actualizacion de celula familiar");
 
             http_response_code(200);
             echo json_encode(array('msj' => 'Celula actualizada exitosamente', 'status' => 200));
+            return true;
             die();
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
@@ -594,7 +595,8 @@ class Celulas extends Model
             Bitacora::registrar("Registro de reunion de celula");
 
             http_response_code(200);
-            echo json_encode(array('msj' => 'Registro actualizado exitosamente', 'status' => 200));
+            echo json_encode(array('msj' => 'Registro de reunion exitosamente', 'status' => 200));
+            return true;
             die();
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(

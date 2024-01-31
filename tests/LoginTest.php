@@ -16,8 +16,8 @@ final class LoginTest extends TestCase
     public function login(): void 
     {
         //Init
-        $cedula = 123456;
-        $password = 123456;
+        $cedula = 1234567;
+        $password = '1234567a';
 
         //Act
         $respuesta = $this->objeto->login($cedula, $password);
