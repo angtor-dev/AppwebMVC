@@ -493,7 +493,7 @@ class Celulas extends Model
         try {
 
             $indice = 0;
-            $query = 'SELECT MAX(id) AS `id` FROM `reunioncelula`'; 
+            $query = 'SELECT MAX(id) AS `id` FROM `reunioncelula`';
             $statement = $this->db->pdo()->prepare($query);
             $statement->execute();
             $resultado = $statement->fetch(PDO::FETCH_ASSOC);
@@ -501,7 +501,7 @@ class Celulas extends Model
 
             if ($resultado2 > 0) {
                 $indice = $resultado['id'] + 1;
-            }else{
+            } else {
                 $indice = 0;
             }
 
@@ -642,9 +642,9 @@ class Celulas extends Model
                 $stmt->execute();
                 $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 return $resultado;
-            } 
-            
-            if ($usuario->tieneRol('Pastor') || $usuario->tieneRol('LiderTerritorio'))  {
+            }
+
+            if ($usuario->tieneRol('Pastor') || $usuario->tieneRol('LiderTerritorio')) {
 
                 $sql = "SELECT usuario.id, usuario.cedula, usuario.nombre, usuario.apellido 
             FROM usuariorol INNER JOIN usuario ON usuario.id = usuariorol.idUsuario WHERE usuario.idSede = :idSede AND usuario.estatus = '1' AND usuariorol.idRol IN (1, 2, 3, 4, 5,6)";
@@ -658,7 +658,7 @@ class Celulas extends Model
                 return $resultado;
             }
 
-            if ($usuario->tieneRol('Lider'))  {
+            if ($usuario->tieneRol('Lider')) {
 
                 $sql = "SELECT usuario.id, usuario.cedula, usuario.nombre, usuario.apellido 
             FROM usuariorol INNER JOIN usuario ON usuario.idS = :idLider AND usuario.estatus = '1'";
@@ -891,7 +891,7 @@ class Celulas extends Model
     }
 
 
-    
+
 
     public function editar_reuniones($id, $idCelula, $fecha, $tematica, $semana, $generosidad, $infantil, $juvenil, $adulto, $actividad, $observaciones)
     {
@@ -1137,7 +1137,7 @@ class Celulas extends Model
     {
         try {
             $indice = 0;
-            $query = 'SELECT MAX(id) AS `id` FROM `asistencia`'; 
+            $query = 'SELECT MAX(id) AS `id` FROM `asistencia`';
             $statement = $this->db->pdo()->prepare($query);
             $statement->execute();
             $resultado = $statement->fetch(PDO::FETCH_ASSOC);
@@ -1145,7 +1145,7 @@ class Celulas extends Model
 
             if ($resultado2 > 0) {
                 $indice = $resultado['id'] + 1;
-            }else{
+            } else {
                 $indice = 0;
             }
 
@@ -1465,45 +1465,45 @@ class Celulas extends Model
             $sql = "SELECT celulas.nombre FROM reunioncelula 
             INNER JOIN celulas ON celulas.id = reunioncelula.idCelula WHERE reunioncelula.idCelula = :idCelula";
 
-                $stmt = $this->db->pdo()->prepare($sql);
-                $stmt->bindValue(":idCelula", $idCelula);
-                $stmt->execute();
-                $stmt->fetchAll(PDO::FETCH_ASSOC);
-                $result = $stmt->rowCount();
-    
-                if ($result > 0) {
+            $stmt = $this->db->pdo()->prepare($sql);
+            $stmt->bindValue(":idCelula", $idCelula);
+            $stmt->execute();
+            $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $result = $stmt->rowCount();
+
+            if ($result > 0) {
 
 
-            if ($tipo == 'consolidacion') {
+                if ($tipo == 'consolidacion') {
 
-                $sql = "SELECT celulas.nombre, COUNT(asistencia.idDiscipulo) AS cantidad_asistencia, reunioncelula.fecha FROM reunioncelula 
+                    $sql = "SELECT celulas.nombre, COUNT(asistencia.idDiscipulo) AS cantidad_asistencia, reunioncelula.fecha FROM reunioncelula 
                 INNER JOIN celulas ON celulas.id = reunioncelula.idCelula 
                 INNER JOIN asistencia ON asistencia.idReunion = reunioncelula.id 
                 WHERE reunioncelula.idCelula = :idCelula GROUP BY reunioncelula.fecha ORDER BY reunioncelula.fecha ASC";
 
-                $stmt = $this->db->pdo()->prepare($sql);
-                $stmt->bindValue(":idCelula", $idCelula);
-                $stmt->execute();
+                    $stmt = $this->db->pdo()->prepare($sql);
+                    $stmt->bindValue(":idCelula", $idCelula);
+                    $stmt->execute();
 
-                return $stmt->fetchAll(PDO::FETCH_ASSOC);
-            } else {
+                    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+                } else {
 
-                $sql = "SELECT celulas.nombre, (reunioncelula.infantil + reunioncelula.juvenil + reunioncelula.adulto) AS cantidad_asistencia, reunioncelula.fecha 
+                    $sql = "SELECT celulas.nombre, (reunioncelula.infantil + reunioncelula.juvenil + reunioncelula.adulto) AS cantidad_asistencia, reunioncelula.fecha 
                 FROM reunioncelula INNER JOIN celulas ON celulas.id = reunioncelula.idCelula WHERE reunioncelula.idCelula = :idCelula ORDER BY reunioncelula.fecha ASC";
 
-                $stmt = $this->db->pdo()->prepare($sql);
-                $stmt->bindValue(":idCelula", $idCelula);
-                $stmt->execute();
+                    $stmt = $this->db->pdo()->prepare($sql);
+                    $stmt->bindValue(":idCelula", $idCelula);
+                    $stmt->execute();
 
-                return $stmt->fetchAll(PDO::FETCH_ASSOC);
-                
+                    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                }
+
+
+            } else {
+
+                throw new Exception("Esta celula aún no tiene reuniones", 422);
             }
-
-            
-        } else {
-        
-        throw new Exception("Esta celula aún no tiene reuniones", 422);
-                 }
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             http_response_code($e->getCode());
             echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
