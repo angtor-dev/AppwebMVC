@@ -441,7 +441,6 @@ class Celulas extends Model
 
             http_response_code(200);
             echo json_encode(array('msj' => 'Celula actualizada exitosamente', 'status' => 200));
-            return true;
             die();
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
@@ -493,14 +492,28 @@ class Celulas extends Model
 
         try {
 
+            $indice = 0;
+            $query = 'SELECT MAX(id) AS `id` FROM `reunioncelula`'; 
+            $statement = $this->db->pdo()->prepare($query);
+            $statement->execute();
+            $resultado = $statement->fetch(PDO::FETCH_ASSOC);
+            $resultado2 = $statement->rowCount();
+
+            if ($resultado2 > 0) {
+                $indice = $resultado['id'] + 1;
+            }else{
+                $indice = 0;
+            }
+
             //Condicional para verificar si es una reunion de Celula de Consolidacion.
             if (empty($infantil) && empty($juvenil) && empty($adulto)) {
 
-                $sql = "INSERT INTO reunioncelula (idCelula, fecha, tematica, semana, generosidad, actividad, observaciones) 
-                VALUES (:idCelula, :fecha, :tematica, :semana, :generosidad, :actividad, :observaciones)";
+                $sql = "INSERT INTO reunioncelula (id, idCelula, fecha, tematica, semana, generosidad, actividad, observaciones) 
+                VALUES (:id, :idCelula, :fecha, :tematica, :semana, :generosidad, :actividad, :observaciones)";
 
                 $stmt = $this->db->pdo()->prepare($sql);
 
+                ($indice > 0) ? $stmt->bindValue(":id", $indice) : $stmt->bindValue(":id", 1);
                 $stmt->bindValue(':idCelula', $idCelula);
                 $stmt->bindValue(':fecha', $fecha);
                 $stmt->bindValue(':tematica', $tematica);
@@ -578,6 +591,7 @@ class Celulas extends Model
 
                 $stmt = $this->db->pdo()->prepare($sql);
 
+                ($indice > 0) ? $stmt->bindValue(":id", $indice) : $stmt->bindValue(":id", 1);
                 $stmt->bindValue(':idCelula', $idCelula);
                 $stmt->bindValue(':fecha', $fecha);
                 $stmt->bindValue(':tematica', $tematica);
@@ -596,7 +610,6 @@ class Celulas extends Model
 
             http_response_code(200);
             echo json_encode(array('msj' => 'Registro de reunion exitosamente', 'status' => 200));
-            return true;
             die();
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
@@ -1106,6 +1119,7 @@ class Celulas extends Model
 
             http_response_code(200);
             echo json_encode(array('msj' => 'Asistencia eliminada correctamente'));
+            return true;
             die();
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
@@ -1122,12 +1136,25 @@ class Celulas extends Model
     public function actualizar_asistenciaReunion($idReunion, $discipulos)
     {
         try {
+            $indice = 0;
+            $query = 'SELECT MAX(id) AS `id` FROM `asistencia`'; 
+            $statement = $this->db->pdo()->prepare($query);
+            $statement->execute();
+            $resultado = $statement->fetch(PDO::FETCH_ASSOC);
+            $resultado2 = $statement->rowCount();
+
+            if ($resultado2 > 0) {
+                $indice = $resultado['id'] + 1;
+            }else{
+                $indice = 0;
+            }
 
             foreach ($discipulos as $valor) {
-                $sql = "INSERT INTO `asistencia` (`idReunion`, `idDiscipulo`) VALUES (:idReunion, :discipulo)";
+                $sql = "INSERT INTO `asistencia` (`id`, `idReunion`, `idDiscipulo`) VALUES (:id, :idReunion, :discipulo)";
 
                 $stmt = $this->db->pdo()->prepare($sql);
 
+                ($indice > 0) ? $stmt->bindValue(":id", $indice) : $stmt->bindValue(":id", 1);
                 $stmt->bindValue(":idReunion", $idReunion);
                 $stmt->bindValue(":discipulo", $valor);
 
@@ -1157,12 +1184,14 @@ class Celulas extends Model
                         }
                     }
                 }
+
+                $indice == 0 ? $indice = 2 : $indice++;
             }
 
-            Bitacora::registrar("Eliminacion de asistencia en reunion de celula de consolidacion");
+            Bitacora::registrar("Asistencia agregada a reunion de celula de consolidacion");
 
             http_response_code(200);
-            echo json_encode(array('msj' => 'Asistencias actualizadas correctamente'));
+            echo json_encode(array('msj' => 'Asistencias actualizada correctamente'));
             die();
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
@@ -1286,7 +1315,7 @@ class Celulas extends Model
                 $stmt->execute();
                 $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
 
-                if ($resultado['idCelula'] !== $arrayAccion['idCelulaConsolidacion']) {
+                if ($resultado['idCelula'] !== $arrayAccion['idCelula']) {
                     $sql2 = "SELECT * FROM asistencia WHERE asistencia.idReunion = :id";
                     $stmt2 = $this->db->pdo()->prepare($sql2);
                     $stmt2->bindValue(":id", $arrayAccion['id']);
