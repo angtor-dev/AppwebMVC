@@ -3,6 +3,7 @@ use PHPUnit\Framework\TestCase;
 require_once "Models/Bitacora.php";
 require_once "Models/Usuario.php";
 require_once "Models/Enums/EstadoCivil.php";
+require_once "config.php";
 require_once "user_config.default.php";
 
 final class UsuarioTest extends TestCase
@@ -35,12 +36,47 @@ final class UsuarioTest extends TestCase
 
         $usuario = new Usuario();
         $usuario->mapFromPost();
+        $usuario->roles[] = Rol::cargar(1);
 
         $esValido = $usuario->esValido();
         $resultado = $usuario->registrar();
 
         $this->assertTrue($esValido);
         $this->assertTrue($resultado);
+    }
+
+    public function test_actualizar(): void
+    {
+        $usuario = Usuario::cargarPorCedula('30111222');
+
+        $_POST['nombre'] = 'Nuevo';
+        $_POST['apellido'] = 'Sujeto';
+        $_POST['telefono'] = '02514456741';
+        $_POST['direccion'] = 'Direccion actualizada';
+        $_POST['estadoCivil'] = EstadoCivil::Casado->value;
+
+        $usuario->mapFromPost();
+
+        $esValido = $usuario->esValido();
+        $resultado = $usuario->actualizar();
+
+        $usuarioActualizado = Usuario::cargarPorCedula('30111222');
+        $nombreActualizado = $usuarioActualizado->getNombre();
+
+        $this->assertTrue($esValido);
+        $this->assertTrue($resultado);
+        $this->assertSame('Nuevo', $nombreActualizado);
+    }
+
+    public function test_eliminar(): void
+    {
+        $usuario = Usuario::cargarPorCedula('30111222');
+        $resultado = $usuario->eliminar(false);
+        
+        $usuario = Usuario::cargarPorCedula('30111222');
+
+        $this->assertTrue($resultado);
+        $this->assertNull($usuario);
     }
 }
 

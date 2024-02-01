@@ -396,7 +396,7 @@ $(document).ready(function () {
 
 
    $('#botonCrecimientoLider').on('click', function (e) {
-        document.getElementById('nombree2').innerText = 'Consulta crecimineto de Lideres';
+        document.getElementById('nombree2').innerText = 'Consulta crecimiento de Lideres';
         listarLideres();
     
     });
@@ -421,10 +421,12 @@ $(document).ready(function () {
 
                 let json = JSON.parse(response);
 
+                let text = `${json[0].nombreUsuario} ${json[0].apellidoUsuario}`;
+
                 let labels = [];
                 let valores = [];
                 let colores = [];
-                let label = json.nombreUsuario + ' ' + json.apellidoUsuario;
+                let label = text;
 
                 json.forEach(element => {
                     valores.push(element.cantidad_celulas)
@@ -675,7 +677,7 @@ $('#botonCelulaConsolidacion1').on('click', function (e) {
 
 
 
-    let tipoCelula;
+   let tipoCelula;
     $('#botonCelulaFamiliar2').on('click', function (e) {
         document.getElementById('nombreSeleccionador').innerText = 'Seleccione la celula familiar';
         listar_celulas('familiar');
@@ -694,7 +696,7 @@ $('#botonCelulaConsolidacion1').on('click', function (e) {
         tipoCelula = 'consolidacion';
     });
 
-   
+    
 
     $('#consultaAsistencia').on('click', function (e) {
         const idCelula = document.getElementById('selectorCelulas').value;
@@ -748,15 +750,38 @@ $('#botonCelulaConsolidacion1').on('click', function (e) {
 
                 $('#modal2').modal('hide');
                 $('#modal1').modal('show');
+
+
+                document.getElementById('nombreReporte').innerText = 'Asistencia de reuniones';
                 $("#ListarDetalles").html('');
 
-                //document.getElementById('nombreReporte').innerText = e.target.textContent
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 // Aquí puedes manejar errores, por ejemplo:
-                console.error("Error al enviar:", textStatus, errorThrown);
-                alert("Hubo un error al realizar el registro. Por favor, inténtalo de nuevo.");
+                console.log(jqXHR.responseText);
+                if (jqXHR.responseText) {
+                    let jsonResponse = JSON.parse(jqXHR.responseText);
+
+                    if (jsonResponse.msj) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Denegado',
+                            text: jsonResponse.msj,
+                            showConfirmButton: true,
+                        })
+                    } else {
+                        const respuesta = JSON.stringify(jsonResponse, null, 2)
+                        Swal.fire({
+                            background: 'red',
+                            color: '#fff',
+                            title: respuesta,
+                            showConfirmButton: true,
+                        })
+                    }
+                } else {
+                    alert('Error desconocido: ' + textStatus);
+                }
             }
         })
     });
@@ -808,6 +833,7 @@ $('#botonCelulaConsolidacion1').on('click', function (e) {
                 });
 
                 choices.setChoiceByValue('');
+            
 
             },
             error: function (jqXHR, textStatus, errorThrown) {

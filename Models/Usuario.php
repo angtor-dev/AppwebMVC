@@ -136,7 +136,7 @@ class Usuario extends Model
         }
     }
 
-    public function actualizar() : void
+    public function actualizar() : bool
     {
         $sql = "UPDATE usuario SET idSede = :idSede, cedula = :cedula, correo = :correo,
             nombre = :nombre, apellido = :apellido, telefono = :telefono, direccion = :direccion,
@@ -178,6 +178,8 @@ class Usuario extends Model
 
             // Guarda los cambios
             $this->db->pdo()->commit();
+
+            return true;
         } catch (\Throwable $th) {
             // Revierte los cambios en la bd
             if ($this->db->pdo()->inTransaction()) {

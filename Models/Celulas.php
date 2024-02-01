@@ -437,7 +437,7 @@ class Celulas extends Model
                 $stmt->execute();
             }
             /** @var Bitacora **/
-            Bitacora::registrar("Actualizacion de celula familiar");
+            //Bitacora::registrar("Actualizacion de celula familiar");
 
             http_response_code(200);
             echo json_encode(array('msj' => 'Celula actualizada exitosamente', 'status' => 200));
@@ -1461,6 +1461,19 @@ class Celulas extends Model
     public function asistencias_reuniones_celulas($idCelula, $tipo)
     {
         try {
+
+            $sql = "SELECT celulas.nombre FROM reunioncelula 
+            INNER JOIN celulas ON celulas.id = reunioncelula.idCelula WHERE reunioncelula.idCelula = :idCelula";
+
+                $stmt = $this->db->pdo()->prepare($sql);
+                $stmt->bindValue(":idCelula", $idCelula);
+                $stmt->execute();
+                $stmt->fetchAll(PDO::FETCH_ASSOC);
+                $result = $stmt->rowCount();
+    
+                if ($result > 0) {
+
+
             if ($tipo == 'consolidacion') {
 
                 $sql = "SELECT celulas.nombre, COUNT(asistencia.idDiscipulo) AS cantidad_asistencia, reunioncelula.fecha FROM reunioncelula 
@@ -1483,15 +1496,17 @@ class Celulas extends Model
                 $stmt->execute();
 
                 return $stmt->fetchAll(PDO::FETCH_ASSOC);
+                
             }
 
+            
+        } else {
+        
+        throw new Exception("Esta celula aún no tiene reuniones", 422);
+                 }
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
-            $error_data = array(
-                "error_message" => $e->getMessage(),
-                "error_line" => "Linea del error: " . $e->getLine()
-            );
-            http_response_code(422);
-            echo json_encode($error_data);
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
             die();
         }
     }
@@ -1500,7 +1515,8 @@ class Celulas extends Model
     {
         try {
 
-            $sql = "SELECT celulas.codigo, COUNT(celulas.id) AS cantidad_celulas, celulas.fechaCreacion FROM celulas 
+            $sql = "SELECT celulas.codigo, COUNT(celulas.id) AS cantidad_celulas, celulas.fechaCreacion, usuario.nombre AS nombreUsuario,
+            usuario.apellido AS apellidoUsuario FROM celulas INNER JOIN usuario ON usuario.id = celulas.idLider
               WHERE celulas.idLider = :idLider AND celulas.fechaCreacion BETWEEN :fecha_inicio AND :fecha_fin GROUP BY celulas.fechaCreacion ASC";
 
 
@@ -1528,7 +1544,7 @@ class Celulas extends Model
         try {
 
             $sql = "SELECT celulas.codigo, celulas.nombre, celulas.fechaCreacion FROM celulas
-                WHERE (celulas.idLider = :idLider) AND (celulas.fechaCreacion BETWEEN :fecha_inicio AND :fecha_fin)";
+                WHERE (celulas.idLider = :idLider) AND (celulas.fechaCreacion BETWEEN :fecha_inicio AND :fecha_fin) ORDER BY celulas.fechaCreacion DESC";
 
 
             $stmt = $this->db->pdo()->prepare($sql);
