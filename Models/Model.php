@@ -109,7 +109,7 @@ abstract class Model
      * @param bool $eliminadoLogico Si es true oculta la instancia en la BD (UPDATE estatus = 0),
      * caso contrario elimina la instancia de la BD (DELETE FROM)
      */
-    public function eliminar(bool $eliminadoLogico = true) : void
+    public function eliminar(bool $eliminadoLogico = true) : bool
     {
         $tabla = strtolower(get_class($this));
         $query = $eliminadoLogico
@@ -121,6 +121,8 @@ abstract class Model
             $stmt->bindValue('id', $this->id);
 
             $stmt->execute();
+
+            return true;
         } catch (\Throwable $th) {
             if (DEVELOPER_MODE) var_dump($th); // Eliminar esto al crear vista para errores
             $_SESSION['errores'][] = "Ha ocurrido un error al eliminar $tabla.";

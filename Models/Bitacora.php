@@ -39,10 +39,10 @@ class Bitacora extends Model
     }
 
     // Override para impedir eliminar
-    public function eliminar(bool $eliminadoLogico = true) : void
+    public function eliminar(bool $eliminadoLogico = true) : bool
     {
         $_SESSION['errores'][] = "No se puede eliminar un registro de la bitacora";
-        return;
+        return false;
     }
 
     // Getters

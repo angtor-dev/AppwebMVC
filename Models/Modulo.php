@@ -7,10 +7,10 @@ class Modulo extends Model
     private string $nombre;
 
     // Override para impedir eliminar
-    public function eliminar(bool $eliminadoLogico = true) : void
+    public function eliminar(bool $eliminadoLogico = true) : bool
     {
         $_SESSION['errores'][] = "No se pueden eliminar registros de la tabla modulos.";
-        return;
+        return false;
     }
 
     /** Recupera la instacia con el nombre especificado */
