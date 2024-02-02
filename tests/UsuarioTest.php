@@ -68,6 +68,18 @@ final class UsuarioTest extends TestCase
         $this->assertSame('Nuevo', $nombreActualizado);
     }
 
+    public function test_actualizarClave(): void
+    {
+        $usuario = Usuario::cargarPorCedula('30111222');
+
+        $usuario->actualizarClave("1234abcd");
+        $usuario->actualizarClave("abcd1234");
+
+        $respuesta = $usuario->login('30111222', 'abcd1234');
+
+        $this->assertTrue($respuesta);
+    }
+
     public function test_eliminar(): void
     {
         $usuario = Usuario::cargarPorCedula('30111222');
