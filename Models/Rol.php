@@ -20,7 +20,7 @@ class Rol extends Model
         }
     }
 
-    public function registrar() : void
+    public function registrar() : bool
     {
         $sql = "INSERT INTO rol(nombre, descripcion, nivel)
             VALUES(:nombre, :descripcion, :nivel)";
@@ -54,6 +54,7 @@ class Rol extends Model
             // Guarda los cambios
             $this->db->pdo()->commit();
 
+            return true;
         } catch (\Throwable $th) {
             // Revierte los cambios en la bd
             if ($this->db->pdo()->inTransaction()) {
@@ -64,7 +65,7 @@ class Rol extends Model
         }
     }
 
-    public function actualizar() : void
+    public function actualizar() : bool
     {
         $sql = "UPDATE rol SET nombre = :nombre, descripcion = :descripcion, nivel = :nivel WHERE id = :id";
 
@@ -76,6 +77,8 @@ class Rol extends Model
             $stmt->bindValue('id', $this->id);
 
             $stmt->execute();
+
+            return true;
         } catch (\Throwable $th) {
             $_SESSION['errores'][] = "Ha ocurrido un error al actualizar el rol.";
             throw $th;

@@ -80,5 +80,5 @@ final class UsuarioTest extends TestCase
     }
 }
 
-// php ./tools/phpunit.phar tests/CelulaConsolidacionTest.php
+// php ./tools/phpunit.phar tests/UsuarioTest.php
 ?>
