@@ -24,7 +24,7 @@ class Bitacora extends Model
      * 
      * @param string $registro accion/actividad a registrar
      */
-    public static function registrar(string $registro) : void
+    public static function registrar(string $registro) : bool
     {
         global $requestUri;
 
@@ -36,6 +36,8 @@ class Bitacora extends Model
             VALUES($idUsuario, '$registro', '$ruta')";
 
         $db->pdo()->query($query);
+
+        return true;
     }
 
     // Override para impedir eliminar
