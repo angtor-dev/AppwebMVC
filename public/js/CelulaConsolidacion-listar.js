@@ -1,5 +1,7 @@
 $(document).ready(function () {
 
+    ejemplo
+
     let choices1;
     let choices2;
     let choices3;
@@ -25,7 +27,7 @@ $(document).ready(function () {
         },
         ajax: {
             method: "GET",
-            url: '/AppwebMVC/CelulaConsolidacion/Index',
+            url: '//CelulaConsolidacion/Index',
             data: { cargar_data: 'cargar_data' }
         },
         columns: [
