@@ -159,6 +159,7 @@ class Celulas extends Model
 
             http_response_code(200);
             echo json_encode(array('msj' => 'Celula registrada exitosamente', 'status' => 200));
+            return true;
             die();
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
@@ -441,6 +442,7 @@ class Celulas extends Model
 
             http_response_code(200);
             echo json_encode(array('msj' => 'Celula actualizada exitosamente', 'status' => 200));
+            return true;
             die();
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
@@ -474,6 +476,7 @@ class Celulas extends Model
 
             http_response_code(200);
             echo json_encode(array('msj' => 'Celula eliminada correctamente'));
+            return true;
             die();
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
@@ -610,6 +613,7 @@ class Celulas extends Model
 
             http_response_code(200);
             echo json_encode(array('msj' => 'Registro de reunion exitosamente', 'status' => 200));
+            return true;
             die();
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
@@ -960,6 +964,7 @@ class Celulas extends Model
 
             http_response_code(200);
             echo json_encode(array('msj' => 'Reunion actualizada correctamente', 'status' => 200));
+            return true;
             die();
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
@@ -992,6 +997,7 @@ class Celulas extends Model
 
             http_response_code(200);
             echo json_encode(array('msj' => 'Reunion eliminada correctamente'));
+            return true;
             die();
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
@@ -1192,6 +1198,7 @@ class Celulas extends Model
 
             http_response_code(200);
             echo json_encode(array('msj' => 'Asistencias actualizada correctamente'));
+            return true;
             die();
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
