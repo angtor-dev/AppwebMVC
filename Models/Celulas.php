@@ -138,11 +138,12 @@ class Celulas extends Model
 
                 $stmt->execute();
             } else {
-                $sql = "INSERT INTO celulas (nombre, codigo, identificador, tipo, idLider, idCoLider, idTerritorio, fechaCreacion) 
-                VALUES (:nombre, :codigo, :identificador, :tipo, :idLider, :idCoLider, :idTerritorio, CURDATE())";
+                $sql = "INSERT INTO celulas (id, nombre, codigo, identificador, tipo, idLider, idCoLider, idTerritorio, fechaCreacion) 
+                VALUES (:id, :nombre, :codigo, :identificador, :tipo, :idLider, :idCoLider, :idTerritorio, CURDATE())";
 
                 $stmt = $this->db->pdo()->prepare($sql);
 
+                $stmt->bindValue(':id', $datos['celulaNumero'] + 1);
                 $stmt->bindValue(':nombre', $nombre);
                 $stmt->bindValue(':codigo', $codigo);
                 $stmt->bindValue(':identificador', $identificador);
@@ -536,15 +537,31 @@ class Celulas extends Model
                     $resultado = $stmt2->fetch(PDO::FETCH_ASSOC);
                     $idReunion = $resultado['id'];
 
+                    $idAsistencia = 0;
+                    $queryAsistencia = 'SELECT MAX(id) AS `id` FROM `asistencia`';
+                    $statementAsistencia = $this->db->pdo()->prepare($queryAsistencia);
+                    $statementAsistencia->execute();
+                    $resultadoAsistencia = $statementAsistencia->fetch(PDO::FETCH_ASSOC);
+                    $resultadoAsistencia2 = $statementAsistencia->rowCount();
+
+                    if ($resultadoAsistencia2 > 0) {
+                        $idAsistencia = $resultadoAsistencia['id'] + 1;
+                    } else {
+                        $idAsistencia = 0;
+                    }
+
+
                     foreach ($arrayAsistencias as $values) {
-                        $sql2 = "INSERT INTO `asistencia` (`idReunion`, `idDiscipulo`) VALUES (:idReunion, :idDiscipulo)";
+                        $sql2 = "INSERT INTO `asistencia` (`id`, `idReunion`, `idDiscipulo`) VALUES (:id, :idReunion, :idDiscipulo)";
                         $stmt3 = $this->db->pdo()->prepare($sql2);
 
+                        ($idAsistencia > 0) ? $stmt3->bindValue(":id", $idAsistencia) : $stmt3->bindValue(":id", 1);
                         $stmt3->bindValue(':idReunion', $idReunion);
                         $stmt3->bindValue(':idDiscipulo', $values);
 
                         $stmt3->execute();
 
+                        ($idAsistencia == 0) ? $idAsistencia = 2 : $idAsistencia++;
 
                         //Esta es una version solamente, se podria hacer de una forma mas dinamica (OJO)
 
