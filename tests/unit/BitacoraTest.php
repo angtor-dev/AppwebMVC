@@ -41,5 +41,5 @@ final class BitacoraTest extends TestCase
     }
 }
 
-// php ./tools/phpunit.phar tests/BitacoraTest.php
-?>
+// Abrir terminal en la raiz del proyecto y ejecutar:
+// php ./tests/phpunit.phar tests/unit/BitacoraTest.php

@@ -92,5 +92,5 @@ final class UsuarioTest extends TestCase
     }
 }
 
-// php ./tools/phpunit.phar tests/UsuarioTest.php
-?>
+// Abrir terminal en la raiz del proyecto y ejecutar:
+// php ./tests/phpunit.phar tests/unit/UsuarioTest.php

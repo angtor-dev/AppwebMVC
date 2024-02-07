@@ -181,4 +181,6 @@ final class CelulaConsolidacionTest extends TestCase
     }
 }
 
-// php ./tools/phpunit.phar tests/CelulaConsolidacionTest.php
+
+// Abrir terminal en la raiz del proyecto y ejecutar:
+// php ./tests/phpunit.phar tests/unit/CelulaConsolidacionTest.php

@@ -70,5 +70,5 @@ final class RolTest extends TestCase
     }
 }
 
-// php ./tools/phpunit.phar tests/RolTest.php
-?>
+// Abrir terminal en la raiz del proyecto y ejecutar:
+// php ./tests/phpunit.phar tests/unit/RolTest.php

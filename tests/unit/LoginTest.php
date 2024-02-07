@@ -28,4 +28,4 @@ final class LoginTest extends TestCase
 }
 
 // Abrir terminal en la raiz del proyecto y ejecutar:
-// php ./tools/phpunit.phar tests/PruebaTest.php
+// php ./tests/phpunit.phar tests/unit/LoginTest.php
