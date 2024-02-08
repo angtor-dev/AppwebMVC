@@ -171,4 +171,4 @@ final class CelulaConsolidacionTest extends TestCase
     }
 }
 
-// php ./tools/phpunit.phar tests/CelulaConsolidacionTest.php
+// php ./tools/phpunit.phar tests/integration
