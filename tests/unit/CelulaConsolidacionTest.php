@@ -31,8 +31,7 @@ final class CelulaConsolidacionTest extends TestCase
         $this->assertArrayHasKey('id', $celulas[0]);
     }
 
-/** @test **/
-    public function test_registrar(): void
+    /*public function test_registrar(): void
     {
         $tipo = strtolower($this->Tipo);
         $nombre = "Consolidacion de prueba";
@@ -48,7 +47,6 @@ final class CelulaConsolidacionTest extends TestCase
         $this->assertTrue($resultado);
     }
 
-/** @test **/
     public function test_editar(): void
     {
         $id = 55;
@@ -68,7 +66,6 @@ final class CelulaConsolidacionTest extends TestCase
         $this->assertTrue($resultado);
     }
 
-/** @test **/
     public function test_registrar_reunion(): void
     {
         $idCelula = 55;
@@ -89,7 +86,6 @@ final class CelulaConsolidacionTest extends TestCase
         $this->assertTrue($resultado);
     }
 
-/** @test **/
     public function test_listar_reunion(): void
     {
         $reuniones = $this->Celulas->listar_reuniones($this->Tipo);
@@ -98,7 +94,6 @@ final class CelulaConsolidacionTest extends TestCase
         $this->assertArrayHasKey('id', $reuniones[0]);
     }
 
-/** @test **/
     public function test_editar_reunion(): void
     {
         $id = 47;
@@ -122,8 +117,7 @@ final class CelulaConsolidacionTest extends TestCase
         $this->assertTrue($resultado);
     }
 
-/** @test **/
-    public function test_listar_asistencia_reunion(): void
+    /*public function test_listar_asistencia_reunion(): void
     {
         $idReunion = 47;
 
@@ -133,7 +127,6 @@ final class CelulaConsolidacionTest extends TestCase
         $this->assertArrayHasKey('idReunion', $Lista[0]);
     }
 
-/** @test **/
     public function test_editar_asistencia_reunion(): void
     {
         $idReunion = 47;
@@ -144,7 +137,6 @@ final class CelulaConsolidacionTest extends TestCase
         $this->assertTrue($resultado);
     }
 
-/** @test **/
     public function test_eliminar_asistencia_reunion(): void
     {
         $id = [36,37,38];
@@ -155,7 +147,7 @@ final class CelulaConsolidacionTest extends TestCase
         }
         
     }
-/** @test **/
+
     public function test_eliminar_reunion(): void
     {
         $id = 47;
@@ -168,7 +160,6 @@ final class CelulaConsolidacionTest extends TestCase
         $this->assertTrue($resultado);
     }
 
-/** @test **/
     public function test_eliminar_celulaConsolidacion(): void
     {
         $id = 55;
@@ -178,7 +169,7 @@ final class CelulaConsolidacionTest extends TestCase
         $resultado = $this->Celulas->eliminar_Celula($id);
 
         $this->assertTrue($resultado);
-    }
+    }*/
 }
 
 

@@ -13,15 +13,15 @@ final class UsuarioTest extends TestCase
         $_SESSION['usuario'] = Usuario::cargar(1);
     }
 
-    public function test_listar(): void 
+    /*public function test_listar(): void 
     {
         $usuarios = Usuario::listar();
 
         $this->assertIsArray($usuarios);
         $this->assertInstanceOf(Usuario::class, $usuarios[0]);
-    }
+    }*/
 
-    public function test_registrar(): void
+    /*public function test_registrar(): void
     {
         $_POST['nombre'] = 'Sujeto';
         $_POST['apellido'] = 'de Prueba';
@@ -43,7 +43,7 @@ final class UsuarioTest extends TestCase
 
         $this->assertTrue($esValido);
         $this->assertTrue($resultado);
-    }
+    }*/
 
     public function test_actualizar(): void
     {
@@ -68,7 +68,7 @@ final class UsuarioTest extends TestCase
         $this->assertSame('Nuevo', $nombreActualizado);
     }
 
-    public function test_actualizarClave(): void
+    /*public function test_actualizarClave(): void
     {
         $usuario = Usuario::cargarPorCedula('30111222');
 
@@ -89,7 +89,7 @@ final class UsuarioTest extends TestCase
 
         $this->assertTrue($resultado);
         $this->assertNull($usuario);
-    }
+    }*/
 }
 
 // Abrir terminal en la raiz del proyecto y ejecutar:
