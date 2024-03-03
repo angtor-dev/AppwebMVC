@@ -264,8 +264,8 @@ $title = "Agenda"
             
                             <thead>
                                     <tr>
-                                        <th style="width: 170px;">Sedes</th>
-                                        <th class="text-center" style="width: 30px;"></th>
+                                        <th>Sedes</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>

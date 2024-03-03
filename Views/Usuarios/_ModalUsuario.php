@@ -102,7 +102,7 @@
         </div>
         <div class="col-sm-12">
             <label for="input-roles">Roles</label>
-            <select class="form-select" name="idRoles[]" id="select-roles" multiple required>
+            <select multiple class="form-select" name="idRoles[]" id="select-roles">
                 <?php foreach ($roles as $rol): ?>
                     <option value="<?= $rol->id ?>" <?= $usuario->tieneRol($rol->getNombre()) ? "selected" : "" ?>>
                         <?= $rol->getNombre() ?>

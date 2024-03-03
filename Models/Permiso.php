@@ -68,7 +68,7 @@ class Permiso extends Model
             $stmt->execute();
         } catch (\Throwable $th) {
             if (DEVELOPER_MODE) echo $th->getMessage();
-            die;
+          
             $_SESSION['errores'][] = "Ha ocurrido un error al actualizar los permisos de rol.";
             throw $th;
         }
