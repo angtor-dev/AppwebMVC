@@ -173,12 +173,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
     datatables = $('#sedesDatatables').DataTable({
       language: {
-        info: "",         // para ocultar "Showing x to y of z entries"
-        infoEmpty: ""     // para ocultar "Showing 0 to 0 of 0 entries"
+       url: '/AppwebMVC/public/lib/datatables/datatable-spanish.json'
       },
-      paging: false,
       searching: false,
       responsive: true,
+      scrollCollapse: true,
+    scrollY: '100px',
+    info: false,
+    ordering: false,
+    paging: false,
       ajax: {
         method: "POST",
         url: '/AppwebMVC/Agenda/Index',

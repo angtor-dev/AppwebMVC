@@ -19,9 +19,9 @@
                             <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-celulas" type="button" role="tab" aria-selected="false">
                                 Células
                             </button>
-                            <!-- <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-escuela" type="button" role="tab" aria-selected="false">
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-escuela" type="button" role="tab" aria-selected="false">
                                 Escuela
-                            </button> -->
+                            </button> 
                             <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-sistema" type="button" role="tab" aria-selected="false">
                                 Sistema
                             </button>
@@ -251,28 +251,29 @@
                                 </div>
                             </div>
                             <!-- Permisos de Escuela -->
-                            <!--
+                          
                             <div class="tab-pane fade" id="tab-escuela" role="tabpanel" tabindex="0">
-                                <h5>Niveles de Crecimiento</h5>
+                                
+                                <h5>E.I.D</h5>
                                 <div class="d-flex flex-wrap gap-3 mb-3">
                                     <label class="pill-check">
-                                        <input type="checkbox" name="nivelesCrecimiento[consultar]" value="true"
-                                            <?= $rol->tienePermiso("nivelesCrecimiento", "consultar") ? "checked" : null ?>>
+                                        <input type="checkbox" name="eid[consultar]" value="true"
+                                            <?= $rol->tienePermiso("eid", "consultar") ? "checked" : null ?>>
                                         Consultar
                                     </label>
                                     <label class="pill-check">
-                                        <input type="checkbox" name="nivelesCrecimiento[registrar]" value="true"
-                                            <?= $rol->tienePermiso("nivelesCrecimiento", "registrar") ? "checked" : null ?>>
+                                        <input type="checkbox" name="eid[registrar]" value="true"
+                                            <?= $rol->tienePermiso("eid", "registrar") ? "checked" : null ?>>
                                         Registrar
                                     </label>
                                     <label class="pill-check">
-                                        <input type="checkbox" name="nivelesCrecimiento[actualizar]" value="true"
-                                            <?= $rol->tienePermiso("nivelesCrecimiento", "actualizar") ? "checked" : null ?>>
+                                        <input type="checkbox" name="eid[actualizar]" value="true"
+                                            <?= $rol->tienePermiso("eid", "actualizar") ? "checked" : null ?>>
                                         Actualizar
                                     </label>
                                     <label class="pill-check">
-                                        <input type="checkbox" name="nivelesCrecimiento[eliminar]" value="true"
-                                            <?= $rol->tienePermiso("nivelesCrecimiento", "eliminar") ? "checked" : null ?>>
+                                        <input type="checkbox" name="eid[eliminar]" value="true"
+                                            <?= $rol->tienePermiso("eid", "eliminar") ? "checked" : null ?>>
                                         Eliminar
                                     </label>
                                 </div>
@@ -322,25 +323,25 @@
                                         Eliminar
                                     </label>
                                 </div>
-                                <h5>Inscripciones</h5>
+                                <h5>Estudiantes</h5>
                                 <div class="d-flex flex-wrap gap-3 mb-3">
                                     <label class="pill-check">
-                                        <input type="checkbox" name="inscripciones[consultar]" value="true"
+                                        <input type="checkbox" name="estudiantes[consultar]" value="true"
                                             <?= $rol->tienePermiso("inscripciones", "consultar") ? "checked" : null ?>>
                                         Consultar
                                     </label>
                                     <label class="pill-check">
-                                        <input type="checkbox" name="inscripciones[registrar]" value="true"
+                                        <input type="checkbox" name="estudiantes[registrar]" value="true"
                                             <?= $rol->tienePermiso("inscripciones", "registrar") ? "checked" : null ?>>
                                         Registrar
                                     </label>
                                     <label class="pill-check">
-                                        <input type="checkbox" name="inscripciones[actualizar]" value="true"
+                                        <input type="checkbox" name="estudiantes[actualizar]" value="true"
                                             <?= $rol->tienePermiso("inscripciones", "actualizar") ? "checked" : null ?>>
                                         Actualizar
                                     </label>
                                     <label class="pill-check">
-                                        <input type="checkbox" name="inscripciones[eliminar]" value="true"
+                                        <input type="checkbox" name="estudiantes[eliminar]" value="true"
                                             <?= $rol->tienePermiso("inscripciones", "eliminar") ? "checked" : null ?>>
                                         Eliminar
                                     </label>
@@ -369,7 +370,7 @@
                                     </label>
                                 </div>
                             </div>
-                            -->
+                            
 
                             <!-- Permisos del Sistema -->
                             <div class="tab-pane fade" id="tab-sistema" role="tabpanel" tabindex="0">
@@ -438,7 +439,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+      
         <div class="modal-footer">
             <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
             <button class="btn btn-primary" form="formPermisos">Guardar</button>
