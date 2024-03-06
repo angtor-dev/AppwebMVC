@@ -1,6 +1,8 @@
 <?php
 session_destroy();
 $loginFails = false;
+require_once "Models/Correo.php";
+$Correo = new Correo();
 
 if (!empty($_POST)) {
     $usuario = new Usuario();
@@ -59,11 +61,13 @@ if (!empty($_POST)) {
     if (isset($_POST['sendRecoveryRespuesta'])) {
         $cedulaRecovery = $_POST['cedulaRecovery'];
         $respuesta = $_POST['respuesta'];
+        $correo = $_POST['correo'];
+
         $datos = $usuario->resetPassword($cedulaRecovery, $respuesta);
 
-        if ($datos) {
+        if ($datos !== '') {
             http_response_code(200);
-            echo json_encode($datos);
+            $Correo->sendPassword($correo, $datos);
         }else{
             http_response_code(402);
             echo json_encode(array('msj'=>'La respuesta enviada es incorrecta'));

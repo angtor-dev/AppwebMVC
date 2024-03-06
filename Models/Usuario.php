@@ -368,9 +368,9 @@ class Usuario extends Model
     {
         try {
 
-            $sql = "SELECT `cedula`, `pregunta`, `respuesta` FROM `usuario` WHERE `cedula` = :cedula";
+            $sql = "SELECT `cedula`, `pregunta`, `respuesta`, `correo` FROM `usuario` WHERE `cedula` = :cedula";
             $stmt = $this->db->pdo()->prepare($sql);
-            $stmt->bindValue(":correo", $cedulaRecovery);
+            $stmt->bindValue(":cedula", $cedulaRecovery);
             $stmt->execute();
 
             if ($stmt->rowCount() > 0) {
@@ -390,7 +390,7 @@ class Usuario extends Model
         }
     }
 
-    public function resetPassword(string $cedulaRecovery, string $respuesta): bool
+    public function resetPassword(string $cedulaRecovery, string $respuesta)
     {
         try {
 
@@ -400,7 +400,7 @@ class Usuario extends Model
             $stmt->execute();
             $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if ($respuesta === $resultado) {
+            if ($respuesta == $resultado['respuesta']) {
                 $caracteres = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
                 $clave = '';
                 for ($i = 0; $i < 10; $i++) {
@@ -410,8 +410,13 @@ class Usuario extends Model
                 $claveEncriptada = password_hash($clave, PASSWORD_DEFAULT);
                 $sql = "UPDATE usuario SET clave = :clave WHERE cedula = :cedula";
                 $stmt = $this->prepare($sql);
-                $stmt->bindValue('clave', $claveEncriptada);
+                $stmt->bindValue(':clave', $claveEncriptada);
+                $stmt->bindValue(':cedula', $cedulaRecovery);
                 $stmt->execute();
+
+                return $clave;
+            }else{
+                return '';
             }
 
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.

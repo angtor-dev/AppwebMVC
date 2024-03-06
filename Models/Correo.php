@@ -16,7 +16,7 @@ require 'public/lib/phpmailer/src/SMTP.php';
 class Correo extends Model
 {
 
-   public function enviar_nueva_password($destinatario, $password){
+   public function sendPassword($destinatario, $password){
     $mail = new PHPMailer(true);
     try {
       //Server settings
@@ -26,23 +26,24 @@ class Correo extends Model
       $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
       $mail->Username   = 'llamasdefuego.iglesia@gmail.com';                     //SMTP username
       $mail->Password   = 'xqghnzcxmncdinai';                               //SMTP password
-      $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+      $mail->SMTPSecure = 'ssl';            //Enable implicit TLS encryption
       $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
       //Recipients
-      $mail->setFrom('llamasdefuego.iglesia@gmail.com', 'LLamas de Fuego');
+      $mail->setFrom($destinatario, 'Llamas de Fuego');
       $mail->addAddress($destinatario);     //Add a recipient
-      $mail->addReplyTo('llamasdefuego.iglesia@gmail.com', 'LLamas de Fuego');
+      $mail->addReplyTo('llamasdefuego.iglesia@gmail.com', 'Llamas de Fuego');
 
       //$mail->AddEmbeddedImage('./resources/img/casawhite.jpg', 'csr');
 
       //Content
       $mail->isHTML(true);                                  //Set email format to HTML
       $mail->Subject =  "Reseteo de contraseña";
-      $mail->Body  = "La nueva contraseña para ingresar al sistema es ".$password ;
+      $mail->Body  = "Su nueva contraseña para ingresar al sistema es ".$password ;
      
 
       $mail->send();
+      echo json_encode(array('msj'=>'Contraseña reseteada', 'text'=>'Su nueva contraseña ha sido enviada al correo asociado a su cuenta'));
 
     } catch (Exception $e) {
       echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
