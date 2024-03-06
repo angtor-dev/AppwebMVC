@@ -1,4 +1,7 @@
-<?php $_layout = "Login" ?>
+<?php
+$_layout = "Login";
+?>
+
 
 <div class="container-fluid" id="loginMain">
     <div class="row h-100 d-flex justify-content-center">
@@ -43,7 +46,7 @@
 
                 <div class="d-grid mt-3">
                     <a class="text-center text-white" href="#" data-bs-toggle="modal"
-                        data-bs-target="#exampleModal">Recuperar contraseña</a>
+                        data-bs-target="#modalCorreoRecovery">Recuperar contraseña</a>
                 </div>
             </div>
         </div>
@@ -52,26 +55,45 @@
 
 
 <!-- Modal para Recuperar password -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="modalCedulaRecovery" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Recuperar contraseña</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title">Recuperar contraseña</h5>
             </div>
             <div class="modal-body">
-                <form action="<?= LOCAL_DIR ?>Login" class="mt-4" method="post" id="loginForm">
-                    <div class="d-grid gap-4 mb-5">
-                        <div class="d-flex flex-column">
-                            <label class="form-label fw-bold text-center">Ingrese su correo</label>
-                            <input class="form-control" type="email" name="correoRecuperacion">
-                        </div>
+                <form method="post">
+                    <div class="d-grid">
+                        <label class="form-label fw-bold text-center">Ingrese su cedula</label>
+                        <input type="text" class="form-control" name="cedulaRecovery" id="cedulaRecovery">
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary">Enviar</button>
+                <button type="button" class="btn btn-primary" id="enviarRecovery">Verificar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalPreguntaRecovery" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Pregunta de seguridad</h5>
+            </div>
+            <div class="modal-body">
+                <form method="post">
+                    <div class="d-grid">
+                        <label class="form-label fw-bold text-center" id="preguntaRecovery"></label>
+                        <input type="text" class="form-control" id="respuestaRecovery">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="enviarRecovery">Enviar</button>
             </div>
         </div>
     </div>

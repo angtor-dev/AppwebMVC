@@ -46,14 +46,14 @@ class Usuario extends Model
 
     }
 
-    public function login(string $cedula, string $clave) : bool
+    public function login(string $cedula, string $clave): bool
     {
         if (empty($cedula) || empty($clave)) {
             return false;
         }
 
         $query = "SELECT * FROM usuario WHERE cedula = :cedula LIMIT 1";
-        
+
         try {
             $stmt = $this->prepare($query);
             $stmt->bindValue('cedula', $cedula);
@@ -81,7 +81,7 @@ class Usuario extends Model
         }
     }
 
-    public function registrar() : bool | null
+    public function registrar(): bool|null
     {
         $sql = "INSERT INTO usuario(idSede, cedula, correo, clave, nombre, apellido, telefono, direccion, estadoCivil, fechaNacimiento)
             VALUES(:idSede, :cedula, :correo, :clave, :nombre, :apellido, :telefono, :direccion, :estadoCivil, :fechaNacimiento)";
@@ -112,7 +112,7 @@ class Usuario extends Model
 
             $sql = "INSERT INTO usuariorol(idUsuario, idRol)
                 VALUES(:idUsuario, :idRol)";
-            
+
             $stmt = $this->prepare($sql);
             $stmt->bindParam('idUsuario', $idUsuario);
             $stmt->bindParam('idRol', $idRol);
@@ -136,7 +136,7 @@ class Usuario extends Model
         }
     }
 
-    public function actualizar() : bool
+    public function actualizar(): bool
     {
         $sql = "UPDATE usuario SET idSede = :idSede, cedula = :cedula, correo = :correo,
             nombre = :nombre, apellido = :apellido, telefono = :telefono, direccion = :direccion,
@@ -144,7 +144,7 @@ class Usuario extends Model
 
         try {
             $this->db->pdo()->beginTransaction();
-            
+
             // Actualiza el usuario
             $stmt = $this->prepare($sql);
             $stmt->bindValue('idSede', $this->idSede);
@@ -166,7 +166,7 @@ class Usuario extends Model
 
             $sql = "INSERT INTO usuariorol(idUsuario, idRol)
                 VALUES(:idUsuario, :idRol)";
-            
+
             $stmt = $this->prepare($sql);
             $stmt->bindParam('idUsuario', $this->id);
             $stmt->bindParam('idRol', $idRol);
@@ -190,7 +190,7 @@ class Usuario extends Model
         }
     }
 
-    public function actualizarClave($claveNueva) : void
+    public function actualizarClave($claveNueva): void
     {
         $clave = password_hash($claveNueva, PASSWORD_DEFAULT);
         $query = "UPDATE usuario SET clave = :clave WHERE id = :id";
@@ -210,18 +210,19 @@ class Usuario extends Model
             throw $th;
         }
     }
-    
-    private function encriptarClave() : void
+
+    private function encriptarClave(): void
     {
         $this->clave = password_hash($this->clave, PASSWORD_DEFAULT);
     }
 
-    public function esValido() : bool
+    public function esValido(): bool
     {
-        if (empty($this->cedula) || empty($this->nombre) || empty($this->apellido)
+        if (
+            empty($this->cedula) || empty($this->nombre) || empty($this->apellido)
             || empty($this->estadoCivil) || empty($this->fechaNacimiento)
-            || empty($this->telefono) || empty($this->direccion))
-        {
+            || empty($this->telefono) || empty($this->direccion)
+        ) {
             $_SESSION['errores'][] = "Algunos campos obligatorios estan vacios.";
             return false;
         }
@@ -238,7 +239,7 @@ class Usuario extends Model
 
         if (empty($this->id) && !preg_match(REG_CLAVE, $this->clave)) {
             $_SESSION['errores'][] = "La clave debe poseer al menos una letra,"
-                ." un número y 6 caracteres de longitud.";
+                . " un número y 6 caracteres de longitud.";
             return false;
         }
 
@@ -246,7 +247,7 @@ class Usuario extends Model
     }
 
     /** Valida si el usuario tiene un rol especifico */
-    public function tieneRol(string $nombreRol) : bool
+    public function tieneRol(string $nombreRol): bool
     {
         if (empty($this->roles)) {
             return false;
@@ -267,12 +268,12 @@ class Usuario extends Model
      * @param string $permiso El permiso a validar. Los posibles valores son 
      * consultar, registrar, actualizar y eliminar.
      */
-    public function tienePermiso(string $modulo, string $permiso) : bool
+    public function tienePermiso(string $modulo, string $permiso): bool
     {
         if (empty($this->roles)) {
             return false;
         }
-        $permiso = "get".ucfirst($permiso);
+        $permiso = "get" . ucfirst($permiso);
 
         foreach ($this->roles as $rol) {
             foreach ($rol->permisos as $p) {
@@ -284,7 +285,7 @@ class Usuario extends Model
         return false;
     }
 
-    public static function cargarPorCedula(string|int $cedula) : null|Usuario
+    public static function cargarPorCedula(string|int $cedula): null|Usuario
     {
         $bd = Database::getInstance();
         $query = "SELECT * FROM usuario WHERE cedula = :cedula AND estatus = 1 LIMIT 1";
@@ -301,7 +302,7 @@ class Usuario extends Model
         return $stmt->fetch();
     }
 
-    public static function cargarPorCorreo(string $correo) : null|Usuario
+    public static function cargarPorCorreo(string $correo): null|Usuario
     {
         $bd = Database::getInstance();
         $query = "SELECT * FROM usuario WHERE correo = :correo AND estatus = 1 LIMIT 1";
@@ -319,7 +320,7 @@ class Usuario extends Model
     }
 
     /** Retorna un arreglo con los usuarios que tengan alguno de los roles indicados */
-    public static function listarPorRoles(string ...$roles) : array
+    public static function listarPorRoles(string ...$roles): array
     {
         /** @var Usuario[] */
         $usuarios = Usuario::listar(1);
@@ -341,7 +342,7 @@ class Usuario extends Model
      *
      * @param Discipulo $discipulo El discipulo desde donde se mapeara el usuario
      **/
-    public function fromDiscipulo(Discipulo $discipulo) : void
+    public function fromDiscipulo(Discipulo $discipulo): void
     {
         /** @var Usuario $usuarioSesion */
         $usuarioSesion = $_SESSION['usuario'];
@@ -363,8 +364,69 @@ class Usuario extends Model
         $this->roles[] = Rol::tryFromNombre("Estudiante");
     }
 
+    public function recovery(string $cedulaRecovery): array
+    {
+        try {
+
+            $sql = "SELECT `cedula`, `pregunta`, `respuesta` FROM `usuario` WHERE `cedula` = :cedula";
+            $stmt = $this->db->pdo()->prepare($sql);
+            $stmt->bindValue(":correo", $cedulaRecovery);
+            $stmt->execute();
+
+            if ($stmt->rowCount() > 0) {
+                $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+                return $resultado;
+            } else {
+                return array();
+            }
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
+            $error_data = array(
+                "error_message" => $e->getMessage(),
+                "error_line" => "Linea del error: " . $e->getLine()
+            );
+            http_response_code(422);
+            echo json_encode($error_data);
+            die();
+        }
+    }
+
+    public function resetPassword(string $cedulaRecovery, string $respuesta): bool
+    {
+        try {
+
+            $sql = "SELECT `respuesta` FROM `usuario` WHERE `cedula` = :cedula";
+            $stmt = $this->db->pdo()->prepare($sql);
+            $stmt->bindValue(":cedula", $cedulaRecovery);
+            $stmt->execute();
+            $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($respuesta === $resultado) {
+                $caracteres = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                $clave = '';
+                for ($i = 0; $i < 10; $i++) {
+                    $clave .= $caracteres[rand(0, strlen($caracteres) - 1)];
+                }
+
+                $claveEncriptada = password_hash($clave, PASSWORD_DEFAULT);
+                $sql = "UPDATE usuario SET clave = :clave WHERE cedula = :cedula";
+                $stmt = $this->prepare($sql);
+                $stmt->bindValue('clave', $claveEncriptada);
+                $stmt->execute();
+            }
+
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
+            $error_data = array(
+                "error_message" => $e->getMessage(),
+                "error_line" => "Linea del error: " . $e->getLine()
+            );
+            http_response_code(422);
+            echo json_encode($error_data);
+            die();
+        }
+    }
+
     /** Mapea los valores de un formulario post a las propiedades del objeto */
-    public function mapFromPost() : bool
+    public function mapFromPost(): bool
     {
         if (!empty($_POST)) {
             foreach ($_POST as $key => $value) {
@@ -378,7 +440,7 @@ class Usuario extends Model
     }
 
     // Getters
-    public function getEdad() : int
+    public function getEdad(): int
     {
         if (empty($this->fechaNacimiento)) {
             return 0;
@@ -388,34 +450,44 @@ class Usuario extends Model
         return $edad;
     }
 
-    public function getNombreCompleto() : string {
-        return $this->nombre." ".$this->apellido;
+    public function getNombreCompleto(): string
+    {
+        return $this->nombre . " " . $this->apellido;
     }
-    public function getNombre() : string {
+    public function getNombre(): string
+    {
         return $this->nombre ?? "";
     }
-    public function getApellido() : string {
+    public function getApellido(): string
+    {
         return $this->apellido ?? "";
     }
-    public function getCorreo() : ?string {
+    public function getCorreo(): ?string
+    {
         return $this->correo ?? null;
     }
-    public function getCedula() : string {
+    public function getCedula(): string
+    {
         return $this->cedula ?? "";
     }
-    public function getTelefono() : string {
+    public function getTelefono(): string
+    {
         return $this->telefono ?? "";
     }
-    public function getDireccion() : string {
+    public function getDireccion(): string
+    {
         return $this->direccion ?? "";
     }
-    public function getEstadoCivil() : string {
+    public function getEstadoCivil(): string
+    {
         return $this->estadoCivil ?? "";
     }
-    public function getFechaNacimiento() : string {
+    public function getFechaNacimiento(): string
+    {
         return $this->fechaNacimiento ?? "";
     }
-    public function getClaveEncriptada() : string {
+    public function getClaveEncriptada(): string
+    {
         return $this->clave ?? "";
     }
 }

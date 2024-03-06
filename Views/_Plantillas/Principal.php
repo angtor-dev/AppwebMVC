@@ -26,7 +26,7 @@ if (isset($_SESSION['usuario'])) {
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/lib/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/lib/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/lib/datatables/datatables.min.css">
-    <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/lib/datatables/choicesjs/choices.css">
+    <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/lib/choicesjs/choices.css">
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/lib/quill/quill.snow.css">
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/css/utilities.css">
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/css/site.css">
@@ -182,8 +182,8 @@ if (isset($_SESSION['usuario'])) {
 
     <script src="<?= LOCAL_DIR ?>public/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="<?= LOCAL_DIR ?>public/lib/datatables/datatables.min.js"></script>
-    <script src="<?= LOCAL_DIR ?>public/lib/datatables/sweetalert2.js"></script>
-    <script src="<?= LOCAL_DIR ?>public/lib/datatables/choicesjs/choices.js"></script>
+    <script src="<?= LOCAL_DIR ?>public/lib/sweetalert2.js"></script>
+    <script src="<?= LOCAL_DIR ?>public/lib/choicesjs/choices.js"></script>
     <script src="<?= LOCAL_DIR ?>public/lib/chartJs/chart.umd.js"></script>
     <script src="<?= LOCAL_DIR ?>public/lib/quill/quill.min.js"></script>
     <script src="<?= LOCAL_DIR ?>public/js/utilities.js"></script>

@@ -15,6 +15,8 @@
     <?= $GLOBALS['view'] ?>
 
     <script src="<?= LOCAL_DIR ?>public/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="<?= LOCAL_DIR ?>public/lib/sweetalert2.js"></script>
+    <script src="<?= LOCAL_DIR ?>public/lib/jQuery/jquery-3.7.0.min.js"></script>
     <script src="<?= LOCAL_DIR ?>public/js/login.js"></script>
 </body>
 
