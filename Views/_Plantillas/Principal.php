@@ -74,7 +74,7 @@ if (isset($_SESSION['usuario'])) {
                                     <i class="fa-solid fa-bell"></i>
                                     <span id="contadorNotif"><?= $cantNotif ?></span>
                                 </button>
-                                <div class="dropdown-menu" id="notificaciones" style="width: 350px;">
+                                <div class="dropdown-menu divNotificaciones" id="notificaciones" >
                                     <div class="px-3" style="font-size: 14px;"><h5>Notificaciones</h5></div>
                                     <?php if (count($usuario->notificaciones) == 0): ?>
                                         <div class="py-4 px3 text-center">

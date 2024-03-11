@@ -63,6 +63,12 @@ body {
     background-color: var(--grey-lighter);
 }
 
+.divNotificaciones{
+    width: 350px;
+    max-height: 500px;
+    overflow-y: scroll;
+}
+
 /* Contenido principal */
 #main {
     margin-left: var(--sidebar-width);
