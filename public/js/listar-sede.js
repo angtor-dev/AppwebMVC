@@ -139,7 +139,7 @@ $(document).ready(function () {
               if (jsonResponse.msj) {
                 Swal.fire({
                   icon: 'error',
-                  title: 'Denegado',
+                  title: 'DENEGADO',
                   text: jsonResponse.msj,
                   showConfirmButton: true,
                 })
@@ -446,7 +446,7 @@ $(document).ready(function () {
             if (jsonResponse.msj) {
               Swal.fire({
                 icon: 'error',
-                title: 'Denegado',
+                title: 'DENEGADO',
                 text: jsonResponse.msj,
                 showConfirmButton: true,
               })
@@ -650,7 +650,7 @@ $(document).ready(function () {
             if (jsonResponse.msj) {
               Swal.fire({
                 icon: 'error',
-                title: 'Denegado',
+                title: 'DENEGADO',
                 text: jsonResponse.msj,
                 showConfirmButton: true,
               })

@@ -113,6 +113,12 @@ if (isset($_SESSION['usuario'])) {
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li>
+                                        <a class="dropdown-item" href="<?= LOCAL_DIR ?>Usuarios/MiPerfil">
+                                            <i class="fa-solid fa-user fa-fw me-2"></i>
+                                            Mi Perfil
+                                        </a>
+                                    </li>
+                                    <li>
                                         <a class="dropdown-item" href="<?= LOCAL_DIR ?>Usuarios/CambiarClave">
                                             <i class="fa-solid fa-key fa-fw me-2"></i>
                                             Cambiar clave

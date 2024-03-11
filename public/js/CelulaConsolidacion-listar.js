@@ -153,7 +153,7 @@ $(document).ready(function () {
                             if (jsonResponse.msj) {
                                 Swal.fire({
                                     icon: 'error',
-                                    title: 'Denegado',
+                                    title: 'DENEGADO',
                                     text: jsonResponse.msj,
                                     showConfirmButton: true,
                                 })
@@ -690,7 +690,7 @@ function Listar_discipulos_celula(idCelula) {
                         if (jsonResponse.msj) {
                             Swal.fire({
                                 icon: 'error',
-                                title: 'Denegado',
+                                title: 'DENEGADO',
                                 text: jsonResponse.msj,
                                 showConfirmButton: true,
                             })
@@ -912,7 +912,7 @@ function Listar_discipulos_celula(idCelula) {
                         if (jsonResponse.msj) {
                             Swal.fire({
                                 icon: 'error',
-                                title: 'Denegado',
+                                title: 'DENEGADO',
                                 text: jsonResponse.msj,
                                 showConfirmButton: true,
                             })
@@ -1178,7 +1178,7 @@ function Listar_discipulos_celula(idCelula) {
                         if (jsonResponse.msj) {
                             Swal.fire({
                                 icon: 'error',
-                                title: 'Denegado',
+                                title: 'DENEGADO',
                                 text: jsonResponse.msj,
                                 showConfirmButton: true,
                             })

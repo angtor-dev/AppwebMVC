@@ -74,6 +74,45 @@ if (!empty($_POST)) {
         }
         exit();
     }
+
+    if (isset($_POST['register'])) {
+
+        $respuesta = $usuario->validarRegister($_POST);
+
+        if ($respuesta) {
+            $respuesta2 = $usuario->registerUser();
+            if ($respuesta2) {
+                http_response_code(200);
+                Bitacora::registrar("Se ha regitrado el usuario ".$usuario->getNombreCompleto());
+                echo json_encode(array('msj'=>'Registrado correctamente', 'status'=>200));
+            }else{
+                http_response_code(402);
+                echo json_encode(array('msj'=>'Error al registrar'));
+            }
+        }else{
+            http_response_code(402);
+            echo json_encode(array('msj'=>'Validacion no lograda'));
+        }
+
+        die();
+    }
+
+}
+
+if (isset($_GET['getSedes'])) {
+
+    $usuario = new Usuario();
+
+    $response = $usuario->getSedes();
+    
+    if (!empty($response)) {
+        http_response_code(200);
+        echo json_encode($response);
+    }else{
+        http_response_code(402);
+        echo json_encode(array("msj"=>'Hubo un problema al obtener las sedes'));
+    }
+    die();
 }
 
 renderView();

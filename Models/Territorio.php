@@ -52,7 +52,7 @@ class Territorio extends Model
                 $territorio = 'T' . $id;
                 $identificador = $sede->getCodigo();
                 $codigo = $identificador . '-' . $territorio;
-                
+
             } else {
                 /** @var Territorio[] */
                 $territorios = Territorio::cargarRelaciones($idSede, "Sede");
@@ -149,46 +149,47 @@ class Territorio extends Model
         }
     }
 
-    public  function listar_territorio()
+    public function listar_territorio()
     {
 
         try {
 
             /** @var Usuario */
-        $usuario = $_SESSION['usuario'];
+            $usuario = $_SESSION['usuario'];
 
-           if ($usuario->tieneRol('SuperUsuario') ){
+            if ($usuario->tieneRol('SuperUsuario')) {
 
-            $sql = "SELECT usuario.id, usuario.nombre AS nombreLider, usuario.cedula, usuario.apellido, territorio.idLider, territorio.id, territorio.idSede,
+                $sql = "SELECT usuario.id, usuario.nombre AS nombreLider, usuario.cedula, usuario.apellido, territorio.idLider, territorio.id, territorio.idSede,
              territorio.detalles, territorio.codigo, territorio.nombre, territorio.estatus 
              FROM territorio INNER JOIN usuario ON usuario.id = territorio.idLider WHERE territorio.estatus = '1'";
 
 
-            $stmt = $this->db->pdo()->prepare($sql);
+                $stmt = $this->db->pdo()->prepare($sql);
 
-            $stmt->execute();
-            $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                $stmt->execute();
+                $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            Bitacora::registrar("Consulta de Territorios");
+                Bitacora::registrar("Consulta de Territorios");
 
-            return $resultado;} 
-            
-            if ($usuario->tieneRol('Pastor')){
+                return $resultado;
+            }
+
+            if ($usuario->tieneRol('Pastor')) {
 
 
                 $sql = "SELECT usuario.id, usuario.nombre AS nombreLider, usuario.cedula, usuario.apellido, territorio.idLider, territorio.id, territorio.idSede,
                 territorio.detalles, territorio.codigo, territorio.nombre, territorio.estatus 
                 FROM territorio INNER JOIN usuario ON usuario.id = territorio.idLider WHERE territorio.idSede = :idSede AND territorio.estatus = '1'";
 
-               
-               $stmt = $this->db->pdo()->prepare($sql);
-               $stmt->bindValue(':idSede', $usuario->idSede);
-   
-               $stmt->execute();
-               $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
-   
-               Bitacora::registrar("Consulta de Territorios");
-               return $resultado;
+
+                $stmt = $this->db->pdo()->prepare($sql);
+                $stmt->bindValue(':idSede', $usuario->idSede);
+
+                $stmt->execute();
+                $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                Bitacora::registrar("Consulta de Territorios");
+                return $resultado;
             }
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
@@ -202,7 +203,7 @@ class Territorio extends Model
     }
 
 
-    public  function editar_territorio($id, $idSede, $nombre, $idLider, $detalles)
+    public function editar_territorio($id, $idSede, $nombre, $idLider, $detalles)
     {
 
         try {
@@ -287,7 +288,7 @@ class Territorio extends Model
 
 
 
-    public  function eliminar_territorio($id)
+    public function eliminar_territorio($id)
     {
         try {
             $sql = "UPDATE territorio SET estatus = '0' WHERE territorio.id = :id";
@@ -318,7 +319,7 @@ class Territorio extends Model
 
 
 
-    public  function listar_lideres()
+    public function listar_lideres()
     {
 
         try {
@@ -326,26 +327,27 @@ class Territorio extends Model
             /** @var Usuario */
             $usuario = $_SESSION['usuario'];
 
-            if ($usuario->tieneRol('SuperUsuario')){
-            $sql = "SELECT usuario.id, usuario.cedula, usuario.nombre, usuario.apellido 
+            if ($usuario->tieneRol('SuperUsuario')) {
+                $sql = "SELECT usuario.id, usuario.cedula, usuario.nombre, usuario.apellido 
             FROM usuariorol INNER JOIN usuario ON usuario.id = usuariorol.idUsuario WHERE usuario.estatus = '1' AND usuariorol.idRol IN (4, 5)";
 
-            $stmt = $this->db->pdo()->prepare($sql);
+                $stmt = $this->db->pdo()->prepare($sql);
 
-            $stmt->execute();
-            $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $resultado;} else {
+                $stmt->execute();
+                $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                return $resultado;
+            } else {
 
                 $sql = "SELECT usuario.id, usuario.cedula, usuario.nombre, usuario.apellido 
             FROM usuariorol INNER JOIN usuario ON usuario.id = usuariorol.idUsuario WHERE usuario.idSede = :idSede AND usuario.estatus = '1' AND usuariorol.idRol IN (4, 5)";
 
-            $stmt = $this->db->pdo()->prepare($sql);
+                $stmt = $this->db->pdo()->prepare($sql);
 
-            $stmt->bindValue(':idSede', $usuario->idSede);
+                $stmt->bindValue(':idSede', $usuario->idSede);
 
-            $stmt->execute();
-            $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $resultado;
+                $stmt->execute();
+                $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                return $resultado;
             }
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
@@ -359,34 +361,34 @@ class Territorio extends Model
         }
     }
 
-    public  function listar_Sedes()
+    public function listar_Sedes()
     {
         try {
 
             /** @var Usuario */
             $usuario = $_SESSION['usuario'];
 
-            if ($usuario->tieneRol('SuperUsuario')){
-            $sql = "SELECT * FROM sede WHERE sede.estatus = '1'";
-
-            $stmt = $this->db->pdo()->prepare($sql);
-
-            $stmt->execute();
-            $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $resultado; } else {
-
-        
-
-                $sql = "SELECT * FROM sede WHERE id = :idSede AND sede.estatus = '1'";
+            if ($usuario->tieneRol('SuperUsuario')) {
+                $sql = "SELECT * FROM sede WHERE sede.estatus = '1'";
 
                 $stmt = $this->db->pdo()->prepare($sql);
 
-                $stmt->bindValue(':idSede', $usuario->idSede);
-    
                 $stmt->execute();
                 $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                
                 return $resultado;
+            } else {
 
+                $sql = "SELECT * FROM sede WHERE id = :idSede AND sede.estatus = '1'";
+                $stmt = $this->db->pdo()->prepare($sql);
+
+                $stmt->bindValue(':idSede', $usuario->idSede);
+
+                $stmt->execute();
+
+                $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                return $resultado;
             }
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
@@ -500,7 +502,7 @@ class Territorio extends Model
     public function validacion_accion(int $idTerritorio, string $accion): void
     {
         try {
-            
+
             /*$sql = "(SELECT 1 FROM celulafamiliar WHERE idTerritorio= :idTerritorio1 AND estatus = 1 LIMIT 1)
                     UNION
                     (SELECT 1 FROM celulaconsolidacion WHERE idTerritorio = :idTerritorio2 AND estatus = 1  LIMIT 1)
@@ -521,7 +523,7 @@ class Territorio extends Model
                 if ($accion == 'eliminar') {
                     throw new Exception("Este territorio esta asociado a celulas que estan en uso. Estos poseen datos asociados", 422);
                 }
-                if($accion == 'actualizar'){
+                if ($accion == 'actualizar') {
                     throw new Exception("No puedes cambiar la sede porque ya existen celulas asociadas al territorio y con codigos unicos generados. Esto podria destruir la integridad de los datos", 422);
                 }
             }
@@ -539,7 +541,7 @@ class Territorio extends Model
         try {
 
             $sql = "SELECT nombre FROM territorio WHERE (idLider = :idLider) AND (estatus = '1') AND (id NOT IN (:id))";
-            
+
 
             $stmt = $this->db->pdo()->prepare($sql);
             $stmt->bindValue(':idLider', $idLider);
@@ -549,10 +551,10 @@ class Territorio extends Model
             $stmt->fetchAll(PDO::FETCH_ASSOC);
             $stmt->rowCount();
 
-            
-                if ($stmt->rowCount() == 1) {
-                    throw new Exception("Este Usuario ya es Lider de un Territorio", 422);
-                }
+
+            if ($stmt->rowCount() == 1) {
+                throw new Exception("Este Usuario ya es Lider de un Territorio", 422);
+            }
 
 
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
@@ -598,16 +600,20 @@ class Territorio extends Model
 
 
     // Getters
-    public function getIdentificador() : string {
+    public function getIdentificador(): string
+    {
         return $this->identificador;
     }
-    public function getCodigo() : string {
+    public function getCodigo(): string
+    {
         return $this->codigo;
     }
-    public function getNombre() : string {
+    public function getNombre(): string
+    {
         return $this->nombre;
     }
-    public function getDetalles() : string {
+    public function getDetalles(): string
+    {
         return $this->detalles;
     }
 }

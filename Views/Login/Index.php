@@ -48,7 +48,7 @@ $_layout = "Login";
                     <a class="text-center text-white" href="#" data-bs-toggle="modal"
                         data-bs-target="#modalRecovery">Recuperar contraseña</a>
                     <a class="text-center text-white" href="#" data-bs-toggle="modal"
-                        data-bs-target="#modalRegister">Registrarse</a>
+                        data-bs-target="#modalRegister" id="registerButton">Registrarse</a>
                 </div>
             </div>
         </div>
@@ -116,7 +116,7 @@ $_layout = "Login";
                         <div class="col-sm-12 col-md-6 col-lg-3">
                             <div class="form-group">
                                 <label class="form-label">Nombre</label>
-                                <input type="email" class="form-control" id="nombre" name="nombre">
+                                <input type="email" class="form-control" id="nombre" name="nombre" maxlength="50">
                                 <small id="nombreError" class="form-text text-danger d-none">Los caracteres ingresados
                                     son invalidos</small>
                             </div>
@@ -124,7 +124,7 @@ $_layout = "Login";
                         <div class="col-sm-12 col-md-6 col-lg-3">
                             <div class="form-group">
                                 <label class="form-label">Apellido</label>
-                                <input type="email" class="form-control" id="apellido" name="apellido">
+                                <input type="email" class="form-control" id="apellido" name="apellido" maxlength="50">
                                 <small id="apellidoError" class="form-text text-danger d-none">Los caracteres ingresados
                                     son invalidos</small>
                             </div>
@@ -135,44 +135,6 @@ $_layout = "Login";
                                 <input type="number" class="form-control" id="telefono" name="telefono">
                                 <small id="telefonoError" class="form-text text-danger d-none">Telefono ingresado
                                     invalido</small>
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-6 col-lg-2">
-                            <div class="form-group">
-                                <label class="form-label">Cedula</label>
-                                <input type="number" class="form-control" id="cedula" name="cedula">
-                                <small id="cedulaError" id="emailHelp" class="form-text text-danger d-none">Cedula
-                                    ingresada invalida</small>
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-6 col-lg-2">
-                            <div class="form-group">
-                                <label class="form-label">Sexo</label>
-                                <select class="form-control" id="sexo" name="sexo">
-                                    <option value="" selected>Seleccione</option>
-                                    <option value="hombre">Hombre</option>
-                                    <option value="mujer">Mujer</option>
-                                </select>
-                                <small id="sexoError" class="form-text text-danger d-none">Seleccion invalida</small>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row mt-4">
-                        <div class="col-sm-12 col-md-6 col-lg-3">
-                            <div class="form-group">
-                                <label class="form-label">Contraseña</label>
-                                <input type="password" class="form-control" id="password" name="password">
-                                <small id="passwordError" class="form-text text-danger d-none">Los caracteres ingresados
-                                    son invalidos y no pueden estar vacios</small>
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-6 col-lg-3">
-                            <div class="form-group">
-                                <label class="form-label">Ingrese nuevamente la contraseña</label>
-                                <input type="password" class="form-control" id="passwordRepeat" name="passwordRepeat">
-                                <small id="passwordRepeatError" class="form-text text-danger d-none">La contraseña no
-                                    coincide</small>
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-6 col-lg-2">
@@ -194,6 +156,52 @@ $_layout = "Login";
                                     <option value="V">Viudo/a</option>
                                 </select>
                                 <small id="estadoCivilError" class="form-text text-danger d-none">El estado civil es invalido</small>
+                            </div>
+                        </div>
+                        <!-- <div class="col-sm-12 col-md-6 col-lg-2">
+                            <div class="form-group">
+                                <label class="form-label">Sexo</label>
+                                <select class="form-control" id="sexo" name="sexo">
+                                    <option value="" selected>Seleccione</option>
+                                    <option value="hombre">Hombre</option>
+                                    <option value="mujer">Mujer</option>
+                                </select>
+                                <small id="sexoError" class="form-text text-danger d-none">Seleccion invalida</small>
+                            </div>
+                        </div> -->
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-sm-12 col-md-6 col-lg-3">
+                            <div class="form-group">
+                                <label class="form-label">Contraseña</label>
+                                <input type="password" class="form-control" id="password" name="password" maxlength="16">
+                                <small id="passwordError" class="form-text text-danger d-none">Los caracteres ingresados
+                                    son invalidos y no pueden estar vacios</small>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-3">
+                            <div class="form-group">
+                                <label class="form-label">Ingrese nuevamente la contraseña</label>
+                                <input type="password" class="form-control" id="passwordRepeat" name="passwordRepeat" maxlength="16">
+                                <small id="passwordRepeatError" class="form-text text-danger d-none">La contraseña no
+                                    coincide</small>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-2">
+                            <div class="form-group">
+                                <label class="form-label">Cedula</label>
+                                <input type="number" class="form-control" id="cedula" name="cedula">
+                                <small id="cedulaError" id="emailHelp" class="form-text text-danger d-none">Cedula
+                                    ingresada invalida</small>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-4">
+                            <div class="form-group">
+                                <label class="form-label">Correo</label>
+                                <input type="email" class="form-control" id="correo" name="correo">
+                                <small id="correoError" class="form-text text-danger d-none">Los caracteres ingresados son
+                                    invalidos y no puede estar vacio</small>
                             </div>
                         </div>
                     </div>
@@ -225,11 +233,22 @@ $_layout = "Login";
                             </div>
                         </div>
                     </div>
+
+                    <div class="row mt-4 justify-content-center">
+                        <div class="col-sm-12 col-md-6 col-lg-4">
+                            <div class="form-group">
+                                <label class="form-label">Seleccionar sede</label>
+                                <select class="form-select" id="idSede" name="idSede">
+                                </select>
+                                <small id="idSedeError" class="form-text text-danger d-none">Debe seleccionar una sede valida</small>
+                            </div>
+                        </div>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary" id="enviarRecovery">Enviar</button>
+                <button type="button" class="btn btn-primary" id="register">Registrarse</button>
             </div>
         </div>
     </div>

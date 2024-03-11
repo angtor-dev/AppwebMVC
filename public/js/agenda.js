@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (jsonResponse.msj) {
                       Swal.fire({
                         icon: 'error',
-                        title: 'Denegado',
+                        title: 'DENEGADO',
                         text: jsonResponse.msj,
                         showConfirmButton: true,
                       })
@@ -264,7 +264,7 @@ document.addEventListener('DOMContentLoaded', function () {
           if (jsonResponse.msj) {
             Swal.fire({
               icon: 'error',
-              title: 'Denegado',
+              title: 'DENEGADO',
               text: jsonResponse.msj,
               showConfirmButton: true,
             })
@@ -339,7 +339,7 @@ document.addEventListener('DOMContentLoaded', function () {
           if (jsonResponse.msj) {
             Swal.fire({
               icon: 'error',
-              title: 'Denegado',
+              title: 'DENEGADO',
               text: jsonResponse.msj,
               showConfirmButton: true,
             })
@@ -670,7 +670,7 @@ form.addEventListener("submit", (e) => {
           if (jsonResponse.msj) {
             Swal.fire({
               icon: 'error',
-              title: 'Denegado',
+              title: 'DENEGADO',
               text: jsonResponse.msj,
               showConfirmButton: true,
             })
@@ -881,7 +881,7 @@ form2.addEventListener("submit", (e) => {
           if (jsonResponse.msj) {
             Swal.fire({
               icon: 'error',
-              title: 'Denegado',
+              title: 'DENEGADO',
               text: jsonResponse.msj,
               showConfirmButton: true,
             })
@@ -963,7 +963,7 @@ const comentario = document.getElementById("comentarioPastor").value;
           if (jsonResponse.msj) {
             Swal.fire({
               icon: 'error',
-              title: 'Denegado',
+              title: 'DENEGADO',
               text: jsonResponse.msj,
               showConfirmButton: true,
             })

@@ -21,6 +21,8 @@ class Usuario extends Model
     private string $direccion;
     private string $estadoCivil;
     private string $fechaNacimiento;
+    private string $preguntaSecurity;
+    private string $respuestaSecurity;
     private ?string $fechaConversion;
     private ?string $motivo;
     private int $estatus;
@@ -415,7 +417,7 @@ class Usuario extends Model
                 $stmt->execute();
 
                 return $clave;
-            }else{
+            } else {
                 return '';
             }
 
@@ -429,6 +431,345 @@ class Usuario extends Model
             die();
         }
     }
+
+    public function registerUser(): bool
+    {
+        $sql = "INSERT INTO usuario(cedula, correo, clave, nombre, apellido, telefono, direccion, estadoCivil, fechaNacimiento, preguntaSecurity, respuestaSecurity, idSede)
+        VALUES(:cedula, :correo, :clave, :nombre, :apellido, :telefono, :direccion, :estadoCivil, :fechaNacimiento, :preguntaSecurity, :respuestaSecurity, :idSede)";
+
+        try {
+
+            $this->encriptarClave();
+
+            // Registra al usuario
+            $stmt = $this->prepare($sql);
+            $stmt->bindValue('cedula', $this->cedula);
+            $stmt->bindValue('correo', $this->correo);
+            $stmt->bindValue('clave', $this->clave);
+            $stmt->bindValue('nombre', $this->nombre);
+            $stmt->bindValue('apellido', $this->apellido);
+            $stmt->bindValue('telefono', $this->telefono);
+            $stmt->bindValue('direccion', $this->direccion);
+            $stmt->bindValue('estadoCivil', $this->estadoCivil);
+            $stmt->bindValue('fechaNacimiento', $this->fechaNacimiento);
+            $stmt->bindValue('preguntaSecurity', $this->preguntaSecurity);
+            $stmt->bindValue('respuestaSecurity', $this->respuestaSecurity);
+            $stmt->bindValue('idSede', $this->idSede);
+
+            $stmt->execute();
+
+            // Registra los roles del usuario
+            $idUsuario = $this->db->pdo()->lastInsertId();
+
+            $sql = "INSERT INTO usuariorol(idUsuario, idRol)
+            VALUES(:idUsuario, 3)";
+
+            $stmt = $this->prepare($sql);
+            $stmt->bindParam('idUsuario', $idUsuario);
+            $stmt->execute();
+
+            return true;
+
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
+            $error_data = array(
+                "error_message" => $e->getMessage(),
+                "error_line" => "Linea del error: " . $e->getLine()
+            );
+            http_response_code(422);
+            echo json_encode($error_data);
+            die();
+        }
+    }
+
+    public function actualizarPerfil($opcion): bool
+    {
+        if ($opcion == 1) {
+            $sql = "UPDATE usuario SET cedula = :cedula, correo = :correo, nombre = :nombre, apellido = :apellido, 
+            telefono = :telefono, direccion = :direccion, estadoCivil = :estadoCivil, fechaNacimiento = :fechaNacimiento 
+            WHERE id = :id";
+
+            try {
+
+                // Actualiza el usuario
+                $stmt = $this->prepare($sql);
+
+                $stmt->bindValue('cedula', $this->cedula);
+                $stmt->bindValue('correo', $this->correo);
+                $stmt->bindValue('nombre', $this->nombre);
+                $stmt->bindValue('apellido', $this->apellido);
+                $stmt->bindValue('telefono', $this->telefono);
+                $stmt->bindValue('direccion', $this->direccion);
+                $stmt->bindValue('estadoCivil', $this->estadoCivil);
+                $stmt->bindValue('fechaNacimiento', $this->fechaNacimiento);
+                $stmt->bindValue('id', $_SESSION['usuario']->id);
+
+                $stmt->execute();
+
+                return true;
+
+            } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
+                $error_data = array(
+                    "error_message" => $e->getMessage(),
+                    "error_line" => "Linea del error: " . $e->getLine()
+                );
+                http_response_code(422);
+                echo json_encode($error_data);
+                die();
+            }
+        } else {
+            $sql = "UPDATE usuario SET preguntaSecurity = :preguntaSecurity, respuestaSecurity = :respuestaSecurity
+            WHERE id = :id";
+
+            try {
+
+                // Actualiza el usuario
+                $stmt = $this->prepare($sql);
+
+                $stmt->bindValue('preguntaSecurity', $this->preguntaSecurity);
+                $stmt->bindValue('respuestaSecurity', $this->respuestaSecurity);
+                $stmt->bindValue('id', $_SESSION['usuario']->id);
+
+                $stmt->execute();
+
+                return true;
+
+            } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
+                $error_data = array(
+                    "error_message" => $e->getMessage(),
+                    "error_line" => "Linea del error: " . $e->getLine()
+                );
+                http_response_code(422);
+                echo json_encode($error_data);
+                die();
+            }
+        }
+
+    }
+
+    public function validarRegister($datos): bool
+    {
+        try {
+            $nombre = trim(strtolower($datos["nombre"]));
+            $apellido = trim(strtolower($datos["apellido"]));
+            $telefono = trim($datos["telefono"]);
+            $cedula = trim($datos["cedula"]);
+            $estadoCivil = trim(strtoupper($datos["estadoCivil"]));
+            $password = trim($datos["password"]);
+            $fechaNacimiento = trim($datos["fechaNacimiento"]);
+            $direccion = trim($datos["direccion"]);
+            $preguntaSecurity = trim($datos["preguntaSecurity"]);
+            $respuestaSecurity = trim($datos["respuestaSecurity"]);
+            $correo = trim(strtolower($datos["correo"]));
+            $idSede = $datos['idSede'];
+
+            if (!preg_match('/^[A-Za-z\s]+$/', $nombre) || !preg_match('/^[A-Za-z\s]+$/', $apellido)) {
+                throw new Exception("Existen caracteres especiales en algun campo. Verifique", 422);
+            }
+
+            // Validar el campo email
+            if (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
+                throw new Exception("Correo invalido", 422);
+            }
+
+            if (
+                empty($nombre) || empty($apellido || empty($direccion || empty($idSede)))
+                || empty($preguntaSecurity) || empty($respuestaSecurity) || empty($password || empty($correo))
+            ) {
+                throw new Exception("Existen datos vacios", 422);
+            }
+
+            if (!ctype_digit($telefono) || !ctype_digit($cedula)) {
+                throw new Exception("Se estan enviado datos no numericos enteros", 422);
+            }
+
+            if (!preg_match('/^[SCDV]$/', $estadoCivil)) {
+                throw new Exception("Estado civil invalido", 422);
+            }
+
+            // Validar el campo fechaNacimiento
+            if (!strtotime($fechaNacimiento) || strtotime($datos["fechaNacimiento"]) > time()) {
+                throw new Exception("Fecha de nacimiento invalida", 422);
+            }
+
+            $this->validar_correo_cedula($correo, $cedula, 1);
+
+            $this->nombre = $nombre;
+            $this->apellido = $apellido;
+            $this->telefono = $telefono;
+            $this->direccion = $direccion;
+            $this->cedula = $cedula;
+            $this->estadoCivil = $estadoCivil;
+            $this->clave = $password;
+            $this->fechaNacimiento = $fechaNacimiento;
+            $this->preguntaSecurity = $preguntaSecurity;
+            $this->respuestaSecurity = $respuestaSecurity;
+            $this->correo = $correo;
+            $this->idSede = $idSede;
+
+            return true;
+
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+            die();
+        }
+    }
+
+    public function validarActualizarPerfil($datos, $opcion): bool
+    {
+        try {
+
+            if ($opcion == 1) {
+
+                $nombre = trim(strtolower($datos["nombre"]));
+                $apellido = trim(strtolower($datos["apellido"]));
+                $telefono = trim($datos["telefono"]);
+                $cedula = trim($datos["cedula"]);
+                $estadoCivil = trim(strtoupper($datos["estadoCivil"]));
+                $fechaNacimiento = trim($datos["fechaNacimiento"]);
+                $direccion = trim($datos["direccion"]);
+                $correo = trim(strtolower($datos["correo"]));
+
+                if (!preg_match('/^[A-Za-z\s]+$/', $nombre) || !preg_match('/^[A-Za-z\s]+$/', $apellido)) {
+                    throw new Exception("Existen caracteres especiales en algun campo. Verifique", 422);
+                }
+
+                // Validar el campo email
+                if (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
+                    throw new Exception("Correo invalido", 422);
+                }
+
+                if (
+                    empty($nombre) || empty($apellido) || empty($direccion) || empty($correo)
+                ) {
+                    throw new Exception("Existen datos vacios", 422);
+                }
+
+                if (!ctype_digit($telefono) || !ctype_digit($cedula)) {
+                    throw new Exception("Se estan enviado datos no numericos enteros", 422);
+                }
+
+                if (!preg_match('/^[SCDV]$/', $estadoCivil)) {
+                    throw new Exception("Estado civil invalido", 422);
+                }
+
+                // Validar el campo fechaNacimiento
+                if (!strtotime($fechaNacimiento) || strtotime($datos["fechaNacimiento"]) > time()) {
+                    throw new Exception("Fecha de nacimiento invalida", 422);
+                }
+
+                $this->validar_correo_cedula($correo, $cedula, 2);
+
+                $this->nombre = $nombre;
+                $this->apellido = $apellido;
+                $this->telefono = $telefono;
+                $this->direccion = $direccion;
+                $this->cedula = $cedula;
+                $this->estadoCivil = $estadoCivil;
+                $this->fechaNacimiento = $fechaNacimiento;
+                $this->correo = $correo;
+
+            } else {
+                $preguntaSecurity = trim($datos["preguntaSecurity"]);
+                $respuestaSecurity = trim($datos["respuestaSecurity"]);
+
+                if (empty($preguntaSecurity) || empty($respuestaSecurity)) {
+                    throw new Exception("Existen datos vacios", 422);
+                }
+
+                $this->preguntaSecurity = $preguntaSecurity;
+                $this->respuestaSecurity = $respuestaSecurity;
+            }
+
+            return true;
+
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+            die();
+        }
+    }
+
+    public function validar_correo_cedula($correo, $cedula, $opcion)
+    {
+        try {
+
+            if ($opcion == 1) {
+                $sql = "SELECT `correo` FROM `usuario` WHERE correo = :correo";
+                $stmt = $this->prepare($sql);
+
+                $stmt->bindValue('correo', $correo);
+
+                $stmt->execute();
+                if ($stmt->rowCount() > 0) {
+                    throw new Exception("Este correo ya se encuentra en uso", 422);
+                }
+
+                
+                $sql = "SELECT `cedula` FROM `usuario` WHERE cedula = :cedula";
+                $stmt = $this->prepare($sql);
+
+                $stmt->bindValue('cedula', $cedula);
+
+                $stmt->execute();
+                if ($stmt->rowCount() > 0) {
+                    throw new Exception("Esta cedula ya se encuentra asociada a un usuario", 422);
+                }
+
+            }else{
+                $sql = "SELECT `correo` FROM `usuario` WHERE correo = :correo AND cedula != :cedula";
+                $stmt = $this->prepare($sql);
+
+                $stmt->bindValue('correo', $correo);
+                $stmt->bindValue('cedula', $this->cedula);
+
+                $stmt->execute();
+                if ($stmt->rowCount() > 0) {
+                    throw new Exception("Este correo ya se encuentra en uso", 422);
+                }
+
+
+                $sql = "SELECT `cedula` FROM `usuario` WHERE cedula = :cedula AND cedula != ".$this->cedula;
+                $stmt = $this->prepare($sql);
+
+                $stmt->bindValue('cedula', $cedula);
+
+                $stmt->execute();
+                if ($stmt->rowCount() > 0) {
+                    throw new Exception("Esta cedula ya se encuentra asociada a un usuario", 422);
+                }
+            }
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+            die();
+        }
+    }
+
+    public function getSedes()
+    {
+        $sql = "SELECT * FROM sede WHERE sede.estatus = '1'";
+
+        try {
+            $stmt = $this->db->pdo()->prepare($sql);
+
+            $stmt->execute();
+            $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return $resultado;
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
+            $error_data = array(
+                "error_message" => $e->getMessage(),
+                "error_line" => "Linea del error: " . $e->getLine()
+            );
+            //print_r($error_data);
+            http_response_code(422);
+            echo json_encode($error_data);
+            die();
+        }
+    }
+
+
 
     /** Mapea los valores de un formulario post a las propiedades del objeto */
     public function mapFromPost(): bool
@@ -494,6 +835,14 @@ class Usuario extends Model
     public function getClaveEncriptada(): string
     {
         return $this->clave ?? "";
+    }
+    public function getPreguntaSecurity(): string
+    {
+        return $this->preguntaSecurity ?? "";
+    }
+    public function getRespuestaSecurity(): string
+    {
+        return $this->respuestaSecurity ?? "";
     }
 }
 ?>

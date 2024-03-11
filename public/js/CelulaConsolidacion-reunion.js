@@ -118,7 +118,7 @@ $(document).ready(function () {
                             if (jsonResponse.msj) {
                                 Swal.fire({
                                     icon: 'error',
-                                    title: 'Denegado',
+                                    title: 'DENEGADO',
                                     text: jsonResponse.msj,
                                     showConfirmButton: true,
                                 })
@@ -352,7 +352,7 @@ $('#asistenciasDatatables tbody').on('click', '#eliminarAsistencia', function ()
                         if (jsonResponse.msj) {
                             Swal.fire({
                                 icon: 'error',
-                                title: 'Denegado',
+                                title: 'DENEGADO',
                                 text: jsonResponse.msj,
                                 showConfirmButton: true,
                             })
@@ -427,7 +427,7 @@ actualizarDiscipulos.addEventListener('click', () => {
                     if (jsonResponse.msj) {
                         Swal.fire({
                             icon: 'error',
-                            title: 'Denegado',
+                            title: 'DENEGADO',
                             text: jsonResponse.msj,
                             showConfirmButton: true,
                         })
@@ -675,7 +675,7 @@ actualizarDiscipulos.addEventListener('click', () => {
                         if (jsonResponse.msj) {
                             Swal.fire({
                                 icon: 'error',
-                                title: 'Denegado',
+                                title: 'DENEGADO',
                                 text: jsonResponse.msj,
                                 showConfirmButton: true,
                             })
