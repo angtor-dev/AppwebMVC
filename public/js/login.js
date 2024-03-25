@@ -25,9 +25,9 @@ document.getElementById('verificarCedula').addEventListener('click', () => {
                     $('#modalRecovery').modal('hide');
                     $('#modalPreguntaRecovery').modal('show');
 
-                    document.getElementById('preguntaRecovery').textContent = datos['pregunta'];
+                    document.getElementById('preguntaRecovery').textContent = datos['preguntaSecurity'];
                     cedula = datos['cedula'];
-                    respuesta = datos['respuesta'];
+                    respuesta = datos['respuestaSecurity'];
                     correo = datos['correo'];
 
                 },
