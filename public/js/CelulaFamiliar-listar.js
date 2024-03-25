@@ -982,7 +982,7 @@ $(document).ready(function () {
         if (!ex_re.generosidad.test(generosidad.value)) {
             generosidad.classList.remove("is-valid");
             generosidad.classList.add("is-invalid");
-            div.innerText = "Este campo es obligatorio, y su formato correcto es 00,00";
+            div.innerText = "Este campo es obligatorio, y su formato correcto es 00.00";
      
             validationStatus3.generosidad = false;
         } else {

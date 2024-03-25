@@ -594,26 +594,17 @@ class Territorio extends Model
     }
 
 
-
-
-
-
-
     // Getters
-    public function getIdentificador(): string
-    {
+    public function getIdentificador(){
         return $this->identificador;
     }
-    public function getCodigo(): string
-    {
+    public function getCodigo(){
         return $this->codigo;
     }
-    public function getNombre(): string
-    {
+    public function getNombre(){
         return $this->nombre;
     }
-    public function getDetalles(): string
-    {
+    public function getDetalles(){
         return $this->detalles;
     }
 }

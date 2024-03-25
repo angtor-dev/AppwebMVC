@@ -120,6 +120,8 @@ $(document).ready(function () {
         $("#aja2").addClass("d-none");
         $("#tab-eidlist").addClass("active");
         $("#aja1").addClass("active");
+        datatables4.ajax.reload();
+
 
 
 
@@ -1154,7 +1156,7 @@ $(document).ready(function () {
 
         document.getElementById('idmodulo1').textContent = datos.id;
         
-        nombreV4 = false;
+        nombreV4 = false;       
 
         let text = `${datos.codigo} ${datos.nombre}`;
         document.getElementById('cartaNiveles').textContent = text;
@@ -1192,6 +1194,7 @@ $(document).ready(function () {
                         console.log(response);
                         let data = JSON.parse(response);
                         datatables4.ajax.reload();
+                        dataTable.ajax.reload();
 
                         Swal.fire({
                             icon: 'success',
@@ -1323,6 +1326,7 @@ $(document).ready(function () {
                     nombreV3 = false;
                     document.getElementById('formulario3').reset();
                     datatables4.ajax.reload();
+                    dataTable.ajax.reload();
 
                 },
                 error: function (jqXHR, textStatus, errorThrown) {

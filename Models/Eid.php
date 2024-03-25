@@ -1,10 +1,14 @@
 <?php
 require_once "Models/Model.php";
+require_once "Models/Nivel.php";
+require_once "Models/Grupo.php";
+require_once "Models/Moduloeid.php";
+
 
 class Eid extends Model
 {
     public int $id;
-    private ?string $codigo;
+    private string $codigo;
     private string $nombre;
     private int $estatus;
 
@@ -136,7 +140,7 @@ class Eid extends Model
 
             $sql = "SELECT * FROM rol WHERE nombre NOT IN ('Estudiante','Superusuario','Administrador','Usuario')";
 
-            
+
 
             $stmt = $this->db->pdo()->prepare($sql);
 
@@ -254,7 +258,8 @@ class Eid extends Model
         }
     }
 
-    public function eliminarControlEid($idRequisito, $idEid, $tipo){
+    public function eliminarControlEid($idRequisito, $idEid, $tipo)
+    {
 
         try {
             $column = '';
@@ -262,11 +267,11 @@ class Eid extends Model
             if ($tipo == 'eid') {
                 $column = 'idEidRequerido';
             }
-    
+
             if ($tipo == 'rolR') {
                 $column = 'idRolRequerido';
             }
-    
+
             if ($tipo == 'rolA') {
                 $column = 'idRolAdquirido';
             }
@@ -296,8 +301,9 @@ class Eid extends Model
         }
     }
 
-    public function listadoSV($id, $tipo){
-       
+    public function listadoSV($id, $tipo)
+    {
+
 
         try {
 
@@ -306,33 +312,33 @@ class Eid extends Model
 
 
             if ($tipo == 'eid') {
-    
+
                 $tabla = 'eid';
                 $column = 'EidRequerido';
 
             }
-    
+
             if ($tipo == 'rolR') {
-    
+
                 $tabla = 'rol';
                 $column = 'RolRequerido';
 
             }
-    
+
             if ($tipo == 'rolA') {
-    
+
                 $tabla = 'rol';
                 $column = 'RolAdquirido';
 
             }
 
-            
 
-            $sql ="SELECT t.nombre AS nombre$tipo, t.* FROM $tabla AS t
-              WHERE t.id NOT IN (SELECT id$column FROM controleid WHERE idEid = :id AND id$column IS NOT NULL) AND t.estatus = '1'" . 
-              (($tabla == 'rol') ? " AND t.nombre NOT IN ('Estudiante','Superusuario','Administrador','Usuario')" : "");
 
- 
+            $sql = "SELECT t.nombre AS nombre$tipo, t.* FROM $tabla AS t
+              WHERE t.id NOT IN (SELECT id$column FROM controleid WHERE idEid = :id AND id$column IS NOT NULL) AND t.estatus = '1'" .
+                (($tabla == 'rol') ? " AND t.nombre NOT IN ('Estudiante','Superusuario','Administrador','Usuario')" : "");
+
+
             $stmt = $this->db->pdo()->prepare($sql);
             $stmt->bindValue(':id', $id);
             $stmt->execute();
@@ -354,26 +360,27 @@ class Eid extends Model
     }
 
 
-    public function registrarControlEid($id, $array, $tipo){
+    public function registrarControlEid($id, $array, $tipo)
+    {
 
         try {
 
             $column = '';
-          
+
             if ($tipo == 'eid') {
-             
+
                 $column = 'EidRequerido';
 
             }
-    
+
             if ($tipo == 'rolR') {
-    
+
                 $column = 'RolRequerido';
 
             }
-    
+
             if ($tipo == 'rolA') {
-    
+
                 $column = 'RolAdquirido';
 
             }
@@ -406,12 +413,101 @@ class Eid extends Model
         }
     }
 
-    public function getCodigo(): ?string
+    public function getValidarRolesRequeridos($idEstudiante)
+    {
+        try {
+
+            /** @var Usuario */
+            $Estudiante = Usuario::cargar($idEstudiante);
+
+
+            $sql = "SELECT rol.id, rol.nombre FROM rol 
+            INNER JOIN controleid ON rol.id = controleid.idRolRequerido AND controleid.idEid = :id";
+            $stmt = $this->db->pdo()->prepare($sql);
+            $stmt->bindValue(":id", $this->id);
+            $stmt->execute();
+
+            $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        
+        if ($stmt->rowCount() > 0) {
+
+            foreach ($resultado as $rol) {
+
+                if (empty($Estudiante->tieneRol($rol['nombre']))) {
+                    // El estudiante no tiene el rol especificado
+                    throw new Exception("El estudiante no posee los roles requeridos para cursar esta EID", 422);
+                }
+
+            }}
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+            die();
+        }
+
+    }
+
+
+    public function getValidarEidsRequerido($idEstudiante)
+    {
+        try {
+
+            $sql = "SELECT eid.id, eid.nombre, eid.codigo FROM eid 
+            INNER JOIN controleid ON eid.id = controleid.idEidRequerido AND controleid.idEid = :id";
+            $stmt4 = $this->db->pdo()->prepare($sql);
+            $stmt4->bindValue(":id", $this->id);
+            $stmt4->execute();
+
+            $resultado = $stmt4->fetchAll(PDO::FETCH_ASSOC);  
+          
+            if ($stmt4->rowCount() > 0) {
+                        
+                foreach ($resultado as $eid) {
+
+                        /** @var Nivel */
+                        $ultimoNivel = Nivel::cargarultimonivelEid(($eid['id'])); 
+
+                 $query = "SELECT * FROM grupo
+                 INNER JOIN matricula 
+                 ON matricula.idEstudiante = :idEstudiante AND matricula.idGrupo = grupo.id AND matricula.estado = '2' 
+                 WHERE grupo.idNivel = :idNivel";
+ 
+                     $stmt = $this->db->pdo()->prepare($query);
+ 
+                     $stmt->bindValue(':idEstudiante', $idEstudiante);
+                     $stmt->bindValue(':idNivel', $ultimoNivel->id);
+ 
+                     $stmt->execute();
+                     $stmt->fetch(PDO::FETCH_ASSOC);
+ 
+                     if ($stmt->rowCount() == 0) {
+                       
+                        throw new Exception("El estudiante no ha aprobado las EID requeridas para poder Cursar esta EID", 422);
+                    
+                     }
+                
+                
+            }}
+                        
+            
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+            die();
+        }
+        
+
+    }
+
+
+
+    public function getCodigo()
     {
         return $this->codigo;
     }
 
-    public function getNombre(): string
+    public function getNombre()
     {
         return $this->nombre;
     }

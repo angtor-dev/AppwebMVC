@@ -4,8 +4,8 @@ require_once "Models/Model.php";
 class Moduloeid extends Model
 {
     public int $id;
-    public int $idEid;
-    public int $nivel;
+    private int $idEid;
+    private int $nivel;
     private ?string $codigo;
     private string $nombre;
 
@@ -14,7 +14,7 @@ class Moduloeid extends Model
     {
 
         try {
-            
+
             /** @var Eid **/
             $Eid = Eid::cargar($idEid);
 
@@ -27,8 +27,8 @@ class Moduloeid extends Model
 
             $nivel = '';
             $codigo = '';
-            
-        
+
+
 
             if ($datos['lastNivel'] == null) {
                 $nivel = 1;
@@ -98,7 +98,7 @@ class Moduloeid extends Model
         }
     }
 
-    
+
 
     public function editarModuloEid($id, $nombre)
     {
@@ -146,24 +146,24 @@ class Moduloeid extends Model
             $consulta->bindValue(':nivel', $datos['lastNivel']);
             $consulta->execute();
             $dato = $consulta->fetch(PDO::FETCH_ASSOC);
-            
-           
+
+
             if ($dato['id'] == $id) {
-$sql = "UPDATE moduloeid SET estatus = '0' WHERE moduloeid.id = :id";
+                $sql = "UPDATE moduloeid SET estatus = '0' WHERE moduloeid.id = :id";
 
-            $stmt = $this->db->pdo()->prepare($sql);
+                $stmt = $this->db->pdo()->prepare($sql);
 
-            $stmt->bindValue(":id", $id);
+                $stmt->bindValue(":id", $id);
 
-            $stmt->execute();
-            http_response_code(200);
-            echo json_encode(array('msj' => 'Modulo eliminado correctamente', 'status' => 200));
-            die();
-                
+                $stmt->execute();
+                http_response_code(200);
+                echo json_encode(array('msj' => 'Modulo eliminado correctamente', 'status' => 200));
+                die();
+
 
             } else {
                 throw new Exception("Este modulo no se puede eliminar porque existe uno de mayor nivel, esto afectaria la integridad de los datos", 422);
-            }    
+            }
         } catch (Exception $e) {
             http_response_code($e->getCode());
             echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
@@ -171,22 +171,77 @@ $sql = "UPDATE moduloeid SET estatus = '0' WHERE moduloeid.id = :id";
         }
     }
 
-    public function getCodigo(): ?string
+
+    public static function cargarModuloAnterior($idModuloEidActual): null|Moduloeid
+    {
+        /** @var Moduloeid **/
+        $Moduloeid = Moduloeid::cargar($idModuloEidActual);
+        $nivelAnterior = $Moduloeid->getNivel() - 1;
+        $idEid = $Moduloeid->getIdEid();
+
+        $db = Database::getInstance();
+        $sql = "SELECT * FROM moduloeid
+        WHERE idEid = $idEid AND nivel = $nivelAnterior AND estatus = '1'";
+
+        $stmt = $db->pdo()->query($sql);
+
+        $stmt->setFetchMode(PDO::FETCH_CLASS, "Moduloeid");
+
+        $moduloeid = $stmt->fetch();
+
+        if ($moduloeid == false) {
+            return null;
+        }
+
+        return $moduloeid;
+    }
+
+    public function getUltimoNivel()
+
+    {
+        try{
+
+        $modulo = $this->id;
+
+        $query = "SELECT * FROM nivel 
+        WHERE idModuloEid = $modulo AND estatus = '1' AND nivel = 
+        (SELECT MAX(nivel) FROM nivel WHERE estatus = '1' AND idModuloEid = $modulo)";
+        $stmt = $this->db->pdo()->prepare($query);
+
+        $consultanivel = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($consultanivel == false) {
+
+            return null;
+        }
+        
+        return $consultanivel['id'];
+
+    } catch (Exception $e) {
+        http_response_code($e->getCode());
+        echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+        die();
+    }
+
+    }
+
+
+
+    public function getCodigo()
     {
         return $this->codigo;
     }
 
-    public function getIdEid(): ?string
+    public function getIdEid()
     {
         return $this->idEid;
     }
 
-    public function getNivel(): ?string
+    public function getNivel()
     {
         return $this->nivel;
     }
 
-    public function getNombre(): string
+    public function getNombre()
     {
         return $this->nombre;
     }

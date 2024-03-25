@@ -1,5 +1,8 @@
 <?php
 require_once "Models/Eid.php";
+require_once "Models/Nivel.php";
+require_once "Models/Grupo.php";
+require_once "Models/Moduloeid.php";
 
 
 necesitaAutenticacion();
