@@ -339,32 +339,8 @@ class Usuario extends Model
         return $usuarios;
     }
 
-    /**
-     * mapea las propiedades del usuario con las propiedades de un Discipulo
-     *
-     * @param Discipulo $discipulo El discipulo desde donde se mapeara el usuario
-     **/
-    public function fromDiscipulo(Discipulo $discipulo): void
-    {
-        /** @var Usuario $usuarioSesion */
-        $usuarioSesion = $_SESSION['usuario'];
-        $idSede = $usuarioSesion->idSede;
 
-        $this->idSede = $idSede;
-        $this->idConsolidador = $discipulo->getIdConsolidador();
-        $this->cedula = $discipulo->getCedula();
-        $this->correo = null;
-        $this->clave = $this->cedula;
-        $this->nombre = $discipulo->getNombre();
-        $this->apellido = $discipulo->getApellido();
-        $this->telefono = $discipulo->getTelefono();
-        $this->direccion = $discipulo->getDireccion();
-        $this->estadoCivil = $discipulo->getEstadoCivil();
-        $this->fechaNacimiento = $discipulo->getFechaNacimiento();
-        $this->fechaConversion = $discipulo->getFechaConvercion();
-        $this->motivo = $discipulo->getMotivo();
-        $this->roles[] = Rol::tryFromNombre("Estudiante");
-    }
+
 
     public function recovery(string $cedulaRecovery): array
     {
@@ -784,6 +760,192 @@ class Usuario extends Model
         }
         return false;
     }
+
+
+    public function listarEstudiantes()
+    {
+
+        try {
+
+            $sql = "SELECT * FROM usuario
+            INNER JOIN usuariorol ON usuario.id = usuariorol.idUsuario AND usuariorol.idRol = '10'
+             WHERE usuario.estatus = '1'";
+
+            $stmt = $this->db->pdo()->prepare($sql);
+
+            $stmt->execute();
+            $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $resultado;
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
+            $error_data = array(
+                "error_message" => $e->getMessage(),
+                "error_line" => "Linea del error: " . $e->getLine()
+            );
+            //print_r($error_data);
+            http_response_code(422);
+            echo json_encode($error_data);
+            die();
+        }
+
+    }
+
+    public function validarRegistrarEstudiante($cedula)
+    {
+
+        try {
+
+            $sql = "SELECT CONCAT(nombre, ' ', apellido) AS nombreCompleto, id, cedula, aprobarUsuario FROM discipulo
+             WHERE cedula = :cedula AND estatus = '1' AND aprobarUsuario NOT IN ('2')";
+
+            $stmt = $this->db->pdo()->prepare($sql);
+
+            $stmt->bindValue(':cedula', $cedula);
+
+            $stmt->execute();
+            $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+
+
+            if ($stmt->rowCount() == 1) {
+                if ($resultado['aprobarUsuario'] == 1) {
+                    $array2 = array("tipo" => 'discipulo');
+                    $resultadoFinal = array_merge($resultado, $array2);
+                    return $resultadoFinal;
+                } else if ($resultado['aprobarUsuario'] == 0) {
+                    throw new Exception("El Discipulo aun no cumple con las 5 Asistencias", 422);
+                }
+
+                //   falta validar si ya tiene usuario creado o si el discipulo esta marcado en '2' pero no tiene usuario
+
+            } else {
+                $usuario = Usuario::cargarPorCedula($cedula);
+                if ($usuario == null) {
+                    throw new Exception("Esta Cedula no corresponde a ningun Usuario ni Discipulo inscrito en el sistema", 422);
+                } else {
+            
+                if ($usuario->tieneRol("Estudiante")) {
+                    throw new Exception("Este estudiante ya esta inscrito en la escuela de Impulso y Desarrollo de la Sede" . $usuario->idSede . ".", 422);
+
+                } else{
+                    return array("nombreCompleto" => $usuario->getNombreCompleto(), "id" => $usuario->id, "cedula" => $usuario->getCedula(), "tipo" => 'usuario');
+                }}
+            }
+
+
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+            die();
+        }
+
+    }
+
+    public function RegistrarEstudiante($id, $tipo)
+    {
+
+        try {
+
+            if ($tipo == 'usuario') {
+
+                $sql2 = "UPDATE usuario SET fechaInscripcionEscuela = CURDATE() WHERE id = :id";
+                
+                $stmt2 = $this->db->pdo()->prepare($sql2);
+
+                $stmt2->bindValue(':id', $id);
+
+                $stmt2->execute();
+
+                $sql = "INSERT INTO usuariorol(idUsuario, idRol)
+                VALUES(:idUsuario, :idRol)";
+
+                $stmt = $this->db->pdo()->prepare($sql);
+
+                $stmt->bindValue(':idUsuario', $id);
+                $stmt->bindValue(':idRol', '10');
+
+                $stmt->execute();
+
+                /** @var Usuario */
+                $Usuario = Usuario::cargar($id);
+
+                Bitacora::registrar("Registro de Estudiante" . $Usuario->getNombreCompleto() . " exitoso.");
+
+                http_response_code(200);
+                echo json_encode(array('msj' => 'Registro de Estudiante exitoso', 'status' => 200));
+                die();
+
+            }
+
+            if ($tipo == 'discipulo') {
+                /** @var Discipulo */
+                $discipulo = Discipulo::cargar($id);
+                /** @var Usuario */
+                $idSede = Usuario::cargar($discipulo->getIdConsolidador());
+
+
+                $sql = "INSERT INTO usuario(idSede, cedula, clave, nombre, apellido, telefono, direccion, estadoCivil, fechaNacimiento, fechaInscripcionEscuela)
+            VALUES(:idSede, :cedula, :clave, :nombre, :apellido, :telefono, :direccion, :estadoCivil, :fechaNacimiento, CURDATE())";
+
+
+            $clave = password_hash($discipulo->getCedula(), PASSWORD_DEFAULT);
+
+            // Registra al usuario
+            
+            $stmt = $this->db->pdo()->prepare($sql);
+
+            $stmt->bindValue('idSede', $idSede->idSede);
+            $stmt->bindValue('cedula', $discipulo->getCedula());
+            $stmt->bindValue('clave', $clave);
+            $stmt->bindValue('nombre', $discipulo->getNombre());
+            $stmt->bindValue('apellido', $discipulo->getApellido());
+            $stmt->bindValue('telefono', $discipulo->getTelefono());
+            $stmt->bindValue('direccion', $discipulo->getDireccion());
+            $stmt->bindValue('estadoCivil', $discipulo->getEstadoCivil());
+            $stmt->bindValue('fechaNacimiento', $discipulo->getFechaNacimiento());
+
+            $stmt->execute();
+
+            // Registra los roles del usuario
+            $idUsuario = $this->db->pdo()->lastInsertId();
+
+            $sql2 = "INSERT INTO usuariorol(idUsuario, idRol)
+                VALUES(:idUsuario, :idRol)";
+
+                $stmt2 = $this->db->pdo()->prepare($sql2);
+
+                $stmt2->bindValue(':idUsuario', $idUsuario);
+                $stmt2->bindValue(':idRol', '10');
+
+                $stmt2->execute();
+
+                $sql3 = "UPDATE discipulo SET aprobarUsuario = '2', estatus = '0' WHERE id = :id";
+                
+                $stmt3 = $this->db->pdo()->prepare($sql3);
+
+                $stmt3->bindValue(':id', $id);
+
+                $stmt3->execute();
+
+                /** @var Usuario */
+                $Usuario = Usuario::cargar($idUsuario);
+
+                Bitacora::registrar("Registro de Estudiante" . $Usuario->getNombreCompleto() . " exitoso.");
+
+                http_response_code(200);
+                echo json_encode(array('msj' => 'Registro de Estudiante exitoso', 'status' => 200));
+                die();
+
+            }
+
+
+
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+            die();
+        }
+
+    }
+
 
     // Getters
     public function getEdad(): int

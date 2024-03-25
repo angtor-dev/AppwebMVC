@@ -18,6 +18,7 @@ class Discipulo extends Model
     private string $motivo;
     private string $fechaConvercion;
     private int $aprobarUsuario;
+    private int $estatus;
 
     private $expresion_nombreApellido = '/^[a-zA-ZñÑáéíóúÁÉÍÓÚ]{1,50}$/';
     private $expresion_fecha = '/^\d{4}-\d{2}-\d{2}$/';
@@ -793,39 +794,6 @@ class Discipulo extends Model
         }
     }
 
-    public static function cargarPorCedula(string|int $cedula): null|Discipulo
-    {
-        $bd = Database::getInstance();
-        $query = "SELECT * FROM discipulo WHERE cedula = :cedula AND estatus = 1 LIMIT 1";
-
-        $stmt = $bd->pdo()->prepare($query);
-        $stmt->bindValue(":cedula", $cedula);
-
-        $stmt->execute();
-        $stmt->setFetchMode(PDO::FETCH_CLASS, "Discipulo");
-
-        if ($stmt->rowCount() == 0) {
-            return null;
-        }
-        return $stmt->fetch();
-    }
-
-    public function marcarUsuarioCreado(): void
-    {
-        try {
-            $query = "UPDATE discipulo SET aprobarUsuario = 2 WHERE id = $this->id";
-
-            $this->query($query);
-        } catch (\Throwable $th) {
-            $_SESSION['errores'][] = "Ah ocurrido un error al actualizar el estado del discipulo";
-            throw $th;
-        }
-    }
-
-
-
-
-
 
     ////////////////////////// APARTADO DE REPORTES ESTADISTICOS ///////////////////////////
 
@@ -906,5 +874,10 @@ class Discipulo extends Model
     public function getAprobarUsuario(): int
     {
         return $this->aprobarUsuario;
+    }
+
+    public function getEstatus(): int
+    {
+        return $this->estatus;
     }
 }

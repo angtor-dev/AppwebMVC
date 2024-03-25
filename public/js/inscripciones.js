@@ -1,77 +1,196 @@
-const modalCedulaEl = document.getElementById('modal-cedula')
-let modalCedula = bootstrap.Modal.getOrCreateInstance(modalCedulaEl)
+$(document).ready(function () {
+    let validCedula = false;
 
-// eventos
-document.getElementById('form-buscar-cedula').addEventListener('submit', submitHandler)
-modalCedulaEl.addEventListener('hidden.bs.modal', e => {
-    document.getElementById('buscar-cedula').value = "";
-    document.querySelector('.msgBox').innerHTML = "";
-})
+    const dataTable = $('#estudiantesDatatables').DataTable({
+        info: false,
+        lengthChange: false,
+        pageLength: 15,
+        dom: 'ltipB',
+        searching: true,
+        language: {
+            url: '/AppwebMVC/public/lib/datatables/datatable-spanish.json'
+        },
 
-/**
- * Handler para formulario de validacion de cedula
- * @param {SubmitEvent} e 
- */
-async function submitHandler(e) {
-    e.preventDefault()
-    let form = e.currentTarget
-    const msgBox = document.querySelector(".msgBox")
+        drawCallback: function (settings) {
+            var pagination = $(this).closest('.dataTables_wrapper').find('.dataTables_paginate');
+            pagination.toggle(this.api().page.info().pages > 1);
+        },
+        ajax: {
+            method: "GET",
+            url: '/AppwebMVC/Estudiantes/Index',
+            data: { cargar_data: 'cargar_data' }
+        },
+        columns: [
+            { data: 'cedula' },
+            { data: 'nombre' },
+            { data: 'apellido' },
+            { data: 'fechaInscripcionEscuela'},
+            // { data: 'cursando' },
+            {
+                data: null,
+                render: function (data, type, row, meta) {
 
-    let res = await fetch(form.action, {
-        method: form.method,
-        body: new FormData(form)
-    })
+                    let botonHistorial = `<a type="button" id="ver_info" data-bs-toggle="modal" data-bs-target="#modalHistorial" title="Ver Historial" ,><i class="fa-solid fa-circle-info" ></i></a>`;
 
-    if (res.status != 200) {
-        console.error("Ah ocurrido un error.", res.status);
-        return;
-    }
-    let data = await res.json();
+                    let div = `
+      <div class="acciones">
+                ${botonHistorial}
 
-    if (data.code != 1) {
-        console.log(data.msg)
-        msgBox.innerHTML = crearAlerta(data.msg)
-        return;
-    }
+      </div>
+      `
+                    return div;
+                }
+            },
+        ],
+    });
 
-    modalCedula.hide()
-    abrirModalDiscipulo(data.id)
-}
+    $('#search').keyup(function () {
+        dataTable.search($(this).val()).draw();
+    });
 
-function abrirModalUsuario(id = 0) {
-    fetch('/AppwebMVC/Inscripciones/Registrar?id=' + id)
-        .then(res => res.text())
-        .then(data => {
-            const modalEl = document.getElementById('offcanvas-estudiante')
-            modalEl.innerHTML = data
-            modalEl.querySelectorAll('.needs-validation')
-                .forEach(agregarValidacionGenerica)
 
-            let modal = new bootstrap.Offcanvas(modalEl)
-            modal.show()
-        })
-        .catch(error => console.error(error))
-}
+    $("#cedula").on("keyup", function (event) {
+        const cedula = document.getElementById("cedula").value;
 
-function abrirModalDiscipulo(id) {
-    fetch('/AppwebMVC/Inscripciones/ModalDiscipulo?id=' + id)
-        .then(res => res.text())
-        .then(data => {
-            const modalEl = document.getElementById('offcanvas-estudiante')
-            modalEl.innerHTML = data
-            modalEl.querySelectorAll('.needs-validation')
-                .forEach(agregarValidacionGenerica)
+        if (/^[0-9]{7,8}$/.test(cedula)) {
+            validCedula = true;
+            $("#cedula").removeClass("is-invalid");
+            $("#cedula").addClass("is-valid");
+            document.getElementById('msj_cedula').textContent = '';
 
-            let modal = new bootstrap.Offcanvas(modalEl)
-            modal.show()
-        })
-        .catch(error => console.error(error))
-}
+        } else {
+            validCedula = false;
+            $("#cedula").removeClass("is-valid");
+            $("#cedula").addClass("is-invalid");
+            document.getElementById('msj_cedula').textContent = 'Escriba la cedula correctamente';
 
-function crearAlerta(mensaje) {
-    return `
-        <div class="alert alert-danger alert-dismissible fade show mt-3">
-            ${mensaje}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>`
-}
+        }
+    });
+
+
+    $("#formulario").submit(function (event) {
+
+        event.preventDefault();
+
+
+        if (validCedula === true) {
+
+            $.ajax({
+                type: "POST",
+                url: "/AppwebMVC/Estudiantes/Index",
+                data: {
+
+                    validarRegistrar: 'validarRegistrar',
+                    cedula: document.getElementById("cedula").value,
+                },
+                success: function (response) {
+
+                    let data = JSON.parse(response);
+
+                    const text = `¿Estas Seguro de inscribir a ${data.nombreCompleto}
+                     titular de la cedula ${data.cedula} en la Escuela de Impulso y Desarrollo?`;
+
+
+                    Swal.fire({
+                        title: text,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Confirmar',
+                        confirmButtonColor: '#007bff',
+                        cancelButtonText: 'Cancelar',
+                        reverseButtons: true
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+
+                            $.ajax({
+                                type: "POST",
+                                url: "/AppwebMVC/Estudiantes/Index",
+                                data: {
+                                    registrar: 'registrar',
+                                    id: data.id,
+                                    tipo: data.tipo
+                                },
+                                success: function (response) {
+                                    // console.log(response);
+                                    let data = JSON.parse(response);
+                                    dataTable.ajax.reload();
+
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Registrado con exito',
+                                        showConfirmButton: false,
+                                        timer: 2000,
+                                    });
+
+                                    $('#agregar').modal('hide');
+                                    document.getElementById('formulario').reset();
+                                    validCedula = false;
+                                    $("#cedula").removeClass("is-valid");
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
+                                    if (jqXHR.responseText) {
+                                        let jsonResponse = JSON.parse(jqXHR.responseText);
+
+                                        if (jsonResponse.msj) {
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: 'Denegado',
+                                                text: jsonResponse.msj,
+                                                showConfirmButton: true,
+                                            })
+                                        } else {
+                                            const respuesta = JSON.stringify(jsonResponse, null, 2)
+                                            Swal.fire({
+                                                background: 'red',
+                                                color: '#fff',
+                                                title: respuesta,
+                                                showConfirmButton: true,
+                                            })
+                                        }
+                                    } else {
+                                        alert('Error desconocido: ' + textStatus);
+                                    }
+                                }
+                            })
+                        }
+                    });
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    if (jqXHR.responseText) {
+                        let jsonResponse = JSON.parse(jqXHR.responseText);
+
+                        if (jsonResponse.msj) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Denegado',
+                                text: jsonResponse.msj,
+                                showConfirmButton: true,
+                            })
+                        } else {
+                            const respuesta = JSON.stringify(jsonResponse, null, 2)
+                            Swal.fire({
+                                background: 'red',
+                                color: '#fff',
+                                title: respuesta,
+                                showConfirmButton: true,
+                            })
+                        }
+                    } else {
+                        alert('Error desconocido: ' + textStatus);
+                    }
+                }
+            });
+
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Formulario invalido. Verifique sus datos',
+                showConfirmButton: false,
+                timer: 2000,
+            })
+        }
+
+    });
+
+});

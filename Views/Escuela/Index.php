@@ -327,7 +327,7 @@ $usuario = $_SESSION['usuario'];
                                     <div class="nav nav-tabs card-header-tabs" id="nav-tab" role="tablist">
                                         <div class="nav-link active" data-bs-toggle="" id="aja1" data-bs-target="#"
                                             type="button" role="tab">
-                                            Eid
+                                            Modulos
                                         </div>
                                         <div class="nav-link d-none" data-bs-toggle="" id="aja2" data-bs-target="#"
                                             type="button" role="tab">
