@@ -920,25 +920,9 @@ class Grupo extends Model
                 $stmt1->bindValue(':idGrupo', $idGrupo);
                 $stmt1->bindValue(':idEstudiante', $id['idEstudiante']);
                 $stmt1->execute();
-                $dato1 = $stmt->fetch(PDO::FETCH_ASSOC);
+                $dato1 = $stmt1->fetch(PDO::FETCH_ASSOC);
 
-                if ($dato1['notaTotal'] <= 69.00) {
-
-
-                    $sql = "UPDATE matricula SET notaTotal = :notaTotal, estado = '3' 
-                WHERE idEstudiante = :idEstudiante AND idGrupo = :idGrupo";
-
-                    $stmt1 = $this->db->pdo()->prepare($sql);
-                    $stmt1->bindValue(':idGrupo', $idGrupo);
-                    $stmt1->bindValue(':idEstudiante', $id['idEstudiante']);
-                    $stmt1->bindValue(':notaTotal', $dato1['notaTotal']);
-                    $stmt1->execute();
-
-
-
-                }
-
-                if ($dato1['notaTotal'] >= 70.00) {
+                if ($dato1['notaTotal'] >= 70) {
 
 
                     $sql = "UPDATE matricula SET notaTotal = :notaTotal, estado = '2' 
@@ -952,6 +936,15 @@ class Grupo extends Model
 
 
 
+                }else{
+                    $sql = "UPDATE matricula SET notaTotal = :notaTotal, estado = '3' 
+                    WHERE idEstudiante = :idEstudiante AND idGrupo = :idGrupo";
+
+                    $stmt1 = $this->db->pdo()->prepare($sql);
+                    $stmt1->bindValue(':idGrupo', $idGrupo);
+                    $stmt1->bindValue(':idEstudiante', $id['idEstudiante']);
+                    $stmt1->bindValue(':notaTotal', $dato1['notaTotal']);
+                    $stmt1->execute();
                 }
             }
 
