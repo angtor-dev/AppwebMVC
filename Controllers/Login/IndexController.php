@@ -5,6 +5,7 @@ require_once "Models/Correo.php";
 $Correo = new Correo();
 
 if (!empty($_POST)) {
+
     $usuario = new Usuario();
 
     if (isset($_POST['cedula']) && isset($_POST['clave'])) {
@@ -29,20 +30,20 @@ if (!empty($_POST)) {
         if ($usuario->login($_POST['cedulaMovil'], $_POST['claveMovil'])) {
             Bitacora::registrar("Inicio de sesión por aplicacion movil");
             http_response_code(200);
-            $usuario = $_SESSION['usuario'];
-            $usuario = Usuario::cargar($usuario->id);
 
-            echo json_encode('Has iniciado sesion como: '.$usuario->getNombreCompleto());
-            exit();
+            echo json_encode(array(
+                'msj'=>'Has iniciado sesion correctamente',
+            ));
+
         } else {
             http_response_code(402);
             $loginFails = true;
+            echo json_encode(array('msj'=>'Datos incorrectos. Intente nuevamente'));
         }
 
-    } else {
-        http_response_code(403);
-        $loginFails = true;
+        exit();
     }
+
 
     if (isset($_POST['recovery'])) {
         $cedulaRecovery = $_POST['cedulaRecovery'];
@@ -55,8 +56,9 @@ if (!empty($_POST)) {
             http_response_code(200);
             echo json_encode($datos);
         }
-        exit();
+        die();
     }
+
 
     if (isset($_POST['sendRecoveryRespuesta'])) {
         $cedulaRecovery = $_POST['cedulaRecovery'];
@@ -72,7 +74,7 @@ if (!empty($_POST)) {
             http_response_code(402);
             echo json_encode(array('msj'=>'La respuesta enviada es incorrecta'));
         }
-        exit();
+        die();
     }
 
     if (isset($_POST['register'])) {

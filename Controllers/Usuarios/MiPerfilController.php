@@ -10,6 +10,24 @@
         die();
     }
 
+    if (isset($_GET['getDatosMoviles'])) {
+        echo json_encode(array(
+            'nombre'=>$usuario->getNombre(),
+            'apellido'=>$usuario->getApellido(),
+            'cedula'=>$usuario->getCedula(),
+            'correo'=>$usuario->getCorreo(),
+            'telefono'=>$usuario->getTelefono(),
+            'estadoCivil'=>$usuario->getEstadoCivil(),
+            'direccion'=>$usuario->getDireccion(),
+            'sede'=>$usuario->sede->getNombre(),
+            'fechaNacimiento'=>$usuario->getFechaNacimiento(),
+            'preguntaSecurity'=>$usuario->getPreguntaSecurity(),
+            'respuestaSecurity'=>$usuario->getRespuestaSecurity(),
+        ));
+
+        die();
+    }
+
     if (isset($_POST['saveDatos'])) {
         $respuesta = $usuario->validarActualizarPerfil($_POST, 1);
 
@@ -55,4 +73,3 @@
 
 
     renderView();
-?>

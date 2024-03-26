@@ -346,7 +346,7 @@ class Usuario extends Model
     {
         try {
 
-            $sql = "SELECT `cedula`, `pregunta`, `respuesta`, `correo` FROM `usuario` WHERE `cedula` = :cedula";
+            $sql = "SELECT `cedula`, `preguntaSecurity`, `respuestaSecurity`, `correo` FROM `usuario` WHERE `cedula` = :cedula";
             $stmt = $this->db->pdo()->prepare($sql);
             $stmt->bindValue(":cedula", $cedulaRecovery);
             $stmt->execute();
@@ -372,13 +372,13 @@ class Usuario extends Model
     {
         try {
 
-            $sql = "SELECT `respuesta` FROM `usuario` WHERE `cedula` = :cedula";
+            $sql = "SELECT `respuestaSecurity` FROM `usuario` WHERE `cedula` = :cedula";
             $stmt = $this->db->pdo()->prepare($sql);
             $stmt->bindValue(":cedula", $cedulaRecovery);
             $stmt->execute();
             $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if ($respuesta == $resultado['respuesta']) {
+            if ($respuesta == $resultado['respuestaSecurity']) {
                 $caracteres = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
                 $clave = '';
                 for ($i = 0; $i < 10; $i++) {
