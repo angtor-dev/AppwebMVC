@@ -5,6 +5,7 @@ $(document).ready(function () {
     let datatables;
     let datatables1;
     let datatables2;
+    let datatables3;
     let ponderacion1;
     let validcedula = false;
 
@@ -70,11 +71,16 @@ $(document).ready(function () {
 
                         let Clases = permisos.actualizar ? `<a role="button" id="clases" data-bs-toggle="modal" title="Clases" data-bs-target="#modalClases" ><i class="fa-solid fa-chalkboard"></i></a>` : '';
 
-                        let activar = permisos.registrar ? ` <a role="button" id="activar" title="Activar Grupo"><i class="fa-solid fa-square-check"></i></a>` : '';
+                        let activar = permisos.registrar ? ` <a role="button" id="activar" title="Activar Grupo"><i class="fa-solid fa-school-circle-check"></i></a>` : '';
+
+                        let cerrar = permisos.registrar ? ` <a role="button" id="cerrarGrupo" title="Cerrar Grupo"><i class="fa-solid fa-school-lock"></i></a>` : '';
 
                         let botonEliminar = permisos.eliminar ? `<a role="button"  id=eliminarGrupo title="Eliminar Grupo"><i class="fa-solid fa-trash" ></i></a>` : '';
 
                         let Matricula = permisos.registrar ? `<a role="button" id="registrarMatricula" data-bs-toggle="modal" data-bs-target="#modal_registroMatricula" title="Registrar Matricula"><i class="fa-solid fa-users"></i></a>` : '';
+
+                        let Matricula2 = permisos.registrar ? `<a role="button" id="Matricula2" data-bs-toggle="modal" data-bs-target="#modal_registroMatricula" title="Matricula"><i class="fa-solid fa-users"></i></a>` : '';
+
 
                         let div = '';
 
@@ -99,6 +105,8 @@ $(document).ready(function () {
                             div = `
                          <div class="acciones">
                          ${Clases}
+                         ${Matricula2}
+                         ${cerrar}
         
                          </div>
                          `}
@@ -144,7 +152,23 @@ $(document).ready(function () {
 
         let text = `Grupo: ${datos.codigo}`;
         $('#titulomatricula').text(text);
+
+        
         ListarMatricula(datos.id, 1);
+
+    });
+
+
+    $('#Grupos tbody').on('click', '#Matricula2', function () {
+        const datos = datatables.row($(this).parents()).data();
+
+        let text = `<strong> Grupo: ${datos.codigo}<strong>`;
+        document.getElementById('registrarEstudiante').innerHTML = text;
+        
+        $('#titulomatricula').text('');
+
+        
+        ListarMatricula(datos.id, 2);
 
     });
 
@@ -457,9 +481,16 @@ $(document).ready(function () {
             ],
         });
 
-        if (tipo == '1' || tipo == '2') {
+        if (tipo == '1') {
             datatables1.column(2).visible(false);
             datatables1.column(3).visible(false);
+          
+        }
+
+        if (tipo == '2') {
+            datatables1.column(2).visible(false);
+            datatables1.column(3).visible(false);
+            datatables1.column(4).visible(false);
         }
     };
 
@@ -644,10 +675,72 @@ $(document).ready(function () {
 
                         Swal.fire({
                             icon: 'success',
-                            title: 'El grupp ahora esta Activo',
+                            title: 'El grupo ahora esta Activo',
                             text: data.msj,
-                            showConfirmButton: false,
-                            timer: 2000,
+                        })
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        if (jqXHR.responseText) {
+                            let jsonResponse = JSON.parse(jqXHR.responseText);
+
+                            if (jsonResponse.msj) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Denegado',
+                                    text: jsonResponse.msj,
+                                    showConfirmButton: true,
+                                })
+                            } else {
+                                const respuesta = JSON.stringify(jsonResponse, null, 2)
+                                Swal.fire({
+                                    background: 'red',
+                                    color: '#fff',
+                                    title: respuesta,
+                                    showConfirmButton: true,
+                                })
+                            }
+                        } else {
+                            alert('Error desconocido: ' + textStatus);
+                        }
+                    }
+                })
+            }
+        });
+    });
+
+    $('#Grupos tbody').on('click', '#cerrarGrupo', function () {
+        const datos = datatables.row($(this).parents()).data();
+
+        Swal.fire({
+            title: '¿Estas Seguro de Cerrar este grupo?',
+            text: "Ya no podras agregar ni editar calificaciones, al cerrar el grupo se pasara nota final a los estudiantes",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: '¡Si, estoy seguro!',
+            confirmButtonColor: '#007bff',
+            cancelButtonText: '¡No, cancelar!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/AppwebMVC/Grupos/Index",
+                    data: {
+
+                        cerrarGrupo: 'cerrarGrupo',
+                        id: datos.id,
+                    },
+                    success: function (response) {
+                        console.log(response);
+                        let data = JSON.parse(response);
+                        datatables.ajax.reload();
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'El grupo ahora esta Cerrado',
+                            text: data.msj,
+
                         })
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
@@ -1008,8 +1101,8 @@ $(document).ready(function () {
         $("#Objetivo").removeClass("is-invalid");
         $("#ponderacion").removeClass("is-invalid");
 
-        
-         $('#modalClases').modal('hide');
+
+        $('#modalClases').modal('hide');
 
         $("#infoNAV").removeClass("active");
         $("#notasNAV").removeClass("active");
@@ -1020,11 +1113,11 @@ $(document).ready(function () {
         $("#tab-info").removeClass("active");
         $("#tab-notas").removeClass("active");
 
-       
+
         $("#clasesNAV").addClass("active");
         $("#tab-clases").addClass("active");
 
-        
+        datatables3.ajax.reload();
 
     })
 
@@ -1154,7 +1247,7 @@ $(document).ready(function () {
                         let div = '';
 
                         if (data.ponderacion > 0) {
-                            editarNota = permisos.registrar ? `<a role="button" id="notas" data-bs-toggle="modal" data-bs-target="#modal_registroMatricula" title="Registrar Matricula"><i class="fa-regular fa-clipboard"></i></a>` : '';
+                            editarNota = permisos.registrar ? `<a role="button" id="notasACT" title="Actualizar Notas"><i class="fa-regular fa-clipboard"></i></a>` : '';
                         } else {
                             editarNota = '';
                         }
@@ -1283,7 +1376,7 @@ $(document).ready(function () {
 
     $('#ClaseDatatables tbody').on('click', '#infoClaseACT', function () {
         const datos = datatables2.row($(this).parents()).data();
-        
+
         $("#infoNAV").removeClass("d-none");
         $("#clasesNAV").removeClass("active");
         $("#tab-info").addClass("active");
@@ -1294,7 +1387,24 @@ $(document).ready(function () {
         document.getElementById('inf_objetivo').textContent = datos.objetivo;
 
         let text = `Clase: ${datos.titulo}`;
-        $('#infoClase').text(text);
+        $('#cartaClases').text(text);
+
+    });
+
+    $('#ClaseDatatables tbody').on('click', '#notasACT', function () {
+        const datos = datatables2.row($(this).parents()).data();
+
+        $("#notasNAV").removeClass("d-none");
+        $("#clasesNAV").removeClass("active");
+        $("#tab-notas").addClass("active");
+        $("#tab-clases").removeClass("active");
+        $("#notasNAV").addClass("active");
+
+        let text = `Clase: ${datos.titulo}`;
+        $('#infoClase2').text(text);
+        $('#idClase1').text(datos.id);
+
+        listarNotasEstudiantes(datos.id);
 
     });
 
@@ -1309,12 +1419,192 @@ $(document).ready(function () {
         $("#tab-info").removeClass("active");
         $("#tab-notas").removeClass("active");
 
-       
+
         $("#clasesNAV").addClass("active");
         $("#tab-clases").addClass("active");
 
+        datatables3.ajax.reload();
+
 
     })
+
+
+    function listarNotasEstudiantes(idClase) {
+
+
+        if (datatables3) {
+            datatables3.destroy();
+        }
+
+        datatables3 = $('#notasdatatble').DataTable({
+
+            info: false,
+            lengthChange: false,
+            pageLength: 15,
+            dom: 'ltip',
+            searching: true,
+            language: {
+                url: '/AppwebMVC/public/lib/datatables/datatable-spanish.json'
+            },
+
+            drawCallback: function (settings) {
+                var pagination = $(this).closest('.dataTables_wrapper').find('.dataTables_paginate');
+                pagination.toggle(this.api().page.info().pages > 1);
+            },
+            ajax: {
+                method: "POST",
+                url: '/AppwebMVC/Grupos/Nota',
+                data: {
+                    cargarNotas: 'cargarNotas',
+                    idClase: idClase
+                }
+            },
+            columns: [
+                { data: 'cedula' },
+                { data: 'nombres' },
+                {
+                    data: null,
+                    render: function (data, type, row, meta) {
+
+                        let id = data.cedula;
+                        let nota = data.calificacion;
+                        let notaInput = `<input type="number" class="form-control" value="${nota}" id="notas${id}" style="width: 100%;"  step="0.01" min="0" aria-describedby="msj_notaACT${id}">
+                        <div id="msj_notaACT${id}" class="invalid-feedback"></div>`;
+
+
+                        let guardar = permisos.registrar ? `<a role="button" id="editarNotas${id}" title="Guardar Cambios" class="d-none"><i class="fa-solid fa-floppy-disk"></i></a></button>` : '';
+
+                        div = ` <div class="acciones" id="guia">
+                        ${notaInput}
+                        ${guardar}
+                        </div>
+                           `
+                        return div;
+                    }
+                },
+
+            ],
+        });
+
+    };
+
+    $('#notasdatatble').on('keyup', '#guia', function (e) {
+        const datos = datatables3.row($(this).parents()).data();
+        let id = datos.cedula;
+        $(`#notasdatatble`).on(`keyup`, `#notas${id}`, function (e) {
+
+            const input = $('#notasdatatble tbody').find(`#notas${id}`);
+            const boton = $('#notasdatatble tbody').find(`#editarNotas${id}`);
+
+            if (input.val() != datos.calificacion) {
+                boton.removeClass("d-none");
+
+                boton.on('click', function (e) {
+                    let nota = '';
+                    let validacion = false;
+                    let msj = $('#notasdatatble tbody').find(`#msj_notaACT${id}`)
+
+                    if (/^\s*$/.test(input.val())) {
+                        nota = '0.00';
+                        input.removeClass("is-invalid");
+                        msj.text('');
+                        validacion = true;
+                    
+                        NotaACT(datos.idUsuario, datos.nombres, nota, boton);
+                    } else {
+                        if(/^([0-9])+(\.[0-9]{2})$/.test(input.val())){
+
+                        input.removeClass("is-invalid");
+                        msj.text('');
+                        validacion = true;
+                        nota = input.val();
+                        NotaACT(datos.idUsuario, datos.nombres, nota, boton);
+                    } else {
+                        
+                        input.addClass("is-invalid");
+                        msj.text('formato incorrecto');
+                        validacion = false;
+                    }
+
+
+                    }
+
+                   
+                });
+
+            } else {
+                boton.addClass("d-none");
+            }
+
+        });
+    });
+
+
+    function NotaACT(idUsuario, nombres, nota, boton) {
+         
+        Swal.fire({
+            title: '¿Estas Seguro?',
+            text: 'Se asignara ' + nota + '% de la calificacion a el estudiante: ' + nombres,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: '¡Si, estoy seguro!',
+            confirmButtonColor: '#007bff',
+            cancelButtonText: '¡No, cancelar!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/AppwebMVC/Grupos/Nota",
+                    data: {
+
+                        actualizarNota: 'actualizarNota',
+                        idClase: $("#idClase1").text(),
+                        idEstudiante: idUsuario,
+                        calificacion: nota,
+                    },
+                    success: function (response) {
+                        console.log(response);
+                        let data = JSON.parse(response);
+                        
+                        boton.addClass('d-none')
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Los cambios fueron guardados',
+                            text: data.msj,
+
+                        })
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        if (jqXHR.responseText) {
+                            let jsonResponse = JSON.parse(jqXHR.responseText);
+
+                            if (jsonResponse.msj) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Denegado',
+                                    text: jsonResponse.msj,
+                                    showConfirmButton: true,
+                                })
+                            } else {
+                                const respuesta = JSON.stringify(jsonResponse, null, 2)
+                                Swal.fire({
+                                    background: 'red',
+                                    color: '#fff',
+                                    title: respuesta,
+                                    showConfirmButton: true,
+                                })
+                            }
+                        } else {
+                            alert('Error desconocido: ' + textStatus);
+                        }
+                    }
+                })
+            }
+        });
+    }
 
 
 });

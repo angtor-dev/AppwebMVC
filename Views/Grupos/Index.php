@@ -157,7 +157,7 @@ $usuario = $_SESSION['usuario'];
         <!-- MODAL PARA REGISTRAR GRUPO -->
         <div class="modal fade" id="modal_registroMatricula" aria-hidden="true" data-bs-backdrop="static"
             data-bs-keyboard="false">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h3 class="modal-title"><strong>Matricula</strong></h3>
@@ -192,8 +192,8 @@ $usuario = $_SESSION['usuario'];
                                                     <tr>
                                                         <th>Cedula</th>
                                                         <th>Nombre</th>
-                                                        <th class="visually-hidden"></th>
-                                                        <th class="visually-hidden"></th>
+                                                        <th>Nota Total</th>
+                                                        <th>Estado</th>
                                                         <th class="text-center" style="width: 100px;">Opciones</th>
                                                     </tr>
                                                 </thead>
@@ -224,7 +224,7 @@ $usuario = $_SESSION['usuario'];
     <?php if ($usuario->tienePermiso("grupos", "registrar")): ?>
         <!-- MODAL PARA REGISTRAR GRUPO -->
         <div class="modal fade" id="modalClases" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-            <div class="modal-dialog modal-md">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h3 class="modal-title" id="tituloClases"><strong></strong></h3>
@@ -352,61 +352,33 @@ $usuario = $_SESSION['usuario'];
                                     </div>
 
                                     <div class="tab-pane fade show" id="tab-notas" role="tabpanel" tabindex="0">
-                                        <h5 id="cartaNiveles"></h5>
+                                        <h5 id="cartaClases"></h5>
 
-                                        <form id="formulario3">
-                                            <div class="mb-3">
-
-                                                <div class="row g-3">
-                                                    <div class="col-7">
-
-
-                                                        <p id="idmodulo1" class="visually-hidden"></p>
-                                                        <p id="idnivel" class="visually-hidden"></p>
-                                                        <input type="text" class="form-control" id="nombre4"
-                                                            placeholder="Nombre del modulo" name="nombre4" maxlength="50"
-                                                            aria-describedby="msj_nombre4" required>
-                                                        <div class="invalid-feedback" id="msj_nombre4">
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-5">
-                                                        <div class="d-flex justify-content-end gap-1">
-                                                            <button type="button" id="editarnivel"
-                                                                class="btn btn-info d-none">editar</button>
-                                                            <button type="button" id="cancelar2"
-                                                                class="btn btn-secondary d-none">cancelar</button>
-                                                            <button type="button" id="registrarnivel"
-                                                                class="btn btn-primary">Registrar</button>
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
-
+                                    
                                         <div class="card">
                                             <div class="card-header">
                                                 <div class="page-top d-flex align-items-end justify-content-between mb-2">
-                                                    <h4><strong>Niveles</strong></h4>
+                                                    <h4><strong>Estudiantes</strong></h4>
                                                     <div class="d-flex gap-3">
                                                         <div class="buscador">
                                                             <input type="text" id="searchNivel" class="form-control"
-                                                                placeholder="Buscar Nivel">
+                                                                placeholder="Buscar Estudiante">
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="card-body">
+                                            <p id="idClase1" class="visually-hidden"></p>
                                                 <div class="table-responsive">
-                                                    <table id="nivelesDatatables"
+                                                    <table id="notasdatatble"
                                                         class="table table-bordered table-rounded table-hover"
                                                         style="width:100%">
                                                         <thead>
                                                             <tr>
-                                                                <th>Codigo</th>
-                                                                <th>Nombre</th>
-                                                                <th class="text-center" style="width: 100px;">Opciones</th>
+                                                            <th>cedula</th>
+                                                            <th>Nombres</th>
+                                                            <th class="gap-2" style="width: 200px;">Calificación</th>
+                                            
                                                             </tr>
                                                         </thead>
                                                         <tbody>

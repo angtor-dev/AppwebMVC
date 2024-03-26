@@ -16,7 +16,7 @@ class Nota extends Model
 
         try {
 
-            $sql = "SELECT usuario.nombre, usuario.apellido, usuario.id, nota.* 
+            $sql = "SELECT usuario.cedula, CONCAT(usuario.nombre, ' ', usuario.apellido) AS nombres, usuario.id AS idUsuario, nota.* 
             FROM nota
             INNER JOIN usuario ON usuario.id = nota.idEstudiante
             WHERE idClase = :idClase";
@@ -53,7 +53,8 @@ class Nota extends Model
 
             if ($calificacion > $Clase->getPonderacion()) {
 
-                throw new Exception("La nota supera la cantidad evaluada para esta clase", 422);
+                throw new Exception("La calificación que se intenta ingresar supera la ponderacion indicada para esta 
+                clase. \n (Ponderación = " .$Clase->getPonderacion(). "%)", 422);
 
             }
 
@@ -63,21 +64,19 @@ class Nota extends Model
 
             $stmt->bindValue(':idClase', $idClase);
             $stmt->bindValue(':idEstudiante', $idEstudiante);
+            $stmt->bindValue(':calificacion', $calificacion);
 
             $stmt->execute();
 
             http_response_code(200);
-            echo json_encode(array('msj' => 'Nota actualizada exitosamente'));
+            echo json_encode(array('msj' => 'Calificacion asignada exitosamente'));
             die();
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
-            $error_data = array(
-                "error_message" => $e->getMessage(),
-                "error_line" => "Linea del error: " . $e->getLine()
-            );
-            http_response_code(422);
-            echo json_encode($error_data);
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
             die();
         }
+        
     }
 
     public function getIdClase()

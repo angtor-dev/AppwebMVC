@@ -743,10 +743,10 @@ class Grupo extends Model
 
             $stmt->execute();
 
-            Bitacora::registrar("El grupo " . $Grupo->getCodigo() . " ahora es un grupo Activo");
+            Bitacora::registrar("El grupo " . $Grupo->getCodigo() . " ahora es un grupo Cerrado");
 
             http_response_code(200);
-            echo json_encode(array('msj' => 'El grupo ya es visible para sus Estudiantes y Profesor correspondiente', 'status' => 200));
+            echo json_encode(array('msj' => 'El grupo ya no es visible para Mentores ni estudiantes', 'status' => 200));
             die();
 
 
@@ -875,7 +875,7 @@ class Grupo extends Model
     {
         try {
 
-            $query = "SELECT id, COUNT(ponderacion) AS ponderacionTotal 
+            $query = "SELECT id, SUM(ponderacion) AS ponderacionTotal 
             FROM clase WHERE idGrupo = :idGrupo AND estatus = '1' GROUP BY idGrupo";
             $stmt = $this->db->pdo()->prepare($query);
 
@@ -889,7 +889,7 @@ class Grupo extends Model
 
                 $cantidad = 100 - $dato['ponderacionTotal'];
 
-                throw new Exception("El grupo no puede cerrar si no se a evaluado el 100%, falta por evaluar " . $cantidad . "%.", 422);
+                throw new Exception("El grupo no puede cerrar si no se a evaluado el 100% falta por evaluar " . $cantidad . "%.", 422);
 
             }
 
@@ -912,7 +912,7 @@ class Grupo extends Model
 
             foreach ($dato as $id) {
 
-                $query2 = "SELECT idEstudiante, COUNT(calificacion) AS notaTotal FROM nota 
+                $query2 = "SELECT idEstudiante, SUM(calificacion) AS notaTotal FROM nota 
                 INNER JOIN clase ON idGrupo = :idGrupo AND clase.id = nota.idClase
                 WHERE nota.idEstudiante = :idEstudiante GROUP BY nota.idEstudiante";
 
@@ -920,9 +920,9 @@ class Grupo extends Model
                 $stmt1->bindValue(':idGrupo', $idGrupo);
                 $stmt1->bindValue(':idEstudiante', $id['idEstudiante']);
                 $stmt1->execute();
-                $dato1 = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                $dato1 = $stmt->fetch(PDO::FETCH_ASSOC);
 
-                if ($dato1['notaTotal'] < 70) {
+                if ($dato1['notaTotal'] <= 69.00) {
 
 
                     $sql = "UPDATE matricula SET notaTotal = :notaTotal, estado = '3' 
@@ -938,7 +938,7 @@ class Grupo extends Model
 
                 }
 
-                if ($dato1['notaTotal'] >= 70) {
+                if ($dato1['notaTotal'] >= 70.00) {
 
 
                     $sql = "UPDATE matricula SET notaTotal = :notaTotal, estado = '2' 

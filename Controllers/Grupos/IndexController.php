@@ -159,4 +159,15 @@ if (isset($_POST['activarGrupo'])) {
 
     die();
 }
+
+if (isset($_POST['cerrarGrupo'])) {
+
+    requierePermiso("grupos", "actualizar");
+
+    $id = $_POST['id'];
+
+    $Grupo->cerrarGrupo($id);
+
+    die();
+}
 renderView();

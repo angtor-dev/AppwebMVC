@@ -17,6 +17,7 @@ $usuarioSesion = $_SESSION['usuario'];
 
 $Clase = new Clase();
 
+
 if (isset($_POST['registrar_editar'])) {
 
 
@@ -81,4 +82,6 @@ if (isset($_POST['eliminar'])) {
 
     die();
 }
+
+
 renderView();
