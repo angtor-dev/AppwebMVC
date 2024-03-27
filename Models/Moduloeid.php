@@ -196,31 +196,37 @@ class Moduloeid extends Model
         return $moduloeid;
     }
 
-    public function getUltimoNivel()
-
+    public function getUltimoNivel($modulo)
     {
-        try{
+        try {
 
-        $modulo = $this->id;
-
-        $query = "SELECT * FROM nivel 
+            $db = Database::getInstance();
+            $query = "SELECT id FROM nivel 
         WHERE idModuloEid = $modulo AND estatus = '1' AND nivel = 
         (SELECT MAX(nivel) FROM nivel WHERE estatus = '1' AND idModuloEid = $modulo)";
-        $stmt = $this->db->pdo()->prepare($query);
 
-        $consultanivel = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($consultanivel == false) {
+            $stmt = $db->pdo()->query($query);
 
-            return null;
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+
+            $consultanivel= $stmt->fetch();
+
+            if ($stmt->rowCount() == 0) {
+                 
+                return null;
+                
+            }else{
+                
+                return $consultanivel['id'];
+            }
+
+
+
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+            die();
         }
-        
-        return $consultanivel['id'];
-
-    } catch (Exception $e) {
-        http_response_code($e->getCode());
-        echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
-        die();
-    }
 
     }
 

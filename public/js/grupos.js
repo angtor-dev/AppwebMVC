@@ -153,7 +153,7 @@ $(document).ready(function () {
         let text = `Grupo: ${datos.codigo}`;
         $('#titulomatricula').text(text);
 
-        
+
         ListarMatricula(datos.id, 1);
 
     });
@@ -164,10 +164,10 @@ $(document).ready(function () {
 
         let text = `<strong> Grupo: ${datos.codigo}<strong>`;
         document.getElementById('registrarEstudiante').innerHTML = text;
-        
+
         $('#titulomatricula').text('');
 
-        
+
         ListarMatricula(datos.id, 2);
 
     });
@@ -484,7 +484,7 @@ $(document).ready(function () {
         if (tipo == '1') {
             datatables1.column(2).visible(false);
             datatables1.column(3).visible(false);
-          
+
         }
 
         if (tipo == '2') {
@@ -521,14 +521,14 @@ $(document).ready(function () {
                     success: function (response) {
                         console.log(response);
                         let data = JSON.parse(response);
+                        datatables.ajax.reload();
                         datatables1.ajax.reload();
 
                         Swal.fire({
                             icon: 'success',
                             title: '¡Borrado!',
                             text: 'Grupo borrado con Exito',
-                            showConfirmButton: false,
-                            timer: 2000,
+
                         })
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
@@ -1140,18 +1140,17 @@ $(document).ready(function () {
                 success: function (response) {
                     console.log(response);
                     let data = JSON.parse(response);
-
+                    datatables.ajax.reload();
+                    datatables1.ajax.reload();
                     Swal.fire({
                         icon: 'success',
                         title: data.msj,
-                        showConfirmButton: false,
-                        timer: 2000,
                     });
 
                     $("#cedula").removeClass("is-valid");
                     validcedula = false;
                     document.getElementById('formulario1').reset();
-                    datatables1.ajax.reload();
+
 
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -1402,7 +1401,12 @@ $(document).ready(function () {
 
         let text = `Clase: ${datos.titulo}`;
         $('#infoClase2').text(text);
+
         $('#idClase1').text(datos.id);
+
+        let text2 = `<strong>Ponderacion: ${datos.ponderacion}%</strong>`;
+        $('#tituloNotas').html(text2);
+        $('#ponderacionClases').val(datos.ponderacion);
 
         listarNotasEstudiantes(datos.id);
 
@@ -1468,13 +1472,13 @@ $(document).ready(function () {
 
                         let id = data.cedula;
                         let nota = data.calificacion;
-                        let notaInput = `<input type="number" class="form-control" value="${nota}" id="notas${id}" style="width: 100%;"  step="0.01" min="0" aria-describedby="msj_notaACT${id}">
+                        let notaInput = `<input type="number" class="form-control" value="${nota}" id="notas${id}"step="0.01" min="0" aria-describedby="msj_notaACT${id}">
                         <div id="msj_notaACT${id}" class="invalid-feedback"></div>`;
 
 
-                        let guardar = permisos.registrar ? `<a role="button" id="editarNotas${id}" title="Guardar Cambios" class="d-none"><i class="fa-solid fa-floppy-disk"></i></a></button>` : '';
+                        let guardar = permisos.registrar ? `<button type="button" id="editarNotas${id}" title="Guardar Cambios" class="btn btn-primary d-none"><i class="fa-solid fa-floppy-disk"></i></button>` : '';
 
-                        div = ` <div class="acciones" id="guia">
+                        div = ` <div class="buttons" style="width: 100%;" id="guia">
                         ${notaInput}
                         ${guardar}
                         </div>
@@ -1495,6 +1499,7 @@ $(document).ready(function () {
 
             const input = $('#notasdatatble tbody').find(`#notas${id}`);
             const boton = $('#notasdatatble tbody').find(`#editarNotas${id}`);
+            
 
             if (input.val() != datos.calificacion) {
                 boton.removeClass("d-none");
@@ -1503,37 +1508,53 @@ $(document).ready(function () {
                     let nota = '';
                     let validacion = false;
                     let msj = $('#notasdatatble tbody').find(`#msj_notaACT${id}`)
+                    const ponderacion = $('#ponderacionClases').val();                 
 
                     if (/^\s*$/.test(input.val())) {
-                        nota = '0.00';
+                        nota = '0';
                         input.removeClass("is-invalid");
                         msj.text('');
                         validacion = true;
-                    
-                        NotaACT(datos.idUsuario, datos.nombres, nota, boton);
-                    } else {
-                        if(/^([0-9])+(\.[0-9]{2})$/.test(input.val())){
 
-                        input.removeClass("is-invalid");
-                        msj.text('');
-                        validacion = true;
-                        nota = input.val();
                         NotaACT(datos.idUsuario, datos.nombres, nota, boton);
                     } else {
-                        
+
+                      if (input.val() <= ponderacion) {            
+
+                        if (/^([0-9])+(\.[0-9]{2})$/.test(input.val())) {
+                            input.removeClass("is-invalid");
+                            msj.text('');
+                            validacion = true;
+                            nota = input.val();
+                            NotaACT(datos.idUsuario, datos.nombres, nota, boton);
+                        } else if (/^[0-9]+$/.test(input.val())) {
+
+                            input.removeClass("is-invalid");
+                            msj.text('');
+                            validacion = true;
+                            nota = input.val();
+                            NotaACT(datos.idUsuario, datos.nombres, nota, boton);
+                        } else {
+                            input.addClass("is-invalid");
+                            msj.text('formato incorrecto');
+                            validacion = false;
+
+                        }
+                    } else {
+
                         input.addClass("is-invalid");
-                        msj.text('formato incorrecto');
-                        validacion = false;
-                    }
-
-
-                    }
-
+                         msj.text('Excede la ponderación');
+                        validacion = false; 
                    
+                    }
+                }
+
+
                 });
 
             } else {
                 boton.addClass("d-none");
+                input.removeClass("is-invalid");
             }
 
         });
@@ -1541,7 +1562,7 @@ $(document).ready(function () {
 
 
     function NotaACT(idUsuario, nombres, nota, boton) {
-         
+
         Swal.fire({
             title: '¿Estas Seguro?',
             text: 'Se asignara ' + nota + '% de la calificacion a el estudiante: ' + nombres,
@@ -1567,7 +1588,7 @@ $(document).ready(function () {
                     success: function (response) {
                         console.log(response);
                         let data = JSON.parse(response);
-                        
+
                         boton.addClass('d-none')
 
                         Swal.fire({

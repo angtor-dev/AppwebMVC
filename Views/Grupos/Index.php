@@ -299,10 +299,12 @@ $usuario = $_SESSION['usuario'];
 
                                                     <div class="col-5 d-flex justify-content-end align-items-end gap-1">
                                                         <div class="d-flex justify-content-end gap-1">
-                                                            <button type="button" id="editarClase"
-                                                                class="btn btn-info d-none">editar</button>
                                                             <button type="button" id="cancelar4"
                                                                 class="btn btn-secondary d-none">cancelar</button>
+                                                                
+                                                                <button type="button" id="editarClase"
+                                                                class="btn btn-primary d-none">editar</button>
+                                                            
                                                             <button type="button" id="registrarClase"
                                                                 class="btn btn-primary">Registrar</button>
 
@@ -334,7 +336,7 @@ $usuario = $_SESSION['usuario'];
 
                                                                 <th>Nombre</th>
                                                                 <th>ponderacion</th>
-                                                                <th class="text-center" style="width: 100px;">Opciones</th>
+                                                                <th class="text-center" style="width: 300px;">Opciones</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -352,13 +354,13 @@ $usuario = $_SESSION['usuario'];
                                     </div>
 
                                     <div class="tab-pane fade show" id="tab-notas" role="tabpanel" tabindex="0">
-                                        <h5 id="cartaClases"></h5>
-
+                                        
+                                        
                                     
                                         <div class="card">
                                             <div class="card-header">
                                                 <div class="page-top d-flex align-items-end justify-content-between mb-2">
-                                                    <h4><strong>Estudiantes</strong></h4>
+                                                    <h4 id="infoClase2"><strong></strong></h4>
                                                     <div class="d-flex gap-3">
                                                         <div class="buscador">
                                                             <input type="text" id="searchNivel" class="form-control"
@@ -369,6 +371,10 @@ $usuario = $_SESSION['usuario'];
                                             </div>
                                             <div class="card-body">
                                             <p id="idClase1" class="visually-hidden"></p>
+
+                                            <p id="tituloNotas"><p>
+                                            <input type="number" id="ponderacionClases" class="visually-hidden">
+
                                                 <div class="table-responsive">
                                                     <table id="notasdatatble"
                                                         class="table table-bordered table-rounded table-hover"
@@ -377,7 +383,7 @@ $usuario = $_SESSION['usuario'];
                                                             <tr>
                                                             <th>cedula</th>
                                                             <th>Nombres</th>
-                                                            <th class="gap-2" style="width: 200px;">Calificación</th>
+                                                            <th class="gap-2" style="width: 250px;">Calificación</th>
                                             
                                                             </tr>
                                                         </thead>

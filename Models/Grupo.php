@@ -145,14 +145,9 @@ class Grupo extends Model
                 return $resultado;
             }
 
-        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
-            $error_data = array(
-                "error_message" => $e->getMessage(),
-                "error_line" => "Linea del error: " . $e->getLine()
-            );
-            //print_r($error_data);
-            http_response_code(422);
-            echo json_encode($error_data);
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
             die();
         }
     }
@@ -183,14 +178,9 @@ class Grupo extends Model
 
 
 
-        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
-            $error_data = array(
-                "error_message" => $e->getMessage(),
-                "error_line" => "Linea del error: " . $e->getLine()
-            );
-            //print_r($error_data);
-            http_response_code(422);
-            echo json_encode($error_data);
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
             die();
         }
     }
@@ -369,14 +359,9 @@ class Grupo extends Model
 
 
 
-        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
-            $error_data = array(
-                "error_message" => $e->getMessage(),
-                "error_line" => "Linea del error: " . $e->getLine()
-            );
-
-            http_response_code(422);
-            echo json_encode($error_data);
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
             die();
         }
 
@@ -419,14 +404,9 @@ class Grupo extends Model
             }
 
 
-        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
-            $error_data = array(
-                "error_message" => $e->getMessage(),
-                "error_line" => "Linea del error: " . $e->getLine()
-            );
-
-            http_response_code(422);
-            echo json_encode($error_data);
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
             die();
         }
 
@@ -453,14 +433,9 @@ class Grupo extends Model
             return $resultado;
 
 
-        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
-            $error_data = array(
-                "error_message" => $e->getMessage(),
-                "error_line" => "Linea del error: " . $e->getLine()
-            );
-            //print_r($error_data);
-            http_response_code(422);
-            echo json_encode($error_data);
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
             die();
         }
     }
@@ -503,14 +478,9 @@ class Grupo extends Model
         }
 
 
-        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
-            $error_data = array(
-                "error_message" => $e->getMessage(),
-                "error_line" => "Linea del error: " . $e->getLine()
-            );
-            //print_r($error_data);
-            http_response_code(422);
-            echo json_encode($error_data);
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
             die();
         }
     }
@@ -592,10 +562,10 @@ class Grupo extends Model
             $stmt1 = $this->db->pdo()->prepare($query1);
 
             $stmt1->bindValue(':idEstudiante', $estudiante->id);
-            $stmt1->bindValue(':idNivel', $idNivel);
+            $stmt1->bindValue(':idNivel', $Nivel->id);
 
             $stmt1->execute();
-            $consulta1 = $stmt1->fetch(PDO::FETCH_ASSOC);
+            $stmt1->fetch(PDO::FETCH_ASSOC);
 
             if ($stmt1->rowCount() == 0) {
                 if ($Nivel->getNivel() != 1) {
@@ -630,6 +600,7 @@ class Grupo extends Model
 
                         /** @var Moduloeid **/
                         $ModuloEidAnterior = Moduloeid::cargarModuloAnterior($Moduloeid->id);
+                         $nivelrequerido = $ModuloEidAnterior->getUltimoNivel($ModuloEidAnterior->id);
 
                         $query = "SELECT * FROM grupo
                     INNER JOIN matricula 
@@ -639,7 +610,7 @@ class Grupo extends Model
                         $stmt = $this->db->pdo()->prepare($query);
 
                         $stmt->bindValue(':idEstudiante', $estudiante->id);
-                        $stmt->bindValue(':idNivel', $ModuloEidAnterior->getUltimoNivel());
+                        $stmt->bindValue(':idNivel', $nivelrequerido);
 
                         $stmt->execute();
                         $consulta = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -663,18 +634,15 @@ class Grupo extends Model
                 throw new Exception("Este Estudiante no se puede inscribir porque ya ha aprobado este nivel.", 422);
             }
 
-        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
-            $error_data = array(
-                "error_message" => $e->getMessage(),
-                "error_line" => "Linea del error: " . $e->getLine()
-            );
-
-            http_response_code(422);
-            echo json_encode($error_data);
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
             die();
         }
 
     }
+
+    
 
     public function activarGrupo($idGrupo)
     {
@@ -968,14 +936,9 @@ class Grupo extends Model
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $resultado;
-        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
-            $error_data = array(
-                "error_message" => $e->getMessage(),
-                "error_line" => "Linea del error: " . $e->getLine()
-            );
-            //print_r($error_data);
-            http_response_code(422);
-            echo json_encode($error_data);
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
             die();
         }
     }
