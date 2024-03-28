@@ -193,4 +193,26 @@ if (isset($_POST['cerrarGrupo'])) {
 
     die();
 }
+
+if (isset($_POST['validarAsignarRoles'])) {
+
+    $idGrupo = $_POST['idGrupo'];
+    $idEid = $_POST['idEid'];
+
+    $response = $Grupo->validarAsignarRolesAdqr($idGrupo, $idEid);
+
+    echo json_encode($response);
+
+    die();
+}
+
+if (isset($_POST['asignarRolesAdqr'])) {
+
+    $idGrupo = $_POST['idGrupo'];
+    $idEid = $_POST['idEid'];
+
+     $Grupo->asignarRolesAdqr($idGrupo, $idEid);
+
+    die();
+}
 renderView();

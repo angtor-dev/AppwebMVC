@@ -74,7 +74,30 @@ class Grupo extends Model
 
     }
 
+    public function actualizarAsignarRoles($id)
+    {
+        try {
 
+
+            $query = "UPDATE grupo SET asignacionRoles = '0' WHERE id = :id";
+            $stmt = $this->db->pdo()->prepare($query);
+            $stmt->bindValue(':id', $id);
+            $stmt->execute();
+
+            /** @var Grupo */
+            $Grupo = Grupo::cargar($id);
+
+            Bitacora::registrar("Se asignaron los roles requeridos al grupo " . $Grupo->getCodigo() . " de forma exitosa.");
+
+            echo json_encode(array('msj' => 'Se asignaron los roles a los Estudiantes aprobados del grupo' . $Grupo->getCodigo() . 'de Manera exitosa', 'status' => 200));
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+            die();
+        }
+
+
+    }
 
     public function listarGrupos($tipo)
     {
@@ -84,46 +107,27 @@ class Grupo extends Model
             /** @var Usuario */
             $usuario = $_SESSION['usuario'];
 
-            if ($usuario->tieneRol('Estudiante') || $usuario->tieneRol('Mentor')) {
+            if ($tipo == '4') {
 
-                if ($usuario->tieneRol('Estudiante')) {
+                $sql = "SELECT COUNT(matricula.idEstudiante) AS estudiantes,
+                    CONCAT (usuario.cedula, ' ', usuario.nombre, ' ', usuario.apellido) AS infoMentor, grupo.*, 
+                    eid.id AS idEid FROM grupo
+                    INNER JOIN usuario ON usuario.id = grupo.idMentor
+                    INNER JOIN matricula ON matricula.idGrupo = grupo.id AND matricula.idEstudiante = :idEstudiante
+                    INNER JOIN nivel ON nivel.id = grupo.idNivel
+                    INNER JOIN moduloeid ON moduloeid.id = nivel.idModuloEid
+                    INNER JOIN eid ON eid.id = moduloeid.idEid
+                    WHERE grupo.estado = '2' AND grupo.estatus = '1' GROUP BY grupo.id";
 
-                    $sql = "SELECT usuario.nombre, usuario.apellido, grupo.* 
-                FROM grupo
-                INNER JOIN usuario ON usuario.id = grupo.idMentor
-                INNER JOIN matricula ON matricula.idGrupo = grupo.id AND matricula.idEstudiante = :idEstudiante
-                WHERE grupo.estado = :tipo AND grupo.estatus = '1'";
+                $stmt = $this->db->pdo()->prepare($sql);
 
-                    $stmt = $this->db->pdo()->prepare($sql);
+                $stmt->bindValue(':idEstudiante', $usuario->id);
 
-                    $stmt->bindValue(':tipo ', $tipo);
-                    $stmt->bindValue(':idEstudiante', $usuario->id);
-
-                    $stmt->execute();
-                    $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                    return $resultado;
-
-
-                }
+                $stmt->execute();
+                $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                return $resultado;
 
 
-                if ($usuario->tieneRol('Mentor')) {
-
-                    $sql = "SELECT usuario.nombre, usuario.apellido, grupo.* 
-                FROM grupo
-                INNER JOIN usuario ON usuario.id = grupo.idMentor
-                WHERE idMentor = :idMentor AND grupo.estado = :tipo AND grupo.estatus = '1'";
-
-                    $stmt = $this->db->pdo()->prepare($sql);
-
-                    $stmt->bindValue(':tipo', $tipo);
-                    $stmt->bindValue(':idMentor', $usuario->id);
-
-                    $stmt->execute();
-                    $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                    return $resultado;
-
-                }
             } else {
 
                 $sql = "SELECT COUNT(matricula.idEstudiante) AS estudiantes,
@@ -134,11 +138,13 @@ class Grupo extends Model
             INNER JOIN nivel ON nivel.id = grupo.idNivel
             INNER JOIN moduloeid ON moduloeid.id = nivel.idModuloEid
             INNER JOIN eid ON eid.id = moduloeid.idEid
-            WHERE grupo.estado = :tipo AND grupo.estatus = '1' GROUP BY grupo.id";
+            WHERE grupo.estado = :tipo AND grupo.estatus = '1'" . (($usuario->tieneRol('Mentor')) ? "AND idMentor = :idMentor GROUP BY grupo.id" : "GROUP BY grupo.id");
 
                 $stmt = $this->db->pdo()->prepare($sql);
 
                 $stmt->bindValue(':tipo', $tipo);
+                $usuario->tieneRol('Mentor') ? $stmt->bindValue(':idMentor', $usuario->id) : "";
+              
 
                 $stmt->execute();
                 $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -202,7 +208,7 @@ class Grupo extends Model
 
             /** @var Sede **/
             $Sede = Sede::cargar($usuario->idSede);
-          
+
             $codigo = '';
 
 
@@ -210,15 +216,15 @@ class Grupo extends Model
 
                 $this->existenciaMatricula($id);
 
-                    $codigo = $Sede->getCodigo() . $Nivel->getCodigo() . '-G' . $consulta->getIdentificador();
-                }else{
+                $codigo = $Sede->getCodigo() . $Nivel->getCodigo() . '-G' . $consulta->getIdentificador();
+            } else {
 
-                    $codigo = $consulta->getCodigo();
-                }
-            
+                $codigo = $consulta->getCodigo();
+            }
+
 
             $identificador = $consulta->getIdentificador();
-       
+
 
             $sql = "UPDATE grupo 
             SET codigo = :codigo, identificador = :identificador, idNivel = :idNivel, idMentor = :idMentor
@@ -313,7 +319,7 @@ class Grupo extends Model
             $stmt->bindValue(':id', $id);
 
             $stmt->execute();
-           $stmt->fetch(PDO::FETCH_ASSOC);
+            $stmt->fetch(PDO::FETCH_ASSOC);
 
 
             if ($stmt->rowCount() >= 1) {
@@ -411,7 +417,8 @@ class Grupo extends Model
         }
 
     }
-    public function cargarNotasEstudiante($idGrupo, $idEstudiante){
+    public function cargarNotasEstudiante($idGrupo, $idEstudiante)
+    {
         try {
             $sql = "SELECT clase.titulo, clase.ponderacion, nota.calificacion FROM clase
             LEFT JOIN nota ON nota.idEstudiante = :idEstudiante And nota.idClase = clase.id
@@ -469,38 +476,38 @@ class Grupo extends Model
     {
 
         try {
-             
+
             /** @var Usuario */
-        $usuario = $_SESSION['usuario'];
+            $usuario = $_SESSION['usuario'];
 
-        if ($usuario->tieneRol('SuperUsuario') ){
+            if ($usuario->tieneRol('SuperUsuario')) {
 
-            $sql = "SELECT usuario.id, usuario.cedula, usuario.nombre, usuario.apellido 
+                $sql = "SELECT usuario.id, usuario.cedula, usuario.nombre, usuario.apellido 
                 FROM usuariorol 
                 INNER JOIN usuario ON usuario.id = usuariorol.idUsuario 
                 WHERE usuario.estatus = '1' AND usuariorol.idRol = '11'";
 
-            $stmt = $this->db->pdo()->prepare($sql);
+                $stmt = $this->db->pdo()->prepare($sql);
 
-            $stmt->execute();
-            $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $resultado;
-        } else {
+                $stmt->execute();
+                $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                return $resultado;
+            } else {
 
-            $sql = "SELECT usuario.id, usuario.cedula, usuario.nombre, usuario.apellido 
+                $sql = "SELECT usuario.id, usuario.cedula, usuario.nombre, usuario.apellido 
             FROM usuariorol 
             INNER JOIN usuario ON usuario.id = usuariorol.idUsuario 
             WHERE usuario.estatus = '1' AND usuario.idSede :idSede AND usuariorol.idRol = '11'";
 
-        $stmt = $this->db->pdo()->prepare($sql);
-        $stmt->bindValue(':idSede', $usuario->idSede);
+                $stmt = $this->db->pdo()->prepare($sql);
+                $stmt->bindValue(':idSede', $usuario->idSede);
 
-        $stmt->execute();
-        $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return $resultado;
+                $stmt->execute();
+                $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                return $resultado;
 
 
-        }
+            }
 
 
         } catch (Exception $e) {
@@ -516,46 +523,47 @@ class Grupo extends Model
         try {
             /** @var Usuario */
             $estudiante = Usuario::cargarPorCedula($cedula);
-            
-            if ($estudiante != null){
 
-            if ($estudiante->tieneRol('Estudiante')) {
+            if ($estudiante != null) {
 
-                /** @var Usuario */
-                $usuario = $_SESSION['usuario'];
+                if ($estudiante->tieneRol('Estudiante')) {
 
-                /** @var Sede **/
-                $Sede = Sede::cargar($estudiante->idSede);
+                    /** @var Usuario */
+                    $usuario = $_SESSION['usuario'];
 
-
-                if ($estudiante->idSede == $usuario->idSede) {
+                    /** @var Sede **/
+                    $Sede = Sede::cargar($estudiante->idSede);
 
 
-                    $query = "SELECT grupo.codigo, CASE
+                    if ($estudiante->idSede == $usuario->idSede) {
+
+
+                        $query = "SELECT grupo.codigo, CASE
                 WHEN grupo.estado = '1' THEN 'Abierto'
                 WHEN grupo.estado = '2' THEN 'Activo'
                 END AS estadoGrupo FROM grupo INNER JOIN matricula 
                 ON matricula.idEstudiante = :idEstudiante AND matricula.idGrupo = grupo.id 
                 WHERE (grupo.estatus = '1') AND (grupo.estado = '1' OR grupo.estado = '2')";
 
-                    $stmt = $this->db->pdo()->prepare($query);
+                        $stmt = $this->db->pdo()->prepare($query);
 
-                    $stmt->bindValue(':idEstudiante', $estudiante->id);
-                    $stmt->execute();
-                    $consulta = $stmt->fetch(PDO::FETCH_ASSOC);
+                        $stmt->bindValue(':idEstudiante', $estudiante->id);
+                        $stmt->execute();
+                        $consulta = $stmt->fetch(PDO::FETCH_ASSOC);
 
 
-                    if ($stmt->rowCount() >= 1) {
-                        throw new Exception("Este Estudiante no puede ser inscrito ya que actualmente pertenece a el grupo " . $consulta['codigo'] . " en estado: " . $consulta['estadoGrupo'] . ".", 422);
+                        if ($stmt->rowCount() >= 1) {
+                            throw new Exception("Este Estudiante no puede ser inscrito ya que actualmente pertenece a el grupo " . $consulta['codigo'] . " en estado: " . $consulta['estadoGrupo'] . ".", 422);
+                        }
+
+                    } else {
+                        throw new Exception("Este Estudiante no puede ser inscrito a este grupo porque pertenece a la sede" . $Sede->getCodigo() . " " . $Sede->getNombre() .
+                            ".", 422);
                     }
-
                 } else {
-                    throw new Exception("Este Estudiante no puede ser inscrito a este grupo porque pertenece a la sede" . $Sede->getCodigo() . " " . $Sede->getNombre() .
-                        ".", 422);
+                    throw new Exception("Esta Cedula no corresponde a ningun Estudiante inscrito en la EID", 422);
                 }
             } else {
-                throw new Exception("Esta Cedula no corresponde a ningun Estudiante inscrito en la EID", 422);
-            } }else {
                 throw new Exception("Esta cedula no corresponde a ningun usuario resgistrado en el sistema", 422);
             }
 
@@ -625,7 +633,7 @@ class Grupo extends Model
 
                         /** @var Moduloeid **/
                         $ModuloEidAnterior = Moduloeid::cargarModuloAnterior($Moduloeid->id);
-                         $nivelrequerido = $ModuloEidAnterior->getUltimoNivel($ModuloEidAnterior->id);
+                        $nivelrequerido = $ModuloEidAnterior->getUltimoNivel($ModuloEidAnterior->id);
 
                         $query = "SELECT * FROM grupo
                     INNER JOIN matricula 
@@ -667,7 +675,7 @@ class Grupo extends Model
 
     }
 
-    
+
 
     public function activarGrupo($idGrupo)
     {
@@ -686,9 +694,9 @@ class Grupo extends Model
 
 
             if ($stmt->rowCount() == 0) {
-                
+
                 throw new Exception("Este grupo no puede pasar a estra activo porque aun no tiene matricula", 422);
-               
+
 
             } else {
 
@@ -722,7 +730,7 @@ class Grupo extends Model
 
         try {
 
-            $this->validarNotasGrupo($idGrupo); 
+            $this->validarNotasGrupo($idGrupo);
             $this->validarNotasEstudiantes($idGrupo);
 
 
@@ -756,7 +764,6 @@ class Grupo extends Model
         try {
 
 
-
             $sql1 = "SELECT rol.id, rol.nombre FROM rol 
             INNER JOIN controleid ON rol.id = controleid.idRolAdquirido AND controleid.idEid = :id";
             $stmt1 = $this->db->pdo()->prepare($sql1);
@@ -771,19 +778,37 @@ class Grupo extends Model
 
             } else {
 
-                $sql2 = "SELECT id FROM grupo WHERE id = :id AND asignacionRoles = '2'";
+                $sql2 = "SELECT * FROM grupo WHERE id = :id";
                 $stmt2 = $this->db->pdo()->prepare($sql2);
                 $stmt2->bindValue(":id", $idGrupo);
                 $stmt2->execute();
-                $stmt2->fetchAll(PDO::FETCH_ASSOC);
+                $consulta = $stmt2->fetch(PDO::FETCH_ASSOC);
 
-                if ($stmt2->rowCount() == 0) {
+                if ($consulta['asignacionRoles'] == 0) {
 
-                    return '1';
+                    return false;
 
                 } else {
 
-                    return true;
+                    /** @var Grupo */
+                    $Grupo = Grupo::cargar($idGrupo);
+                    /** @var Nivel **/
+                    $Nivel = Nivel::cargar($Grupo->getidNivel());
+                    /** @var Moduloeid **/
+                    $Moduloeid = Moduloeid::cargar($Nivel->getIdModuloEid());
+                    /** @var Moduloeid **/
+                    $ultimoModulo = Moduloeid::cargarUltimoModulo($Moduloeid->getIdEid());
+
+                    $ultimoNiveldeEid = $ultimoModulo->getUltimoNivel($ultimoModulo->id);
+
+                    if ($ultimoNiveldeEid == $Grupo->getidNivel()) {
+
+                        return true;
+
+                    } else {
+
+                        return false;
+                    }
                 }
             }
 
@@ -799,62 +824,55 @@ class Grupo extends Model
     {
         try {
 
-            $sql = "SELECT matricula.idEstudiante FROM matricula
-        WHERE matricula.idGrupo = :idGrupo AND matricula.estado = '2'";
-            $stmt = $this->db->pdo()->prepare($sql);
-            $stmt->bindValue(":id", $this->id);
-            $stmt->execute();
+            $validacion = $this->validarAsignarRolesAdqr($idGrupo, $idEid);
 
-            $Estudiantes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            if ($validacion == false) {
+                throw new Exception("Esta accion no esta permitida para este grupo.", 422);
 
-            $sql1 = "SELECT rol.id, rol.nombre FROM rol 
+            } else {
+
+                $sql = "SELECT matricula.idEstudiante FROM matricula
+            WHERE matricula.idGrupo = :idGrupo AND matricula.estado = '2'";
+                $stmt = $this->db->pdo()->prepare($sql);
+                $stmt->bindValue(":idGrupo", $idGrupo);
+                $stmt->execute();
+
+                $Estudiantes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                $sql1 = "SELECT rol.id, rol.nombre FROM rol 
             INNER JOIN controleid ON rol.id = controleid.idRolAdquirido AND controleid.idEid = :id";
-            $stmt1 = $this->db->pdo()->prepare($sql1);
-            $stmt1->bindValue(":id", $idEid);
-            $stmt1->execute();
+                $stmt1 = $this->db->pdo()->prepare($sql1);
+                $stmt1->bindValue(":id", $idEid);
+                $stmt1->execute();
 
-            $roles = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                $roles = $stmt1->fetchAll(PDO::FETCH_ASSOC);
 
 
-            foreach ($roles as $rol) {
-                foreach ($Estudiantes as $Estudiante) {
-                    /** @var Usuario */
-                    $Usuario = Usuario::cargar($Estudiante['idEstudiante']);
+                foreach ($roles as $rol) {
+                    foreach ($Estudiantes as $Estudiante) {
 
-                    if (empty($Usuario->tieneRol($rol['nombre']))) {
+                        /** @var Usuario */
+                        $Usuario = Usuario::cargar($Estudiante['idEstudiante']);
 
-                        $sql = "INSERT INTO usuariorol(idUsuario, idRol)
-                VALUES(:idUsuario, :idRol)";
+                        if (empty ($Usuario->tieneRol($rol['nombre']))) {
 
-                        $stmt = $this->db->pdo()->prepare($sql);
+                            $sql = "INSERT INTO usuariorol(idUsuario, idRol)
+                        VALUES(:idUsuario, :idRol)";
 
-                        $stmt->bindValue(':idUsuario', $Estudiante['idEstudiante']);
-                        $stmt->bindValue(':idRol', $rol['id']);
+                            $stmt = $this->db->pdo()->prepare($sql);
 
-                        $stmt->execute();
+                            $stmt->bindValue(':idUsuario', $Estudiante['idEstudiante']);
+                            $stmt->bindValue(':idRol', $rol['id']);
+
+                            $stmt->execute();
+
+                        }
 
                     }
-
                 }
             }
 
-            "UPDATE grupo SET asignacionRoles = '2' WHERE idGrupo = :idGrupo";
-
-
-            $stmt1 = $this->db->pdo()->prepare($sql);
-            $stmt1->bindValue(':idGrupo', $idGrupo);
-          
-            $stmt1->execute();
-
-
-            /** @var Grupo */
-            $Grupo = Grupo::cargar($idGrupo);
-
-            Bitacora::registrar("Se asignaron los roles requeridos al grupo " . $Grupo->getCodigo() . " de forma exitosa.");
-
-            http_response_code(200);
-            echo json_encode(array('msj' => 'Se asignaron los roles a los Estudiantes aprobados de Manera exitosa', 'status' => 200));
-            die();
+            $this->actualizarAsignarRoles($idGrupo);
 
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             http_response_code($e->getCode());
@@ -864,6 +882,8 @@ class Grupo extends Model
 
 
     }
+
+
     private function validarNotasGrupo($idGrupo)
     {
         try {
@@ -929,7 +949,7 @@ class Grupo extends Model
 
 
 
-                }else{
+                } else {
                     $sql = "UPDATE matricula SET notaTotal = :notaTotal, estado = '3' 
                     WHERE idEstudiante = :idEstudiante AND idGrupo = :idGrupo";
 

@@ -216,7 +216,7 @@ class Moduloeid extends Model
                 return null;
                 
             }else{
-                
+
                 return $consultanivel['id'];
             }
 
@@ -228,6 +228,27 @@ class Moduloeid extends Model
             die();
         }
 
+    }
+
+    public static function cargarultimoModulo($idEid): null|Moduloeid
+    {
+        
+        $db = Database::getInstance();
+        $sql = "SELECT id FROM moduloeid 
+        WHERE idEid = $idEid AND estatus = '1' AND nivel = 
+        (SELECT MAX(nivel) FROM moduloeid WHERE estatus = '1' AND idEid = $idEid)";
+
+        $stmt = $db->pdo()->query($sql);
+
+        $stmt->setFetchMode(PDO::FETCH_CLASS, "Moduloeid");
+
+        $moduloeid = $stmt->fetch();
+
+        if ($moduloeid == false) {
+            return null;
+        }
+
+        return $moduloeid;
     }
 
 

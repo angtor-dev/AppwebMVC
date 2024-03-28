@@ -14,7 +14,8 @@ $usuario = $_SESSION['usuario'];
         registrar: <?php echo $usuario->tienePermiso("grupos", "registrar") ? 1 : 0 ?>,
         consultar: <?php echo $usuario->tienePermiso("grupos", "consultar") ? 1 : 0 ?>,
         actualizar: <?php echo $usuario->tienePermiso("grupos", "actualizar") ? 1 : 0 ?>,
-        eliminar: <?php echo $usuario->tienePermiso("grupos", "eliminar") ? 1 : 0 ?>
+        eliminar: <?php echo $usuario->tienePermiso("grupos", "eliminar") ? 1 : 0 ?>,
+        rolEstudiante: <?php echo $usuario->tieneRol("Estudiante") ? 1 : 0 ?>
     }
 </script>
 
@@ -34,7 +35,7 @@ $usuario = $_SESSION['usuario'];
     </div>
 
     <div class="mb-3">
-        <?php if ($usuario->tienePermiso("grupos", "registrar")): ?>
+        <?php if ($usuario->tienePermiso("grupos", "consultar")): ?>
 
             <div class="card">
                 <div class="card-header">
@@ -52,6 +53,13 @@ $usuario = $_SESSION['usuario'];
                                 type="button" role="tab" aria-selected="false">
                                 Cerrados
                             </button>
+                           
+                            <button class="nav-link" data-bs-toggle="tab" id="misGrupos" data-bs-target="#tab-gruposActivos"
+                                type="button" role="tab" aria-selected="false">
+                                Mis Grupos
+                            </button>
+                         
+
 
                         </div>
                     </nav>

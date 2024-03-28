@@ -10,7 +10,16 @@ $(document).ready(function () {
     let ponderacion1;
     let validcedula = false;
 
-    listarGrupos(2)
+    if(permisos.rolEstudiante == true){
+      
+        listarGrupos(4)
+        $("#activo").removeClass("active");
+        $("#misGrupos").addClass("active")
+
+    }else{
+    
+        listarGrupos(2)
+    }
 
     const validClase = {
         titulo: false,
@@ -26,6 +35,9 @@ $(document).ready(function () {
     });
     $("#cerrado").on("click", function (event) {
         listarGrupos(3)
+    });
+    $("#misGrupos").on("click", function (event) {
+        listarGrupos(4)
     });
 
     function listarGrupos(tipo) {
@@ -81,21 +93,25 @@ $(document).ready(function () {
                         let Matricula = permisos.registrar ? `<a role="button" id="registrarMatricula" data-bs-toggle="modal" data-bs-target="#modal_registroMatricula" title="Registrar Matricula"><i class="fa-solid fa-users"></i></a>` : '';
 
                         let Matricula2 = permisos.registrar ? `<a role="button" id="Matricula2" data-bs-toggle="modal" data-bs-target="#modal_registroMatricula" title="Matricula"><i class="fa-solid fa-users"></i></a>` : '';
+                        
+                        let Matricula3 = permisos.registrar ? `<a role="button" id="Matricula3" data-bs-toggle="modal" data-bs-target="#modal_registroMatricula" title="Matricula"><i class="fa-solid fa-users"></i></a>` : '';
 
+                         let asignarRoles = `<a role="button" id="asignarRoles${data.id}" class="d-none" title="Asignar Roles"><i class="fa-solid fa-graduation-cap"></i></a>`;
+                         validarAsignarRoles(data.id, data.idEid);
 
                         let div = '';
 
 
                         if (tipo == '1') {
                             div = `
-              <div class="acciones">
+                        <div class="acciones">
                       
                         ${activar}
                         ${Matricula}
                         ${botonEditarGrupoAbierto}
                         ${botonEliminar}
-              </div>
-              `}
+                        </div>
+                        `}
 
                         if (tipo == '2') {
                             div = `
@@ -107,12 +123,13 @@ $(document).ready(function () {
                          </div>
                          `}
 
-                         if (tipo == '3') {
+                        if (tipo == '3') {
                             div = `
-                         <div class="acciones">
+                         <div class="acciones" id="guia2">
+                         
                          ${Clases}
-                         ${Matricula2}
-                         ${AsignarRoles}
+                         ${Matricula3}
+                         ${asignarRoles}
         
                          </div>
                          `}
@@ -127,6 +144,130 @@ $(document).ready(function () {
         }
     };
 
+    $('#Grupos').on('click', '#guia2', function (e) {
+        const datos = datatables.row($(this).parents()).data();
+       
+        $(`#Grupos`).on(`click`, `#asignarRoles${datos.id}`, function (e) {
+
+            Swal.fire({
+                title: '¿Estas Seguro? esta acción solo se puedo hacer una vez.',
+                text: "Se asignaran los roles adquiridos a los estudiantes que hayan aprobado en su totalidad esta Eid.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: '¡Si, estoy seguro!',
+                confirmButtonColor: '#007bff',
+                cancelButtonText: '¡No, cancelar!',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+    
+                    $.ajax({
+                        type: "POST",
+                        url: "/AppwebMVC/Grupos/Index",
+                        data: {
+    
+                            asignarRolesAdqr: 'asignarRolesAdqr',
+                            idGrupo: datos.id,
+                            idEid: datos.idEid,
+                        },
+                        success: function (response) {
+                            let jsonResponse = JSON.parse(response);
+        
+                            Swal.fire({
+                                icon: 'success',
+                                title: '¡Roles Asignados!',
+                                text: jsonResponse.msj,
+    
+                            })
+                            datatables.ajax.reload();
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            if (jqXHR.responseText) {
+                                let jsonResponse = JSON.parse(jqXHR.responseText);
+    
+                                if (jsonResponse.msj) {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Denegado',
+                                        text: jsonResponse.msj,
+                                        showConfirmButton: true,
+                                    })
+                                } else {
+                                    const respuesta = JSON.stringify(jsonResponse, null, 2)
+                                    Swal.fire({
+                                        background: 'red',
+                                        color: '#fff',
+                                        title: respuesta,
+                                        showConfirmButton: true,
+                                    })
+                                }
+                            } else {
+                                alert('Error desconocido: ' + textStatus);
+                            }
+                        }
+                    })
+                }
+
+        });
+    });
+});
+
+
+
+
+
+    function validarAsignarRoles(idGrupo, idEid) {
+
+        $.ajax({
+            type: "POST",
+            url: "/AppwebMVC/Grupos/Index",
+            data: {
+
+                validarAsignarRoles: 'validarAsignarRoles',
+                idGrupo: idGrupo,
+                idEid: idEid
+            },
+            success: function (response) {
+                let data = JSON.parse(response);
+               
+                if (data == true){
+                    
+                    const boton = $('#Grupos tbody').find(`#asignarRoles${idGrupo}`);
+                    boton.removeClass("d-none");
+                    
+                }
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                if (jqXHR.responseText) {
+                    let jsonResponse = JSON.parse(jqXHR.responseText);
+
+                    if (jsonResponse.msj) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Denegado',
+                            text: jsonResponse.msj,
+                            showConfirmButton: true,
+                        })
+                    } else {
+                        const respuesta = JSON.stringify(jsonResponse, null, 2)
+                        Swal.fire({
+                            background: 'red',
+                            color: '#fff',
+                            title: respuesta,
+                            showConfirmButton: true,
+                        })
+                    }
+                } else {
+                    alert('Error desconocido: ' + textStatus);
+                }
+            }
+        })
+       
+
+    }
+
+   
 
 
     $('#Grupos tbody').on('click', '#registrarMatricula', function () {
@@ -174,6 +315,18 @@ $(document).ready(function () {
         document.getElementById('registrarEstudiante').innerHTML = '';
 
         ListarMatricula(datos.id, 2);
+
+    });
+
+    $('#Grupos tbody').on('click', '#Matricula3', function () {
+        const datos = datatables.row($(this).parents()).data();
+
+        let text = `Grupo: ${datos.codigo}`;
+        $('#titulomatricula').text(text);
+
+        document.getElementById('registrarEstudiante').innerHTML = '';
+
+        ListarMatricula(datos.id, 3);
 
     });
 
@@ -258,8 +411,9 @@ $(document).ready(function () {
 
         const ponderacion = $("#ponderacion").val();
 
+
         if (/^\s*$/.test(ponderacion)) {
-            ponderacion1 = 0.00;
+            ponderacion1 = '0';
             $("#ponderacion").removeClass("is-invalid");
             $("#ponderacion").addClass("is-valid");
             document.getElementById('msj_ponderacion').textContent = '';
@@ -268,35 +422,29 @@ $(document).ready(function () {
         } else {
 
             if (/^([0-9]+)(\.[0-9]{2})$/.test(ponderacion)) {
-
-
-                if (ponderacion === 0 || ponderacion == 0.00) {
-
-                    ponderacion1 = 0.00;
+              
                     $("#ponderacion").removeClass("is-invalid");
                     $("#ponderacion").addClass("is-valid");
                     document.getElementById('msj_ponderacion').textContent = '';
                     validClase.ponderacion = true;
-
-                } else {
+                    ponderacion1 = $("#ponderacion").val();
+                }else if (/^[0-9]+$/.test(ponderacion)) {
 
                     $("#ponderacion").removeClass("is-invalid");
                     $("#ponderacion").addClass("is-valid");
                     document.getElementById('msj_ponderacion').textContent = '';
                     validClase.ponderacion = true;
                     ponderacion1 = $("#ponderacion").val();
-
+                } else {
+                    validClase.ponderacion = false;
+                $("#ponderacion").removeClass("is-valid");
+                $("#ponderacion").addClass("is-invalid");
+                document.getElementById('msj_ponderacion').textContent = 'El formato es incorrecto, si se coloca 0 o se deja en blanco este campo se entendera que la clase no es evaluada';
 
                 }
 
-            } else {
-                validClase.ponderacion = false;
-                $("#ponderacion").removeClass("is-valid");
-                $("#ponderacion").addClass("is-invalid");
-                document.getElementById('msj_ponderacion').textContent = 'El formato correcto de este campo es 000.00 de no indicar la ponderacion se entendera que la clase no tiene evaluacion';
-
-            }
-        }
+            } 
+        
 
 
 
@@ -318,24 +466,37 @@ $(document).ready(function () {
         const ponderacion = $("#ponderacion").val();
 
         if (/^\s*$/.test(ponderacion)) {
-            ponderacion1 = '0.00';
+            ponderacion1 = '0';
             $("#ponderacion").removeClass("is-invalid");
             $("#ponderacion").addClass("is-valid");
             document.getElementById('msj_ponderacion').textContent = '';
             validClase.ponderacion = true;
 
-        }
+        } else {
 
-        if (/^([0-9]+)(\.[0-9]{2})$/.test(ponderacion)) {
+            if (/^([0-9]+)(\.[0-9]{2})$/.test(ponderacion)) {
+              
+                    $("#ponderacion").removeClass("is-invalid");
+                    $("#ponderacion").addClass("is-valid");
+                    document.getElementById('msj_ponderacion').textContent = '';
+                    validClase.ponderacion = true;
+                    ponderacion1 = $("#ponderacion").val();
+                }else if (/^[0-9]+$/.test(ponderacion)) {
 
+                    $("#ponderacion").removeClass("is-invalid");
+                    $("#ponderacion").addClass("is-valid");
+                    document.getElementById('msj_ponderacion').textContent = '';
+                    validClase.ponderacion = true;
+                    ponderacion1 = $("#ponderacion").val();
+                } else {
+                    validClase.ponderacion = false;
+                $("#ponderacion").removeClass("is-valid");
+                $("#ponderacion").addClass("is-invalid");
+                document.getElementById('msj_ponderacion').textContent = 'El formato es incorrecto, si indica decimal debe ser 0,00. Dejar en blanco este campo o en "0" se entendera que la clase no es evaluada';
 
-            $("#ponderacion").removeClass("is-invalid");
-            $("#ponderacion").addClass("is-valid");
-            document.getElementById('msj_ponderacion').textContent = '';
-            validClase.ponderacion = true;
-            ponderacion1 = $("#ponderacion").val();
+                }
 
-        }
+            } 
 
 
 
@@ -474,8 +635,8 @@ $(document).ready(function () {
 
                         let div = '';
 
-                        if (tipo == '1') {div =`<div class="acciones">${botonEliminar}</div>`}
-                        if (tipo == '2') {div =`<div class="acciones">${verNotasEstudiante}</div>`}
+                        if (tipo == '1') { div = `<div class="acciones">${botonEliminar}</div>` }
+                        if (tipo == '2' || tipo == '3') { div = `<div class="acciones">${verNotasEstudiante}</div>` }
                         return div;
                     }
                 },
@@ -492,6 +653,11 @@ $(document).ready(function () {
         if (tipo == '2') {
             datatables1.column(2).visible(false);
             datatables1.column(4).visible(false);
+        }
+
+        if (tipo == '3') {
+
+            datatables1.column(3).visible(false);
         }
     };
 
@@ -1083,9 +1249,15 @@ $(document).ready(function () {
         $("#cedula").removeClass("is-valid");
         $("#cedula").removeClass("is-invalid");
         validcedula = false;
+
         $('#modal_registroMatricula').modal('hide');
+        
+        $("#EstudianteNAV").addClass("d-none");
+        $("#EstudianteNAV").removeClass("active");
+        $("#tab-Estudiante").removeClass("active");
         $("#MatriculaNAV").addClass("active");
         $("#tab-Matricula").addClass("active");
+
         document.getElementById('formulario1').reset();
 
     })
@@ -1120,7 +1292,7 @@ $(document).ready(function () {
 
         $("#clasesNAV").addClass("active");
         $("#tab-clases").addClass("active");
-         
+
 
     })
 
@@ -1393,7 +1565,7 @@ $(document).ready(function () {
 
     });
 
-    
+
 
 
     $('#Matricula tbody').on('click', '#verNotasEstudiante', function () {
@@ -1405,22 +1577,32 @@ $(document).ready(function () {
         $("#tab-Matricula").removeClass("active");
         $("#EstudianteNAV").addClass("active");
 
-    
+
         $('#EstudianteNAV').text('Notas');
 
         let text = `<strong>Estudiante: ${datos.nombres} C.I: ${datos.cedula}.</strong>`;
         $('#nombreEstudiante2').html(text);
+        let text2;
 
-        let text2 = `Nota acumulada: ${datos.notaAcumulada}%`;
+        if(datos.notaTotal > '0'){
+
+            text2 = `Nota Total: ${datos.notaTotal}%`;
+
+        }else{
+
+            text2 = `Nota acumulada: ${datos.notaAcumulada}%`;
+        }
+
+        
         $('#notaAcumuladaEstudiante').html(text2);
-     
+
 
         NotasEstudiantes(datos.id, datos.idGrupo);
 
     });
 
 
-    function NotasEstudiantes(idEstudiante, idGrupo){
+    function NotasEstudiantes(idEstudiante, idGrupo) {
 
         if (datatables4) {
             datatables4.destroy();
@@ -1514,7 +1696,7 @@ $(document).ready(function () {
         $("#MatriculaNAV").addClass("active");
         $("#tab-Matricula").addClass("active");
 
-        
+
 
 
     })
@@ -1586,7 +1768,7 @@ $(document).ready(function () {
 
             const input = $('#notasdatatble tbody').find(`#notas${id}`);
             const boton = $('#notasdatatble tbody').find(`#editarNotas${id}`);
-            
+
 
             if (input.val() != datos.calificacion) {
                 boton.removeClass("d-none");
@@ -1595,7 +1777,7 @@ $(document).ready(function () {
                     let nota = '';
                     let validacion = false;
                     let msj = $('#notasdatatble tbody').find(`#msj_notaACT${id}`)
-                    const ponderacion = $('#ponderacionClases').val();                 
+                    const ponderacion = $('#ponderacionClases').val();
 
                     if (/^\s*$/.test(input.val())) {
                         nota = '0';
@@ -1606,35 +1788,35 @@ $(document).ready(function () {
                         NotaACT(datos.idUsuario, datos.nombres, nota, boton);
                     } else {
 
-                      if (input.val() <= ponderacion) {            
+                        if (input.val() <= ponderacion) {
 
-                        if (/^([0-9])+(\.[0-9]{2})$/.test(input.val())) {
-                            input.removeClass("is-invalid");
-                            msj.text('');
-                            validacion = true;
-                            nota = input.val();
-                            NotaACT(datos.idUsuario, datos.nombres, nota, boton);
-                        } else if (/^[0-9]+$/.test(input.val())) {
+                            if (/^([0-9])+(\.[0-9]{2})$/.test(input.val())) {
+                                input.removeClass("is-invalid");
+                                msj.text('');
+                                validacion = true;
+                                nota = input.val();
+                                NotaACT(datos.idUsuario, datos.nombres, nota, boton);
+                            } else if (/^[0-9]+$/.test(input.val())) {
 
-                            input.removeClass("is-invalid");
-                            msj.text('');
-                            validacion = true;
-                            nota = input.val();
-                            NotaACT(datos.idUsuario, datos.nombres, nota, boton);
+                                input.removeClass("is-invalid");
+                                msj.text('');
+                                validacion = true;
+                                nota = input.val();
+                                NotaACT(datos.idUsuario, datos.nombres, nota, boton);
+                            } else {
+                                input.addClass("is-invalid");
+                                msj.text('formato incorrecto');
+                                validacion = false;
+
+                            }
                         } else {
+
                             input.addClass("is-invalid");
-                            msj.text('formato incorrecto');
+                            msj.text('Excede la ponderación');
                             validacion = false;
 
                         }
-                    } else {
-
-                        input.addClass("is-invalid");
-                         msj.text('Excede la ponderación');
-                        validacion = false; 
-                   
                     }
-                }
 
 
                 });
