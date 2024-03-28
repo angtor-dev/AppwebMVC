@@ -91,8 +91,8 @@ $usuario = $_SESSION['usuario'];
                                                 <th>Codigo</th>
                                                 <th>Mentor</th>
                                                 <th>Estudiantes</th>
-                                                <th>FechaInicio</th>
-                                                <th>Fecha Fin</th>
+                                                <th>Fecha de inicio</th>
+                                                <th>Fecha fin</th>
                                                 <th class="text-center" style="width: 100px;">Opciones</th>
                                             </tr>
                                         </thead>
@@ -460,8 +460,34 @@ $usuario = $_SESSION['usuario'];
                 <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" id="cerrarmatricula">Cerrar</button>
                 </div>
-
             </div>
         </div>
 </div>
 <?php endif ?>
+
+    <div class="modal fade" id="contenidoModal" aria-hidden="true" tabindex="-1" data-bs-backdrop="static"
+        data-bs-keyboard="false">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalToggleLabel2">Contenido</h5>
+                </div>
+                <div class="modal-body">
+                    <div id="contenido" class="w-100"></div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-target="#modalClases" data-bs-toggle="modal"
+                        data-bs-dismiss="modal">Atras</button>
+                    <button id="agregarContenido" class="btn btn-primary">Agregar contenido</button>
+                    <button id="guardarContenido" class="btn btn-primary">Guardar</button>
+                    <button id="editarContenido" class="btn btn-primary">Editar contenido</button>
+                    <button id="cancelarContenido" class="btn btn-secondary">Cancelar</button>
+                    <button class="btn btn-primary">Actualizar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>

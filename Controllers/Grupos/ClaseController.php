@@ -20,8 +20,6 @@ $Clase = new Clase();
 
 if (isset($_POST['registrar_editar'])) {
 
-
-
     $accion = $_POST['accion'];
     $idGrupo = $_POST['idGrupo'];
     $idClase = $_POST['idClase'];
@@ -52,7 +50,6 @@ if (isset($_POST['cargarClase'])) {
 
     requierePermiso("clases", "registrar");
 
-
     $idGrupo = $_POST['idGrupo'];
 
     $Lista = $Clase->listarClases($idGrupo);
@@ -79,6 +76,35 @@ if (isset($_POST['eliminar'])) {
     $id = $_POST['id'];
 
     $Clase->eliminarClase($id);
+
+    die();
+}
+
+if (isset($_GET['cargarContenido'])) {
+    $idClase = $_GET['idClase'];
+    echo json_encode($Clase->cargarContenido($idClase));
+    die();
+}
+
+if (isset($_POST['guardarContenido'])) {
+
+    $idClase = $_POST['idClase'];
+    $contenido = $_POST['contenido'];
+
+    die();
+}
+
+if (isset($_POST['editarContenido'])) {
+
+    $idContenido = $_POST['idContenido'];
+    $contenido = $_POST['contenido'];
+
+    die();
+}
+
+if (isset($_POST['eliminarContenido'])) {
+
+    $idContenido = $_POST['idContenido'];
 
     die();
 }

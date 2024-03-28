@@ -336,6 +336,33 @@ class Clase extends Model
         }
     }
 
+    public function cargarContenido($id)
+    {
+        try {
+
+            $query = "SELECT id, contenido FROM contenido WHERE idClase = :idClase";
+            $stmt = $this->db->pdo()->prepare($query);
+            $stmt->bindValue(':idClase', $id);
+            $stmt->execute();
+
+            if ($stmt->rowCount() > 0) {
+                return $stmt->fetch(PDO::FETCH_ASSOC);
+            }else{
+                return array();
+            }
+
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
+            $error_data = array(
+                "error_message" => $e->getMessage(),
+                "error_line" => "Linea del error: " . $e->getLine()
+            );
+            //print_r($error_data);
+            http_response_code(422);
+            echo json_encode($error_data);
+            die();
+        }
+    }
+
 
     public function getIdGrupo()
     {

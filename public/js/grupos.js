@@ -20,6 +20,9 @@ $(document).ready(function () {
     
         listarGrupos(2)
     }
+    // Variable que almacena el objeto Quill JS
+    let editorQuill;
+
 
     const validClase = {
         titulo: false,
@@ -1416,6 +1419,8 @@ $(document).ready(function () {
 
                         let botonEliminar = permisos.eliminar ? `<a role="button"  id="eliminarClase" title="Eliminar Clase"><i class="fa-solid fa-trash" ></i></a>` : '';
 
+                        let contenido = `<a role="button" id="contenidoBoton" title="Contenido"><i class="fa-solid fa-book" data-bs-toggle="modal" href="#contenidoModal"></i></a>`
+
                         let editarNota;
 
                         let div = '';
@@ -1433,7 +1438,7 @@ $(document).ready(function () {
                         ${botonEditar}    
                         ${botonEliminar}
                         ${editarNota}
-                        
+                        ${contenido}
               </div>
               `
                         return div;
@@ -1897,5 +1902,111 @@ $(document).ready(function () {
     }
 
 
-});
 
+
+    ///////////// APARTADO DE CONTENIDO ///////////////
+
+    let idClase
+    let idContenido
+    let contenido
+
+    $('#ClaseDatatables tbody').on('click', '#contenidoBoton', function () {
+        const datos = datatables2.row($(this).parents()).data();
+
+        idClase = datos.id
+        cargarContenido(idClase);
+    });
+
+    // Función para crear un nuevo editor Quill y añadirlo al contenedor
+    function agregar_quillEditor(datos) {
+        // Crea un nuevo elemento <div> para el editor
+        var editorElement = document.createElement('div');
+        // Asigna un ID único al elemento del editor
+        var editorId = 'editor-contenido';
+        editorElement.setAttribute('id', editorId);
+        // Agrega el editor al contenedor sobrescribiendo el contenido existente
+        document.getElementById('contenido').innerHTML = '';
+        document.getElementById('contenido').appendChild(editorElement)
+
+        // Inicializa el editor Quill en el nuevo elemento
+        editorQuill = new Quill('#' + editorId, {
+            theme: 'snow'
+        });
+
+        if (datos != '') {
+            editorQuill.clipboard.dangerouslyPasteHTML(0, datos)
+        }
+    }
+
+
+    function cargarContenido(idClase) {
+        $.ajax({
+            type: "GET",
+            url: "/AppwebMVC/Grupos/Clase",
+            data: {
+                cargarContenido: 'cargarContenido',
+                idClase: idClase
+            },
+            success: function (response) {
+                console.log(response);
+                let data = JSON.parse(response);
+    
+                document.getElementById('contenido').innerHTML = '';
+
+                if (data.length !== 0) {
+                    document.getElementById('contenido').innerHTML = data['contenido'];
+
+                    idContenido = data.id
+                    contenido = data.contenido
+                }else{
+                    let texto = '<p>No existe contenido actualmente</p>'
+                    document.getElementById('contenido').innerHTML = texto;
+                    contenido = texto
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                if (jqXHR.responseText) {
+                    let jsonResponse = JSON.parse(jqXHR.responseText);
+    
+                    if (jsonResponse.msj) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Denegado',
+                            text: jsonResponse.msj,
+                            showConfirmButton: true,
+                        });
+                    } else {
+                        const respuesta = JSON.stringify(jsonResponse, null, 2);
+                        Swal.fire({
+                            background: 'red',
+                            color: '#fff',
+                            title: respuesta,
+                            showConfirmButton: true,
+                        });
+                    }
+                } else {
+                    alert('Error desconocido: ' + textStatus);
+                }
+            }
+        });
+    }
+
+
+    $('#agregarContenido').on('click', function () {
+        agregar_quillEditor('')
+    })
+
+    $('#guardarContenido').on('click', function () {
+        console.log(editorQuill.root.innerHTML)
+    })
+
+    $('#editarContenido').on('click', function () {
+        agregar_quillEditor(contenido)
+    })
+
+    $('#cancelarContenido').on('click', function () {
+        document.getElementById('contenido').innerHTML = '';
+        document.getElementById('contenido').innerHTML = contenido;
+    })
+
+});
