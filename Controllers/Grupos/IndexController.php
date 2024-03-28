@@ -126,6 +126,29 @@ if (isset($_POST['cargarMatricula'])) {
     die();
 }
 
+if (isset($_POST['cargarNotasEstudiante'])) {
+
+
+    $idGrupo = $_POST['idGrupo'];
+    $idEstudiante = $_POST['idEstudiante'];
+
+    $Lista = $Grupo->cargarNotasEstudiante($idGrupo, $idEstudiante);
+    //Variable json solamente para guardar el array de datos
+    $json = array();
+
+    if (!empty($Lista)) {
+        foreach ($Lista as $key) {
+            $json['data'][] = $key;
+        }
+    } else {
+
+        $json['data'] = array();
+    }
+
+    echo json_encode($json);
+    die();
+}
+
 if (isset($_POST['registroEstudiante'])) {
 
 

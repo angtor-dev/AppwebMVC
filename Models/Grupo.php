@@ -411,18 +411,43 @@ class Grupo extends Model
         }
 
     }
+    public function cargarNotasEstudiante($idGrupo, $idEstudiante){
+        try {
+            $sql = "SELECT clase.titulo, clase.ponderacion, nota.calificacion FROM clase
+            LEFT JOIN nota ON nota.idEstudiante = :idEstudiante And nota.idClase = clase.id
+            WHERE clase.idGrupo = :idGrupo AND clase.estatus = '1';";
 
+            $stmt = $this->db->pdo()->prepare($sql);
+
+            $stmt->bindValue(':idGrupo', $idGrupo);
+            $stmt->bindValue(':idEstudiante', $idEstudiante);
+
+            $stmt->execute();
+            $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $resultado;
+
+
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+            die();
+        }
+
+    }
     public function listarMatricula($idGrupo)
     {
 
         try {
-            $sql = "SELECT usuario.id, usuario.cedula,CONCAT(usuario.nombre, ' ', usuario.apellido) AS nombres,  matricula.notaTotal,
-                CASE WHEN matricula.estado = '1' THEN 'Cursando'
-                WHEN matricula.estado = '2' THEN 'Aprobado'
-                WHEN matricula.estado = '3' THEN 'Reprobado'
-                END AS estado FROM matricula
-                LEFT JOIN usuario ON usuario.id = matricula.idEstudiante
-                WHERE matricula.idGrupo = :idGrupo";
+            $sql = "SELECT usuario.id, usuario.cedula, CONCAT(usuario.nombre, ' ', usuario.apellido) AS nombres,  matricula.notaTotal,
+            CASE WHEN matricula.estado = '1' THEN 'Cursando'
+            WHEN matricula.estado = '2' THEN 'Aprobado'
+            WHEN matricula.estado = '3' THEN 'Reprobado'
+            END AS estado, SUM(CASE WHEN nota.calificacion IS NULL THEN 0
+            ELSE nota.calificacion END) AS notaAcumulada, matricula.idGrupo FROM matricula
+            LEFT JOIN usuario ON usuario.id = matricula.idEstudiante
+            LEFT JOIN nota ON nota.idEstudiante = usuario.id 
+            LEFT JOIN clase ON clase.idGrupo = matricula.idGrupo AND nota.idClase = clase.id
+            WHERE matricula.idGrupo = :idGrupo GROUP BY usuario.id";
 
             $stmt = $this->db->pdo()->prepare($sql);
 

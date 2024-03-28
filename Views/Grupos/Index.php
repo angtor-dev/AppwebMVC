@@ -153,103 +153,243 @@ $usuario = $_SESSION['usuario'];
 
 
 
-    <?php if ($usuario->tienePermiso("grupos", "registrar")): ?>
-        <!-- MODAL PARA REGISTRAR GRUPO -->
-        <div class="modal fade" id="modal_registroMatricula" aria-hidden="true" data-bs-backdrop="static"
-            data-bs-keyboard="false">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3 class="modal-title"><strong>Matricula</strong></h3>
-
-                    </div>
-                    <div class="modal-body">
-
-                        <p id="titulomatricula"><strong></strong>
-                        <p>
+   
 
 
-                        <div class="card">
-                            <div class="card-header">
+<?php if ($usuario->tienePermiso("grupos", "registrar")): ?>
+    <!-- MODAL PARA REGISTRAR GRUPO -->
+    <div class="modal fade" id="modalClases" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="tituloClases"><strong></strong></h3>
 
-                                <div id="registrarEstudiante">
+                </div>
+                <div class="modal-body">
+
+                    <p><strong></strong>
+                    <p>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <nav>
+                                <div class="nav nav-tabs card-header-tabs" id="nav-tab" role="tablist">
+                                    <div class="nav-link active" data-bs-toggle="" id="clasesNAV" data-bs-target="#"
+                                        type="button" role="tab">
+                                        Clases
+                                    </div>
+                                    <div class="nav-link d-none" data-bs-toggle="" id="notasNAV" data-bs-target="#"
+                                        type="button" role="tab">
+                                        Notas
+                                    </div>
+                                    <div class="nav-link d-none" data-bs-toggle="" id="infoNAV" data-bs-target="#"
+                                        type="button" role="tab">
+                                        Info
+                                    </div>
+
+                                </div>
+                            </nav>
+                        </div>
+                        <div class="card-body">
+
+                            <div class="tab-content" id="nav-tabContent2">
+
+                                <div class="tab-pane fade show active" id="tab-clases" role="tabpanel" tabindex="0">
+
+                                    <p id="idGrupo1" class="visually-hidden"></p>
+                                    <p id="idClase" class="visually-hidden"></p>
+
+
+                                    <form id="formulario2">
+                                        <div class="mb-3">
+
+                                            <div class="row g-3 mb-3">
+                                                <div class="col-6">
+
+
+
+                                                    <input type="text" class="form-control" id="titulo" placeholder="Titulo"
+                                                        name="titulo" maxlength="50" aria-describedby="msj_titulo" required>
+                                                    <div class="invalid-feedback" id="msj_titulo">
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-6">
+                                                    <input type="number" id="ponderacion" placeholder="Ponderación 0.00"
+                                                        class="form-control" step="0.01" min="0"
+                                                        aria-describedby="msj_ponderacion">
+                                                    <div id="msj_ponderacion" class="invalid-feedback"></div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row g-3 ">
+                                                <div class="col-7">
+
+                                                    <textarea class="form-control" id="Objetivo"
+                                                        placeholder="Objetivo de la Clase" maxlength="100"></textarea>
+                                                    <div id="msj_Objetivo" class="invalid-feedback">
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-5 d-flex justify-content-end align-items-end gap-1">
+                                                    <div class="d-flex justify-content-end gap-1">
+                                                        <button type="button" id="cancelar4"
+                                                            class="btn btn-secondary d-none">cancelar</button>
+
+                                                        <button type="button" id="editarClase"
+                                                            class="btn btn-primary d-none">editar</button>
+
+                                                        <button type="button" id="registrarClase"
+                                                            class="btn btn-primary">Registrar</button>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <div class="page-top d-flex align-items-end justify-content-between mb-2">
+                                                <h4><strong>Clases</strong></h4>
+                                                <div class="d-flex gap-3">
+                                                    <div class="buscador">
+                                                        <input type="text" id="searchModulo" class="form-control"
+                                                            placeholder="Buscar Clase">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table id="ClaseDatatables"
+                                                    class="table table-bordered table-rounded table-hover"
+                                                    style="width:100%">
+                                                    <thead>
+                                                        <tr>
+
+                                                            <th>Nombre</th>
+                                                            <th>ponderacion</th>
+                                                            <th class="text-center" style="width: 300px;">Opciones</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <!-- AQUI MOSTRARA LA INFORMACION -->
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+
+
                                 </div>
 
-                            </div>
-                            <div class="card-body">
+                                <div class="tab-pane fade show" id="tab-notas" role="tabpanel" tabindex="0">
 
-                                <div class="card">
-                                    <div class="card-header">
-                                        <div class="page-top d-flex align-items-end justify-content-between mb-2">
-                                            <h4><strong>Estudiantes</strong></h4>
+
+
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <div class="page-top d-flex align-items-end justify-content-between mb-2">
+                                                <h4 id="infoClase2"><strong></strong></h4>
+                                                <div class="d-flex gap-3">
+                                                    <div class="buscador">
+                                                        <input type="text" id="searchNivel" class="form-control"
+                                                            placeholder="Buscar Estudiante">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <p id="idClase1" class="visually-hidden"></p>
+
+                                            <p id="tituloNotas">
+                                            <p>
+                                                <input type="number" id="ponderacionClases" class="visually-hidden">
+
+                                            <div class="table-responsive">
+                                                <table id="notasdatatble"
+                                                    class="table table-bordered table-rounded table-hover"
+                                                    style="width:100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>cedula</th>
+                                                            <th>Nombres</th>
+                                                            <th class="gap-2" style="width: 250px;">Calificación</th>
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <!-- AQUI MOSTRARA LA INFORMACION -->
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="card-body">
-                                        <div class="table-responsive">
-                                            <table id="Matricula" class="table table-bordered table-rounded table-hover"
-                                                style="width:100%">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Cedula</th>
-                                                        <th>Nombre</th>
-                                                        <th>Nota Total</th>
-                                                        <th>Estado</th>
-                                                        <th class="text-center" style="width: 100px;">Opciones</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <!-- AQUI MOSTRARA LA INFORMACION -->
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
+
+                                </div>
+                                <div class="tab-pane fade show" id="tab-info" role="tabpanel" tabindex="0">
+                                    <h5 id="infoClase"></h5>
+
+                                    <ul class="list-group">
+
+                                        <li class="list-group-item "><strong>Ponderacion:</strong>
+                                            <p id="inf_ponderacion"></p>
+                                        </li>
+                                        <li class="list-group-item "><strong>Objetivo:</strong>
+                                            <p id="inf_objetivo"></p>
+                                        </li>
+                                    </ul>
+
+
+
                                 </div>
 
                             </div>
                         </div>
+                    </div>
 
 
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" id="cerrarmatricula"
-                            data-bs-dismiss="modal">Cerrar</button>
-                    </div>
                 </div>
-
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cerrarClases">Cerrar</button>
+                </div>
             </div>
+
         </div>
-    <?php endif ?>
+    </div>
+<?php endif ?>
 
 
-    <?php if ($usuario->tienePermiso("grupos", "registrar")): ?>
-        <!-- MODAL PARA REGISTRAR GRUPO -->
-        <div class="modal fade" id="modalClases" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3 class="modal-title" id="tituloClases"><strong></strong></h3>
+<?php if ($usuario->tienePermiso("grupos", "registrar")): ?>
+    <!-- MODAL PARA REGISTRAR GRUPO -->
+    <div class="modal fade" id="modal_registroMatricula" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
 
-                    </div>
-                    <div class="modal-body">
+                    <h5 id="titulomatricula" class="modal-title"><strong></strong></h5>
+           
+                </div> 
+                <div class="modal-body">
 
-                        <p><strong></strong>
-                        <p>
+                        <div id="registrarEstudiante" class="mb-3">
+                        </div>
 
                         <div class="card">
                             <div class="card-header">
                                 <nav>
                                     <div class="nav nav-tabs card-header-tabs" id="nav-tab" role="tablist">
-                                        <div class="nav-link active" data-bs-toggle="" id="clasesNAV" data-bs-target="#"
+                                        <div class="nav-link active" data-bs-toggle="" id="MatriculaNAV" data-bs-target="#"
                                             type="button" role="tab">
-                                            Clases
+                                            Matricula
                                         </div>
-                                        <div class="nav-link d-none" data-bs-toggle="" id="notasNAV" data-bs-target="#"
+                                        <div class="nav-link d-none" data-bs-toggle="" id="EstudianteNAV" data-bs-target="#"
                                             type="button" role="tab">
-                                            Notas
-                                        </div>
-                                        <div class="nav-link d-none" data-bs-toggle="" id="infoNAV" data-bs-target="#"
-                                            type="button" role="tab">
-                                            Info
+
                                         </div>
 
                                     </div>
@@ -257,176 +397,63 @@ $usuario = $_SESSION['usuario'];
                             </div>
                             <div class="card-body">
 
-                                <div class="tab-content" id="nav-tabContent2">
+                                <div class="tab-content" id="nav-tabContent3">
+                                    <div class="tab-pane fade show active" id="tab-Matricula" role="tabpanel" tabindex="0">
 
-                                    <div class="tab-pane fade show active" id="tab-clases" role="tabpanel" tabindex="0">
-
-                                        <p id="idGrupo1" class="visually-hidden"></p>
-                                        <p id="idClase" class="visually-hidden"></p>
-
-
-                                        <form id="formulario2">
-                                            <div class="mb-3">
-
-                                                <div class="row g-3 mb-3">
-                                                    <div class="col-6">
-
-
-
-                                                        <input type="text" class="form-control" id="titulo"
-                                                            placeholder="Titulo" name="titulo" maxlength="50"
-                                                            aria-describedby="msj_titulo" required>
-                                                        <div class="invalid-feedback" id="msj_titulo">
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-6">
-                                                        <input type="number" id="ponderacion" placeholder="Ponderación 0.00"
-                                                            class="form-control" step="0.01" min="0"
-                                                            aria-describedby="msj_ponderacion">
-                                                        <div id="msj_ponderacion" class="invalid-feedback"></div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row g-3 ">
-                                                    <div class="col-7">
-
-                                                        <textarea class="form-control" id="Objetivo"
-                                                            placeholder="Objetivo de la Clase" maxlength="100"></textarea>
-                                                        <div id="msj_Objetivo" class="invalid-feedback">
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-5 d-flex justify-content-end align-items-end gap-1">
-                                                        <div class="d-flex justify-content-end gap-1">
-                                                            <button type="button" id="cancelar4"
-                                                                class="btn btn-secondary d-none">cancelar</button>
-                                                                
-                                                                <button type="button" id="editarClase"
-                                                                class="btn btn-primary d-none">editar</button>
-                                                            
-                                                            <button type="button" id="registrarClase"
-                                                                class="btn btn-primary">Registrar</button>
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
-
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <div class="page-top d-flex align-items-end justify-content-between mb-2">
-                                                    <h4><strong>Clases</strong></h4>
-                                                    <div class="d-flex gap-3">
-                                                        <div class="buscador">
-                                                            <input type="text" id="searchModulo" class="form-control"
-                                                                placeholder="Buscar Clase">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="table-responsive">
-                                                    <table id="ClaseDatatables"
-                                                        class="table table-bordered table-rounded table-hover"
-                                                        style="width:100%">
-                                                        <thead>
-                                                            <tr>
-
-                                                                <th>Nombre</th>
-                                                                <th>ponderacion</th>
-                                                                <th class="text-center" style="width: 300px;">Opciones</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <!-- AQUI MOSTRARA LA INFORMACION -->
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-
-
-
-
+                                    <div class="table-responsive">
+                                    <table id="Matricula" class="table table-bordered table-rounded table-hover"
+                                        style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Cedula</th>
+                                                <th>Nombre</th>
+                                                <th>Nota Total</th>
+                                                <th>Nota Acumulada</th>
+                                                <th>Estado</th>
+                                                <th class="text-center">Opciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- AQUI MOSTRARA LA INFORMACION -->
+                                        </tbody>
+                                    </table>
+                                    </div>
 
                                     </div>
 
-                                    <div class="tab-pane fade show" id="tab-notas" role="tabpanel" tabindex="0">
-                                        
-                                        
-                                    
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <div class="page-top d-flex align-items-end justify-content-between mb-2">
-                                                    <h4 id="infoClase2"><strong></strong></h4>
-                                                    <div class="d-flex gap-3">
-                                                        <div class="buscador">
-                                                            <input type="text" id="searchNivel" class="form-control"
-                                                                placeholder="Buscar Estudiante">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="card-body">
-                                            <p id="idClase1" class="visually-hidden"></p>
+                                    <div class="tab-pane fade show" id="tab-Estudiante" role="tabpanel" tabindex="0">
 
-                                            <p id="tituloNotas"><p>
-                                            <input type="number" id="ponderacionClases" class="visually-hidden">
+                                    <p id="nombreEstudiante2" class="mb-3"></p>
+                                    <p id="notaAcumuladaEstudiante" class="mb-3"></p>
 
-                                                <div class="table-responsive">
-                                                    <table id="notasdatatble"
-                                                        class="table table-bordered table-rounded table-hover"
-                                                        style="width:100%">
-                                                        <thead>
-                                                            <tr>
-                                                            <th>cedula</th>
-                                                            <th>Nombres</th>
-                                                            <th class="gap-2" style="width: 250px;">Calificación</th>
-                                            
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <!-- AQUI MOSTRARA LA INFORMACION -->
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <div class="tab-pane fade show" id="tab-info" role="tabpanel" tabindex="0">
-                                        <h5 id="infoClase"></h5>
-
-                                        <ul class="list-group">
-
-                                            <li class="list-group-item "><strong>Ponderacion:</strong>
-                                                <p id="inf_ponderacion"></p>
-                                            </li>
-                                            <li class="list-group-item "><strong>Objetivo:</strong>
-                                                <p id="inf_objetivo"></p>
-                                            </li>
-                                        </ul>
-
-                                   
-
+                                    <div class="table-responsive">
+                                    <table id="NotasEstudiante" class="table table-bordered table-rounded table-hover"
+                                        style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Clase</th>
+                                                <th>Ponderacion</th>
+                                                <th>Calificacion</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- AQUI MOSTRARA LA INFORMACION -->
+                                        </tbody>
+                                    </table>
                                     </div>
 
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
 
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" id="cerrarClases">Cerrar</button>
-                    </div>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="cerrarmatricula">Cerrar</button>
                 </div>
 
             </div>
         </div>
-    <?php endif ?>
-
-
 </div>
+<?php endif ?>

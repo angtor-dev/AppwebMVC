@@ -6,6 +6,7 @@ $(document).ready(function () {
     let datatables1;
     let datatables2;
     let datatables3;
+    let datatables4;
     let ponderacion1;
     let validcedula = false;
 
@@ -84,11 +85,6 @@ $(document).ready(function () {
 
                         let div = '';
 
-                        `<input type="text" class="form-control" id="nombre7"
-                        placeholder="Nombre del modulo" value="${data.codigo}" name="nombre4" maxlength="50"
-                        aria-describedby="msj_nombre4" required>`
-
-
 
                         if (tipo == '1') {
                             div = `
@@ -107,6 +103,16 @@ $(document).ready(function () {
                          ${Clases}
                          ${Matricula2}
                          ${cerrar}
+        
+                         </div>
+                         `}
+
+                         if (tipo == '3') {
+                            div = `
+                         <div class="acciones">
+                         ${Clases}
+                         ${Matricula2}
+                         ${AsignarRoles}
         
                          </div>
                          `}
@@ -162,11 +168,10 @@ $(document).ready(function () {
     $('#Grupos tbody').on('click', '#Matricula2', function () {
         const datos = datatables.row($(this).parents()).data();
 
-        let text = `<strong> Grupo: ${datos.codigo}<strong>`;
-        document.getElementById('registrarEstudiante').innerHTML = text;
+        let text = `Grupo: ${datos.codigo}`;
+        $('#titulomatricula').text(text);
 
-        $('#titulomatricula').text('');
-
+        document.getElementById('registrarEstudiante').innerHTML = '';
 
         ListarMatricula(datos.id, 2);
 
@@ -450,6 +455,7 @@ $(document).ready(function () {
                 { data: 'cedula' },
                 { data: 'nombres' },
                 { data: 'notaTotal' },
+                { data: 'notaAcumulada' },
                 { data: 'estado' },
                 {
                     data: null,
@@ -464,17 +470,12 @@ $(document).ready(function () {
 
                         let botonEliminar = permisos.eliminar ? `<a role="button"  id=eliminarEstudiante title="Eliminar estudiante"><i class="fa-solid fa-trash" ></i></a>` : '';
 
-                        let Matricula = permisos.registrar ? `<a role="button" id="registrarMatricula" data-bs-toggle="modal" data-bs-target="#modal_registroMatricula" title="Registrar Matricula"><i class="fa-solid fa-users"></i></a>` : '';
+                        let verNotasEstudiante = permisos.consultar ? `<a role="button" id="verNotasEstudiante" title="Consultar Notas"><i class="fa-regular fa-clipboard"></i></a>` : '';
 
                         let div = '';
 
-                        if (tipo == '1') {
-                            div = `
-              <div class="acciones">
-                
-                        ${botonEliminar}
-              </div>
-              `}
+                        if (tipo == '1') {div =`<div class="acciones">${botonEliminar}</div>`}
+                        if (tipo == '2') {div =`<div class="acciones">${verNotasEstudiante}</div>`}
                         return div;
                     }
                 },
@@ -484,12 +485,12 @@ $(document).ready(function () {
         if (tipo == '1') {
             datatables1.column(2).visible(false);
             datatables1.column(3).visible(false);
+            datatables1.column(4).visible(false);
 
         }
 
         if (tipo == '2') {
             datatables1.column(2).visible(false);
-            datatables1.column(3).visible(false);
             datatables1.column(4).visible(false);
         }
     };
@@ -1082,6 +1083,9 @@ $(document).ready(function () {
         $("#cedula").removeClass("is-valid");
         $("#cedula").removeClass("is-invalid");
         validcedula = false;
+        $('#modal_registroMatricula').modal('hide');
+        $("#MatriculaNAV").addClass("active");
+        $("#tab-Matricula").addClass("active");
         document.getElementById('formulario1').reset();
 
     })
@@ -1116,8 +1120,7 @@ $(document).ready(function () {
 
         $("#clasesNAV").addClass("active");
         $("#tab-clases").addClass("active");
-
-        datatables3.ajax.reload();
+         
 
     })
 
@@ -1390,6 +1393,73 @@ $(document).ready(function () {
 
     });
 
+    
+
+
+    $('#Matricula tbody').on('click', '#verNotasEstudiante', function () {
+        const datos = datatables1.row($(this).parents()).data();
+
+        $("#EstudianteNAV").removeClass("d-none");
+        $("#MatriculaNAV").removeClass("active");
+        $("#tab-Estudiante").addClass("active");
+        $("#tab-Matricula").removeClass("active");
+        $("#EstudianteNAV").addClass("active");
+
+    
+        $('#EstudianteNAV').text('Notas');
+
+        let text = `<strong>Estudiante: ${datos.nombres} C.I: ${datos.cedula}.</strong>`;
+        $('#nombreEstudiante2').html(text);
+
+        let text2 = `Nota acumulada: ${datos.notaAcumulada}%`;
+        $('#notaAcumuladaEstudiante').html(text2);
+     
+
+        NotasEstudiantes(datos.id, datos.idGrupo);
+
+    });
+
+
+    function NotasEstudiantes(idEstudiante, idGrupo){
+
+        if (datatables4) {
+            datatables4.destroy();
+        }
+
+        datatables4 = $('#NotasEstudiante').DataTable({
+
+            info: false,
+            lengthChange: false,
+            pageLength: 15,
+            dom: 'ltip',
+            searching: true,
+            language: {
+                url: '/AppwebMVC/public/lib/datatables/datatable-spanish.json'
+            },
+
+            drawCallback: function (settings) {
+                var pagination = $(this).closest('.dataTables_wrapper').find('.dataTables_paginate');
+                pagination.toggle(this.api().page.info().pages > 1);
+            },
+            ajax: {
+                method: "POST",
+                url: '/AppwebMVC/Grupos/Index',
+                data: {
+                    cargarNotasEstudiante: 'cargarNotasEstudiante',
+                    idEstudiante: idEstudiante,
+                    idGrupo: idGrupo
+                }
+            },
+            columns: [
+                { data: 'titulo' },
+                { data: 'ponderacion' },
+                { data: 'calificacion' },
+            ],
+        });
+
+
+    }
+
     $('#ClaseDatatables tbody').on('click', '#notasACT', function () {
         const datos = datatables2.row($(this).parents()).data();
 
@@ -1428,6 +1498,23 @@ $(document).ready(function () {
         $("#tab-clases").addClass("active");
 
         datatables3.ajax.reload();
+
+
+    })
+
+    $("#MatriculaNAV").on("click", function (event) {
+
+        $("#EstudianteNAV").removeClass("active");
+
+        $("#EstudianteNAV").addClass("d-none");
+
+        $("#tab-Estudiante").removeClass("active");
+
+
+        $("#MatriculaNAV").addClass("active");
+        $("#tab-Matricula").addClass("active");
+
+        
 
 
     })
