@@ -363,6 +363,77 @@ class Clase extends Model
         }
     }
 
+    public function guardarContenido($idClase, $contenido)
+    {
+        try {
+
+            $query = "INSERT INTO `contenido` (`idClase`, `contenido`) VALUES (:idClase, :contenido)";
+            $stmt = $this->db->pdo()->prepare($query);
+            $stmt->bindValue(':idClase', $idClase);
+            $stmt->bindValue(':contenido', $contenido);
+            $stmt->execute();
+
+            return true;
+
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
+            $error_data = array(
+                "error_message" => $e->getMessage(),
+                "error_line" => "Linea del error: " . $e->getLine()
+            );
+            //print_r($error_data);
+            http_response_code(422);
+            echo json_encode($error_data);
+            die();
+        }
+    }
+
+    public function actualizarContenido($idContenido, $contenido)
+    {
+        try {
+
+            $query = "UPDATE contenido SET contenido = :contenido WHERE id = :idContenido";
+            $stmt = $this->db->pdo()->prepare($query);
+            $stmt->bindValue(':idContenido', $idContenido);
+            $stmt->bindValue(':contenido', $contenido);
+            $stmt->execute();
+
+            return true;
+
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
+            $error_data = array(
+                "error_message" => $e->getMessage(),
+                "error_line" => "Linea del error: " . $e->getLine()
+            );
+            //print_r($error_data);
+            http_response_code(422);
+            echo json_encode($error_data);
+            die();
+        }
+    }
+
+    public function eliminarContenido($idContenido)
+    {
+        try {
+
+            $query = "DELETE FROM contenido WHERE id = :idContenido";
+            $stmt = $this->db->pdo()->prepare($query);
+            $stmt->bindValue(':idContenido', $idContenido);
+            $stmt->execute();
+
+            return true;
+
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
+            $error_data = array(
+                "error_message" => $e->getMessage(),
+                "error_line" => "Linea del error: " . $e->getLine()
+            );
+            //print_r($error_data);
+            http_response_code(422);
+            echo json_encode($error_data);
+            die();
+        }
+    }
+
 
     public function getIdGrupo()
     {
