@@ -83,8 +83,8 @@ $usuario = $_SESSION['usuario'];
                                                 <th>Codigo</th>
                                                 <th>Mentor</th>
                                                 <th>Estudiantes</th>
-                                                <th>FechaInicio</th>
-                                                <th>Fecha Fin</th>
+                                                <th>Fecha de inicio</th>
+                                                <th>Fecha fin</th>
                                                 <th class="text-center" style="width: 100px;">Opciones</th>
                                             </tr>
                                         </thead>
@@ -270,9 +270,6 @@ $usuario = $_SESSION['usuario'];
 
                                                 <div class="row g-3 mb-3">
                                                     <div class="col-6">
-
-
-
                                                         <input type="text" class="form-control" id="titulo"
                                                             placeholder="Titulo" name="titulo" maxlength="50"
                                                             aria-describedby="msj_titulo" required>
@@ -301,13 +298,12 @@ $usuario = $_SESSION['usuario'];
                                                         <div class="d-flex justify-content-end gap-1">
                                                             <button type="button" id="cancelar4"
                                                                 class="btn btn-secondary d-none">cancelar</button>
-                                                                
-                                                                <button type="button" id="editarClase"
+
+                                                            <button type="button" id="editarClase"
                                                                 class="btn btn-primary d-none">editar</button>
-                                                            
+
                                                             <button type="button" id="registrarClase"
                                                                 class="btn btn-primary">Registrar</button>
-
                                                         </div>
                                                     </div>
                                                 </div>
@@ -333,9 +329,8 @@ $usuario = $_SESSION['usuario'];
                                                         style="width:100%">
                                                         <thead>
                                                             <tr>
-
                                                                 <th>Nombre</th>
-                                                                <th>ponderacion</th>
+                                                                <th>Ponderacion</th>
                                                                 <th class="text-center" style="width: 300px;">Opciones</th>
                                                             </tr>
                                                         </thead>
@@ -346,17 +341,11 @@ $usuario = $_SESSION['usuario'];
                                                 </div>
                                             </div>
                                         </div>
-
-
-
-
-
                                     </div>
 
+
+
                                     <div class="tab-pane fade show" id="tab-notas" role="tabpanel" tabindex="0">
-                                        
-                                        
-                                    
                                         <div class="card">
                                             <div class="card-header">
                                                 <div class="page-top d-flex align-items-end justify-content-between mb-2">
@@ -370,10 +359,11 @@ $usuario = $_SESSION['usuario'];
                                                 </div>
                                             </div>
                                             <div class="card-body">
-                                            <p id="idClase1" class="visually-hidden"></p>
+                                                <p id="idClase1" class="visually-hidden"></p>
 
-                                            <p id="tituloNotas"><p>
-                                            <input type="number" id="ponderacionClases" class="visually-hidden">
+                                                <p id="tituloNotas">
+                                                <p>
+                                                    <input type="number" id="ponderacionClases" class="visually-hidden">
 
                                                 <div class="table-responsive">
                                                     <table id="notasdatatble"
@@ -381,10 +371,9 @@ $usuario = $_SESSION['usuario'];
                                                         style="width:100%">
                                                         <thead>
                                                             <tr>
-                                                            <th>cedula</th>
-                                                            <th>Nombres</th>
-                                                            <th class="gap-2" style="width: 250px;">Calificación</th>
-                                            
+                                                                <th>Cedula</th>
+                                                                <th>Nombres</th>
+                                                                <th class="gap-2" style="width: 250px;">Calificación</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -394,13 +383,12 @@ $usuario = $_SESSION['usuario'];
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
+
                                     <div class="tab-pane fade show" id="tab-info" role="tabpanel" tabindex="0">
                                         <h5 id="infoClase"></h5>
 
                                         <ul class="list-group">
-
                                             <li class="list-group-item "><strong>Ponderacion:</strong>
                                                 <p id="inf_ponderacion"></p>
                                             </li>
@@ -408,25 +396,43 @@ $usuario = $_SESSION['usuario'];
                                                 <p id="inf_objetivo"></p>
                                             </li>
                                         </ul>
-
-                                   
-
                                     </div>
 
                                 </div>
                             </div>
                         </div>
-
-
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" id="cerrarClases">Cerrar</button>
                     </div>
                 </div>
-
             </div>
         </div>
     <?php endif ?>
+
+    <div class="modal fade" id="contenidoModal" aria-hidden="true" tabindex="-1" data-bs-backdrop="static"
+        data-bs-keyboard="false">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalToggleLabel2">Contenido</h5>
+                </div>
+                <div class="modal-body">
+                    <div id="contenido" class="w-100"></div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-target="#modalClases" data-bs-toggle="modal"
+                        data-bs-dismiss="modal">Atras</button>
+                    <button id="agregarContenido" class="btn btn-primary">Agregar contenido</button>
+                    <button id="guardarContenido" class="btn btn-primary">Guardar</button>
+                    <button id="editarContenido" class="btn btn-primary">Editar contenido</button>
+                    <button id="cancelarContenido" class="btn btn-secondary">Cancelar</button>
+                    <button class="btn btn-primary">Actualizar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 
 </div>

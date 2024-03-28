@@ -9,6 +9,9 @@ $(document).ready(function () {
     let ponderacion1;
     let validcedula = false;
 
+    // Variable que almacena el objeto Quill JS
+    let editorQuill;
+
     listarGrupos(2)
 
     const validClase = {
@@ -92,14 +95,13 @@ $(document).ready(function () {
 
                         if (tipo == '1') {
                             div = `
-              <div class="acciones">
-                      
-                        ${activar}
-                        ${Matricula}
-                        ${botonEditarGrupoAbierto}
-                        ${botonEliminar}
-              </div>
-              `}
+                            <div class="acciones">
+                                ${activar}
+                                ${Matricula}
+                                ${botonEditarGrupoAbierto}
+                                ${botonEliminar}
+                            </div>`
+                        }
 
                         if (tipo == '2') {
                             div = `
@@ -1241,6 +1243,8 @@ $(document).ready(function () {
 
                         let botonEliminar = permisos.eliminar ? `<a role="button"  id="eliminarClase" title="Eliminar Clase"><i class="fa-solid fa-trash" ></i></a>` : '';
 
+                        let contenido = `<a role="button" id="contenidoBoton" title="Contenido"><i class="fa-solid fa-book" data-bs-toggle="modal" href="#contenidoModal"></i></a>`
+
                         let editarNota;
 
                         let div = '';
@@ -1258,7 +1262,7 @@ $(document).ready(function () {
                         ${botonEditar}    
                         ${botonEliminar}
                         ${editarNota}
-                        
+                        ${contenido}
               </div>
               `
                         return div;
@@ -1499,7 +1503,7 @@ $(document).ready(function () {
 
             const input = $('#notasdatatble tbody').find(`#notas${id}`);
             const boton = $('#notasdatatble tbody').find(`#editarNotas${id}`);
-            
+
 
             if (input.val() != datos.calificacion) {
                 boton.removeClass("d-none");
@@ -1508,7 +1512,7 @@ $(document).ready(function () {
                     let nota = '';
                     let validacion = false;
                     let msj = $('#notasdatatble tbody').find(`#msj_notaACT${id}`)
-                    const ponderacion = $('#ponderacionClases').val();                 
+                    const ponderacion = $('#ponderacionClases').val();
 
                     if (/^\s*$/.test(input.val())) {
                         nota = '0';
@@ -1519,35 +1523,35 @@ $(document).ready(function () {
                         NotaACT(datos.idUsuario, datos.nombres, nota, boton);
                     } else {
 
-                      if (input.val() <= ponderacion) {            
+                        if (input.val() <= ponderacion) {
 
-                        if (/^([0-9])+(\.[0-9]{2})$/.test(input.val())) {
-                            input.removeClass("is-invalid");
-                            msj.text('');
-                            validacion = true;
-                            nota = input.val();
-                            NotaACT(datos.idUsuario, datos.nombres, nota, boton);
-                        } else if (/^[0-9]+$/.test(input.val())) {
+                            if (/^([0-9])+(\.[0-9]{2})$/.test(input.val())) {
+                                input.removeClass("is-invalid");
+                                msj.text('');
+                                validacion = true;
+                                nota = input.val();
+                                NotaACT(datos.idUsuario, datos.nombres, nota, boton);
+                            } else if (/^[0-9]+$/.test(input.val())) {
 
-                            input.removeClass("is-invalid");
-                            msj.text('');
-                            validacion = true;
-                            nota = input.val();
-                            NotaACT(datos.idUsuario, datos.nombres, nota, boton);
+                                input.removeClass("is-invalid");
+                                msj.text('');
+                                validacion = true;
+                                nota = input.val();
+                                NotaACT(datos.idUsuario, datos.nombres, nota, boton);
+                            } else {
+                                input.addClass("is-invalid");
+                                msj.text('formato incorrecto');
+                                validacion = false;
+
+                            }
                         } else {
+
                             input.addClass("is-invalid");
-                            msj.text('formato incorrecto');
+                            msj.text('Excede la ponderación');
                             validacion = false;
 
                         }
-                    } else {
-
-                        input.addClass("is-invalid");
-                         msj.text('Excede la ponderación');
-                        validacion = false; 
-                   
                     }
-                }
 
 
                 });
@@ -1628,5 +1632,111 @@ $(document).ready(function () {
     }
 
 
-});
 
+
+    ///////////// APARTADO DE CONTENIDO ///////////////
+
+    let idClase
+    let idContenido
+    let contenido
+
+    $('#ClaseDatatables tbody').on('click', '#contenidoBoton', function () {
+        const datos = datatables2.row($(this).parents()).data();
+
+        idClase = datos.id
+        cargarContenido(idClase);
+    });
+
+    // Función para crear un nuevo editor Quill y añadirlo al contenedor
+    function agregar_quillEditor(datos) {
+        // Crea un nuevo elemento <div> para el editor
+        var editorElement = document.createElement('div');
+        // Asigna un ID único al elemento del editor
+        var editorId = 'editor-contenido';
+        editorElement.setAttribute('id', editorId);
+        // Agrega el editor al contenedor sobrescribiendo el contenido existente
+        document.getElementById('contenido').innerHTML = '';
+        document.getElementById('contenido').appendChild(editorElement)
+
+        // Inicializa el editor Quill en el nuevo elemento
+        editorQuill = new Quill('#' + editorId, {
+            theme: 'snow'
+        });
+
+        if (datos != '') {
+            editorQuill.clipboard.dangerouslyPasteHTML(0, datos)
+        }
+    }
+
+
+    function cargarContenido(idClase) {
+        $.ajax({
+            type: "GET",
+            url: "/AppwebMVC/Grupos/Clase",
+            data: {
+                cargarContenido: 'cargarContenido',
+                idClase: idClase
+            },
+            success: function (response) {
+                console.log(response);
+                let data = JSON.parse(response);
+    
+                document.getElementById('contenido').innerHTML = '';
+
+                if (data.length !== 0) {
+                    document.getElementById('contenido').innerHTML = data['contenido'];
+
+                    idContenido = data.id
+                    contenido = data.contenido
+                }else{
+                    let texto = '<p>No existe contenido actualmente</p>'
+                    document.getElementById('contenido').innerHTML = texto;
+                    contenido = texto
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                if (jqXHR.responseText) {
+                    let jsonResponse = JSON.parse(jqXHR.responseText);
+    
+                    if (jsonResponse.msj) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Denegado',
+                            text: jsonResponse.msj,
+                            showConfirmButton: true,
+                        });
+                    } else {
+                        const respuesta = JSON.stringify(jsonResponse, null, 2);
+                        Swal.fire({
+                            background: 'red',
+                            color: '#fff',
+                            title: respuesta,
+                            showConfirmButton: true,
+                        });
+                    }
+                } else {
+                    alert('Error desconocido: ' + textStatus);
+                }
+            }
+        });
+    }
+
+
+    $('#agregarContenido').on('click', function () {
+        agregar_quillEditor('')
+    })
+
+    $('#guardarContenido').on('click', function () {
+        console.log(editorQuill.root.innerHTML)
+    })
+
+    $('#editarContenido').on('click', function () {
+        agregar_quillEditor(contenido)
+    })
+
+    $('#cancelarContenido').on('click', function () {
+        document.getElementById('contenido').innerHTML = '';
+        document.getElementById('contenido').innerHTML = contenido;
+    })
+
+});
