@@ -117,21 +117,26 @@
         <div class="nav-link py-0 mt-3 text-uppercase">Escuela</div>
 
 
-        
-            <a href="<?= LOCAL_DIR ?>Escuela/Index" class="nav-link" <?= empty($uriParts[0]) || strtolower($uriParts[0]) == "agenda" ? "active" : "" ?>">
+        <?php if ($usuario->tienePermiso("eid", "consultar")) : ?>
+            <a href="<?= LOCAL_DIR ?>Escuela/Index" class="nav-link" <?= empty($uriParts[0]) || strtolower($uriParts[0]) == "agenda" ? "active" : "" ?>>
                 <i class="fa-solid fa-school fa-fw me-2"></i>
                 Gestionar E.I.D
             </a>
+            <?php endif ?>
 
-            <a href="<?= LOCAL_DIR ?>Estudiantes/Index" class="nav-link" <?= empty($uriParts[0]) || strtolower($uriParts[0]) == "agenda" ? "active" : "" ?>">
+            <?php if ($usuario->tienePermiso("estudiantes", "consultar")) : ?>
+            <a href ="<?= LOCAL_DIR ?>Estudiantes/Index" class="nav-link" <?= empty($uriParts[0]) || strtolower($uriParts[0]) == "agenda" ? "active" : "" ?>>
                <i class="fa-solid fa-chalkboard-user fa-fw me-2"></i>
                 Estudiantes
             </a>
+            <?php endif ?>
 
-            <a href="<?= LOCAL_DIR ?>Grupos/Index" class="nav-link" <?= empty($uriParts[0]) || strtolower($uriParts[0]) == "agenda" ? "active" : "" ?>">
+           <?php if ($usuario->tienePermiso("grupos", "consultar")) : ?>
+            <a href="<?= LOCAL_DIR ?>Grupos/Index" class="nav-link" <?= empty($uriParts[0]) || strtolower($uriParts[0]) == "agenda" ? "active" : "" ?>>
                <i class="fa-solid fa-users-rectangle fa-fw me-2"></i>
-                Mis grupos
+                Grupos
             </a>
+            <?php endif ?>
         
 
 

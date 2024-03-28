@@ -10,7 +10,7 @@ $(document).ready(function () {
     let ponderacion1;
     let validcedula = false;
 
-    if(permisos.rolEstudiante == true){
+    if(permisosRoles.rolEstudiante == true){
       
         listarGrupos(4)
         $("#activo").removeClass("active");
@@ -83,23 +83,25 @@ $(document).ready(function () {
                     render: function (data, type, row, meta) {
 
 
-                        let botonEditarGrupoAbierto = permisos.actualizar ? `<a role="button" id="editarGrupoAbierto" data-bs-toggle="modal" title="Editar Nombre" data-bs-target="#modal_registrar" ><i class="fa-solid fa-pen" ></i></a>` : '';
+                        let botonEditarGrupoAbierto = permisosgrupos.actualizar ? `<a role="button" id="editarGrupoAbierto" data-bs-toggle="modal" title="Editar Nombre" data-bs-target="#modal_registrar" ><i class="fa-solid fa-pen" ></i></a>` : '';
 
-                        let Clases = permisos.actualizar ? `<a role="button" id="clases" data-bs-toggle="modal" title="Clases" data-bs-target="#modalClases" ><i class="fa-solid fa-chalkboard"></i></a>` : '';
+                        let Clases = permisosgrupos.actualizar ? `<a role="button" id="clases" data-bs-toggle="modal" title="Clases" data-bs-target="#modalClases" ><i class="fa-solid fa-chalkboard"></i></a>` : '';
 
-                        let activar = permisos.registrar ? ` <a role="button" id="activar" title="Activar Grupo"><i class="fa-solid fa-school-circle-check"></i></a>` : '';
+                        let Clases2 = permisosgrupos.actualizar ? `<a role="button" id="clases2" data-bs-toggle="modal" title="Clases" data-bs-target="#modalClases" ><i class="fa-solid fa-chalkboard"></i></a>` : '';
 
-                        let cerrar = permisos.registrar ? ` <a role="button" id="cerrarGrupo" title="Cerrar Grupo"><i class="fa-solid fa-school-lock"></i></a>` : '';
+                        let activar = permisosgrupos.registrar ? ` <a role="button" id="activar" title="Activar Grupo"><i class="fa-solid fa-school-circle-check"></i></a>` : '';
 
-                        let botonEliminar = permisos.eliminar ? `<a role="button"  id=eliminarGrupo title="Eliminar Grupo"><i class="fa-solid fa-trash" ></i></a>` : '';
+                        let cerrar = permisosgrupos.actualizar ? ` <a role="button" id="cerrarGrupo" title="Cerrar Grupo"><i class="fa-solid fa-school-lock"></i></a>` : '';
 
-                        let Matricula = permisos.registrar ? `<a role="button" id="registrarMatricula" data-bs-toggle="modal" data-bs-target="#modal_registroMatricula" title="Registrar Matricula"><i class="fa-solid fa-users"></i></a>` : '';
+                        let botonEliminar = permisosgrupos.eliminar ? `<a role="button"  id=eliminarGrupo title="Eliminar Grupo"><i class="fa-solid fa-trash" ></i></a>` : '';
 
-                        let Matricula2 = permisos.registrar ? `<a role="button" id="Matricula2" data-bs-toggle="modal" data-bs-target="#modal_registroMatricula" title="Matricula"><i class="fa-solid fa-users"></i></a>` : '';
+                        let Matricula = permisosgrupos.registrar ? `<a role="button" id="registrarMatricula" data-bs-toggle="modal" data-bs-target="#modal_registroMatricula" title="Registrar Matricula"><i class="fa-solid fa-users"></i></a>` : '';
+
+                        let Matricula2 = permisosgrupos.actualizar ? `<a role="button" id="Matricula2" data-bs-toggle="modal" data-bs-target="#modal_registroMatricula" title="Matricula"><i class="fa-solid fa-users"></i></a>` : '';
                         
-                        let Matricula3 = permisos.registrar ? `<a role="button" id="Matricula3" data-bs-toggle="modal" data-bs-target="#modal_registroMatricula" title="Matricula"><i class="fa-solid fa-users"></i></a>` : '';
+                        let Matricula3 = permisosgrupos.consultar ? `<a role="button" id="Matricula3" data-bs-toggle="modal" data-bs-target="#modal_registroMatricula" title="Matricula"><i class="fa-solid fa-users"></i></a>` : '';
 
-                         let asignarRoles = `<a role="button" id="asignarRoles${data.id}" class="d-none" title="Asignar Roles"><i class="fa-solid fa-graduation-cap"></i></a>`;
+                         let asignarRoles = permisosgrupos.actualizar ? `<a role="button" id="asignarRoles${data.id}" class="d-none" title="Asignar Roles"><i class="fa-solid fa-graduation-cap"></i></a>` : '';
                          validarAsignarRoles(data.id, data.idEid);
 
                         let div = '';
@@ -130,7 +132,7 @@ $(document).ready(function () {
                             div = `
                          <div class="acciones" id="guia2">
                          
-                         ${Clases}
+                         ${Clases2}
                          ${Matricula3}
                          ${asignarRoles}
         
@@ -276,7 +278,7 @@ $(document).ready(function () {
     $('#Grupos tbody').on('click', '#registrarMatricula', function () {
         const datos = datatables.row($(this).parents()).data();
 
-        let div = permisos.registrar ? `<form id="formulario1">
+        let div = permisosgrupos.registrar ? `<form id="formulario1">
         <div class="mb-2 mt-2">
             <p id="GrupoMatricula" class="visually-hidden"></p>
             <div class="row g-3"">               
@@ -335,6 +337,58 @@ $(document).ready(function () {
 
     $('#Grupos tbody').on('click', '#clases', function () {
         const datos = datatables.row($(this).parents()).data();
+         
+
+        let div = permisosclases.registrar ? `<form id="formulario2">
+        <div class="mb-3">
+
+            <div class="row g-3 mb-3">
+                <div class="col-6">
+
+
+
+                    <input type="text" class="form-control" id="titulo" placeholder="Titulo"
+                        name="titulo" maxlength="50" aria-describedby="msj_titulo" required>
+                    <div class="invalid-feedback" id="msj_titulo">
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <input type="number" id="ponderacion" placeholder="Ponderación 0.00"
+                        class="form-control" step="0.01" min="0"
+                        aria-describedby="msj_ponderacion">
+                    <div id="msj_ponderacion" class="invalid-feedback"></div>
+                </div>
+            </div>
+
+            <div class="row g-3 ">
+                <div class="col-7">
+
+                    <textarea class="form-control" id="Objetivo"
+                        placeholder="Objetivo de la Clase" maxlength="100"></textarea>
+                    <div id="msj_Objetivo" class="invalid-feedback">
+                    </div>
+                </div>
+
+                <div class="col-5 d-flex justify-content-end align-items-end gap-1">
+                    <div class="d-flex justify-content-end gap-1">
+                        <button type="button" id="cancelar4"
+                            class="btn btn-secondary d-none">cancelar</button>
+
+                        <button type="button" id="editarClase"
+                            class="btn btn-primary d-none">editar</button>
+
+                        <button type="button" id="registrarClase"
+                            class="btn btn-primary">Registrar</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>` : '';
+
+
+        document.getElementById('registrarClases').innerHTML = div;
 
         document.getElementById('idGrupo1').textContent = datos.id;
 
@@ -342,10 +396,28 @@ $(document).ready(function () {
         let text = `Grupo: ${datos.codigo}`;
         $('#tituloClases').text(text);
 
-        listarClases(datos.id);
+        listarClases(datos.id, 1);
 
 
     });
+
+    $('#Grupos tbody').on('click', '#clases2', function () {
+        const datos = datatables.row($(this).parents()).data();
+         
+
+        document.getElementById('registrarClases').innerHTML = '';
+
+        document.getElementById('idGrupo1').textContent = datos.id;
+
+
+        let text = `Grupo: ${datos.codigo}`;
+        $('#tituloClases').text(text);
+
+        listarClases(datos.id, 2);
+
+
+    });
+
 
 
 
@@ -369,7 +441,7 @@ $(document).ready(function () {
     });
 
 
-    $('#titulo').on("keyup", function (event) {
+    $('#registrarClases').on('keyup', '#titulo', function (e) {
 
         const titulo = $("#titulo").val();
 
@@ -388,7 +460,7 @@ $(document).ready(function () {
         }
     });
 
-    $('#Objetivo').on("keyup", function (event) {
+    $('#registrarClases').on('keyup', '#Objetivo', function (e) {
 
         const Objetivo = $("#Objetivo").val();
 
@@ -409,7 +481,7 @@ $(document).ready(function () {
 
 
 
-    $('#ponderacion').on("keyup", function (event) {
+    $('#registrarClases').on('keyup', '#ponderacion', function (event) {
 
 
         const ponderacion = $("#ponderacion").val();
@@ -455,11 +527,11 @@ $(document).ready(function () {
 
 
 
-    $("#registrarClase").on("click", function () {
+    $("#registrarClases").on('click', '#registrarClase', function () {
         registrarEditarClase('Registrar')
     });
 
-    $("#editarClase").on("click", function () {
+    $("#registrarClases").on('click','#editarClase', function () {
         registrarEditarClase('Editar')
     });
 
@@ -626,15 +698,9 @@ $(document).ready(function () {
                     render: function (data, type, row, meta) {
 
 
-                        let botonEditarGrupoAbierto = permisos.actualizar ? `<a role="button" id="editarGrupoAbierto" data-bs-toggle="modal" title="Editar Nombre" data-bs-target="#modal_registrar" ><i class="fa-solid fa-pen" ></i></a>` : '';
+                        let botonEliminar = permisosgrupos.eliminar ? `<a role="button"  id=eliminarEstudiante title="Eliminar estudiante"><i class="fa-solid fa-trash" ></i></a>` : '';
 
-                        let botonRequisitos = permisos.actualizar ? `<a role="button" id="requisitos" data-bs-toggle="modal" title="Editar Requisitos" data-bs-target="#modal_requisitos" ><i class="fa-solid fa-key" ></i></a>` : '';
-
-                        let botonModulo = permisos.registrar ? `<a role="button" id="Modulo" data-bs-toggle="modal" title="Gestionar Modulos" data-bs-target="#modal_modulos" ><i class="fa-solid fa-users"></i></a>` : '';
-
-                        let botonEliminar = permisos.eliminar ? `<a role="button"  id=eliminarEstudiante title="Eliminar estudiante"><i class="fa-solid fa-trash" ></i></a>` : '';
-
-                        let verNotasEstudiante = permisos.consultar ? `<a role="button" id="verNotasEstudiante" title="Consultar Notas"><i class="fa-regular fa-clipboard"></i></a>` : '';
+                        let verNotasEstudiante = permisosnotas.consultar ? `<a role="button" id="verNotasEstudiante" title="Consultar Notas"><i class="fa-regular fa-clipboard"></i></a>` : '';
 
                         let div = '';
 
@@ -1370,7 +1436,7 @@ $(document).ready(function () {
     });
 
 
-    function listarClases(idGrupo) {
+    function listarClases(idGrupo, tipo) {
 
         if (datatables2) {
             datatables2.destroy();
@@ -1413,25 +1479,25 @@ $(document).ready(function () {
                     render: function (data, type, row, meta) {
 
 
-                        let info = permisos.actualizar ? `<a role="button" id="infoClaseACT" title="Informacion" ><i class="fa-solid fa-circle-info"></i></a>` : '';
+                        let info = permisosclases.consultar ? `<a role="button" id="infoClaseACT" title="Informacion" ><i class="fa-solid fa-circle-info"></i></a>` : '';
 
-                        let botonEditar = permisos.actualizar ? `<a role="button" id="editarClase" title="Editar Clase"><i class="fa-solid fa-pen" ></i></a>` : '';
+                        let botonEditar = permisosclases.actualizar ? `<a role="button" id="editarClase" title="Editar Clase"><i class="fa-solid fa-pen" ></i></a>` : '';
 
-                        let botonEliminar = permisos.eliminar ? `<a role="button"  id="eliminarClase" title="Eliminar Clase"><i class="fa-solid fa-trash" ></i></a>` : '';
+                        let botonEliminar = permisosclases.eliminar ? `<a role="button"  id="eliminarClase" title="Eliminar Clase"><i class="fa-solid fa-trash" ></i></a>` : '';
 
-                        let contenido = `<a role="button" id="contenidoBoton" title="Contenido"><i class="fa-solid fa-book" data-bs-toggle="modal" href="#contenidoModal"></i></a>`
+                        let contenido = permisosclases.registrar ?`<a role="button" id="contenidoBoton" title="Contenido"><i class="fa-solid fa-book" data-bs-toggle="modal" href="#contenidoModal"></i></a>` : '';
 
                         let editarNota;
 
                         let div = '';
 
                         if (data.ponderacion > 0) {
-                            editarNota = permisos.registrar ? `<a role="button" id="notasACT" title="Actualizar Notas"><i class="fa-regular fa-clipboard"></i></a>` : '';
+                            editarNota = permisosnotas.consultar ? `<a role="button" id="notasACT" title="Actualizar Notas"><i class="fa-regular fa-clipboard"></i></a>` : '';
                         } else {
                             editarNota = '';
                         }
 
-
+                  if(tipo == 1){
                         div = `
               <div class="acciones">
                         ${info}
@@ -1440,7 +1506,15 @@ $(document).ready(function () {
                         ${editarNota}
                         ${contenido}
               </div>
-              `
+              `}
+
+              if(tipo == 2){
+                div = `
+      <div class="acciones">
+                ${info}
+                ${contenido}
+      </div>
+      `}
                         return div;
                     }
                 },
@@ -1750,7 +1824,7 @@ $(document).ready(function () {
                         <div id="msj_notaACT${id}" class="invalid-feedback"></div>`;
 
 
-                        let guardar = permisos.registrar ? `<button type="button" id="editarNotas${id}" title="Guardar Cambios" class="btn btn-primary d-none"><i class="fa-solid fa-floppy-disk"></i></button>` : '';
+                        let guardar = permisosnotas.actualizar ? `<button type="button" id="editarNotas${id}" title="Guardar Cambios" class="btn btn-primary d-none"><i class="fa-solid fa-floppy-disk"></i></button>` : '';
 
                         div = ` <div class="buttons" style="width: 100%;" id="guia">
                         ${notaInput}

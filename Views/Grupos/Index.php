@@ -10,12 +10,37 @@ $usuario = $_SESSION['usuario'];
 ?>
 
 <script>
-    const permisos = {
+    const permisosRoles = {
+        rolEstudiante: <?php echo $usuario->tieneRol("Estudiante") ? 1 : 0 ?>
+    }
+
+    const permisosclases = {
+        registrar: <?php echo $usuario->tienePermiso("clases", "registrar") ? 1 : 0 ?>,
+        consultar: <?php echo $usuario->tienePermiso("clases", "consultar") ? 1 : 0 ?>,
+        actualizar: <?php echo $usuario->tienePermiso("clases", "actualizar") ? 1 : 0 ?>,
+        eliminar: <?php echo $usuario->tienePermiso("clases", "eliminar") ? 1 : 0 ?>,
+        
+    }
+
+    const permisosnotas = {
+        registrar: <?php echo $usuario->tienePermiso("notas", "registrar") ? 1 : 0 ?>,
+        consultar: <?php echo $usuario->tienePermiso("notas", "consultar") ? 1 : 0 ?>,
+        actualizar: <?php echo $usuario->tienePermiso("notas", "actualizar") ? 1 : 0 ?>,
+        eliminar: <?php echo $usuario->tienePermiso("notas", "eliminar") ? 1 : 0 ?>,
+    }
+
+    const permisosgrupos = {
         registrar: <?php echo $usuario->tienePermiso("grupos", "registrar") ? 1 : 0 ?>,
         consultar: <?php echo $usuario->tienePermiso("grupos", "consultar") ? 1 : 0 ?>,
         actualizar: <?php echo $usuario->tienePermiso("grupos", "actualizar") ? 1 : 0 ?>,
         eliminar: <?php echo $usuario->tienePermiso("grupos", "eliminar") ? 1 : 0 ?>,
-        rolEstudiante: <?php echo $usuario->tieneRol("Estudiante") ? 1 : 0 ?>
+    }
+
+    const permisosestudiantes = {
+        registrar: <?php echo $usuario->tienePermiso("estudiantes", "registrar") ? 1 : 0 ?>,
+        consultar: <?php echo $usuario->tienePermiso("estudiantes", "consultar") ? 1 : 0 ?>,
+        actualizar: <?php echo $usuario->tienePermiso("estudiantes", "actualizar") ? 1 : 0 ?>,
+        eliminar: <?php echo $usuario->tienePermiso("estudiantes", "eliminar") ? 1 : 0 ?>,
     }
 </script>
 
@@ -40,11 +65,16 @@ $usuario = $_SESSION['usuario'];
             <div class="card">
                 <div class="card-header">
                     <nav>
+
+                        <?php  if ($usuario->tienePermiso("grupos", "registrar") || $usuario->tieneRol("Mentor")): ?>
                         <div class="nav nav-tabs card-header-tabs" id="nav-tabGrupos" role="tablist">
                             <button class="nav-link active" data-bs-toggle="tab" id="activo"
                                 data-bs-target="#tab-gruposActivos" type="button" role="tab" aria-selected="true">
                                 Activos
                             </button>
+                            <?php endif ?>
+
+                            <?php  if ($usuario->tienePermiso("grupos", "registrar")): ?>
                             <button class="nav-link" data-bs-toggle="tab" id="abierto" data-bs-target="#tab-gruposActivos"
                                 type="button" role="tab" aria-selected="false">
                                 Abiertos
@@ -53,16 +83,20 @@ $usuario = $_SESSION['usuario'];
                                 type="button" role="tab" aria-selected="false">
                                 Cerrados
                             </button>
-                           
+                            <?php endif ?>
+
+                            <?php  if ($usuario->tieneRol("Estudiante")): ?>
                             <button class="nav-link" data-bs-toggle="tab" id="misGrupos" data-bs-target="#tab-gruposActivos"
                                 type="button" role="tab" aria-selected="false">
                                 Mis Grupos
                             </button>
+                            <?php endif ?>
                          
 
 
                         </div>
                     </nav>
+
                 </div>
                 <div class="card-body">
                     <!-- Grupos Activos -->
@@ -164,8 +198,8 @@ $usuario = $_SESSION['usuario'];
    
 
 
-<?php if ($usuario->tienePermiso("grupos", "registrar")): ?>
-    <!-- MODAL PARA REGISTRAR GRUPO -->
+<?php if ($usuario->tienePermiso("grupos", "consultar")): ?>
+    <!-- MODAL CLASES-->
     <div class="modal fade" id="modalClases" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -208,53 +242,7 @@ $usuario = $_SESSION['usuario'];
                                     <p id="idClase" class="visually-hidden"></p>
 
 
-                                    <form id="formulario2">
-                                        <div class="mb-3">
-
-                                            <div class="row g-3 mb-3">
-                                                <div class="col-6">
-
-
-
-                                                    <input type="text" class="form-control" id="titulo" placeholder="Titulo"
-                                                        name="titulo" maxlength="50" aria-describedby="msj_titulo" required>
-                                                    <div class="invalid-feedback" id="msj_titulo">
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-6">
-                                                    <input type="number" id="ponderacion" placeholder="Ponderación 0.00"
-                                                        class="form-control" step="0.01" min="0"
-                                                        aria-describedby="msj_ponderacion">
-                                                    <div id="msj_ponderacion" class="invalid-feedback"></div>
-                                                </div>
-                                            </div>
-
-                                            <div class="row g-3 ">
-                                                <div class="col-7">
-
-                                                    <textarea class="form-control" id="Objetivo"
-                                                        placeholder="Objetivo de la Clase" maxlength="100"></textarea>
-                                                    <div id="msj_Objetivo" class="invalid-feedback">
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-5 d-flex justify-content-end align-items-end gap-1">
-                                                    <div class="d-flex justify-content-end gap-1">
-                                                        <button type="button" id="cancelar4"
-                                                            class="btn btn-secondary d-none">cancelar</button>
-
-                                                        <button type="button" id="editarClase"
-                                                            class="btn btn-primary d-none">editar</button>
-
-                                                        <button type="button" id="registrarClase"
-                                                            class="btn btn-primary">Registrar</button>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
+                                    <div id="registrarClases" class="mb-3"></div>
 
                                     <div class="card">
                                         <div class="card-header">
@@ -372,8 +360,8 @@ $usuario = $_SESSION['usuario'];
 <?php endif ?>
 
 
-<?php if ($usuario->tienePermiso("grupos", "registrar")): ?>
-    <!-- MODAL PARA REGISTRAR GRUPO -->
+<?php if ($usuario->tienePermiso("grupos", "consultar")): ?>
+    <!-- MODAL MATRICULA-->
     <div class="modal fade" id="modal_registroMatricula" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -465,6 +453,7 @@ $usuario = $_SESSION['usuario'];
 </div>
 <?php endif ?>
 
+<?php if ($usuario->tienePermiso("grupos", "consultar")): ?>
     <div class="modal fade" id="contenidoModal" aria-hidden="true" tabindex="-1" data-bs-backdrop="static"
         data-bs-keyboard="false">
         <div class="modal-dialog modal-lg">
@@ -487,7 +476,7 @@ $usuario = $_SESSION['usuario'];
             </div>
         </div>
     </div>
-
+<?php endif ?>
 
 
 </div>
