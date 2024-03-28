@@ -19,7 +19,7 @@ $Grupo = new Grupo();
 
 if (isset($_POST['cargar_data'])) {
 
-    requierePermiso("grupos", "actualizar");
+    requierePermiso("grupos", "consultar");
 
 
     $tipo = $_POST['tipo'];
@@ -43,7 +43,7 @@ if (isset($_POST['cargar_data'])) {
 
 if (isset($_POST['registrar_editar'])) {
 
-
+  
 
     $accion = $_POST['accion'];
     $idNivel = $_POST['idNivel'];
@@ -82,7 +82,7 @@ if (isset($_POST['eliminar'])) {
 
 if (isset($_GET['ListarMentores'])) {
 
-    requierePermiso("grupos", "actualizar");
+    requierePermiso("grupos", "registrar");
 
     $Lista = $Grupo->listarMentores();
 
@@ -93,7 +93,7 @@ if (isset($_GET['ListarMentores'])) {
 
 if (isset($_GET['ListaNiveles'])) {
 
-    requierePermiso("grupos", "actualizar");
+    requierePermiso("grupos", "registrar");
 
     $Lista = $Grupo->listarNiveles();
 
@@ -104,7 +104,7 @@ if (isset($_GET['ListaNiveles'])) {
 
 if (isset($_POST['cargarMatricula'])) {
 
-    requierePermiso("grupos", "registrar");
+    requierePermiso("grupos", "consultar");
 
 
     $idGrupo = $_POST['idGrupo'];
@@ -128,6 +128,7 @@ if (isset($_POST['cargarMatricula'])) {
 
 if (isset($_POST['cargarNotasEstudiante'])) {
 
+    requierePermiso("grupos", "consultar");
 
     $idGrupo = $_POST['idGrupo'];
     $idEstudiante = $_POST['idEstudiante'];
@@ -150,7 +151,8 @@ if (isset($_POST['cargarNotasEstudiante'])) {
 }
 
 if (isset($_POST['registroEstudiante'])) {
-
+   
+    requierePermiso("grupos", "registrar");
 
     $cedula = $_POST['cedula'];  
     $idGrupo = $_POST['idGrupo'];
@@ -161,7 +163,7 @@ if (isset($_POST['registroEstudiante'])) {
 
 if (isset($_POST['eliminarMatricula'])) {
 
-    requierePermiso("grupos", "eliminar");
+    requierePermiso("grupos", "actualizar");
 
     $id = $_POST['id'];
     $idGrupo = $_POST['idGrupo'];
@@ -195,7 +197,8 @@ if (isset($_POST['cerrarGrupo'])) {
 }
 
 if (isset($_POST['validarAsignarRoles'])) {
-
+     
+    requierePermiso("grupos", "actualizar");
     $idGrupo = $_POST['idGrupo'];
     $idEid = $_POST['idEid'];
 
@@ -207,7 +210,8 @@ if (isset($_POST['validarAsignarRoles'])) {
 }
 
 if (isset($_POST['asignarRolesAdqr'])) {
-
+   
+    requierePermiso("grupos", "actualizar");
     $idGrupo = $_POST['idGrupo'];
     $idEid = $_POST['idEid'];
 
