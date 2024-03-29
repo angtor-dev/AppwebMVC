@@ -165,7 +165,7 @@ class Grupo extends Model
 
 
 
-            $sql = "SELECT usuario.nombre, usuario.apellido, grupo.*, matricula.notaTotal,
+            $sql = "SELECT matricula.idEstudiante, CONCAT (usuario.cedula, ' ', usuario.nombre, ' ', usuario.apellido) AS infoMentor, grupo.*, matricula.notaTotal,
                 CASE WHEN matricula.estado = '1' THEN 'Cursando'
                 WHEN matricula.estado = '2' THEN 'Aprobado'
                 WHEN matricula.estado = '3' THEN 'Reprobado'
@@ -441,10 +441,13 @@ class Grupo extends Model
         }
 
     }
-    public function listarMatricula($idGrupo)
+    public function listarMatricula($idGrupo, $tipo)
     {
 
         try {
+
+            if ($tipo != '4'){
+
             $sql = "SELECT usuario.id, usuario.cedula, CONCAT(usuario.nombre, ' ', usuario.apellido) AS nombres,  matricula.notaTotal,
             CASE WHEN matricula.estado = '1' THEN 'Cursando'
             WHEN matricula.estado = '2' THEN 'Aprobado'
@@ -463,6 +466,33 @@ class Grupo extends Model
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $resultado;
+        } else {
+
+            /** @var Usuario */
+            $usuario = $_SESSION['usuario'];
+
+            $sql = "SELECT usuario.id, usuario.cedula, CONCAT(usuario.nombre, ' ', usuario.apellido) AS nombres,  matricula.notaTotal,
+            CASE WHEN matricula.estado = '1' THEN 'Cursando'
+            WHEN matricula.estado = '2' THEN 'Aprobado'
+            WHEN matricula.estado = '3' THEN 'Reprobado'
+            END AS estado, SUM(CASE WHEN nota.calificacion IS NULL THEN 0
+            ELSE nota.calificacion END) AS notaAcumulada, matricula.idGrupo FROM matricula
+            LEFT JOIN usuario ON usuario.id = matricula.idEstudiante
+            LEFT JOIN nota ON nota.idEstudiante = usuario.id 
+            LEFT JOIN clase ON clase.idGrupo = matricula.idGrupo AND nota.idClase = clase.id
+            WHERE matricula.idGrupo = :idGrupo AND matricula.idEstudiante = :idEstudiante GROUP BY usuario.id";
+
+            $stmt = $this->db->pdo()->prepare($sql);
+
+            $stmt->bindValue(':idGrupo', $idGrupo);
+            $stmt->bindValue(':idEstudiante', $usuario->id);
+
+            $stmt->execute();
+            $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $resultado;
+
+
+        }
 
 
         } catch (Exception $e) {

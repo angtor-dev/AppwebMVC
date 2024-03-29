@@ -108,8 +108,9 @@ if (isset($_POST['cargarMatricula'])) {
 
 
     $idGrupo = $_POST['idGrupo'];
-
-    $Lista = $Grupo->listarMatricula($idGrupo);
+    $tipo = $_POST['tipo'];
+    
+    $Lista = $Grupo->listarMatricula($idGrupo, $tipo);
     //Variable json solamente para guardar el array de datos
     $json = array();
 

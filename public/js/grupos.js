@@ -11,7 +11,7 @@ $(document).ready(function () {
     let validcedula = false;
 
     if(permisosRoles.rolEstudiante == true){
-      
+    
         listarGrupos(4)
         $("#activo").removeClass("active");
         $("#misGrupos").addClass("active")
@@ -87,7 +87,7 @@ $(document).ready(function () {
 
                         let Clases = permisosgrupos.actualizar ? `<a role="button" id="clases" data-bs-toggle="modal" title="Clases" data-bs-target="#modalClases" ><i class="fa-solid fa-chalkboard"></i></a>` : '';
 
-                        let Clases2 = permisosgrupos.actualizar ? `<a role="button" id="clases2" data-bs-toggle="modal" title="Clases" data-bs-target="#modalClases" ><i class="fa-solid fa-chalkboard"></i></a>` : '';
+                        let Clases2 = permisosgrupos.consultar ? `<a role="button" id="clases2" data-bs-toggle="modal" title="Clases" data-bs-target="#modalClases" ><i class="fa-solid fa-chalkboard"></i></a>` : '';
 
                         let activar = permisosgrupos.registrar ? ` <a role="button" id="activar" title="Activar Grupo"><i class="fa-solid fa-school-circle-check"></i></a>` : '';
 
@@ -100,9 +100,11 @@ $(document).ready(function () {
                         let Matricula2 = permisosgrupos.actualizar ? `<a role="button" id="Matricula2" data-bs-toggle="modal" data-bs-target="#modal_registroMatricula" title="Matricula"><i class="fa-solid fa-users"></i></a>` : '';
                         
                         let Matricula3 = permisosgrupos.consultar ? `<a role="button" id="Matricula3" data-bs-toggle="modal" data-bs-target="#modal_registroMatricula" title="Matricula"><i class="fa-solid fa-users"></i></a>` : '';
+                        
+                        let Matricula4 = permisosgrupos.consultar ? `<a role="button" id="Matricula4" data-bs-toggle="modal" data-bs-target="#modal_registroMatricula" title="Matricula"><i class="fa-solid fa-users"></i></a>` : '';
 
-                         let asignarRoles = permisosgrupos.actualizar ? `<a role="button" id="asignarRoles${data.id}" class="d-none" title="Asignar Roles"><i class="fa-solid fa-graduation-cap"></i></a>` : '';
-                         validarAsignarRoles(data.id, data.idEid);
+                        if (tipo == '3') { let asignarRoles = permisosgrupos.actualizar ? `<a role="button" id="asignarRoles${data.id}" class="d-none" title="Asignar Roles"><i class="fa-solid fa-graduation-cap"></i></a>` : '';
+                         validarAsignarRoles(data.id, data.idEid);}
 
                         let div = '';
 
@@ -136,6 +138,14 @@ $(document).ready(function () {
                          ${Matricula3}
                          ${asignarRoles}
         
+                         </div>
+                         `}
+
+                         if (tipo == '4') {
+                            div = `
+                         <div class="acciones" id="guia2">       
+                         ${Clases2}
+                         ${Matricula4}
                          </div>
                          `}
                         return div;
@@ -334,6 +344,20 @@ $(document).ready(function () {
         ListarMatricula(datos.id, 3);
 
     });
+
+    $('#Grupos tbody').on('click', '#Matricula4', function () {
+        const datos = datatables.row($(this).parents()).data();
+
+        let text = `Grupo: ${datos.codigo}`;
+        $('#titulomatricula').text(text);
+
+        document.getElementById('registrarEstudiante').innerHTML = '';
+
+        ListarMatricula(datos.id, 4);
+
+    });
+
+
 
     $('#Grupos tbody').on('click', '#clases', function () {
         const datos = datatables.row($(this).parents()).data();
@@ -684,7 +708,8 @@ $(document).ready(function () {
                 url: '/AppwebMVC/Grupos/Index',
                 data: {
                     cargarMatricula: 'cargarMatricula',
-                    idGrupo: idGrupo
+                    idGrupo: idGrupo,
+                    tipo: tipo
                 }
             },
             columns: [
@@ -705,7 +730,7 @@ $(document).ready(function () {
                         let div = '';
 
                         if (tipo == '1') { div = `<div class="acciones">${botonEliminar}</div>` }
-                        if (tipo == '2' || tipo == '3') { div = `<div class="acciones">${verNotasEstudiante}</div>` }
+                        if (tipo == '2' || tipo == '3' || tipo == '4') { div = `<div class="acciones">${verNotasEstudiante}</div>` }
                         return div;
                     }
                 },
@@ -727,6 +752,13 @@ $(document).ready(function () {
         if (tipo == '3') {
 
             datatables1.column(3).visible(false);
+        }
+
+        if (tipo == '4') {
+
+            datatables1.column(2).visible(false);
+            datatables1.column(3).visible(false);
+            datatables1.column(4).visible(false);
         }
     };
 
@@ -1200,6 +1232,7 @@ $(document).ready(function () {
 
 
     const form = document.getElementById("formulario");
+    if(form !== null){
     form.addEventListener("submit", (e) => {
         e.preventDefault();
 
@@ -1280,6 +1313,7 @@ $(document).ready(function () {
             })
         }
     });
+    }
 
 
     $('#cerrarRegistrar').on('click', function () {
@@ -1334,7 +1368,7 @@ $(document).ready(function () {
 
     $("#cerrarClases").on("click", function (event) {
 
-        document.getElementById('formulario2').reset();
+        
 
         for (const key in validClase) {
             validClase[key] = false;
@@ -1362,7 +1396,7 @@ $(document).ready(function () {
         $("#clasesNAV").addClass("active");
         $("#tab-clases").addClass("active");
 
-
+        document.getElementById('formulario2').reset();
     })
 
 
@@ -1485,7 +1519,7 @@ $(document).ready(function () {
 
                         let botonEliminar = permisosclases.eliminar ? `<a role="button"  id="eliminarClase" title="Eliminar Clase"><i class="fa-solid fa-trash" ></i></a>` : '';
 
-                        let contenido = permisosclases.registrar ?`<a role="button" id="contenidoBoton" title="Contenido"><i class="fa-solid fa-book" data-bs-toggle="modal" href="#contenidoModal"></i></a>` : '';
+                        let contenido = permisosclases.consultar ?`<a role="button" id="contenidoBoton" title="Contenido"><i class="fa-solid fa-book" data-bs-toggle="modal" href="#contenidoModal"></i></a>` : '';
 
                         let editarNota;
 
@@ -1679,6 +1713,7 @@ $(document).ready(function () {
         NotasEstudiantes(datos.id, datos.idGrupo);
 
     });
+
 
 
     function NotasEstudiantes(idEstudiante, idGrupo) {

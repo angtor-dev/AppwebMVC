@@ -48,7 +48,7 @@ if (isset($_POST['registrar_editar'])) {
 
 if (isset($_POST['cargarClase'])) {
 
-    requierePermiso("clases", "registrar");
+    requierePermiso("clases", "consultar");
 
     $idGrupo = $_POST['idGrupo'];
 

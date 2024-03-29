@@ -1,5 +1,6 @@
 $(document).ready(function () {
     let validCedula = false;
+    let datatables1;
 
     const dataTable = $('#estudiantesDatatables').DataTable({
         info: false,
@@ -192,5 +193,66 @@ $(document).ready(function () {
         }
 
     });
+
+
+
+    function listarGrupos(tipo) {
+
+        if (datatables1) {
+            datatables1.destroy();
+        }
+
+        datatables1 = $('#Historial').DataTable({
+
+            info: false,
+            lengthChange: false,
+            pageLength: 15,
+            dom: 'ltipB',
+            searching: true,
+            language: {
+                url: '/AppwebMVC/public/lib/datatables/datatable-spanish.json'
+            },
+
+            drawCallback: function (settings) {
+                var pagination = $(this).closest('.dataTables_wrapper').find('.dataTables_paginate');
+                pagination.toggle(this.api().page.info().pages > 1);
+            },
+            ajax: {
+                method: "GET",
+                url: '/AppwebMVC/Grupos/Index',
+                data: {
+                    cargar_data: 'cargar_data',
+                }
+            },
+            columns: [
+                { data: 'codigo' },
+                { data: 'infoMentor' },
+                { data: 'notaTotal' },
+                { data: 'fechaInicio' },
+                { data: 'fechaFin' },
+                { data: 'estadoMatricula' },
+                {
+                    data: null,
+                    render: function (data, type, row, meta) {
+
+
+                        let notas = permisosgrupos.actualizar ? `<a role="button" id="editarGrupoAbierto" data-bs-toggle="modal" title="Editar Nombre" data-bs-target="#modal_registrar" ><i class="fa-solid fa-pen" ></i></a>` : '';
+
+                            let div = `
+                         <div class="acciones" id="guia2">       
+                         ${Clases2}
+                         ${Matricula4}
+                         </div>`
+                       
+                        return div;
+                    }
+                },
+            ],
+        });
+
+        if (tipo == '1' || tipo == '2') {
+            datatables.column(4).visible(false);
+        }
+    };
 
 });

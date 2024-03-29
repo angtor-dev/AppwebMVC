@@ -83,3 +83,50 @@ $usuario = $_SESSION['usuario'];
         </div>
 
     <?php endif ?>
+
+    <?php if ($usuario->tienePermiso("estudiantes", "consultar")): ?>
+        <!-- MODAL PARA INSCRIBIR ESTUDIANTE -->
+
+        <div class="modal fade" id="modalHistorial" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="tituloHistorial"></h5>
+                    </div>
+                    <div class="modal-body">
+
+                    <div class="table-responsive">
+                                    <table id="Historial" class="table table-bordered table-rounded table-hover"
+                                        style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Codigo</th>
+                                                <th>Mentor</th>
+                                                <th>Nota Total</th>
+                                                <th>Fecha Inicio</th>
+                                                <th>Fecha fin</th>
+                                                <th>estado</th>
+                                                <th class="text-center" style="width: 100px;">Opciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- AQUI MOSTRARA LA INFORMACION -->
+                                        </tbody>
+                                    </table>
+                                </div>
+
+ 
+               
+                    
+                            <div class="d-flex justify-content-end gap-1">
+                                <button type="button" id="cerrarHistorial" class="btn btn-secondary">Cerrar</button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    <?php endif ?>

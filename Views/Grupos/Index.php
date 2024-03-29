@@ -11,7 +11,8 @@ $usuario = $_SESSION['usuario'];
 
 <script>
     const permisosRoles = {
-        rolEstudiante: <?php echo $usuario->tieneRol("Estudiante") ? 1 : 0 ?>
+        rolEstudiante: <?php echo $usuario->tieneRol("Estudiante") ? 1 : 0 ?>,
+        idUsuario: <?php echo $usuario->id?>,
     }
 
     const permisosclases = {
@@ -65,9 +66,10 @@ $usuario = $_SESSION['usuario'];
             <div class="card">
                 <div class="card-header">
                     <nav>
+                        <div class="nav nav-tabs card-header-tabs" id="nav-tabGrupos" role="tablist">
 
                         <?php  if ($usuario->tienePermiso("grupos", "registrar") || $usuario->tieneRol("Mentor")): ?>
-                        <div class="nav nav-tabs card-header-tabs" id="nav-tabGrupos" role="tablist">
+                        
                             <button class="nav-link active" data-bs-toggle="tab" id="activo"
                                 data-bs-target="#tab-gruposActivos" type="button" role="tab" aria-selected="true">
                                 Activos
