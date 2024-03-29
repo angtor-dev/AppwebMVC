@@ -466,14 +466,7 @@ $usuario = $_SESSION['usuario'];
                 <div class="modal-body">
                     <div id="contenido" class="w-100"></div>
                 </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" data-bs-target="#modalClases" data-bs-toggle="modal"
-                        data-bs-dismiss="modal">Atras</button>
-                    <button id="agregarContenido" class="btn btn-primary">Agregar contenido</button>
-                    <button id="guardarContenido" class="btn btn-primary">Guardar</button>
-                    <button id="editarContenido" class="btn btn-primary">Editar contenido</button>
-                    <button id="cancelarContenido" class="btn btn-secondary">Cancelar</button>
-                    <button class="btn btn-primary">Actualizar</button>
+                <div id="contenedorBotones" class="modal-footer">
                 </div>
             </div>
         </div>

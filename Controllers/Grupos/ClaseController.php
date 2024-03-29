@@ -91,13 +91,29 @@ if (isset($_POST['guardarContenido'])) {
     $idClase = $_POST['idClase'];
     $contenido = $_POST['contenido'];
 
+    if ($Clase->guardarContenido($idClase, $contenido)) {
+        http_response_code(200);
+        echo json_encode(array('msj'=>'El contenido ingresado se ha guardado'));
+    }else{
+        http_response_code(402);
+        echo json_encode(array('msj'=>'Algo ocurrio en la ejecucion de la accion'));
+    }
+
     die();
 }
 
-if (isset($_POST['editarContenido'])) {
+if (isset($_POST['actualizarContenido'])) {
 
     $idContenido = $_POST['idContenido'];
     $contenido = $_POST['contenido'];
+
+    if ($Clase->actualizarContenido($idContenido, $contenido)) {
+        http_response_code(200);
+        echo json_encode(array('msj'=>'El contenido ha sido actualizado correctamente'));
+    }else{
+        http_response_code(402);
+        echo json_encode(array('msj'=>'Algo ocurrio en la ejecucion de la accion'));
+    }
 
     die();
 }
@@ -105,6 +121,14 @@ if (isset($_POST['editarContenido'])) {
 if (isset($_POST['eliminarContenido'])) {
 
     $idContenido = $_POST['idContenido'];
+
+    if ($Clase->eliminarContenido($idContenido)) {
+        http_response_code(200);
+        echo json_encode(array('msj'=>'El contenido ha sido eliminado correctamente'));
+    }else{
+        http_response_code(402);
+        echo json_encode(array('msj'=>'Algo ocurrio en la ejecucion de la accion'));
+    }
 
     die();
 }

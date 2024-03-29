@@ -16,8 +16,8 @@ $(document).ready(function () {
         $("#activo").removeClass("active");
         $("#misGrupos").addClass("active")
 
-    }else{
-    
+    } else {
+
         listarGrupos(2)
     }
     // Variable que almacena el objeto Quill JS
@@ -161,7 +161,7 @@ $(document).ready(function () {
 
     $('#Grupos').on('click', '#guia2', function (e) {
         const datos = datatables.row($(this).parents()).data();
-       
+
         $(`#Grupos`).on(`click`, `#asignarRoles${datos.id}`, function (e) {
 
             Swal.fire({
@@ -175,31 +175,31 @@ $(document).ready(function () {
                 reverseButtons: true
             }).then((result) => {
                 if (result.isConfirmed) {
-    
+
                     $.ajax({
                         type: "POST",
                         url: "/AppwebMVC/Grupos/Index",
                         data: {
-    
+
                             asignarRolesAdqr: 'asignarRolesAdqr',
                             idGrupo: datos.id,
                             idEid: datos.idEid,
                         },
                         success: function (response) {
                             let jsonResponse = JSON.parse(response);
-        
+
                             Swal.fire({
                                 icon: 'success',
                                 title: '¡Roles Asignados!',
                                 text: jsonResponse.msj,
-    
+
                             })
                             datatables.ajax.reload();
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
                             if (jqXHR.responseText) {
                                 let jsonResponse = JSON.parse(jqXHR.responseText);
-    
+
                                 if (jsonResponse.msj) {
                                     Swal.fire({
                                         icon: 'error',
@@ -223,9 +223,9 @@ $(document).ready(function () {
                     })
                 }
 
+            });
         });
     });
-});
 
 
 
@@ -244,12 +244,12 @@ $(document).ready(function () {
             },
             success: function (response) {
                 let data = JSON.parse(response);
-               
-                if (data == true){
-                    
+
+                if (data == true) {
+
                     const boton = $('#Grupos tbody').find(`#asignarRoles${idGrupo}`);
                     boton.removeClass("d-none");
-                    
+
                 }
 
             },
@@ -278,11 +278,11 @@ $(document).ready(function () {
                 }
             }
         })
-       
+
 
     }
 
-   
+
 
 
     $('#Grupos tbody').on('click', '#registrarMatricula', function () {
@@ -521,29 +521,29 @@ $(document).ready(function () {
         } else {
 
             if (/^([0-9]+)(\.[0-9]{2})$/.test(ponderacion)) {
-              
-                    $("#ponderacion").removeClass("is-invalid");
-                    $("#ponderacion").addClass("is-valid");
-                    document.getElementById('msj_ponderacion').textContent = '';
-                    validClase.ponderacion = true;
-                    ponderacion1 = $("#ponderacion").val();
-                }else if (/^[0-9]+$/.test(ponderacion)) {
 
-                    $("#ponderacion").removeClass("is-invalid");
-                    $("#ponderacion").addClass("is-valid");
-                    document.getElementById('msj_ponderacion').textContent = '';
-                    validClase.ponderacion = true;
-                    ponderacion1 = $("#ponderacion").val();
-                } else {
-                    validClase.ponderacion = false;
+                $("#ponderacion").removeClass("is-invalid");
+                $("#ponderacion").addClass("is-valid");
+                document.getElementById('msj_ponderacion').textContent = '';
+                validClase.ponderacion = true;
+                ponderacion1 = $("#ponderacion").val();
+            } else if (/^[0-9]+$/.test(ponderacion)) {
+
+                $("#ponderacion").removeClass("is-invalid");
+                $("#ponderacion").addClass("is-valid");
+                document.getElementById('msj_ponderacion').textContent = '';
+                validClase.ponderacion = true;
+                ponderacion1 = $("#ponderacion").val();
+            } else {
+                validClase.ponderacion = false;
                 $("#ponderacion").removeClass("is-valid");
                 $("#ponderacion").addClass("is-invalid");
                 document.getElementById('msj_ponderacion').textContent = 'El formato es incorrecto, si se coloca 0 o se deja en blanco este campo se entendera que la clase no es evaluada';
 
-                }
+            }
 
-            } 
-        
+        }
+
 
 
 
@@ -574,28 +574,28 @@ $(document).ready(function () {
         } else {
 
             if (/^([0-9]+)(\.[0-9]{2})$/.test(ponderacion)) {
-              
-                    $("#ponderacion").removeClass("is-invalid");
-                    $("#ponderacion").addClass("is-valid");
-                    document.getElementById('msj_ponderacion').textContent = '';
-                    validClase.ponderacion = true;
-                    ponderacion1 = $("#ponderacion").val();
-                }else if (/^[0-9]+$/.test(ponderacion)) {
 
-                    $("#ponderacion").removeClass("is-invalid");
-                    $("#ponderacion").addClass("is-valid");
-                    document.getElementById('msj_ponderacion').textContent = '';
-                    validClase.ponderacion = true;
-                    ponderacion1 = $("#ponderacion").val();
-                } else {
-                    validClase.ponderacion = false;
+                $("#ponderacion").removeClass("is-invalid");
+                $("#ponderacion").addClass("is-valid");
+                document.getElementById('msj_ponderacion').textContent = '';
+                validClase.ponderacion = true;
+                ponderacion1 = $("#ponderacion").val();
+            } else if (/^[0-9]+$/.test(ponderacion)) {
+
+                $("#ponderacion").removeClass("is-invalid");
+                $("#ponderacion").addClass("is-valid");
+                document.getElementById('msj_ponderacion').textContent = '';
+                validClase.ponderacion = true;
+                ponderacion1 = $("#ponderacion").val();
+            } else {
+                validClase.ponderacion = false;
                 $("#ponderacion").removeClass("is-valid");
                 $("#ponderacion").addClass("is-invalid");
                 document.getElementById('msj_ponderacion').textContent = 'El formato es incorrecto, si indica decimal debe ser 0,00. Dejar en blanco este campo o en "0" se entendera que la clase no es evaluada';
 
-                }
+            }
 
-            } 
+        }
 
 
 
@@ -1354,7 +1354,7 @@ $(document).ready(function () {
         validcedula = false;
 
         $('#modal_registroMatricula').modal('hide');
-        
+
         $("#EstudianteNAV").addClass("d-none");
         $("#EstudianteNAV").removeClass("active");
         $("#tab-Estudiante").removeClass("active");
@@ -1697,16 +1697,16 @@ $(document).ready(function () {
         $('#nombreEstudiante2').html(text);
         let text2;
 
-        if(datos.notaTotal > '0'){
+        if (datos.notaTotal > '0') {
 
             text2 = `Nota Total: ${datos.notaTotal}%`;
 
-        }else{
+        } else {
 
             text2 = `Nota acumulada: ${datos.notaAcumulada}%`;
         }
 
-        
+
         $('#notaAcumuladaEstudiante').html(text2);
 
 
@@ -2019,6 +2019,20 @@ $(document).ready(function () {
     let idContenido
     let contenido
 
+    let contenidoEmpty = '<p>No existe contenido actualmente</p>'
+
+    let atrasBoton = `<button class="btn btn-secondary" data-bs-target="#modalClases" data-bs-toggle="modal"
+    data-bs-dismiss="modal">Atras</button>`
+    let agregarContenido_boton = `<button id="agregarContenido" class="btn btn-primary">Agregar contenido</button>`
+    let guardarContenido_boton = `<button id="guardarContenido" class="btn btn-primary">Guardar</button>`
+    let editarContenido_boton = `<button id="editarContenido" class="btn btn-primary">Editar contenido</button>`
+    let cancelarBoton = `<button id="cancelarContenido" class="btn btn-secondary">Cancelar</button>`
+    let actualizarContenido_boton = `<button id="actualizarContenido" class="btn btn-primary">Actualizar</button>`
+    let eliminarContenido_boton = `<button id="eliminarContenido" class="btn btn-danger">Eliminar contenido</button>`
+
+    let contenidoFound = atrasBoton + editarContenido_boton + eliminarContenido_boton
+    let contenidoNotFound = atrasBoton + agregarContenido_boton
+
     $('#ClaseDatatables tbody').on('click', '#contenidoBoton', function () {
         const datos = datatables2.row($(this).parents()).data();
 
@@ -2028,6 +2042,16 @@ $(document).ready(function () {
 
     // Función para crear un nuevo editor Quill y añadirlo al contenedor
     function agregar_quillEditor(datos) {
+
+        // Logica para saber si esta agregando contenido por primera vez o esta editando el contenido existente
+        // Hara que los botones se cambien
+        document.getElementById('contenedorBotones').innerHTML = ''
+        if (contenido === contenidoEmpty) {
+            document.getElementById('contenedorBotones').innerHTML = cancelarBoton + guardarContenido_boton
+        } else {
+            document.getElementById('contenedorBotones').innerHTML = cancelarBoton + actualizarContenido_boton
+        }
+
         // Crea un nuevo elemento <div> para el editor
         var editorElement = document.createElement('div');
         // Asigna un ID único al elemento del editor
@@ -2057,26 +2081,27 @@ $(document).ready(function () {
                 idClase: idClase
             },
             success: function (response) {
-                console.log(response);
                 let data = JSON.parse(response);
-    
+
                 document.getElementById('contenido').innerHTML = '';
 
                 if (data.length !== 0) {
                     document.getElementById('contenido').innerHTML = data['contenido'];
+                    document.getElementById('contenedorBotones').innerHTML = contenidoFound
 
                     idContenido = data.id
                     contenido = data.contenido
-                }else{
-                    let texto = '<p>No existe contenido actualmente</p>'
-                    document.getElementById('contenido').innerHTML = texto;
-                    contenido = texto
+                } else {
+                    document.getElementById('contenido').innerHTML = contenidoEmpty;
+                    document.getElementById('contenedorBotones').innerHTML = contenidoNotFound
+
+                    contenido = contenidoEmpty
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 if (jqXHR.responseText) {
                     let jsonResponse = JSON.parse(jqXHR.responseText);
-    
+
                     if (jsonResponse.msj) {
                         Swal.fire({
                             icon: 'error',
@@ -2101,21 +2126,216 @@ $(document).ready(function () {
     }
 
 
-    $('#agregarContenido').on('click', function () {
+    // AGREGAR CONTENIDO
+
+    $('#contenedorBotones').on('click', '#agregarContenido', function () {
         agregar_quillEditor('')
     })
 
-    $('#guardarContenido').on('click', function () {
-        console.log(editorQuill.root.innerHTML)
+    $('#contenedorBotones').on('click', '#guardarContenido', function () {
+        let clipboard = editorQuill.root.innerHTML
+
+        // Validamos que no este vacio
+        if (clipboard !== '<p><br></p>') {
+
+            $.ajax({
+                type: "POST",
+                url: "/AppwebMVC/Grupos/Clase",
+                data: {
+                    guardarContenido: 'guardarContenido',
+                    idClase: idClase,
+                    contenido: clipboard,
+                },
+                success: function (response) {
+                    console.log(response);
+                    let data = JSON.parse(response);
+
+                    cargarContenido(idClase)
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Agregado correctamente!',
+                        text: data.msj,
+                    })
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    if (jqXHR.responseText) {
+                        let jsonResponse = JSON.parse(jqXHR.responseText);
+
+                        if (jsonResponse.msj) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Denegado',
+                                text: jsonResponse.msj,
+                                showConfirmButton: true,
+                            });
+                        } else {
+                            const respuesta = JSON.stringify(jsonResponse, null, 2);
+                            Swal.fire({
+                                background: 'red',
+                                color: '#fff',
+                                title: respuesta,
+                                showConfirmButton: true,
+                            });
+                        }
+                    } else {
+                        alert('Error desconocido: ' + textStatus);
+                    }
+                }
+            });
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Ups',
+                text: 'No puedes enviar contenido vacio',
+                showConfirmButton: true,
+            });
+        }
     })
 
-    $('#editarContenido').on('click', function () {
-        agregar_quillEditor(contenido)
+
+    // ACTUALIZAR CONTENIDO
+
+    $('#contenedorBotones').on('click', '#editarContenido', function () {
+        agregar_quillEditor(contenido);
     })
 
-    $('#cancelarContenido').on('click', function () {
+    $('#contenedorBotones').on('click', '#actualizarContenido', function () {
+        let clipboard = editorQuill.root.innerHTML
+
+        // Validamos que no este vacio
+        if (clipboard !== '<p><br></p>') {
+
+            $.ajax({
+                type: "POST",
+                url: "/AppwebMVC/Grupos/Clase",
+                data: {
+                    actualizarContenido: 'actualizarContenido',
+                    idContenido: idContenido,
+                    contenido: clipboard,
+                },
+                success: function (response) {
+                    console.log(response);
+                    let data = JSON.parse(response);
+
+                    cargarContenido(idClase)
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: data.msj,
+                    })
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    if (jqXHR.responseText) {
+                        let jsonResponse = JSON.parse(jqXHR.responseText);
+
+                        if (jsonResponse.msj) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Denegado',
+                                text: jsonResponse.msj,
+                                showConfirmButton: true,
+                            });
+                        } else {
+                            const respuesta = JSON.stringify(jsonResponse, null, 2);
+                            Swal.fire({
+                                background: 'red',
+                                color: '#fff',
+                                title: respuesta,
+                                showConfirmButton: true,
+                            });
+                        }
+                    } else {
+                        alert('Error desconocido: ' + textStatus);
+                    }
+                }
+            });
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Ups',
+                text: 'No puedes enviar contenido vacio',
+                showConfirmButton: true,
+            });
+        }
+    })
+
+
+    // ELIMINAR CONTENIDO
+
+    $('#contenedorBotones').on('click', '#eliminarContenido', function () {
+
+        Swal.fire({
+            title: '¿Estas Seguro?',
+            text: "El contenido se eliminara completamente de la Base de Datos",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: '¡Si, estoy seguro!',
+            confirmButtonColor: '#007bff',
+            cancelButtonText: '¡No, cancelar!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "POST",
+                    url: "/AppwebMVC/Grupos/Clase",
+                    data: {
+                        eliminarContenido: 'eliminarContenido',
+                        idContenido: idContenido,
+                    },
+                    success: function (response) {
+                        console.log(response);
+                        let data = JSON.parse(response);
+
+                        cargarContenido(idClase)
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: data.msj,
+                        })
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        if (jqXHR.responseText) {
+                            let jsonResponse = JSON.parse(jqXHR.responseText);
+
+                            if (jsonResponse.msj) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Denegado',
+                                    text: jsonResponse.msj,
+                                    showConfirmButton: true,
+                                });
+                            } else {
+                                const respuesta = JSON.stringify(jsonResponse, null, 2);
+                                Swal.fire({
+                                    background: 'red',
+                                    color: '#fff',
+                                    title: respuesta,
+                                    showConfirmButton: true,
+                                });
+                            }
+                        } else {
+                            alert('Error desconocido: ' + textStatus);
+                        }
+                    }
+                });
+            }
+        });
+    })
+
+
+    // Evento para logica de botones al precionar el boton "Cancelar"
+    $('#contenedorBotones').on('click', '#cancelarContenido', function () {
         document.getElementById('contenido').innerHTML = '';
         document.getElementById('contenido').innerHTML = contenido;
+
+        document.getElementById('contenedorBotones').innerHTML = ''
+
+        if (contenido === contenidoEmpty) {
+            document.getElementById('contenedorBotones').innerHTML = contenidoNotFound
+        } else {
+            document.getElementById('contenedorBotones').innerHTML = contenidoFound
+        }
     })
 
 });
