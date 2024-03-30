@@ -369,6 +369,29 @@
                                         Eliminar
                                     </label>
                                 </div>
+                                <h5>Contenido</h5>
+                                <div class="d-flex flex-wrap gap-3 mb-3">
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="contenido[consultar]" value="true"
+                                            <?= $rol->tienePermiso("contenido", "consultar") ? "checked" : null ?>>
+                                        Consultar
+                                    </label>
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="contenido[registrar]" value="true"
+                                            <?= $rol->tienePermiso("contenido", "registrar") ? "checked" : null ?>>
+                                        Registrar
+                                    </label>
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="contenido[actualizar]" value="true"
+                                            <?= $rol->tienePermiso("contenido", "actualizar") ? "checked" : null ?>>
+                                        Actualizar
+                                    </label>
+                                    <label class="pill-check">
+                                        <input type="checkbox" name="contenido[eliminar]" value="true"
+                                            <?= $rol->tienePermiso("contenido", "eliminar") ? "checked" : null ?>>
+                                        Eliminar
+                                    </label>
+                                </div>
                             </div>
                             
 

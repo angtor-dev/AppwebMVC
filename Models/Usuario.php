@@ -767,7 +767,7 @@ class Usuario extends Model
 
         try {
 
-            $sql = "SELECT * FROM usuario
+            $sql = "SELECT usuario.* FROM usuario
             INNER JOIN usuariorol ON usuario.id = usuariorol.idUsuario AND usuariorol.idRol = '10'
              WHERE usuario.estatus = '1'";
 

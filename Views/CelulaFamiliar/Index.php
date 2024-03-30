@@ -154,7 +154,7 @@ $usuario = $_SESSION['usuario'];
         <!-- MODAL PARA EDITAR TODOS LOS DATOS DE LA CELULA -->
 
         <div class="modal fade" id="modal_editarInfo" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Editar datos de la Celula</h5>

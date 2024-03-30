@@ -316,8 +316,8 @@ $usuario = $_SESSION['usuario'];
         <div class="modal fade" id="modal_modulos" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title"><h2 id="cartaEid"></h2></h5>
+                    <div class="modal-header" >
+                        <h3 class="modal-title" id="cartaEid"></h3>
                     </div>
                     <div class="modal-body">
 

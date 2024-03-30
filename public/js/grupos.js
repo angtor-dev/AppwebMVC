@@ -102,8 +102,9 @@ $(document).ready(function () {
                         let Matricula3 = permisosgrupos.consultar ? `<a role="button" id="Matricula3" data-bs-toggle="modal" data-bs-target="#modal_registroMatricula" title="Matricula"><i class="fa-solid fa-users"></i></a>` : '';
                         
                         let Matricula4 = permisosgrupos.consultar ? `<a role="button" id="Matricula4" data-bs-toggle="modal" data-bs-target="#modal_registroMatricula" title="Matricula"><i class="fa-solid fa-users"></i></a>` : '';
-
-                        if (tipo == '3') { let asignarRoles = permisosgrupos.actualizar ? `<a role="button" id="asignarRoles${data.id}" class="d-none" title="Asignar Roles"><i class="fa-solid fa-graduation-cap"></i></a>` : '';
+                        
+                        let asignarRoles ="";
+                        if (tipo == '3') { asignarRoles = permisosgrupos.actualizar ? `<a role="button" id="asignarRoles${data.id}" class="d-none" title="Asignar Roles"><i class="fa-solid fa-graduation-cap"></i></a>` : '';
                          validarAsignarRoles(data.id, data.idEid);}
 
                         let div = '';
@@ -154,10 +155,14 @@ $(document).ready(function () {
             ],
         });
 
-        if (tipo == '1' || tipo == '2') {
+        if (tipo == '1' || tipo == '2' || tipo == '4') {
             datatables.column(4).visible(false);
         }
     };
+
+    $('#searchgruposActivos').keyup(function () {
+        datatables.search($(this).val()).draw();
+    });
 
     $('#Grupos').on('click', '#guia2', function (e) {
         const datos = datatables.row($(this).parents()).data();
@@ -1557,6 +1562,11 @@ $(document).ready(function () {
 
     };
 
+    $('#searchClase').keyup(function () {
+        datatables2.search($(this).val()).draw();
+    });
+    
+
     $("#ClaseDatatables tbody").on('click', '#editarClase', function (event) {
         const datos = datatables2.row($(this).parents()).data();
 
@@ -1874,6 +1884,12 @@ $(document).ready(function () {
         });
 
     };
+
+
+
+    $('#searchEstudiante').keyup(function () {
+        datatables3.search($(this).val()).draw();
+    });
 
     $('#notasdatatble').on('keyup', '#guia', function (e) {
         const datos = datatables3.row($(this).parents()).data();

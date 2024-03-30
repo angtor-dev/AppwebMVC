@@ -188,7 +188,9 @@ class Eid extends Model
 
     public function eliminarEid($id)
     {
-
+             
+            $this->ValidarEliminar($id);
+            
         try {
 
             $sql = "UPDATE eid SET estatus = '0' WHERE eid.id = :id";
@@ -499,6 +501,35 @@ class Eid extends Model
         
 
     }
+
+    private function validarEliminar($idEid)
+    {
+        try {
+
+                 $query = "SELECT * FROM moduloeid WHERE estatus = '1' AND idEid = :idEid";
+ 
+                     $stmt = $this->db->pdo()->prepare($query);
+ 
+                     $stmt->bindValue(':idEid', $idEid);
+ 
+                     $stmt->execute();
+                     $stmt->fetchAll(PDO::FETCH_ASSOC);
+ 
+                     if ($stmt->rowCount() > 0) {
+                       
+                        throw new Exception("Esta Eid no se puede eliminar porque ya existen Modulos registrados", 422);
+                    
+                     }
+                            
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+            die();
+        }
+        
+
+    }
+
 
 
 

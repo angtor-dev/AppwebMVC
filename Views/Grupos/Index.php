@@ -252,7 +252,7 @@ $usuario = $_SESSION['usuario'];
                                                 <h4><strong>Clases</strong></h4>
                                                 <div class="d-flex gap-3">
                                                     <div class="buscador">
-                                                        <input type="text" id="searchModulo" class="form-control"
+                                                        <input type="text" id="searchClase" class="form-control"
                                                             placeholder="Buscar Clase">
                                                     </div>
                                                 </div>
@@ -295,7 +295,7 @@ $usuario = $_SESSION['usuario'];
                                                 <h4 id="infoClase2"><strong></strong></h4>
                                                 <div class="d-flex gap-3">
                                                     <div class="buscador">
-                                                        <input type="text" id="searchNivel" class="form-control"
+                                                        <input type="text" id="searchEstudiante" class="form-control"
                                                             placeholder="Buscar Estudiante">
                                                     </div>
                                                 </div>

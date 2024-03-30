@@ -41,6 +41,30 @@ if (isset($_POST['cargar_data'])) {
     die();
 }
 
+if (isset($_POST['cargar_dataHistorial'])) {
+
+    requierePermiso("estudiantes", "consultar");
+
+
+    $id= $_POST['id'];
+
+    $Lista = $Grupo->listarHistorialGrupos($id);
+    //Variable json solamente para guardar el array de datos
+    $json = array();
+
+    if (!empty($Lista)) {
+        foreach ($Lista as $key) {
+            $json['data'][] = $key;
+        }
+    } else {
+
+        $json['data'] = array();
+    }
+
+    echo json_encode($json);
+    die();
+}
+
 if (isset($_POST['registrar_editar'])) {
 
   

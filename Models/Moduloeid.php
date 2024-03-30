@@ -132,6 +132,8 @@ class Moduloeid extends Model
 
         try {
 
+            $this->validarEliminarModuloEid($id);
+
             $query = "SELECT MAX(nivel) AS lastNivel FROM moduloeid WHERE idEid = :idEid AND estatus = '1'";
             $consultanivel = $this->db->pdo()->prepare($query);
 
@@ -251,6 +253,34 @@ class Moduloeid extends Model
         return $moduloeid;
     }
 
+    private function validarEliminarModuloEid($idModuloEid){
+
+        try {
+
+            $query = "SELECT * FROM nivel WHERE estatus = '1' AND idModuloEid = :idModuloEid";
+
+                $stmt = $this->db->pdo()->prepare($query);
+
+                $stmt->bindValue(':idModuloEid', $idModuloEid);
+
+                $stmt->execute();
+                $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                if ($stmt->rowCount() > 0) {
+                  
+                   throw new Exception("Este Modulo no se puede eliminar porque ya existen Niveles registrados", 422);
+               
+                }
+                       
+   } catch (Exception $e) {
+       http_response_code($e->getCode());
+       echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+       die();
+   }
+   
+
+
+    }
 
 
     public function getCodigo()

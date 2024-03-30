@@ -136,6 +136,8 @@ class Nivel extends Model
 
         try {
 
+            $this->validarEliminarNivel($id);
+
             $query = "SELECT MAX(nivel) AS lastNivel FROM nivel WHERE idModuloEid = :idModuloEid AND estatus = '1'";
             $consultanivel = $this->db->pdo()->prepare($query);
 
@@ -166,7 +168,7 @@ class Nivel extends Model
 
 
             } else {
-                throw new Exception("Este Nivel no se puede eliminar porque existe uno de mayor, esto afectaria la integridad de los datos", 422);
+                throw new Exception("Este Nivel no se puede eliminar porque existe uno de mayor rango, esto afectaria la integridad de los datos", 422);
             }
         } catch (Exception $e) {
             http_response_code($e->getCode());
@@ -174,6 +176,31 @@ class Nivel extends Model
             die();
         }
     }
+
+    private function validarEliminarNivel($idNivel){
+
+        try {
+
+            $query = "SELECT * FROM grupo WHERE estatus = '1' AND idNivel = :idNivel";
+
+                $stmt = $this->db->pdo()->prepare($query);
+
+                $stmt->bindValue(':idNivel', $idNivel);
+
+                $stmt->execute();
+                $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                if ($stmt->rowCount() > 0) {
+                  
+                   throw new Exception("Este Modulo no se puede eliminar porque ya existen Niveles registrados", 422);
+               
+                }
+                       
+   } catch (Exception $e) {
+       http_response_code($e->getCode());
+       echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+       die();
+   }}
 
 
     public static function cargarpornivelymodulo($idModuloEid, $nivelAnterior): null|Nivel

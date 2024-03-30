@@ -1,6 +1,7 @@
 $(document).ready(function () {
     let validCedula = false;
     let datatables1;
+    let datatables4;
 
     const dataTable = $('#estudiantesDatatables').DataTable({
         info: false,
@@ -45,9 +46,31 @@ $(document).ready(function () {
         ],
     });
 
+
+    $('#estudiantesDatatables tbody').on('click', '#ver_info', function () {
+        const datos = dataTable.row($(this).parents()).data();
+
+        let text = `<strong>Estudiante: ${datos.nombre} ${datos.apellido}</strong>`;
+        $('#nombreEstudiante2').html(text);
+        $('#nombreEstudiante').html(text);
+
+
+        $('#idEstudiante').text(datos.id);
+
+        console.log(datos.id);
+
+        listarGrupos(datos.id);
+
+    });
+
     $('#search').keyup(function () {
         dataTable.search($(this).val()).draw();
     });
+
+    $('#search1').keyup(function () {
+        datatables1.search($(this).val()).draw();
+    });
+
 
 
     $("#cedula").on("keyup", function (event) {
@@ -195,8 +218,12 @@ $(document).ready(function () {
     });
 
 
+    
 
-    function listarGrupos(tipo) {
+
+
+
+    function listarGrupos($id) {
 
         if (datatables1) {
             datatables1.destroy();
@@ -218,10 +245,11 @@ $(document).ready(function () {
                 pagination.toggle(this.api().page.info().pages > 1);
             },
             ajax: {
-                method: "GET",
+                method: "POST",
                 url: '/AppwebMVC/Grupos/Index',
                 data: {
-                    cargar_data: 'cargar_data',
+                    cargar_dataHistorial: 'cargar_dataHistorial',
+                    id: $id 
                 }
             },
             columns: [
@@ -236,12 +264,11 @@ $(document).ready(function () {
                     render: function (data, type, row, meta) {
 
 
-                        let notas = permisosgrupos.actualizar ? `<a role="button" id="editarGrupoAbierto" data-bs-toggle="modal" title="Editar Nombre" data-bs-target="#modal_registrar" ><i class="fa-solid fa-pen" ></i></a>` : '';
+                        let notas = permisos.consultar ? `<a role="button" id="verNotas" data-bs-toggle="modal" title="Ver Notas" data-bs-target="#modal_notas" ><i class="fa-regular fa-clipboard"></i></a>` : '';
 
                             let div = `
-                         <div class="acciones" id="guia2">       
-                         ${Clases2}
-                         ${Matricula4}
+                         <div class="acciones">       
+                         ${notas}
                          </div>`
                        
                         return div;
@@ -250,9 +277,72 @@ $(document).ready(function () {
             ],
         });
 
-        if (tipo == '1' || tipo == '2') {
-            datatables.column(4).visible(false);
+
+
+        $('#Historial tbody').on('click', '#verNotas', function () {
+            const datos = datatables1.row($(this).parents()).data();
+    
+    
+    
+            let text = `<strong>Grupo: ${datos.codigo}</strong>`;
+            $('#tituloNotas').html(text);
+           
+            let text2 = `<strong>Nota Total: ${datos.notaTotal}</strong>`;
+            $('#notaTotal').html(text2);
+    
+
+            let idEstudiante = $('#idEstudiante').text();
+    
+            NotasEstudiantes(idEstudiante, datos.id);
+    
+        });
+    
+
         }
-    };
+
+
+        function NotasEstudiantes(idEstudiante, idGrupo) {
+
+            if (datatables4) {
+                datatables4.destroy();
+            }
+    
+            datatables4 = $('#NotasEstudiante').DataTable({
+    
+                info: false,
+                lengthChange: false,
+                pageLength: 15,
+                dom: 'ltip',
+                searching: true,
+                language: {
+                    url: '/AppwebMVC/public/lib/datatables/datatable-spanish.json'
+                },
+    
+                drawCallback: function (settings) {
+                    var pagination = $(this).closest('.dataTables_wrapper').find('.dataTables_paginate');
+                    pagination.toggle(this.api().page.info().pages > 1);
+                },
+                ajax: {
+                    method: "POST",
+                    url: '/AppwebMVC/Grupos/Index',
+                    data: {
+                        cargarNotasEstudiante: 'cargarNotasEstudiante',
+                        idEstudiante: idEstudiante,
+                        idGrupo: idGrupo
+                    }
+                },
+                columns: [
+                    { data: 'titulo' },
+                    { data: 'ponderacion' },
+                    { data: 'calificacion' },
+                ],
+            });
+    
+    
+        }
+        $('#search2').keyup(function () {
+            datatables1.search($(this).val()).draw();
+        });
+   
 
 });

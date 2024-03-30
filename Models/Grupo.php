@@ -172,7 +172,7 @@ class Grupo extends Model
                 END AS estadoMatricula FROM grupo
                 INNER JOIN usuario ON usuario.id = grupo.idMentor
                 INNER JOIN matricula ON matricula.idGrupo = grupo.id AND matricula.idEstudiante = :idEstudiante
-                 AND estatus = '1'";
+                 AND grupo.estatus = '1'";
 
             $stmt = $this->db->pdo()->prepare($sql);
 

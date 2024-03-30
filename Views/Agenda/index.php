@@ -38,8 +38,9 @@ $title = "Agenda"
         color: black;
     }
 </style>
+<div class="container-fluid" >
 
-<div id="calendar"></div>
+<div id="calendar" style = "Widht: 100%;"></div>
 
 
 <!-- Agregar Evento -->
@@ -297,4 +298,6 @@ $title = "Agenda"
         </div>
     </div>
 </div>
+</div>
+
 
