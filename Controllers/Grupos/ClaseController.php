@@ -81,13 +81,14 @@ if (isset($_POST['eliminar'])) {
 }
 
 if (isset($_GET['cargarContenido'])) {
+    requierePermiso("contenido", "consultar");
     $idClase = $_GET['idClase'];
     echo json_encode($Clase->cargarContenido($idClase));
     die();
 }
 
 if (isset($_POST['guardarContenido'])) {
-
+    requierePermiso("contenido", "registrar");
     $idClase = $_POST['idClase'];
     $contenido = $_POST['contenido'];
 
@@ -103,7 +104,7 @@ if (isset($_POST['guardarContenido'])) {
 }
 
 if (isset($_POST['actualizarContenido'])) {
-
+    requierePermiso("contenido", "actualizar");
     $idContenido = $_POST['idContenido'];
     $contenido = $_POST['contenido'];
 
@@ -119,7 +120,7 @@ if (isset($_POST['actualizarContenido'])) {
 }
 
 if (isset($_POST['eliminarContenido'])) {
-
+    requierePermiso("contenido", "eliminar");
     $idContenido = $_POST['idContenido'];
 
     if ($Clase->eliminarContenido($idContenido)) {

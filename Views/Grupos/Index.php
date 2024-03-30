@@ -23,6 +23,14 @@ $usuario = $_SESSION['usuario'];
         
     }
 
+    const permisosContenido = {
+        registrar: <?php echo $usuario->tienePermiso("contenido", "registrar") ? 1 : 0 ?>,
+        consultar: <?php echo $usuario->tienePermiso("contenido", "consultar") ? 1 : 0 ?>,
+        actualizar: <?php echo $usuario->tienePermiso("contenido", "actualizar") ? 1 : 0 ?>,
+        eliminar: <?php echo $usuario->tienePermiso("contenido", "eliminar") ? 1 : 0 ?>,
+        
+    }
+
     const permisosnotas = {
         registrar: <?php echo $usuario->tienePermiso("notas", "registrar") ? 1 : 0 ?>,
         consultar: <?php echo $usuario->tienePermiso("notas", "consultar") ? 1 : 0 ?>,

@@ -1524,7 +1524,7 @@ $(document).ready(function () {
 
                         let botonEliminar = permisosclases.eliminar ? `<a role="button"  id="eliminarClase" title="Eliminar Clase"><i class="fa-solid fa-trash" ></i></a>` : '';
 
-                        let contenido = permisosclases.consultar ?`<a role="button" id="contenidoBoton" title="Contenido"><i class="fa-solid fa-book" data-bs-toggle="modal" href="#contenidoModal"></i></a>` : '';
+                        let contenido = permisosContenido.consultar ?`<a role="button" id="contenidoBoton" title="Contenido"><i class="fa-solid fa-book" data-bs-toggle="modal" href="#contenidoModal"></i></a>` : '';
 
                         let editarNota;
 
@@ -2039,12 +2039,12 @@ $(document).ready(function () {
 
     let atrasBoton = `<button class="btn btn-secondary" data-bs-target="#modalClases" data-bs-toggle="modal"
     data-bs-dismiss="modal">Atras</button>`
-    let agregarContenido_boton = `<button id="agregarContenido" class="btn btn-primary">Agregar contenido</button>`
-    let guardarContenido_boton = `<button id="guardarContenido" class="btn btn-primary">Guardar</button>`
-    let editarContenido_boton = `<button id="editarContenido" class="btn btn-primary">Editar contenido</button>`
-    let cancelarBoton = `<button id="cancelarContenido" class="btn btn-secondary">Cancelar</button>`
-    let actualizarContenido_boton = `<button id="actualizarContenido" class="btn btn-primary">Actualizar</button>`
-    let eliminarContenido_boton = `<button id="eliminarContenido" class="btn btn-danger">Eliminar contenido</button>`
+    let agregarContenido_boton = permisosContenido.registrar ? `<button id="agregarContenido" class="btn btn-primary">Agregar contenido</button>` : '';
+    let guardarContenido_boton = permisosContenido.registrar ? `<button id="guardarContenido" class="btn btn-primary">Guardar</button>` : '';
+    let editarContenido_boton = permisosContenido.actualizar ? `<button id="editarContenido" class="btn btn-primary">Editar contenido</button>` : '';
+    let cancelarBoton = `<button id="cancelarContenido" class="btn btn-secondary">Cancelar</button>`;
+    let actualizarContenido_boton = permisosContenido.registrar ? `<button id="actualizarContenido" class="btn btn-primary">Actualizar</button>` : '';
+    let eliminarContenido_boton = permisosContenido.eliminar ? `<button id="eliminarContenido" class="btn btn-danger">Eliminar contenido</button>` : '';
 
     let contenidoFound = atrasBoton + editarContenido_boton + eliminarContenido_boton
     let contenidoNotFound = atrasBoton + agregarContenido_boton
@@ -2108,10 +2108,10 @@ $(document).ready(function () {
                     idContenido = data.id
                     contenido = data.contenido
                 } else {
-                    document.getElementById('contenido').innerHTML = contenidoEmpty;
                     document.getElementById('contenedorBotones').innerHTML = contenidoNotFound
 
                     contenido = contenidoEmpty
+                    document.getElementById('contenido').innerHTML = contenido;
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {
