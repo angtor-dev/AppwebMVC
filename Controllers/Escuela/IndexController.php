@@ -39,7 +39,9 @@ if (isset($_POST['registrar'])) {
 
     requierePermiso("eid", "registrar");
 
-    $nombre = trim(strtolower($_POST['nombre']));
+    $nombre = $_POST['nombre'];
+    $edadMinima = empty($_POST['edadMinima']) ? '' : $_POST['edadMinima'];
+    $edadMaxima = empty($_POST['edadMaxima']) ? '' : $_POST['edadMaxima'];
     $selectedEid = empty($_POST['selectedEid']) ? '' : $_POST['selectedEid'];
     $selectedRolR = empty($_POST['selectedRolR']) ? '' : $_POST['selectedRolR'];
     $selectedRolA = empty($_POST['selectedRolA']) ? '' : $_POST['selectedRolA'];
@@ -48,7 +50,7 @@ if (isset($_POST['registrar'])) {
     // $Celulas->validacion_datos($nombre, [$idLider, $idCoLider, $idTerritorio]);
     // $Celulas->validacion_existencia($nombre, $id='', $tipo, $idTerritorio);
     // $Celulas->valida_celulascantidad($idLider, $tipo, $id='');
-    $Eid->registrarEid($nombre, $selectedEid, $selectedRolR, $selectedRolA);
+    $Eid->registrarEid($nombre, $edadMinima, $edadMaxima, $selectedEid, $selectedRolR, $selectedRolA);
 
     die();
 }
@@ -69,9 +71,11 @@ if (isset($_POST['editar'])) {
     requierePermiso("eid", "actualizar");
 
     $id = $_POST['id'];
-    $nombre = trim(strtolower($_POST['nombre']));
+    $nombre = $_POST['nombre'];
+    $edadMinima = empty($_POST['edadMinima']) ? '' : $_POST['edadMinima'];
+    $edadMaxima = empty($_POST['edadMaxima']) ? '' : $_POST['edadMaxima'];
  
-    $Eid->editarEid($id, $nombre);
+    $Eid->editarEid($id, $nombre, $edadMinima, $edadMaxima);
 
     die();
 }

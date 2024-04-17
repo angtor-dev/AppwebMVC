@@ -318,7 +318,7 @@ $(document).ready(function () {
         }
     })
 
-    $("#juvenil").on("change", function (event) {
+    $("#juvenil").on("keyup", function (event) {
         const input = document.getElementById("juvenil");
         const div = document.getElementById("msj_juvenil");
         if (!ex_re.asistencia.test(input.value)) {
@@ -336,7 +336,7 @@ $(document).ready(function () {
         }
     })
 
-    $("#adulto").on("change", function (event) {
+    $("#adulto").on("keyup", function (event) {
         const input = document.getElementById("adulto");
         const div = document.getElementById("msj_adulto");
         if (!ex_re.asistencia.test(input.value)) {
@@ -354,7 +354,7 @@ $(document).ready(function () {
         }
     })
 
-    $("#infantil").on("change", function (event) {
+    $("#infantil").on("keyup", function (event) {
         const input = document.getElementById("infantil");
         const div = document.getElementById("msj_infantil");
         if (!ex_re.asistencia.test(input.value)) {

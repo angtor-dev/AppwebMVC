@@ -2,6 +2,7 @@ $(document).ready(function () {
 
     let choices1;
     let choices2;
+    let choices3;
     let datatables;
     let datatables1;
     let datatables2;
@@ -231,6 +232,72 @@ $(document).ready(function () {
             });
         });
     });
+
+
+    function Listar_SedesRegistrar(idSede, opcion) {
+
+        $.ajax({
+            type: "GET",
+            url: "/AppwebMVC/Territorios/Listar",
+            data: {
+
+                listaSedes: 'listaSedes',
+
+            },
+            success: function (response) {
+
+
+                let data = JSON.parse(response);
+
+                let selector = document.getElementById('idSede');
+
+                if (opcion == 1) {
+
+                selector.innerHTML = '';
+
+                const placeholderOption = document.createElement('option');
+                placeholderOption.value = '';
+                placeholderOption.text = 'Seleccione una Sede';
+                placeholderOption.disabled = true;
+                placeholderOption.selected = true;
+                selector.appendChild(placeholderOption);
+
+            } else {
+                selector.innerHTML = '';
+            }
+
+                data.forEach(item => {
+
+                    const option = document.createElement('option');
+                    option.value = item.id;
+                    option.text = `${item.codigo} ${item.nombre}`;
+                    selector.appendChild(option);
+
+                });
+
+                // Destruir la instancia existente si la hay
+                if (choices3) {
+                    choices3.destroy();
+                }
+                choices3 = new Choices(selector, {
+                    allowHTML: true,
+                    searchEnabled: true,  // Habilita la funcionalidad de búsqueda
+                    removeItemButton: true,  // Habilita la posibilidad de remover items
+                    placeholderValue: 'Selecciona una opción',  // Texto del placeholder
+                });
+
+                if (idSede !== '') {
+                    choices3.setChoiceByValue(idSede.toString())
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                // Aquí puedes manejar errores, por ejemplo:
+                console.error("Error al enviar:", textStatus, errorThrown);
+                alert("Hubo un error al realizar el registro. Por favor, inténtalo de nuevo.");
+            }
+        })
+    }
+
 
 
 
@@ -846,7 +913,7 @@ $(document).ready(function () {
         document.getElementById('submitRE').textContent = 'Actualizar';
 
 
-
+        Listar_SedesRegistrar(datos.idSede, 2);
         Listar_Niveles(datos.idNivel, 2);
         Listar_Mentores(datos.idMentor, 2);
 
@@ -1187,12 +1254,13 @@ $(document).ready(function () {
         document.getElementById('titulo1').textContent = 'Registrar Grupo';
         document.getElementById('submitRE').textContent = 'Registrar';
 
-
+        Listar_SedesRegistrar('', 1);
         Listar_Niveles('', 1);
         Listar_Mentores('', 1);
     });
 
     const validacion1 = {
+        idSede: false,
         idNivel: false,
         idMentor: false,
     };
@@ -1236,6 +1304,24 @@ $(document).ready(function () {
     });
 
 
+    $("#idSede").on("change", function (event) {
+        const idSede = document.getElementById("idSede").value;
+        const div = document.getElementById("msj_idSede");
+        if (!/^[1-9]\d*$/.test(idSede)) {
+            div.classList.remove("d-none");
+            div.innerText = "Este campo es obligatorio";
+
+            validacion1.idSede = false;
+        } else {
+            div.classList.add("d-none");
+            div.innerText = "";
+
+            validacion1.idSede = true;
+        }
+
+    });
+
+
     const form = document.getElementById("formulario");
     if(form !== null){
     form.addEventListener("submit", (e) => {
@@ -1254,6 +1340,7 @@ $(document).ready(function () {
                     idGrupo: document.getElementById("Grupo").textContent,
                     idNivel: document.getElementById("idNivel").value,
                     idMentor: document.getElementById("idMentor").value,
+                    idSede: document.getElementById("idSede").value,
 
                 },
                 success: function (response) {
@@ -1280,6 +1367,9 @@ $(document).ready(function () {
                     }
                     if (choices2) {
                         choices2.destroy();
+                    }
+                    if (choices3) {
+                        choices3.destroy();
                     }
 
 
@@ -1327,6 +1417,7 @@ $(document).ready(function () {
 
         $("#msj_idNivel").addClass("d-none");
         $("#msj_idMentor").addClass("d-none");
+        $("#msj_idSede").addClass("d-none");
 
 
         for (const key in validacion1) {
@@ -1338,6 +1429,9 @@ $(document).ready(function () {
         }
         if (choices2) {
             choices2.destroy();
+        }
+        if (choices2) {
+            choices3.destroy();
         }
 
         $('#modal_registrar').modal('hide');

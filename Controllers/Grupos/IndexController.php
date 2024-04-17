@@ -73,11 +73,12 @@ if (isset($_POST['registrar_editar'])) {
     $idNivel = $_POST['idNivel'];
     $id = $_POST['idGrupo'];
     $idMentor = $_POST['idMentor'];
+    $idSede = $_POST['idSede'];
 
     if ($accion == 'registrar') {
 
         requierePermiso("grupos", "registrar");
-        $Grupo->registrarGrupo($idNivel, $idMentor);
+        $Grupo->registrarGrupo($idNivel, $idMentor, $idSede);
         die();
 
     }
@@ -85,7 +86,7 @@ if (isset($_POST['registrar_editar'])) {
     if ($accion == 'editar') {
 
         requierePermiso("grupos", "actualizar");
-        $Grupo->editarGrupo($id, $idNivel, $idMentor);
+        $Grupo->editarGrupo($id, $idNivel, $idMentor, $idSede);
         die();
 
     }

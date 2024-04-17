@@ -132,8 +132,7 @@ $usuario = $_SESSION['usuario'];
                     </div>
                     <div class="modal-footer">
                         <div class="d-flex justify-content-end gap-1">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        </div>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>                        </div>
                     </div>
                 </div>
 

@@ -359,7 +359,7 @@ class Discipulo extends Model
             discipulo
             INNER JOIN usuario AS Consolidador ON discipulo.idConsolidador = Consolidador.id
             LEFT JOIN asistencia ON discipulo.id = asistencia.idDiscipulo
-            INNER JOIN celulas ON discipulo.idCelulaConsolidacion = celulas.id
+            INNER JOIN celulas ON discipulo.idCelulaConsolidacion = celulas.id WHERE discipulo.estatus = '1'
         GROUP BY
             discipulo.id";
 

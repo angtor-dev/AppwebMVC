@@ -170,6 +170,17 @@ $usuario = $_SESSION['usuario'];
                             <p id="Grupo" class="visually-hidden"></p>
                             <p id="accion" class="visually-hidden"></p>
 
+                            <?php if ($usuario->tieneRol("Superusuario")): ?>
+                            <div class="mb-3">
+                                <label for="sede" class="form-label fw-bold">Sede</label>
+                                <select class="form-select" id="idSede" name="idSede">
+                                </select>
+                                <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_idSede" role="alert">
+                                    Debe seleccionar una Sede.
+                                </div>
+                            </div>
+                            <?php endif ?>
+ 
                             <div class="mb-3">
                                 <label for="idNivel" class="form-label fw-bold">Nivel</label>
                                 <select class="form-select" id="idNivel" name="idNivel">

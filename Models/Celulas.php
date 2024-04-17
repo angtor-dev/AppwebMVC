@@ -580,7 +580,7 @@ class Celulas extends Model
                                     );
                                 }
                             }
-                        }
+                        } 
                     }
                 }
             } else {

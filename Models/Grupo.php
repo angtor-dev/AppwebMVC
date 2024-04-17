@@ -9,13 +9,14 @@ class Grupo extends Model
     private int $idNivel;
     private int $identificador;
     private int $idMentor;
+    public int $idSede;
     private string $fechaInicio;
     private ?string $fechaFin;
     private int $estado;
     private int $estatus;
 
 
-    public function registrarGrupo($idNivel, $idMentor)
+    public function registrarGrupo($idNivel, $idMentor, $idSede)
     {
 
         try {
@@ -27,13 +28,12 @@ class Grupo extends Model
             $usuario = $_SESSION['usuario'];
 
             /** @var Sede **/
-            $Sede = Sede::cargar($usuario->idSede);
+            $Sede = Sede::cargar($idSede);
 
-            $query = "SELECT MAX(identificador) AS conteo FROM grupo INNER JOIN usuario 
-            ON usuario.id = grupo.idMentor AND usuario.idSede = :idSede WHERE grupo.estatus = '1' ORDER  BY identificador ASC";
+            $query = "SELECT MAX(identificador) AS conteo FROM grupo WHERE grupo.estatus = '1' AND idSede = :idSede ORDER  BY identificador ASC";
             $consultanivel = $this->db->pdo()->prepare($query);
 
-            $consultanivel->bindValue(':idSede', $usuario->idSede);
+            $consultanivel->bindValue(':idSede', $idSede);
             $consultanivel->execute();
             $datos = $consultanivel->fetch(PDO::FETCH_ASSOC);
 
@@ -49,13 +49,14 @@ class Grupo extends Model
                 $codigo = $Sede->getCodigo() . '-' . $Nivel->getCodigo() . '-G' . $identificador;
             }
 
-            $sql = "INSERT INTO grupo (codigo, identificador, idNivel, idMentor, fechaInicio) VALUES (:codigo, :identificador, :idNivel, :idMentor, CURDATE())";
+            $sql = "INSERT INTO grupo (codigo, identificador, idNivel, idMentor, idSede, fechaInicio) VALUES (:codigo, :identificador, :idNivel, :idMentor, :idSede, CURDATE())";
             $stmt = $this->db->pdo()->prepare($sql);
 
             $stmt->bindValue(':codigo', $codigo);
             $stmt->bindValue(':identificador', $identificador);
             $stmt->bindValue(':idNivel', $idNivel);
             $stmt->bindValue(':idMentor', $idMentor);
+            $stmt->bindValue(':idSede', $idSede);
 
             $stmt->execute();
 
@@ -127,10 +128,27 @@ class Grupo extends Model
                 $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 return $resultado;
 
-
             } else {
 
-                $sql = "SELECT COUNT(matricula.idEstudiante) AS estudiantes,
+                $sql = '';
+
+                if ($usuario->tieneRol('Superusuario')) {
+
+
+                    $sql = "SELECT COUNT(matricula.idEstudiante) AS estudiantes,
+            CONCAT (usuario.cedula, ' ', usuario.nombre, ' ', usuario.apellido) AS infoMentor, grupo.*, 
+            eid.id AS idEid FROM grupo
+            INNER JOIN usuario ON usuario.id = grupo.idMentor
+            LEFT JOIN matricula ON matricula.idGrupo = grupo.id
+            INNER JOIN nivel ON nivel.id = grupo.idNivel
+            INNER JOIN moduloeid ON moduloeid.id = nivel.idModuloEid
+            INNER JOIN eid ON eid.id = moduloeid.idEid
+            WHERE grupo.estado = :tipo AND grupo.estatus = '1' GROUP BY grupo.id;";
+
+
+                } else {
+
+                    $sql = "SELECT COUNT(matricula.idEstudiante) AS estudiantes,
                  CONCAT (usuario.cedula, ' ', usuario.nombre, ' ', usuario.apellido) AS infoMentor, grupo.*, 
             eid.id AS idEid FROM grupo
             INNER JOIN usuario ON usuario.id = grupo.idMentor
@@ -138,13 +156,16 @@ class Grupo extends Model
             INNER JOIN nivel ON nivel.id = grupo.idNivel
             INNER JOIN moduloeid ON moduloeid.id = nivel.idModuloEid
             INNER JOIN eid ON eid.id = moduloeid.idEid
-            WHERE grupo.estado = :tipo AND grupo.estatus = '1'" . (($usuario->tieneRol('Mentor')) ? "AND idMentor = :idMentor GROUP BY grupo.id" : "GROUP BY grupo.id");
+            WHERE grupo.estado = :tipo AND grupo.estatus = '1'" . (($usuario->tieneRol('Mentor')) ? "AND idMentor = :idMentor GROUP BY grupo.id" : "AND grupo.idSede = :idSede GROUP BY grupo.id");
+
+                }
 
                 $stmt = $this->db->pdo()->prepare($sql);
 
                 $stmt->bindValue(':tipo', $tipo);
+                $usuario->tieneRol('Superusuario') ? "" : $stmt->bindValue(':idSede', $usuario->idSede);
                 $usuario->tieneRol('Mentor') ? $stmt->bindValue(':idMentor', $usuario->id) : "";
-              
+
 
                 $stmt->execute();
                 $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -193,7 +214,7 @@ class Grupo extends Model
 
 
 
-    public function editarGrupo($id, $idNivel, $idMentor)
+    public function editarGrupo($id, $idNivel, $idMentor, $idSede)
     {
 
         try {
@@ -203,31 +224,44 @@ class Grupo extends Model
             /** @var Nivel **/
             $Nivel = Nivel::cargar($idNivel);
 
-            /** @var Usuario */
+            /** @var Usuario **/
             $usuario = Usuario::cargar($idMentor);
 
             /** @var Sede **/
-            $Sede = Sede::cargar($usuario->idSede);
+            $Sede = Sede::cargar($idSede);
 
+            $query = "SELECT MAX(identificador) AS conteo FROM grupo WHERE grupo.estatus = '1' AND grupo.idSede = :idSede ORDER  BY identificador ASC";
+            $consultanivel = $this->db->pdo()->prepare($query);
+
+            $consultanivel->bindValue(':idSede', $idSede);
+            $consultanivel->execute();
+            $datos = $consultanivel->fetch(PDO::FETCH_ASSOC);
+
+
+            $identificador = '';
             $codigo = '';
 
 
-            if ($consulta->getidNivel() != $idNivel) {
+            if ($consulta->getidNivel() != $idNivel || $consulta->idSede != $idSede) {
 
                 $this->existenciaMatricula($id);
 
-                $codigo = $Sede->getCodigo() . $Nivel->getCodigo() . '-G' . $consulta->getIdentificador();
+                if ($datos['conteo'] == null) {
+                    $identificador = 1;
+                    $codigo = $Sede->getCodigo() . '-' . $Nivel->getCodigo() . '-G' . $identificador;
+                } else {
+                    $identificador = $consulta->idSede == $idSede ? $consulta->getIdentificador() : $datos['conteo'] + 1;
+                    $codigo = $Sede->getCodigo() . '-' . $Nivel->getCodigo() . '-G' . $identificador;
+                }
+
             } else {
 
                 $codigo = $consulta->getCodigo();
+                $identificador = $consulta->getIdentificador();
             }
 
-
-            $identificador = $consulta->getIdentificador();
-
-
             $sql = "UPDATE grupo 
-            SET codigo = :codigo, identificador = :identificador, idNivel = :idNivel, idMentor = :idMentor
+            SET codigo = :codigo, identificador = :identificador, idNivel = :idNivel, idMentor = :idMentor, idSede = :idSede
             WHERE id = :id";
             $stmt = $this->db->pdo()->prepare($sql);
 
@@ -236,6 +270,7 @@ class Grupo extends Model
             $stmt->bindValue(':identificador', $identificador);
             $stmt->bindValue(':idNivel', $idNivel);
             $stmt->bindValue(':idMentor', $idMentor);
+            $stmt->bindValue(':idSede', $idSede);
 
             $stmt->execute();
 
@@ -344,7 +379,7 @@ class Grupo extends Model
             /** @var Grupo */
             $Grupo = Grupo::cargar($idGrupo);
 
-            $this->validarExistenciaEstudianteGrupo($cedula);
+            $this->validarExistenciaEstudianteGrupo($cedula, $Grupo->getidSede());
             $this->validarEstudianteAprobado($cedula, $Grupo->getidNivel());
 
             $sql = "INSERT INTO matricula (idGrupo, idEstudiante) VALUES (:idGrupo, :idEstudiante)";
@@ -446,9 +481,9 @@ class Grupo extends Model
 
         try {
 
-            if ($tipo != '4'){
+            if ($tipo != '4') {
 
-            $sql = "SELECT usuario.id, usuario.cedula, CONCAT(usuario.nombre, ' ', usuario.apellido) AS nombres,  matricula.notaTotal,
+                $sql = "SELECT usuario.id, usuario.cedula, CONCAT(usuario.nombre, ' ', usuario.apellido) AS nombres,  matricula.notaTotal,
             CASE WHEN matricula.estado = '1' THEN 'Cursando'
             WHEN matricula.estado = '2' THEN 'Aprobado'
             WHEN matricula.estado = '3' THEN 'Reprobado'
@@ -459,19 +494,19 @@ class Grupo extends Model
             LEFT JOIN clase ON clase.idGrupo = matricula.idGrupo AND nota.idClase = clase.id
             WHERE matricula.idGrupo = :idGrupo GROUP BY usuario.id";
 
-            $stmt = $this->db->pdo()->prepare($sql);
+                $stmt = $this->db->pdo()->prepare($sql);
 
-            $stmt->bindValue(':idGrupo', $idGrupo);
+                $stmt->bindValue(':idGrupo', $idGrupo);
 
-            $stmt->execute();
-            $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $resultado;
-        } else {
+                $stmt->execute();
+                $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                return $resultado;
+            } else {
 
-            /** @var Usuario */
-            $usuario = $_SESSION['usuario'];
+                /** @var Usuario */
+                $usuario = $_SESSION['usuario'];
 
-            $sql = "SELECT usuario.id, usuario.cedula, CONCAT(usuario.nombre, ' ', usuario.apellido) AS nombres,  matricula.notaTotal,
+                $sql = "SELECT usuario.id, usuario.cedula, CONCAT(usuario.nombre, ' ', usuario.apellido) AS nombres,  matricula.notaTotal,
             CASE WHEN matricula.estado = '1' THEN 'Cursando'
             WHEN matricula.estado = '2' THEN 'Aprobado'
             WHEN matricula.estado = '3' THEN 'Reprobado'
@@ -482,17 +517,17 @@ class Grupo extends Model
             LEFT JOIN clase ON clase.idGrupo = matricula.idGrupo AND nota.idClase = clase.id
             WHERE matricula.idGrupo = :idGrupo AND matricula.idEstudiante = :idEstudiante GROUP BY usuario.id";
 
-            $stmt = $this->db->pdo()->prepare($sql);
+                $stmt = $this->db->pdo()->prepare($sql);
 
-            $stmt->bindValue(':idGrupo', $idGrupo);
-            $stmt->bindValue(':idEstudiante', $usuario->id);
+                $stmt->bindValue(':idGrupo', $idGrupo);
+                $stmt->bindValue(':idEstudiante', $usuario->id);
 
-            $stmt->execute();
-            $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $resultado;
+                $stmt->execute();
+                $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                return $resultado;
 
 
-        }
+            }
 
 
         } catch (Exception $e) {
@@ -547,7 +582,7 @@ class Grupo extends Model
         }
     }
 
-    private function validarExistenciaEstudianteGrupo($cedula)
+    private function validarExistenciaEstudianteGrupo($cedula, $idSede)
     {
 
         try {
@@ -558,14 +593,13 @@ class Grupo extends Model
 
                 if ($estudiante->tieneRol('Estudiante')) {
 
-                    /** @var Usuario */
-                    $usuario = $_SESSION['usuario'];
+
 
                     /** @var Sede **/
                     $Sede = Sede::cargar($estudiante->idSede);
 
 
-                    if ($estudiante->idSede == $usuario->idSede) {
+                    if ($estudiante->idSede == $idSede) {
 
 
                         $query = "SELECT grupo.codigo, CASE
@@ -690,6 +724,7 @@ class Grupo extends Model
 
                         $Eid->getValidarRolesRequeridos($estudiante->id);
                         $Eid->getValidarEidsRequerido($estudiante->id);
+                        $Eid->getValidarEdad($estudiante->id);
 
                     }
                 }
@@ -884,7 +919,7 @@ class Grupo extends Model
                         /** @var Usuario */
                         $Usuario = Usuario::cargar($Estudiante['idEstudiante']);
 
-                        if (empty ($Usuario->tieneRol($rol['nombre']))) {
+                        if (empty($Usuario->tieneRol($rol['nombre']))) {
 
                             $sql = "INSERT INTO usuariorol(idUsuario, idRol)
                         VALUES(:idUsuario, :idRol)";
@@ -1026,6 +1061,10 @@ class Grupo extends Model
     public function getidNivel()
     {
         return $this->idNivel;
+    }
+    public function getidSede()
+    {
+        return $this->idSede;
     }
 
     public function getIdentificador()

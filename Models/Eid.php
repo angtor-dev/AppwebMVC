@@ -13,7 +13,7 @@ class Eid extends Model
     private int $estatus;
 
 
-    public function registrarEid($nombre, $selectedEid, $selectedRolR, $selectedRolA)
+    public function registrarEid($nombre, $edadMinima, $edadMaxima, $selectedEid, $selectedRolR, $selectedRolA)
     {
 
         try {
@@ -34,11 +34,13 @@ class Eid extends Model
                 $codigo = 'EID' . $id;
             }
 
-            $sql = "INSERT INTO eid (id, codigo, nombre) VALUES (:id, :codigo, :nombre)";
+            $sql = "INSERT INTO eid (id, codigo, nombre, edadMinima, edadMaxima) VALUES (:id, :codigo, :nombre, :edadMinima, :edadMaxima)";
             $stmt = $this->db->pdo()->prepare($sql);
 
             $stmt->bindValue(':id', $id);
             $stmt->bindValue(':nombre', $nombre);
+            $stmt->bindValue(':edadMinima', $edadMinima);
+            $stmt->bindValue(':edadMaxima', $edadMaxima);
             $stmt->bindValue(':codigo', $codigo);
 
             $stmt->execute();
@@ -111,7 +113,7 @@ class Eid extends Model
 
         try {
 
-            $sql = "SELECT eid.id, eid.nombre, eid.codigo, 
+            $sql = "SELECT eid.id, eid.nombre, eid.codigo, edadMinima, edadMaxima, 
             COALESCE(COUNT(moduloeid.id), 0) AS modulos FROM eid
             LEFT JOIN moduloeid ON eid.id = moduloeid.idEid AND moduloeid.estatus = '1'
              WHERE eid.estatus = '1' GROUP BY eid.id ORDER BY eid.id ASC";
@@ -159,16 +161,18 @@ class Eid extends Model
         }
     }
 
-    public function editarEid($id, $nombre)
+    public function editarEid($id, $nombre, $edadMinima, $edadMaxima)
     {
 
         try {
-            $sql = "UPDATE eid SET nombre = :nombre WHERE id = :id";
+            $sql = "UPDATE eid SET nombre = :nombre, edadMinima = :edadMinima, edadMaxima = :edadMaxima WHERE id = :id";
 
             $stmt = $this->db->pdo()->prepare($sql);
 
             $stmt->bindValue(':id', $id);
             $stmt->bindValue(':nombre', $nombre);
+            $stmt->bindValue(':edadMinima', $edadMinima);
+            $stmt->bindValue(':edadMaxima', $edadMaxima);
 
             $stmt->execute();
 
@@ -491,6 +495,63 @@ class Eid extends Model
                 
                 
             }}
+                        
+            
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+            die();
+        }
+        
+
+    }
+
+
+    public function getValidarEdad($idEstudiante)
+    {
+        try {
+
+            $sql = "SELECT fechaNacimiento FROM usuario 
+            WHERE id = :id";
+            $stmt4 = $this->db->pdo()->prepare($sql);
+            $stmt4->bindValue(":id", $idEstudiante);
+            $stmt4->execute();
+
+            $resultadoConsulta = $stmt4->fetch(PDO::FETCH_ASSOC);  
+          
+            $fechaNacimientoString = $resultadoConsulta['fechaNacimiento'];
+            $fechaNacimiento = DateTime::createFromFormat('Y-m-d', $fechaNacimientoString);
+            $fechaActual = new DateTime();
+            $edad = $fechaActual->diff($fechaNacimiento)->y;
+            
+            $sql2 = "SELECT edadMinima, edadMaxima FROM eid
+            WHERE id = :id";
+            $stmt = $this->db->pdo()->prepare($sql2);
+            $stmt->bindValue(":id", $this->id);
+            $stmt->execute();
+
+            $resultado = $stmt->fetch(PDO::FETCH_ASSOC);  
+
+            if($resultado['edadMinima'] > 0){
+                   
+                if($resultado['edadMinima'] > $edad){
+                       
+                    throw new Exception("El estudiante no cumple con la edad minima asignada para esta Eid. edad Minima: " . $resultado['edadMinima'] . ". Edad del estudiante: " . $edad . ".", 422);
+               
+                }
+               
+            } 
+            
+                if ($resultado['edadMaxima'] > 0){
+               
+                if($resultado['edadMaxima'] < $edad){
+
+                    throw new Exception("El estudiante no cumple con la edad maxima asignada para esta Eid. edad Maxima: " . $resultado['edadMaxima'] . ". Edad del estudiante: " . $edad . ".", 422);
+
+                }
+   
+            }
+
                         
             
         } catch (Exception $e) {

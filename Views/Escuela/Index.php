@@ -42,6 +42,8 @@ $usuario = $_SESSION['usuario'];
                     <th>Codigo</th>
                     <th>Nombre</th>
                     <th>Modulos</th>
+                    <th>Edad Minima</th>
+                    <th>Edad Maxima</th>
                     <th class="text-center" style="width: 100px;">Opciones</th>
                 </tr>
             </thead>
@@ -69,11 +71,28 @@ $usuario = $_SESSION['usuario'];
 
                             <div class="mb-3">
                                 <label for="nombre" class="form-label fw-bold">Nombre</label>
-                                <input type="text" class="form-control" id="nombre" maxlength="30" name="nombre"
+                                <input type="text" placeholder="nombre" class="form-control" id="nombre" maxlength="30" name="nombre"
                                     aria-describedby="msj_nombre">
 
                                 <div class="invalid-feedback" id="msj_nombre" role="alert">
 
+                                </div>
+                            </div>
+
+                            <div clas="mb-3">
+                                <div class="row g-3">
+                                    <div class="col-6">
+                                        <label for="edadMinima" class="form-label fw-bold">Edad Minima Requerida</label>
+                                        <input type="number" class="form-control" id="edadMinima" name="edadMinima"
+                                             min="0" placeholder="Edad Minima" aria-describedby="msj_edadMinima">
+                                        <div class="invalid-feedback" id="msj_edadMinima" role="alert"></div>
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="edadMaxima" class="form-label fw-bold">Edad Maxima Requerida</label>
+                                        <input type="number" placeholder="Edad Maxima" class="form-control" id="edadMaxima" name="edadMaxima"
+                                           min="0" aria-describedby="msj_edadMaxima">
+                                        <div class="invalid-feedback" id="msj_edadMaxima" role="alert"></div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -124,29 +143,50 @@ $usuario = $_SESSION['usuario'];
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Editar nombre EID</h5>
+                        <h5 class="modal-title">Editar EID</h5>
                     </div>
                     <div class="modal-body">
 
 
                         <form id="formulario2">
                             <div class="mb-3">
-
+                                <label for="nombre2" class="form-label fw-bold">Nombre</label>
                                 <input type="text" class="form-control" id="nombre2" name="nombre2" maxlength="50"
                                     aria-describedby="msj_nombre2" required>
                                 <div class="invalid-feedback" id="msj_nombre2">
                                 </div>
                             </div>
+
+                            <div clas="mb-3">
+                                <div class="row g-3">
+                                    <div class="col-6">
+                                        <label for="edadMinima2" class="form-label fw-bold">Edad Minima Requerida</label>
+                                        <input type="number" class="form-control" id="edadMinima2" name="edadMinima2"
+                                             min="0" placeholder="Edad Minima" aria-describedby="msj_edadMinima2">
+                                        <div class="invalid-feedback" id="msj_edadMinima2" role="alert"></div>
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="edadMaxima2" class="form-label fw-bold">Edad Maxima Requerida</label>
+                                        <input type="number" placeholder="Edad Maxima" class="form-control" id="edadMaxima2" name="edadMaxima2"
+                                           min="0" aria-describedby="msj_edadMaxima2">
+                                        <div class="invalid-feedback" id="msj_edadMaxima2" role="alert"></div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <p id="idEid3" class="visually-hidden"></p>
 
 
-                            <div class="d-flex justify-content-end gap-1">
-                                <button type="button" id="cerrarEditar" class="btn btn-secondary">Cerrar</button>
-                                <button type="submit" class="btn btn-primary">Actualizar</button>
-                            </div>
-                        </form>
+                          
+                        
 
                     </div>
+                    <div class="modal-footer">
+                    <div class="d-flex justify-content-end gap-1">
+                                <button type="button" id="cerrarEditar" class="btn btn-secondary">Cerrar</button>
+                                <button type="submit" class="btn btn-primary">Actualizar</button>
+                            </div></form>
+                     </div>
                 </div>
 
             </div>
@@ -316,7 +356,7 @@ $usuario = $_SESSION['usuario'];
         <div class="modal fade" id="modal_modulos" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header" >
+                    <div class="modal-header">
                         <h3 class="modal-title" id="cartaEid"></h3>
                     </div>
                     <div class="modal-body">
@@ -342,13 +382,13 @@ $usuario = $_SESSION['usuario'];
                                 <div class="tab-content" id="nav-tabContent2">
 
                                     <div class="tab-pane fade show active" id="tab-eidlist" role="tabpanel" tabindex="0">
-                                        
+
 
 
 
                                         <form id="formulario3">
                                             <div class="mb-3">
-                                                
+
                                                 <div class="row g-3">
                                                     <div class="col-7">
 
@@ -366,7 +406,7 @@ $usuario = $_SESSION['usuario'];
                                                         <div class="d-flex justify-content-end gap-1">
                                                             <button type="button" id="editarmodulo"
                                                                 class="btn btn-info d-none">editar</button>
-                                                                <button type="button" id="cancelar"
+                                                            <button type="button" id="cancelar"
                                                                 class="btn btn-secondary d-none">cancelar</button>
                                                             <button type="button" id="registrarmodulo"
                                                                 class="btn btn-primary">Registrar</button>
@@ -421,7 +461,7 @@ $usuario = $_SESSION['usuario'];
 
                                         <form id="formulario4">
                                             <div class="mb-3">
-                                                
+
                                                 <div class="row g-3">
                                                     <div class="col-7">
 
@@ -439,7 +479,7 @@ $usuario = $_SESSION['usuario'];
                                                         <div class="d-flex justify-content-end gap-1">
                                                             <button type="button" id="editarnivel"
                                                                 class="btn btn-info d-none">editar</button>
-                                                                <button type="button" id="cancelar2"
+                                                            <button type="button" id="cancelar2"
                                                                 class="btn btn-secondary d-none">cancelar</button>
                                                             <button type="button" id="registrarnivel"
                                                                 class="btn btn-primary">Registrar</button>
@@ -493,7 +533,8 @@ $usuario = $_SESSION['usuario'];
                     </div>
                     <div class="modal-footer">
 
-                        <button type="button" class="btn btn-secondary" id="cerrarmodulos" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-secondary" id="cerrarmodulos"
+                            data-bs-dismiss="modal">Cerrar</button>
                     </div>
 
                 </div>
@@ -503,8 +544,3 @@ $usuario = $_SESSION['usuario'];
     </div>
 
 </div>
-
-
-
-
-

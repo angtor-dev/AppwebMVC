@@ -343,6 +343,21 @@ $(document).ready(function () {
         $('#search2').keyup(function () {
             datatables1.search($(this).val()).draw();
         });
+
+        $('#cerrarRegistrar').on('click', function () {
+             
+            document.getElementById('formulario').reset();
+           
+            $("#cedula").removeClass("is-valid");
+            $("#cedula").removeClass("is-invalid");
+
+        
+            $('#modal_registrar').modal('hide');
+        
+          });
+
+
+    
    
 
 });

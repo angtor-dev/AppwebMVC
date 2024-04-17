@@ -40,6 +40,20 @@ $(document).ready(function () {
             {
                 data: null,
                 render: function (data, type, row, meta) {
+                    let edadMinima = data.edadMinima > 0 ? data.edadMinima : 'No tiene';
+                    return edadMinima;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row, meta) {
+                    let edadMaxima = data.edadMaxima > 0 ? data.edadMaxima : 'No tiene';
+                    return edadMaxima;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row, meta) {
 
 
                     let botonEditar = permisos.actualizar ? `<a role="button" id="editar" data-bs-toggle="modal" title="Editar Nombre" data-bs-target="#modal_editar" ><i class="fa-solid fa-pen" ></i></a>` : '';
@@ -145,6 +159,8 @@ $(document).ready(function () {
 
         document.getElementById('idEid3').textContent = datos.id;
         document.getElementById('nombre2').value = datos.nombre;
+        document.getElementById('edadMinima2').value = datos.edadMinima;
+        document.getElementById('edadMaxima2').value = datos.edadMaxima;
 
     });
 
@@ -353,7 +369,8 @@ $(document).ready(function () {
 
     const exp = {
         nombre: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,]{5,100}$/, // Letras, números, espacios, puntos y comas con un máximo de 20 caracteres
-        selectores: /^[0-9]\d*$/
+        selectores: /^[0-9]\d*$/,
+        edad: /^[0-9]\d*$/,
     }
 
 
@@ -381,8 +398,62 @@ $(document).ready(function () {
         eid: false,
         rolR: false,
         rolA: false,
+        edadMinima: false,
+        edadMaxima: false,
     };
 
+    $("#edadMinima").on("keyup", function (event) {
+        const input = document.getElementById("edadMinima");
+        const div = document.getElementById("msj_edadMinima");
+            
+
+        if (/^\s*$/.test(input.value)) {
+            input.classList.remove("is-valid");
+            input.classList.remove("is-invalid");
+            nombreV = true;
+        } else {
+       
+            if (!exp.edad.test(input.value)) {
+                input.classList.remove("is-valid");
+                input.classList.add("is-invalid");
+                div.innerText = "solo se pueden ingresas numeros enteros";
+         
+                nombreV = false;
+            } else {
+                input.classList.remove("is-invalid");
+                input.classList.add("is-valid");
+                div.innerText = "";
+    
+                nombreV = true;
+            }
+        }
+    })
+
+
+    $("#edadMaxima").on("keyup", function (event) {
+        const input = document.getElementById("edadMaxima");
+        const div = document.getElementById("msj_edadMaxima");
+        if (/^\s*$/.test(input.value)) {
+            input.classList.remove("is-valid");
+            input.classList.remove("is-invalid");
+            nombreV = true;
+        } else {
+       
+            if (!exp.edad.test(input.value)) {
+                input.classList.remove("is-valid");
+                input.classList.add("is-invalid");
+                div.innerText = "solo se pueden ingresas numeros enteros";
+         
+                nombreV = false;
+            } else {
+                input.classList.remove("is-invalid");
+                input.classList.add("is-valid");
+                div.innerText = "";
+    
+                nombreV = true;
+            }
+        }
+    })
 
     let selectedEid;
     $("#idEid").on("change", function (event) {
@@ -435,7 +506,7 @@ $(document).ready(function () {
                 if (Object.values(validacionselect).every(status => status === false)) {
 
                     Swal.fire({
-                        title: '¿Estas seguro de resgistrar la EID sin requisitos?',
+                        title: '¿Estas seguro de resgistrar la EID sin requisitos de edad, Eid o roles?',
                         icon: 'warning',
                         showCancelButton: true,
                         confirmButtonText: 'Si',
@@ -450,7 +521,7 @@ $(document).ready(function () {
                 } else {
 
                     Swal.fire({
-                        title: '¿Estas seguro de resgistrar la EID con estos requisitos?',
+                        title: '¿Estas seguro de resgistrar la EID con estos requisitos de edad, Eid y roles?',
                         icon: 'warning',
                         showCancelButton: true,
                         confirmButtonText: 'Si',
@@ -483,6 +554,8 @@ $(document).ready(function () {
 
                 registrar: 'registrar',
                 nombre: document.getElementById("nombre").value,
+                edadMinima: document.getElementById("edadMinima").value,
+                edadMaxima: document.getElementById("edadMaxima").value,
                 selectedEid: selectedEid,
                 selectedRolR: selectedRolR,
                 selectedRolA: selectedRolA
@@ -507,6 +580,8 @@ $(document).ready(function () {
                 }
                 nombreV = false;
                 $("#nombre").removeClass("is-valid");
+                $("#edadMinima").removeClass("is-valid");
+                $("#edadMaxima").removeClass("is-valid");
                 ListarEid();
                 ListarRoles();
 
@@ -565,6 +640,58 @@ $(document).ready(function () {
         }
     });
 
+$("#edadMinima2").on("keyup", function (event) {
+        const input = document.getElementById("edadMinima2");
+        const div = document.getElementById("msj_edadMinima2");
+            
+
+        if (/^\s*$/.test(input.value)) {
+            input.classList.remove("is-valid");
+            input.classList.remove("is-invalid");
+            nombreV2 = true;
+        } else {
+       
+            if (!exp.edad.test(input.value)) {
+                input.classList.remove("is-valid");
+                input.classList.add("is-invalid");
+                div.innerText = "solo se pueden ingresas numeros enteros";
+         
+                nombreV2 = false;
+            } else {
+                input.classList.remove("is-invalid");
+                input.classList.add("is-valid");
+                div.innerText = "";
+    
+                nombreV2 = true;
+            }
+        }
+    })
+
+
+    $("#edadMaxima2").on("keyup", function (event) {
+        const input = document.getElementById("edadMaxima2");
+        const div = document.getElementById("msj_edadMaxima2");
+        if (/^\s*$/.test(input.value)) {
+            input.classList.remove("is-valid");
+            input.classList.remove("is-invalid");
+            nombreV2 = true;
+        } else {
+       
+            if (!exp.edad.test(input.value)) {
+                input.classList.remove("is-valid");
+                input.classList.add("is-invalid");
+                div.innerText = "solo se pueden ingresas numeros enteros";
+         
+                nombreV2 = false;
+            } else {
+                input.classList.remove("is-invalid");
+                input.classList.add("is-valid");
+                div.innerText = "";
+    
+                nombreV2 = true;
+            }
+        }
+    })
 
 
     $("#formulario2").submit(function (event) {
@@ -577,7 +704,9 @@ $(document).ready(function () {
 
                     editar: 'editar',
                     id: document.getElementById("idEid3").textContent,
-                    nombre: document.getElementById("nombre2").value
+                    nombre: document.getElementById("nombre2").value,
+                    edadMinima: document.getElementById("edadMinima2").value,
+                    edadMaxima: document.getElementById("edadMaxima2").value
                 },
                 success: function (response) {
                     console.log(response);
@@ -593,6 +722,8 @@ $(document).ready(function () {
 
 
                     $("#nombre2").removeClass("is-valid");
+                    $("#edadMinima2").removeClass("is-valid");
+                    $("#edadMaxima2").removeClass("is-valid");
 
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -630,6 +761,9 @@ $(document).ready(function () {
             })
         }
     });
+
+
+    
 
 
     function listarEidV(id) {
