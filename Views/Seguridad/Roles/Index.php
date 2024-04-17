@@ -29,18 +29,24 @@ $usuario = $_SESSION['usuario'];
         </tr>
     </thead>
     <tbody>
-        <?php foreach ($roles as $rol) : ?>
+        <?php foreach ($roles as $rol): ?>
             <tr>
                 <td><?= $rol->getNombre() ?></td>
                 <td><?= $rol->getDescripcion() ?></td>
                 <td>
                     <div class="acciones">
-                        <?php if ($usuario->tienePermiso("roles", "actualizar") && $rol->getNombre() != "Superusuario"): ?>
+                        <?php if (
+                            $usuario->tienePermiso("roles", "actualizar") && $rol->getNombre() != "Superusuario"
+                            && $rol->getNombre() != "Usuario" && $rol->getNombre() != "Pastor" && $rol->getNombre() != "Mentor"
+                        ): ?>
                             <a role="button" onclick="abrirModalRol(<?= $rol->id ?>)">
                                 <i class="fa-solid fa-pen" title="Actualizar" data-bs-toggle="tooltip"></i>
                             </a>
                         <?php endif ?>
-                        <?php if ($usuario->tienePermiso("roles", "eliminar") && $rol->getNombre() != "Superusuario"): ?>
+                        <?php if (
+                            $usuario->tienePermiso("roles", "eliminar") && $rol->getNombre() != "Superusuario"
+                            && $rol->getNombre() != "Usuario" && $rol->getNombre() != "Pastor" && $rol->getNombre() != "Mentor"
+                        ): ?>
                             <a role="button" data-bs-toggle="modal" data-bs-target="#confirmar-eliminacion"
                                 data-id="<?= $rol->id ?>">
                                 <i class="fa-solid fa-trash" title="Eliminar" data-bs-toggle="tooltip"></i>
@@ -76,7 +82,8 @@ $usuario = $_SESSION['usuario'];
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No, cancelar</button>
-                <a href="#" data-href="/AppwebMVC/Seguridad/Roles/Eliminar?id=" type="button" class="btn btn-danger btn-eliminar">Si, eliminar</a>
+                <a href="#" data-href="/AppwebMVC/Seguridad/Roles/Eliminar?id=" type="button"
+                    class="btn btn-danger btn-eliminar">Si, eliminar</a>
             </div>
         </div>
     </div>

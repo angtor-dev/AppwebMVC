@@ -254,15 +254,28 @@ estadoCivilInput.addEventListener('change', function () {
     }
 });
 
+const fechaNacimientoInput = document.getElementById('fechaNacimiento');
+const fechaNacimientoError = document.getElementById('fechaNacimientoError');
+
+fechaNacimientoInput.addEventListener('change', function () {
+    if (estadoCivilInput.value === "" || !regexValidaciones.fechaNacimiento.test(fechaNacimientoInput.value)) {
+        fechaNacimientoError.classList.remove('d-none');
+        validationRegister.fechaNacimiento = false;
+    } else {
+        fechaNacimientoError.classList.add('d-none');
+        validationRegister.fechaNacimiento = true;
+    }
+});
+
 // Validación especial para el campo de Sede (select)
 const idSedeInput = document.getElementById('idSede');
 const idSedeError = document.getElementById('idSedeError');
 
 idSedeInput.addEventListener('change', function () {
-    
+
     let valor = $('#idSede').val();
 
-     // Convertir a número entero
+    // Convertir a número entero
     const numero = parseInt(valor, 10);
 
     if (numero === "" || !Number.isInteger(numero)) {
@@ -303,8 +316,6 @@ function Listar_SedesRegistrar() {
             getSedes: 'getSedes',
         },
         success: function (response) {
-            console.log(response);
-
             let data = JSON.parse(response);
 
             if (data.length > 0) {

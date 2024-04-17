@@ -6,7 +6,8 @@ abstract class Model
     public int $id;
     protected Database $db;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->db = Database::getInstance();
     }
 
@@ -17,7 +18,7 @@ abstract class Model
      * Si se especifica, retorna las filas donde el estatus sea igual al indicado.
      * @return array<Model>
      **/
-    public static function listar(int $estatus = null) : array
+    public static function listar(int $estatus = null): array
     {
         $bd = Database::getInstance();
         $table = strtolower(static::class);
@@ -25,7 +26,7 @@ abstract class Model
 
         $stmt = $bd->pdo()->query($query);
         $stmt->setFetchMode(PDO::FETCH_CLASS, $table);
-        
+
         return $stmt->fetchAll();
     }
 
@@ -35,7 +36,7 @@ abstract class Model
      * @param int $id El id a buscar en la bd
      * @return null|Model El modelo encontrado o null en caso de no haber coincidencias
      */
-    public static function cargar(int $id) : null|Model
+    public static function cargar(int $id): null|Model
     {
         $bd = Database::getInstance();
         $table = strtolower(static::class);
@@ -59,7 +60,7 @@ abstract class Model
      * @param int|null $estatus Si se especifica, retorna las filas donde el estatus sea igual al indicado.
      * @return array<Model>
      */
-    public static function cargarRelaciones(int $id, string $tablaForanea, int $estatus = null) : array
+    public static function cargarRelaciones(int $id, string $tablaForanea, int $estatus = null): array
     {
         $bd = Database::getInstance();
         $table = strtolower(static::class);
@@ -84,8 +85,10 @@ abstract class Model
      * @return array<Model>
      **/
     public static function cargarMultiplesRelaciones(
-        int $id, string $tablaForanea, string $tablaIntermediaria) : array
-    {
+        int $id,
+        string $tablaForanea,
+        string $tablaIntermediaria
+    ): array {
         $bd = Database::getInstance();
         $table = strtolower(static::class);
         $tablaIntermediaria = strtolower($tablaIntermediaria);
@@ -109,7 +112,7 @@ abstract class Model
      * @param bool $eliminadoLogico Si es true oculta la instancia en la BD (UPDATE estatus = 0),
      * caso contrario elimina la instancia de la BD (DELETE FROM)
      */
-    public function eliminar(bool $eliminadoLogico = true) : bool
+    public function eliminar(bool $eliminadoLogico = true): bool
     {
         $tabla = strtolower(get_class($this));
         $query = $eliminadoLogico
@@ -124,14 +127,15 @@ abstract class Model
 
             return true;
         } catch (\Throwable $th) {
-            if (DEVELOPER_MODE) var_dump($th); // Eliminar esto al crear vista para errores
+            if (DEVELOPER_MODE)
+                var_dump($th); // Eliminar esto al crear vista para errores
             $_SESSION['errores'][] = "Ha ocurrido un error al eliminar $tabla.";
             throw $th;
         }
     }
 
     /** Mapea los valores de un formulario post a las propiedades del objeto */
-    public function mapFromPost() : bool
+    public function mapFromPost(): bool
     {
         if (!empty($_POST)) {
             foreach ($_POST as $key => $value) {
@@ -145,12 +149,14 @@ abstract class Model
     }
 
     /** Shorthand para PDO::query() */
-    protected function query(String $query) : PDOStatement {
+    protected function query(string $query): PDOStatement
+    {
         return $this->db->pdo()->query($query);
     }
 
     /** Shorthand para PDO::prepare() */
-    protected function prepare(String $query) : PDOStatement {
+    protected function prepare(string $query): PDOStatement
+    {
         return $this->db->pdo()->prepare($query);
     }
 }

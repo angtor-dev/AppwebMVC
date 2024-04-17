@@ -150,6 +150,21 @@ estadoCivilInput.addEventListener('change', function () {
 });
 
 
+// Validacion especial para el campo fecha de nacimiento (select)
+const fechaNacimientoInput = document.getElementById('fechaNacimiento');
+const fechaNacimientoError = document.getElementById('fechaNacimientoError');
+
+fechaNacimientoInput.addEventListener('change', function () {
+    if (estadoCivilInput.value === "" || !regexValidaciones.fechaNacimiento.test(fechaNacimientoInput.value)) {
+        fechaNacimientoError.classList.remove('d-none');
+        validationSaveDatos.fechaNacimiento = false;
+    } else {
+        fechaNacimientoError.classList.add('d-none');
+        validationSaveDatos.fechaNacimiento = true;
+    }
+});
+
+
 
 ////////// Evento para actualizar datos del perfil /////////
 

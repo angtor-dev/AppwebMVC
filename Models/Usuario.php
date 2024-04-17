@@ -525,8 +525,8 @@ class Usuario extends Model
     public function validarRegister($datos): bool
     {
         try {
-            $nombre = trim(strtolower($datos["nombre"]));
-            $apellido = trim(strtolower($datos["apellido"]));
+            $nombre = trim($datos["nombre"]);
+            $apellido = trim($datos["apellido"]);
             $telefono = trim($datos["telefono"]);
             $cedula = trim($datos["cedula"]);
             $estadoCivil = trim(strtoupper($datos["estadoCivil"]));
@@ -597,8 +597,8 @@ class Usuario extends Model
 
             if ($opcion == 1) {
 
-                $nombre = trim(strtolower($datos["nombre"]));
-                $apellido = trim(strtolower($datos["apellido"]));
+                $nombre = trim($datos["nombre"]);
+                $apellido = trim($datos["apellido"]);
                 $telefono = trim($datos["telefono"]);
                 $cedula = trim($datos["cedula"]);
                 $estadoCivil = trim(strtoupper($datos["estadoCivil"]));
@@ -681,7 +681,7 @@ class Usuario extends Model
                     throw new Exception("Este correo ya se encuentra en uso", 422);
                 }
 
-                
+
                 $sql = "SELECT `cedula` FROM `usuario` WHERE cedula = :cedula";
                 $stmt = $this->prepare($sql);
 
@@ -692,7 +692,7 @@ class Usuario extends Model
                     throw new Exception("Esta cedula ya se encuentra asociada a un usuario", 422);
                 }
 
-            }else{
+            } else {
                 $sql = "SELECT `correo` FROM `usuario` WHERE correo = :correo AND cedula != :cedula";
                 $stmt = $this->prepare($sql);
 
@@ -705,7 +705,7 @@ class Usuario extends Model
                 }
 
 
-                $sql = "SELECT `cedula` FROM `usuario` WHERE cedula = :cedula AND cedula != ".$this->cedula;
+                $sql = "SELECT `cedula` FROM `usuario` WHERE cedula = :cedula AND cedula != " . $this->cedula;
                 $stmt = $this->prepare($sql);
 
                 $stmt->bindValue('cedula', $cedula);
@@ -821,13 +821,14 @@ class Usuario extends Model
                 if ($usuario == null) {
                     throw new Exception("Esta Cedula no corresponde a ningun Usuario ni Discipulo inscrito en el sistema", 422);
                 } else {
-            
-                if ($usuario->tieneRol("Estudiante")) {
-                    throw new Exception("Este estudiante ya esta inscrito en la escuela de Impulso y Desarrollo de la Sede" . $usuario->idSede . ".", 422);
 
-                } else{
-                    return array("nombreCompleto" => $usuario->getNombreCompleto(), "id" => $usuario->id, "cedula" => $usuario->getCedula(), "tipo" => 'usuario');
-                }}
+                    if ($usuario->tieneRol("Estudiante")) {
+                        throw new Exception("Este estudiante ya esta inscrito en la escuela de Impulso y Desarrollo de la Sede" . $usuario->idSede . ".", 422);
+
+                    } else {
+                        return array("nombreCompleto" => $usuario->getNombreCompleto(), "id" => $usuario->id, "cedula" => $usuario->getCedula(), "tipo" => 'usuario');
+                    }
+                }
             }
 
 
@@ -847,7 +848,7 @@ class Usuario extends Model
             if ($tipo == 'usuario') {
 
                 $sql2 = "UPDATE usuario SET fechaInscripcionEscuela = CURDATE() WHERE id = :id";
-                
+
                 $stmt2 = $this->db->pdo()->prepare($sql2);
 
                 $stmt2->bindValue(':id', $id);
@@ -886,28 +887,28 @@ class Usuario extends Model
             VALUES(:idSede, :cedula, :clave, :nombre, :apellido, :telefono, :direccion, :estadoCivil, :fechaNacimiento, CURDATE())";
 
 
-            $clave = password_hash($discipulo->getCedula(), PASSWORD_DEFAULT);
+                $clave = password_hash($discipulo->getCedula(), PASSWORD_DEFAULT);
 
-            // Registra al usuario
-            
-            $stmt = $this->db->pdo()->prepare($sql);
+                // Registra al usuario
 
-            $stmt->bindValue('idSede', $idSede->idSede);
-            $stmt->bindValue('cedula', $discipulo->getCedula());
-            $stmt->bindValue('clave', $clave);
-            $stmt->bindValue('nombre', $discipulo->getNombre());
-            $stmt->bindValue('apellido', $discipulo->getApellido());
-            $stmt->bindValue('telefono', $discipulo->getTelefono());
-            $stmt->bindValue('direccion', $discipulo->getDireccion());
-            $stmt->bindValue('estadoCivil', $discipulo->getEstadoCivil());
-            $stmt->bindValue('fechaNacimiento', $discipulo->getFechaNacimiento());
+                $stmt = $this->db->pdo()->prepare($sql);
 
-            $stmt->execute();
+                $stmt->bindValue('idSede', $idSede->idSede);
+                $stmt->bindValue('cedula', $discipulo->getCedula());
+                $stmt->bindValue('clave', $clave);
+                $stmt->bindValue('nombre', $discipulo->getNombre());
+                $stmt->bindValue('apellido', $discipulo->getApellido());
+                $stmt->bindValue('telefono', $discipulo->getTelefono());
+                $stmt->bindValue('direccion', $discipulo->getDireccion());
+                $stmt->bindValue('estadoCivil', $discipulo->getEstadoCivil());
+                $stmt->bindValue('fechaNacimiento', $discipulo->getFechaNacimiento());
 
-            // Registra los roles del usuario
-            $idUsuario = $this->db->pdo()->lastInsertId();
+                $stmt->execute();
 
-            $sql2 = "INSERT INTO usuariorol(idUsuario, idRol)
+                // Registra los roles del usuario
+                $idUsuario = $this->db->pdo()->lastInsertId();
+
+                $sql2 = "INSERT INTO usuariorol(idUsuario, idRol)
                 VALUES(:idUsuario, :idRol)";
 
                 $stmt2 = $this->db->pdo()->prepare($sql2);
@@ -918,7 +919,7 @@ class Usuario extends Model
                 $stmt2->execute();
 
                 $sql3 = "UPDATE discipulo SET aprobarUsuario = '2', estatus = '0' WHERE id = :id";
-                
+
                 $stmt3 = $this->db->pdo()->prepare($sql3);
 
                 $stmt3->bindValue(':id', $id);
