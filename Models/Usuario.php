@@ -882,7 +882,13 @@ class Usuario extends Model
                 /** @var Usuario */
                 $idSede = Usuario::cargar($discipulo->getIdConsolidador());
 
+                $usuario = Usuario::cargarPorCedula($discipulo->getCedula());
 
+                $idUsuario = '';
+
+                if ($usuario == null) {
+                   
+                
                 $sql = "INSERT INTO usuario(idSede, cedula, clave, nombre, apellido, telefono, direccion, estadoCivil, fechaNacimiento, fechaInscripcionEscuela)
             VALUES(:idSede, :cedula, :clave, :nombre, :apellido, :telefono, :direccion, :estadoCivil, :fechaNacimiento, CURDATE())";
 
@@ -907,7 +913,17 @@ class Usuario extends Model
 
                 // Registra los roles del usuario
                 $idUsuario = $this->db->pdo()->lastInsertId();
+            
+            }else{
+          
+                $idUsuario = $usuario->id;
 
+            }
+
+                /** @var Usuario */
+                $UsuarioActual = Usuario::cargar($idUsuario);
+                
+                if(empty($UsuarioActual->tieneRol('Estudiante'))) {
                 $sql2 = "INSERT INTO usuariorol(idUsuario, idRol)
                 VALUES(:idUsuario, :idRol)";
 
@@ -918,6 +934,21 @@ class Usuario extends Model
 
                 $stmt2->execute();
 
+                }
+
+                if(empty($UsuarioActual->tieneRol('Discipulo'))) {
+
+                $sql4 = "INSERT INTO usuariorol(idUsuario, idRol)
+                VALUES(:idUsuario, :idRol)";
+
+                $stmt4 = $this->db->pdo()->prepare($sql4);
+
+                $stmt4->bindValue(':idUsuario', $idUsuario);
+                $stmt4->bindValue(':idRol', '12');
+
+                $stmt4->execute();
+                }
+
                 $sql3 = "UPDATE discipulo SET aprobarUsuario = '2', estatus = '0' WHERE id = :id";
 
                 $stmt3 = $this->db->pdo()->prepare($sql3);
@@ -926,10 +957,8 @@ class Usuario extends Model
 
                 $stmt3->execute();
 
-                /** @var Usuario */
-                $Usuario = Usuario::cargar($idUsuario);
-
-                Bitacora::registrar("Registro de Estudiante" . $Usuario->getNombreCompleto() . " exitoso.");
+               
+                Bitacora::registrar("Registro de Estudiante" . $UsuarioActual->getNombreCompleto() . " exitoso.");
 
                 http_response_code(200);
                 echo json_encode(array('msj' => 'Registro de Estudiante exitoso', 'status' => 200));
@@ -1008,4 +1037,3 @@ class Usuario extends Model
         return $this->respuestaSecurity ?? "";
     }
 }
-?>

@@ -1159,8 +1159,27 @@ class Celulas extends Model
 
                 $stmt->execute();
 
+
+                $query = 'SELECT idCelula FROM reunioncelula WHERE id = :id';
+            $statement = $this->db->pdo()->prepare($query);
+            $statement->bindValue(':id', $idReunion);
+            $statement->execute();
+            $resultado = $statement->fetch(PDO::FETCH_ASSOC);
+
+
+
+                $consultaSql = "SELECT reunioncelula.idCelula, reunioncelula.id, asistencia.idDiscipulo, asistencia.idReunion FROM asistencia 
+                        INNER JOIN reunioncelula ON reunioncelula.idCelula = :idCelula
+                        WHERE asistencia.idDiscipulo = :idDiscipulo AND asistencia.idReunion = reunioncelula.id";
+
+                        $stmt4 = $this->db->pdo()->prepare($consultaSql);
+                        $stmt4->bindValue(':idCelula', $resultado['idCelula']);
+                        $stmt4->bindValue(':idDiscipulo', $valor);
+
+                        $stmt4->execute();
+
                 // Si la cuenta de la consulta es igual a 5, entonces este sera aprobado. Del resto, no hara nada
-                if ($stmt->rowCount() == 5) {
+                if ($stmt4->rowCount() == 5) {
                     $update = "UPDATE discipulo SET aprobarUsuario = '1' WHERE discipulo.id = :idDiscipulo";
                     $stmt5 = $this->db->pdo()->prepare($update);
                     $stmt5->bindValue(':idDiscipulo', $valor);
