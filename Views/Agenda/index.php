@@ -84,11 +84,23 @@ $title = "Agenda"
                             </div>
                         </div>
                     </div>
+                    <style>
+    .choice-select-container {
+      width: 100%; /* Ajusta el ancho del selector */
+    }
 
+    .choice-list {
+      max-height: 5px; /* Altura máxima del contenedor de opciones */
+      overflow-y: auto; /* Agrega scroll si hay más de 3 opciones */
+    }
+  </style>
                     <div class="mb-3">
                         <label for="sedes" class="form-label fw-bold">Sedes</label>
+                        <div class="choice-select-container">
                         <select multiple class="form-select" id="sedes" name="sedes">
                         </select>
+                        <div class="choice-list"></div>
+                        </div>
                         <div id="msj_sedes" class="alert alert-danger d-flex align-items-center mt-3 d-none">
                             
                             </div>

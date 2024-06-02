@@ -132,7 +132,7 @@ class Grupo extends Model
 
                 $sql = '';
 
-                if ($usuario->tieneRol('Superusuario')) {
+                if ($usuario->tieneRol('Superusuario') ) {
 
 
                     $sql = "SELECT COUNT(matricula.idEstudiante) AS estudiantes,
@@ -143,7 +143,7 @@ class Grupo extends Model
             INNER JOIN nivel ON nivel.id = grupo.idNivel
             INNER JOIN moduloeid ON moduloeid.id = nivel.idModuloEid
             INNER JOIN eid ON eid.id = moduloeid.idEid
-            WHERE grupo.estado = :tipo AND grupo.estatus = '1' GROUP BY grupo.id;";
+            WHERE grupo.estado = :tipo AND grupo.estatus = '1' GROUP BY grupo.id";
 
 
                 } else {
@@ -156,15 +156,17 @@ class Grupo extends Model
             INNER JOIN nivel ON nivel.id = grupo.idNivel
             INNER JOIN moduloeid ON moduloeid.id = nivel.idModuloEid
             INNER JOIN eid ON eid.id = moduloeid.idEid
-            WHERE grupo.estado = :tipo AND grupo.estatus = '1'" . (($usuario->tieneRol('Mentor')) ? "AND idMentor = :idMentor GROUP BY grupo.id" : "AND grupo.idSede = :idSede GROUP BY grupo.id");
+            WHERE grupo.estado = :tipo 
+            AND grupo.estatus = '1'" . (($usuario->tieneRol('Mentor')) ? "AND idMentor = :idMentor GROUP BY grupo.id" 
+            : "AND grupo.idSede = :idSede GROUP BY grupo.id");
 
                 }
 
-                $stmt = $this->db->pdo()->prepare($sql);
+                $stmt = $this->prepare($sql);
 
                 $stmt->bindValue(':tipo', $tipo);
-                $usuario->tieneRol('Superusuario') ? "" : $stmt->bindValue(':idSede', $usuario->idSede);
-                $usuario->tieneRol('Mentor') ? $stmt->bindValue(':idMentor', $usuario->id) : "";
+                $usuario->tieneRol('Superusuario') || $usuario->tieneRol('Mentor')? "" : $stmt->bindValue(':idSede', $usuario->idSede);
+                $usuario->tieneRol('Mentor') && $usuario->tieneRol('Superusuario')? "" : $stmt->bindValue(':idMentor', $usuario->id);
 
 
                 $stmt->execute();
@@ -403,6 +405,8 @@ class Grupo extends Model
         } catch (Exception $e) {
             http_response_code($e->getCode());
             echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
+
+
             die();
         }
 
@@ -457,7 +461,7 @@ class Grupo extends Model
         try {
             $sql = "SELECT clase.titulo, clase.ponderacion, nota.calificacion FROM clase
             LEFT JOIN nota ON nota.idEstudiante = :idEstudiante And nota.idClase = clase.id
-            WHERE clase.idGrupo = :idGrupo AND clase.estatus = '1';";
+            WHERE clase.idGrupo = :idGrupo AND clase.estatus = '1'";
 
             $stmt = $this->db->pdo()->prepare($sql);
 

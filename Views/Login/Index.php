@@ -1,12 +1,34 @@
 <?php
 $_layout = "Login";
+
+
+$config = [
+    'config' => 'C:\xampp\apache\conf\openssl.cnf',
+    'private_key_bits' => 2048,
+    'default_md' => "aes-256-ccm"
+];
+
+$keyPar =  openssl_pkey_new($config);
+$keyPublic = openssl_pkey_get_details($keyPar);
+
+
+openssl_pkey_export($keyPar, $output);
+$publicKeyString = $keyPublic['key'];
+$msg = "array('email' => 'cangjhel@gmail.com')";
+$enc = '';
+openssl_public_encrypt($msg, $enc, $publicKeyString);
+
+
+$dec = '';
+openssl_private_decrypt($enc, $dec, $output)
 ?>
 
 
 <div class="container-fluid" id="loginMain">
     <div class="row h-100 d-flex justify-content-center">
         <div class="col-lg-5 col-md-8 col-sm-12 d-flex justify-content-center align-items-center flex-column">
-
+            <?php echo $enc;
+            echo $dec;?>
             <div class="d-flex flex-column text-center mb-3">
                 <h2 id="bienvenida1">INICIO DE SESION</h2>
                 <h4 id="bienvenida2">Bienvenidos a Llamas de Fuego</h4>

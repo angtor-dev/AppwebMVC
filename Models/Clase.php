@@ -28,7 +28,7 @@ class Clase extends Model
 
             $idClase = $this->db->pdo()->lastInsertId();
 
-            if ($ponderacion != 0.00) {
+            if ($ponderacion != 0) {
 
                 $query = "SELECT idEstudiante FROM matricula WHERE idGrupo = :idGrupo";
                 $stmt = $this->db->pdo()->prepare($query);
@@ -172,7 +172,7 @@ class Clase extends Model
 
         try {
             $query = "SELECT * FROM nota 
-            WHERE idClase = :id AND calificacion > '0.00'";
+            WHERE idClase = :id AND calificacion > '0'";
 
             $stmt = $this->db->pdo()->prepare($query);
             $stmt->bindValue(':id', $id);
@@ -187,7 +187,7 @@ class Clase extends Model
             }
 
             $query1 = "SELECT * FROM contenido 
-            WHERE idClase = :id AND estatus = '1'";
+            WHERE idClase = :id";
 
             $stmt1 = $this->db->pdo()->prepare($query1);
             $stmt1->bindValue(':id', $id);
@@ -299,7 +299,7 @@ class Clase extends Model
             if ($ponderacion != $dato['ponderacion']) {
 
                 $query = "SELECT * FROM nota 
-            WHERE idClase = :id AND calificacion > '0.00'";
+            WHERE idClase = :id AND calificacion > '0'";
 
                 $stmt = $this->db->pdo()->prepare($query);
                 $stmt->bindValue(':id', $id);

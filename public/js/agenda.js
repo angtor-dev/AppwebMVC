@@ -400,8 +400,12 @@ document.addEventListener('DOMContentLoaded', function () {
           searchEnabled: true,  // Habilita la funcionalidad de búsqueda
           removeItemButton: true,  // Habilita la posibilidad de remover items
           placeholderValue: 'Selecciona una opción',  // Texto del placeholder
+        
 
         });
+        
+
+        
 
 
       },

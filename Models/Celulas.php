@@ -117,13 +117,16 @@ class Celulas extends Model
                     $codigo = $territorio->getCodigo() . '-' . $identificador;
                 }
             }
+                $this->db->pdo()->beginTransaction();
 
             if ($id == 1) {
 
                 $sql = "INSERT INTO celulas (id, nombre, codigo, identificador, tipo, idLider, idCoLider, idTerritorio, fechaCreacion) 
                 VALUES (:id, :nombre, :codigo, :identificador, :tipo, :idLider, :idCoLider, :idTerritorio, CURDATE())";
 
-                $stmt = $this->db->pdo()->prepare($sql);
+                
+
+                $stmt = $this->prepare($sql);
 
                 $stmt->bindValue(':id', $id);
                 $stmt->bindValue(':nombre', $nombre);
@@ -141,7 +144,9 @@ class Celulas extends Model
                 $sql = "INSERT INTO celulas (nombre, codigo, identificador, tipo, idLider, idCoLider, idTerritorio, fechaCreacion) 
                 VALUES (:nombre, :codigo, :identificador, :tipo, :idLider, :idCoLider, :idTerritorio, CURDATE())";
 
-                $stmt = $this->db->pdo()->prepare($sql);
+                
+
+                $stmt = $this->prepare($sql);
 
                 $stmt->bindValue(':nombre', $nombre);
                 $stmt->bindValue(':codigo', $codigo);
@@ -155,12 +160,18 @@ class Celulas extends Model
                 $stmt->execute();
             }
 
+            $this->db->pdo()->commit();
+
             Bitacora::registrar("Registro de celula familiar");
 
             http_response_code(200);
             echo json_encode(array('msj' => 'Celula registrada exitosamente', 'status' => 200));
             die();
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
+            
+            if ($this->db->pdo()->inTransaction()) {
+                $this->db->pdo()->rollBack();
+            }
             $error_data = array(
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()

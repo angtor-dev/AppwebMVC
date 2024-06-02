@@ -1677,9 +1677,23 @@ $(document).ready(function () {
             validClase[key] = true;
         }
 
+        for (const key in validClase) {
+            validClase[key] = false;
+        }
+        $("#titulo").removeClass("is-valid");
+        $("#Objetivo").removeClass("is-valid");
+        $("#ponderacion").removeClass("is-valid");
+        $("#titulo").removeClass("is-invalid");
+        $("#Objetivo").removeClass("is-invalid");
+        $("#ponderacion").removeClass("is-invalid");
+
     });
 
-    $("#cancelar4").on("click", function (event) {
+   $('#registrarClases').on('click', '#cancelar4', function (event) {
+
+        $("#registrarClase").removeClass("d-none");
+        $("#editarClase").addClass("d-none");
+        $("#cancelar4").addClass("d-none");
 
         document.getElementById('formulario2').reset();
 
@@ -1693,10 +1707,6 @@ $(document).ready(function () {
         $("#Objetivo").removeClass("is-invalid");
         $("#ponderacion").removeClass("is-invalid");
 
-
-        $("#registrarClase").removeClass("d-none");
-        $("#editarClase").addClass("d-none");
-        $("#cancelar4").addClass("d-none");
 
 
     })
@@ -1985,34 +1995,74 @@ $(document).ready(function () {
         datatables3.search($(this).val()).draw();
     });
 
-    $('#notasdatatble').on('keyup', '#guia', function (e) {
+
+
+    $('#notasdatatble').on('click', '#guia', function (e) {
         const datos = datatables3.row($(this).parents()).data();
         let id = datos.cedula;
-        $(`#notasdatatble`).on(`keyup`, `#notas${id}`, function (e) {
-
-            const input = $('#notasdatatble tbody').find(`#notas${id}`);
+            
             const boton = $('#notasdatatble tbody').find(`#editarNotas${id}`);
+            const ponderacion = $('#ponderacionClases').val();
+            const msj = $('#notasdatatble tbody').find(`#msj_notaACT${id}`)
 
+        $(`#notasdatatble`).on(`keyup`, `#notas${id}`, function (e) {
+            let input = $('#notasdatatble tbody').find(`#notas${id}`);
+            
+            console.log(parseFloat(ponderacion))
+            console.log(parseFloat(input.val()))
+            if ((parseFloat(input.val())) > (parseFloat(ponderacion))) {
+                boton.addClass("d-none");
+                input.addClass("is-invalid");
+                msj.text('Excede la ponderación');         
+            } else if (parseFloat(input.val()) != datos.calificacion){
+                boton.removeClass("d-none"); 
+                input.removeClass("is-invalid");
+                msj.text('');  
+            } else {
+                boton.addClass("d-none");
+                input.removeClass("is-invalid");
+            } 
+           
+       
 
-            if (input.val() != datos.calificacion) {
-                boton.removeClass("d-none");
+        });
 
-                boton.on('click', function (e) {
+        $(`#notasdatatble`).on(`click`, `#notas${id}`, function (e) {
+            let input = $('#notasdatatble tbody').find(`#notas${id}`);
+            
+           
+            if ((parseFloat(input.val())) > (parseFloat(ponderacion))) {
+                boton.addClass("d-none");
+                input.addClass("is-invalid");
+                msj.text('Excede la ponderación');         
+            } else if (parseFloat(input.val()) != datos.calificacion){
+                boton.removeClass("d-none"); 
+                input.removeClass("is-invalid");
+                msj.text('');  
+            } else {
+                boton.addClass("d-none");
+                input.removeClass("is-invalid");
+            } 
+
+           
+           
+
+        });
+
+        
+        boton.on('click', function (e) {
                     let nota = '';
                     let validacion = false;
-                    let msj = $('#notasdatatble tbody').find(`#msj_notaACT${id}`)
-                    const ponderacion = $('#ponderacionClases').val();
-
+                    let input = $('#notasdatatble tbody').find(`#notas${id}`);
+                    
                     if (/^\s*$/.test(input.val())) {
-                        nota = '0';
+                        nota = '0'; 
                         input.removeClass("is-invalid");
                         msj.text('');
                         validacion = true;
 
                         NotaACT(datos.idUsuario, datos.nombres, nota, boton);
                     } else {
-
-                        if (input.val() <= ponderacion) {
 
                             if (/^([0-9])+(\.[0-9]{2})$/.test(input.val())) {
                                 input.removeClass("is-invalid");
@@ -2033,25 +2083,16 @@ $(document).ready(function () {
                                 validacion = false;
 
                             }
-                        } else {
 
-                            input.addClass("is-invalid");
-                            msj.text('Excede la ponderación');
-                            validacion = false;
-
-                        }
                     }
 
 
                 });
 
-            } else {
-                boton.addClass("d-none");
-                input.removeClass("is-invalid");
-            }
-
-        });
     });
+    
+
+   
 
 
     function NotaACT(idUsuario, nombres, nota, boton) {
@@ -2081,6 +2122,7 @@ $(document).ready(function () {
                     success: function (response) {
                         console.log(response);
                         let data = JSON.parse(response);
+                        datatables3.ajax.reload();
 
                         boton.addClass('d-none')
 
