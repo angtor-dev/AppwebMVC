@@ -8,41 +8,40 @@ if (!empty($_POST)) {
 
     $usuario = new Usuario();
 
-    if (isset($_POST['cedula']) && isset($_POST['clave'])) {
-        if ($usuario->login($_POST['cedula'], $_POST['clave'])) {
+    if (isset($_POST['encryptedLogin'])) {
+
+        if ($usuario->login($_POST['encryptedLogin'])) {
             Bitacora::registrar("Inicio de sesión");
             http_response_code(200);
-            header('location:' . LOCAL_DIR);
-            exit();
         } else {
             http_response_code(402);
-            $loginFails = true;
-        }
-
-    } else {
-        http_response_code(403);
-        $loginFails = true;
-    }
-
-
-    // Inicio sesion app movil
-    if (isset($_POST['cedulaMovil']) && isset($_POST['claveMovil'])) {
-        if ($usuario->login($_POST['cedulaMovil'], $_POST['claveMovil'])) {
-            Bitacora::registrar("Inicio de sesión por aplicacion movil");
-            http_response_code(200);
-
-            echo json_encode(array(
-                'msj'=>'Has iniciado sesion correctamente',
-            ));
-
-        } else {
-            http_response_code(402);
-            $loginFails = true;
-            echo json_encode(array('msj'=>'Datos incorrectos. Intente nuevamente'));
+            echo json_encode(array('msj' => 'Datos incorrectos'));
         }
 
         exit();
     }
+
+
+    // Inicio sesion app movil
+    /* if (isset($_POST['cedulaMovil']) && isset($_POST['claveMovil'])) {
+        if ($usuario->login($_POST['cedulaMovil'], $_POST['claveMovil'])) {
+            Bitacora::registrar("Inicio de sesión por aplicacion movil");
+            http_response_code(200);
+
+            echo json_encode(
+                array(
+                    'msj' => 'Has iniciado sesion correctamente',
+                )
+            );
+
+        } else {
+            http_response_code(402);
+            $loginFails = true;
+            echo json_encode(array('msj' => 'Datos incorrectos. Intente nuevamente'));
+        }
+
+        exit();
+    } */
 
 
     if (isset($_POST['recovery'])) {
@@ -51,8 +50,8 @@ if (!empty($_POST)) {
 
         if ($datos == []) {
             http_response_code(402);
-            echo json_encode(array('msj'=> 'La cedula ingresada no existe'));
-        }else{
+            echo json_encode(array('msj' => 'La cedula ingresada no existe'));
+        } else {
             http_response_code(200);
             echo json_encode($datos);
         }
@@ -70,9 +69,9 @@ if (!empty($_POST)) {
         if ($datos !== '') {
             http_response_code(200);
             $Correo->sendPassword($correo, $datos);
-        }else{
+        } else {
             http_response_code(402);
-            echo json_encode(array('msj'=>'La respuesta enviada es incorrecta'));
+            echo json_encode(array('msj' => 'La respuesta enviada es incorrecta'));
         }
         die();
     }
@@ -85,15 +84,15 @@ if (!empty($_POST)) {
             $respuesta2 = $usuario->registerUser();
             if ($respuesta2) {
                 http_response_code(200);
-                Bitacora::registrar("Se ha regitrado el usuario ".$usuario->getNombreCompleto());
-                echo json_encode(array('msj'=>'Registrado correctamente', 'status'=>200));
-            }else{
+                Bitacora::registrar("Se ha regitrado el usuario " . $usuario->getNombreCompleto());
+                echo json_encode(array('msj' => 'Registrado correctamente', 'status' => 200));
+            } else {
                 http_response_code(402);
-                echo json_encode(array('msj'=>'Error al registrar'));
+                echo json_encode(array('msj' => 'Error al registrar'));
             }
-        }else{
+        } else {
             http_response_code(402);
-            echo json_encode(array('msj'=>'Validacion no lograda'));
+            echo json_encode(array('msj' => 'Validacion no lograda'));
         }
 
         die();
@@ -101,18 +100,23 @@ if (!empty($_POST)) {
 
 }
 
+if (isset($_GET['getKey'])) {
+    echo json_encode(publicKey);
+    die();
+}
+
 if (isset($_GET['getSedes'])) {
 
     $usuario = new Usuario();
 
     $response = $usuario->getSedes();
-    
+
     if (!empty($response)) {
         http_response_code(200);
         echo json_encode($response);
-    }else{
+    } else {
         http_response_code(402);
-        echo json_encode(array("msj"=>'Hubo un problema al obtener las sedes'));
+        echo json_encode(array("msj" => 'Hubo un problema al obtener las sedes'));
     }
     die();
 }

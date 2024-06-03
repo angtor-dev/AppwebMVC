@@ -1,9 +1,64 @@
 
+let encrypt = new JSEncrypt();
 let cedula = null;
 let respuesta = null;
 let correo = null;
 
 let choices;
+
+
+let formLogin = document.getElementById('loginForm');
+formLogin.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const url = '?getKey';
+    const response = await fetch(url);
+    const publicKey = await response.json();
+
+    encrypt.setPublicKey(publicKey);
+
+    const json = {
+        cedula: document.getElementById('cedulaLogin').value,
+        clave: document.getElementById('claveLogin').value,
+    }
+
+    let jsonString = JSON.stringify(json);
+    let encrypted = encrypt.encrypt(jsonString);
+
+    $.ajax({
+        type: "POST",
+        url: '',
+        data: {
+            encryptedLogin: encrypted,
+        },
+        success: function (response) {
+            window.location.replace("/AppwebMVC/");
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            if (jqXHR.responseText) {
+                let jsonResponse = JSON.parse(jqXHR.responseText);
+
+                if (jsonResponse.msj) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: jsonResponse.msj,
+                        showConfirmButton: true,
+                    })
+                } else {
+                    const respuesta = JSON.stringify(jsonResponse, null, 2)
+                    Swal.fire({
+                        background: 'red',
+                        color: '#fff',
+                        title: respuesta,
+                        showConfirmButton: true,
+                    })
+                }
+            } else {
+                alert('Error desconocido: ' + textStatus);
+            }
+        }
+    })
+})
 
 document.getElementById('verificarCedula').addEventListener('click', () => {
     const cedulaRecovery = document.getElementById('cedulaRecovery').value;

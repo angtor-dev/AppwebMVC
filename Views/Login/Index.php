@@ -8,27 +8,23 @@ $config = [
     'default_md' => "aes-256-ccm"
 ];
 
-$keyPar =  openssl_pkey_new($config);
-$keyPublic = openssl_pkey_get_details($keyPar);
+/* $privateKey = openssl_pkey_new($config);
 
+openssl_pkey_export($privateKey, $privateKeyStr);
+$privateKeyDetails = openssl_pkey_get_details($privateKey);
+$publicKey = $privateKeyDetails['key'];
 
-openssl_pkey_export($keyPar, $output);
-$publicKeyString = $keyPublic['key'];
-$msg = "array('email' => 'cangjhel@gmail.com')";
-$enc = '';
-openssl_public_encrypt($msg, $enc, $publicKeyString);
+// Guardar la clave privada en un archivo
+file_put_contents("clave_privada.pem", $privateKeyStr);
 
-
-$dec = '';
-openssl_private_decrypt($enc, $dec, $output)
+// Guardar la clave pública en un archivo
+file_put_contents("clave_publica.pem", $publicKey); */
 ?>
 
 
 <div class="container-fluid" id="loginMain">
     <div class="row h-100 d-flex justify-content-center">
         <div class="col-lg-5 col-md-8 col-sm-12 d-flex justify-content-center align-items-center flex-column">
-            <?php echo $enc;
-            echo $dec;?>
             <div class="d-flex flex-column text-center mb-3">
                 <h2 id="bienvenida1">INICIO DE SESION</h2>
                 <h4 id="bienvenida2">Bienvenidos a Llamas de Fuego</h4>
@@ -45,12 +41,14 @@ openssl_private_decrypt($enc, $dec, $output)
                     <div class="d-grid gap-4 mb-5">
                         <div class="d-flex flex-column align-items-center">
                             <label class="form-label fw-bold text-white">Cedula</label>
-                            <input type="text" class="inputLogin text-center" name="cedula" maxlength="8" required>
+                            <input type="text" class="inputLogin text-center" name="cedula" id="cedulaLogin"
+                                maxlength="8" required>
                         </div>
 
                         <div class="d-flex flex-column align-items-center">
                             <label class="form-label text-white fw-bold">Clave</label>
-                            <input type="password" class="inputLogin text-center" name="clave" maxlength="10" required>
+                            <input type="password" class="inputLogin text-center" name="clave" id="claveLogin"
+                                maxlength="10" required>
                         </div>
                     </div>
                     <div class="d-flex justify-content-center">
@@ -60,17 +58,11 @@ openssl_private_decrypt($enc, $dec, $output)
                     </div>
                 </form>
 
-                <?php if ($loginFails): ?>
-                    <div class="alert alert-light" role="alert">
-                        <p class="text-danger text-center">La cédula o la clave son incorrectos</p>
-                    </div>
-                <?php endif ?>
-
                 <div class="d-flex justify-content-center mt-3 gap-4">
                     <a class="text-center text-white" href="#" data-bs-toggle="modal"
                         data-bs-target="#modalRecovery">Recuperar contraseña</a>
-                    <a class="text-center text-white" href="#" data-bs-toggle="modal"
-                        data-bs-target="#modalRegister" id="registerButton">Registrarse</a>
+                    <a class="text-center text-white" href="#" data-bs-toggle="modal" data-bs-target="#modalRegister"
+                        id="registerButton">Registrarse</a>
                 </div>
             </div>
         </div>
@@ -163,7 +155,8 @@ openssl_private_decrypt($enc, $dec, $output)
                             <div class="form-group">
                                 <label class="form-label">Fecha de nacimiento</label>
                                 <input type="date" class="form-control" id="fechaNacimiento" name="fechaNacimiento">
-                                <small id="fechaNacimientoError" class="form-text text-danger d-none">La fecha ingresada es
+                                <small id="fechaNacimientoError" class="form-text text-danger d-none">La fecha ingresada
+                                    es
                                     invalida</small>
                             </div>
                         </div>
@@ -177,7 +170,8 @@ openssl_private_decrypt($enc, $dec, $output)
                                     <option value="D">Divorviado/a</option>
                                     <option value="V">Viudo/a</option>
                                 </select>
-                                <small id="estadoCivilError" class="form-text text-danger d-none">El estado civil es invalido</small>
+                                <small id="estadoCivilError" class="form-text text-danger d-none">El estado civil es
+                                    invalido</small>
                             </div>
                         </div>
                         <!-- <div class="col-sm-12 col-md-6 col-lg-2">
@@ -197,7 +191,8 @@ openssl_private_decrypt($enc, $dec, $output)
                         <div class="col-sm-12 col-md-6 col-lg-3">
                             <div class="form-group">
                                 <label class="form-label">Contraseña</label>
-                                <input type="password" class="form-control" id="password" name="password" maxlength="16">
+                                <input type="password" class="form-control" id="password" name="password"
+                                    maxlength="16">
                                 <small id="passwordError" class="form-text text-danger d-none">Los caracteres ingresados
                                     son invalidos y no pueden estar vacios</small>
                             </div>
@@ -205,7 +200,8 @@ openssl_private_decrypt($enc, $dec, $output)
                         <div class="col-sm-12 col-md-6 col-lg-3">
                             <div class="form-group">
                                 <label class="form-label">Ingrese nuevamente la contraseña</label>
-                                <input type="password" class="form-control" id="passwordRepeat" name="passwordRepeat" maxlength="16">
+                                <input type="password" class="form-control" id="passwordRepeat" name="passwordRepeat"
+                                    maxlength="16">
                                 <small id="passwordRepeatError" class="form-text text-danger d-none">La contraseña no
                                     coincide</small>
                             </div>
@@ -222,7 +218,8 @@ openssl_private_decrypt($enc, $dec, $output)
                             <div class="form-group">
                                 <label class="form-label">Correo</label>
                                 <input type="email" class="form-control" id="correo" name="correo">
-                                <small id="correoError" class="form-text text-danger d-none">Los caracteres ingresados son
+                                <small id="correoError" class="form-text text-danger d-none">Los caracteres ingresados
+                                    son
                                     invalidos y no puede estar vacio</small>
                             </div>
                         </div>
@@ -233,7 +230,8 @@ openssl_private_decrypt($enc, $dec, $output)
                             <div class="form-group">
                                 <label class="form-label">Direccion</label>
                                 <input type="text" class="form-control" id="direccion" name="direccion">
-                                <small id="direccionError" class="form-text text-danger d-none">Los caracteres ingresados son
+                                <small id="direccionError" class="form-text text-danger d-none">Los caracteres
+                                    ingresados son
                                     invalidos y no puede estar vacio</small>
                             </div>
                         </div>
@@ -262,7 +260,8 @@ openssl_private_decrypt($enc, $dec, $output)
                                 <label class="form-label">Seleccionar sede</label>
                                 <select class="form-select" id="idSede" name="idSede">
                                 </select>
-                                <small id="idSedeError" class="form-text text-danger d-none">Debe seleccionar una sede valida</small>
+                                <small id="idSedeError" class="form-text text-danger d-none">Debe seleccionar una sede
+                                    valida</small>
                             </div>
                         </div>
                     </div>

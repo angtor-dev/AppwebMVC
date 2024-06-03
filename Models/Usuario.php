@@ -27,6 +27,8 @@ class Usuario extends Model
     private ?string $motivo;
     private int $estatus;
 
+    private ?string $encryptedLogin;
+
     public Sede $sede;
     /** @var ?array<Rol> */
     public ?array $roles;
@@ -48,17 +50,33 @@ class Usuario extends Model
 
     }
 
-    public function login(string $cedula, string $clave): bool
+    public function rsaDescrypt()
     {
-        if (empty($cedula) || empty($clave)) {
+        $text = base64_decode($this->encryptedLogin);
+        $privateKey = openssl_pkey_get_private(privateKey);
+        if (!$privateKey) {
+            throw new Exception("Failed to get private key");
+        }
+
+        openssl_private_decrypt($text, $res, $privateKey);
+
+        return json_decode($res);
+    }
+
+    public function login($encryptedLogin): bool
+    {
+        if (empty($encryptedLogin)) {
             return false;
         }
+        $this->encryptedLogin = $encryptedLogin;
+
+        $object = $this->rsaDescrypt();
 
         $query = "SELECT * FROM usuario WHERE cedula = :cedula LIMIT 1";
 
         try {
             $stmt = $this->prepare($query);
-            $stmt->bindValue('cedula', $cedula);
+            $stmt->bindValue('cedula', $object->cedula);
 
             $stmt->execute();
 
@@ -68,7 +86,7 @@ class Usuario extends Model
 
             $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if (!password_verify($clave, $usuario['clave'])) {
+            if (!password_verify($object->clave, $usuario['clave'])) {
                 return false;
             }
 
@@ -887,66 +905,66 @@ class Usuario extends Model
                 $idUsuario = '';
 
                 if ($usuario == null) {
-                   
-                
-                $sql = "INSERT INTO usuario(idSede, cedula, clave, nombre, apellido, telefono, direccion, estadoCivil, fechaNacimiento, fechaInscripcionEscuela)
+
+
+                    $sql = "INSERT INTO usuario(idSede, cedula, clave, nombre, apellido, telefono, direccion, estadoCivil, fechaNacimiento, fechaInscripcionEscuela)
             VALUES(:idSede, :cedula, :clave, :nombre, :apellido, :telefono, :direccion, :estadoCivil, :fechaNacimiento, CURDATE())";
 
 
-                $clave = password_hash($discipulo->getCedula(), PASSWORD_DEFAULT);
+                    $clave = password_hash($discipulo->getCedula(), PASSWORD_DEFAULT);
 
-                // Registra al usuario
+                    // Registra al usuario
 
-                $stmt = $this->db->pdo()->prepare($sql);
+                    $stmt = $this->db->pdo()->prepare($sql);
 
-                $stmt->bindValue('idSede', $idSede->idSede);
-                $stmt->bindValue('cedula', $discipulo->getCedula());
-                $stmt->bindValue('clave', $clave);
-                $stmt->bindValue('nombre', $discipulo->getNombre());
-                $stmt->bindValue('apellido', $discipulo->getApellido());
-                $stmt->bindValue('telefono', $discipulo->getTelefono());
-                $stmt->bindValue('direccion', $discipulo->getDireccion());
-                $stmt->bindValue('estadoCivil', $discipulo->getEstadoCivil());
-                $stmt->bindValue('fechaNacimiento', $discipulo->getFechaNacimiento());
+                    $stmt->bindValue('idSede', $idSede->idSede);
+                    $stmt->bindValue('cedula', $discipulo->getCedula());
+                    $stmt->bindValue('clave', $clave);
+                    $stmt->bindValue('nombre', $discipulo->getNombre());
+                    $stmt->bindValue('apellido', $discipulo->getApellido());
+                    $stmt->bindValue('telefono', $discipulo->getTelefono());
+                    $stmt->bindValue('direccion', $discipulo->getDireccion());
+                    $stmt->bindValue('estadoCivil', $discipulo->getEstadoCivil());
+                    $stmt->bindValue('fechaNacimiento', $discipulo->getFechaNacimiento());
 
-                $stmt->execute();
+                    $stmt->execute();
 
-                // Registra los roles del usuario
-                $idUsuario = $this->db->pdo()->lastInsertId();
-            
-            }else{
-          
-                $idUsuario = $usuario->id;
+                    // Registra los roles del usuario
+                    $idUsuario = $this->db->pdo()->lastInsertId();
 
-            }
+                } else {
 
-                /** @var Usuario */
-                $UsuarioActual = Usuario::cargar($idUsuario);
-                
-                if(empty($UsuarioActual->tieneRol('Estudiante'))) {
-                $sql2 = "INSERT INTO usuariorol(idUsuario, idRol)
-                VALUES(:idUsuario, :idRol)";
-
-                $stmt2 = $this->db->pdo()->prepare($sql2);
-
-                $stmt2->bindValue(':idUsuario', $idUsuario);
-                $stmt2->bindValue(':idRol', '10');
-
-                $stmt2->execute();
+                    $idUsuario = $usuario->id;
 
                 }
 
-                if(empty($UsuarioActual->tieneRol('Discipulo'))) {
+                /** @var Usuario */
+                $UsuarioActual = Usuario::cargar($idUsuario);
 
-                $sql4 = "INSERT INTO usuariorol(idUsuario, idRol)
+                if (empty($UsuarioActual->tieneRol('Estudiante'))) {
+                    $sql2 = "INSERT INTO usuariorol(idUsuario, idRol)
                 VALUES(:idUsuario, :idRol)";
 
-                $stmt4 = $this->db->pdo()->prepare($sql4);
+                    $stmt2 = $this->db->pdo()->prepare($sql2);
 
-                $stmt4->bindValue(':idUsuario', $idUsuario);
-                $stmt4->bindValue(':idRol', '12');
+                    $stmt2->bindValue(':idUsuario', $idUsuario);
+                    $stmt2->bindValue(':idRol', '10');
 
-                $stmt4->execute();
+                    $stmt2->execute();
+
+                }
+
+                if (empty($UsuarioActual->tieneRol('Discipulo'))) {
+
+                    $sql4 = "INSERT INTO usuariorol(idUsuario, idRol)
+                VALUES(:idUsuario, :idRol)";
+
+                    $stmt4 = $this->db->pdo()->prepare($sql4);
+
+                    $stmt4->bindValue(':idUsuario', $idUsuario);
+                    $stmt4->bindValue(':idRol', '12');
+
+                    $stmt4->execute();
                 }
 
                 $sql3 = "UPDATE discipulo SET aprobarUsuario = '2', estatus = '0' WHERE id = :id";
@@ -957,7 +975,7 @@ class Usuario extends Model
 
                 $stmt3->execute();
 
-               
+
                 Bitacora::registrar("Registro de Estudiante" . $UsuarioActual->getNombreCompleto() . " exitoso.");
 
                 http_response_code(200);
