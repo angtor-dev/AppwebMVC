@@ -45,6 +45,7 @@ $usuario = $_SESSION['usuario'];
                         <th class="text-center" style="width: 90px;">Opciones</th>
                     </tr>
                 </thead>
+                <tbody>
                 <!-- AQUI MOSTRARA LA INFORMACION -->
                 </tbody>
             </table>

@@ -112,7 +112,7 @@ class Grupo extends Model
 
                 $sql = "SELECT COUNT(matricula.idEstudiante) AS estudiantes,
                     CONCAT (usuario.cedula, ' ', usuario.nombre, ' ', usuario.apellido) AS infoMentor, grupo.*, 
-                    eid.id AS idEid FROM grupo
+                    eid.id AS idEid, eid.nombre AS nombreEid FROM grupo
                     INNER JOIN usuario ON usuario.id = grupo.idMentor
                     INNER JOIN matricula ON matricula.idGrupo = grupo.id AND matricula.idEstudiante = :idEstudiante
                     INNER JOIN nivel ON nivel.id = grupo.idNivel
@@ -137,7 +137,7 @@ class Grupo extends Model
 
                     $sql = "SELECT COUNT(matricula.idEstudiante) AS estudiantes,
             CONCAT (usuario.cedula, ' ', usuario.nombre, ' ', usuario.apellido) AS infoMentor, grupo.*, 
-            eid.id AS idEid FROM grupo
+            eid.id AS idEid, eid.nombre AS nombreEid FROM grupo
             INNER JOIN usuario ON usuario.id = grupo.idMentor
             LEFT JOIN matricula ON matricula.idGrupo = grupo.id
             INNER JOIN nivel ON nivel.id = grupo.idNivel
@@ -150,7 +150,7 @@ class Grupo extends Model
 
                     $sql = "SELECT COUNT(matricula.idEstudiante) AS estudiantes,
                  CONCAT (usuario.cedula, ' ', usuario.nombre, ' ', usuario.apellido) AS infoMentor, grupo.*, 
-            eid.id AS idEid FROM grupo
+            eid.id AS idEid, eid.nombre AS nombreEid FROM grupo
             INNER JOIN usuario ON usuario.id = grupo.idMentor
             LEFT JOIN matricula ON matricula.idGrupo = grupo.id
             INNER JOIN nivel ON nivel.id = grupo.idNivel
@@ -494,9 +494,9 @@ class Grupo extends Model
             END AS estado, SUM(CASE WHEN nota.calificacion IS NULL THEN 0
             ELSE nota.calificacion END) AS notaAcumulada, matricula.idGrupo FROM matricula
             LEFT JOIN usuario ON usuario.id = matricula.idEstudiante
-            LEFT JOIN nota ON nota.idEstudiante = usuario.id 
-            LEFT JOIN clase ON clase.idGrupo = matricula.idGrupo AND nota.idClase = clase.id
-            WHERE matricula.idGrupo = :idGrupo GROUP BY usuario.id";
+            LEFT JOIN clase ON clase.idGrupo = matricula.idGrupo
+            LEFT JOIN nota ON nota.idEstudiante = usuario.id AND nota.idClase = clase.id
+            WHERE matricula.idGrupo = :idGrupo GROUP BY usuario.id;";
 
                 $stmt = $this->db->pdo()->prepare($sql);
 
@@ -517,8 +517,8 @@ class Grupo extends Model
             END AS estado, SUM(CASE WHEN nota.calificacion IS NULL THEN 0
             ELSE nota.calificacion END) AS notaAcumulada, matricula.idGrupo FROM matricula
             LEFT JOIN usuario ON usuario.id = matricula.idEstudiante
-            LEFT JOIN nota ON nota.idEstudiante = usuario.id 
-            LEFT JOIN clase ON clase.idGrupo = matricula.idGrupo AND nota.idClase = clase.id
+            LEFT JOIN clase ON clase.idGrupo = matricula.idGrupo 
+            LEFT JOIN nota ON nota.idEstudiante = usuario.id AND nota.idClase = clase.id
             WHERE matricula.idGrupo = :idGrupo AND matricula.idEstudiante = :idEstudiante GROUP BY usuario.id";
 
                 $stmt = $this->db->pdo()->prepare($sql);

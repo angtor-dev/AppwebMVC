@@ -132,6 +132,7 @@ $usuario = $_SESSION['usuario'];
                                         style="width:100%">
                                         <thead>
                                             <tr>
+                                                <th>EID</th>
                                                 <th>Codigo</th>
                                                 <th>Mentor</th>
                                                 <th>Estudiantes</th>

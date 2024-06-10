@@ -602,7 +602,6 @@ class Celulas extends Model
 
                 $stmt = $this->db->pdo()->prepare($sql);
 
-                ($indice > 0) ? $stmt->bindValue(":id", $indice) : $stmt->bindValue(":id", 1);
                 $stmt->bindValue(':idCelula', $idCelula);
                 $stmt->bindValue(':fecha', $fecha);
                 $stmt->bindValue(':tematica', $tematica);

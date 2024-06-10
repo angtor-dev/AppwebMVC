@@ -47,6 +47,32 @@ class Bitacora extends Model
         return false;
     }
 
+    public function listar_Bitacora(){
+      
+        try{
+
+            $sql = "SELECT CONCAT(usuario.nombre, ' ' ,usuario.apellido, '-' ,usuario.cedula) AS usuarioDatos, bitacora.registro, bitacora.ruta, bitacora.fecha
+            FROM bitacora INNER JOIN usuario ON usuario.id = bitacora.idUsuario  ORDER BY bitacora.fecha DESC";
+
+            $stmt = $this->db->pdo()->prepare($sql);
+
+            $stmt->execute();
+            $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $resultado;
+
+        } catch (Exception $e) {
+            $error_data = array(
+                "error_message" => $e->getMessage(),
+                "error_line" => "Linea del error: " . $e->getLine()
+            );
+          
+            http_response_code(422);
+            echo json_encode($error_data);
+            die();
+        }
+
+    }
+
     // Getters
     public function getRegistro() : string {
         return $this->registro;

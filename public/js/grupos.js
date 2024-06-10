@@ -74,6 +74,7 @@ $(document).ready(function () {
                 }
             },
             columns: [
+                { data: 'nombreEid' },
                 { data: 'codigo' },
                 { data: 'infoMentor' },
                 { data: 'estudiantes' },
@@ -157,7 +158,7 @@ $(document).ready(function () {
         });
 
         if (tipo == '1' || tipo == '2' || tipo == '4') {
-            datatables.column(4).visible(false);
+            datatables.column(5).visible(false);
         }
     };
 
