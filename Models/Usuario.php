@@ -4,6 +4,9 @@ require_once "Models/Rol.php";
 require_once "Models/Sede.php";
 require_once "Models/Notificacion.php";
 
+require 'vendor/autoload.php';
+use \Firebase\JWT\JWT;
+use \Firebase\JWT\Key;
 
 class Usuario extends Model
 {
@@ -26,14 +29,16 @@ class Usuario extends Model
     private ?string $fechaConversion;
     private ?string $motivo;
     private int $estatus;
-
-    private ?string $encryptedLogin;
-
     public Sede $sede;
     /** @var ?array<Rol> */
     public ?array $roles;
     /** @var ?array<Notificacion> */
     public ?array $notificaciones;
+
+    //Variables referentes a encriptado
+    private ?string $encryptedLogin;
+    private string $secretJwt = 'appWebMvcLlamasDeFuegoLlaveSegura'; // Cambia esto por una clave secreta segura
+    private string $emisor = 'AppwebMvc'; // Emisor del token
 
     public function __construct()
     {
@@ -50,18 +55,7 @@ class Usuario extends Model
 
     }
 
-    public function rsaDescrypt()
-    {
-        $text = base64_decode($this->encryptedLogin);
-        $privateKey = openssl_pkey_get_private(privateKey);
-        if (!$privateKey) {
-            throw new Exception("Failed to get private key");
-        }
 
-        openssl_private_decrypt($text, $res, $privateKey);
-
-        return json_decode($res);
-    }
 
     public function login($encryptedLogin): bool
     {
@@ -93,6 +87,22 @@ class Usuario extends Model
             // Almacena usuario en sesion
             session_start();
             $_SESSION['usuario'] = Usuario::cargar($usuario['id']);
+
+            // Generar JWT
+            $tiempo = time();
+            $payload = array(
+                'tiempo' => $tiempo,
+                'emisor' => $this->emisor,
+                'data' => array(
+                    'cedula' => $object->cedula,
+                    'clave' => $object->clave,
+                    // otros datos si son necesarios
+                )
+            );
+
+            $jwt = JWT::encode($payload, $this->secretJwt, 'HS256');
+
+            $_SESSION['jwt'] = array('msj' => 'Has iniciado sesion', 'token' => $jwt);
 
             return true;
         } catch (\Throwable $th) {
@@ -992,6 +1002,34 @@ class Usuario extends Model
             die();
         }
 
+    }
+
+
+    /// Funciones referentes a encriptados
+    private function rsaDescrypt()
+    {
+        $text = base64_decode($this->encryptedLogin);
+        $privateKey = openssl_pkey_get_private(privateKey);
+        if (!$privateKey) {
+            throw new Exception("Failed to get private key");
+        }
+
+        openssl_private_decrypt($text, $res, $privateKey);
+
+        return json_decode($res);
+    }
+
+    public function validateJwt($jwt)
+    {
+        try {
+            // Decodificar el token
+            $decoded = JWT::decode($jwt, new Key($this->secretJwt, 'HS256'));
+            return (array) $decoded->data;
+        } catch (Exception $e) {
+            http_response_code(401);
+            echo json_encode(array('msj' => 'Token no valido'));
+            die();
+        }
     }
 
 

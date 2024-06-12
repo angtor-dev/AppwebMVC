@@ -32,6 +32,7 @@ formLogin.addEventListener('submit', async (e) => {
             encryptedLogin: encrypted,
         },
         success: function (response) {
+            console.log(response);
             window.location.replace("/AppwebMVC/");
         },
         error: function (jqXHR, textStatus, errorThrown) {

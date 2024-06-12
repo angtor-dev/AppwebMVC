@@ -13,36 +13,15 @@ if (!empty($_POST)) {
         if ($usuario->login($_POST['encryptedLogin'])) {
             Bitacora::registrar("Inicio de sesión");
             http_response_code(200);
+
+            echo json_encode($_SESSION['jwt']);
         } else {
             http_response_code(402);
-            echo json_encode(array('msj' => 'Datos incorrectos'));
-        }
-
-        exit();
-    }
-
-
-    // Inicio sesion app movil
-    /* if (isset($_POST['cedulaMovil']) && isset($_POST['claveMovil'])) {
-        if ($usuario->login($_POST['cedulaMovil'], $_POST['claveMovil'])) {
-            Bitacora::registrar("Inicio de sesión por aplicacion movil");
-            http_response_code(200);
-
-            echo json_encode(
-                array(
-                    'msj' => 'Has iniciado sesion correctamente',
-                )
-            );
-
-        } else {
-            http_response_code(402);
-            $loginFails = true;
             echo json_encode(array('msj' => 'Datos incorrectos. Intente nuevamente'));
         }
 
-        exit();
-    } */
-
+        die();
+    }
 
     if (isset($_POST['recovery'])) {
         $cedulaRecovery = $_POST['cedulaRecovery'];

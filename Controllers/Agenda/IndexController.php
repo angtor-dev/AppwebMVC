@@ -78,26 +78,26 @@ if (isset($_POST['cargar_data_sedes'])) {
     } else {
         $json['data'] = array();
     }
-    
+
     echo json_encode($json);
     die();
 }
 
-if (isset($_POST['coincidencias'])){
-    
-    if (isset($_POST['id'])){
-    
-    $titulos = $_POST['titulo'];
-    $id = $_POST['id'];
+if (isset($_POST['coincidencias'])) {
 
-    $resultado = $Evento->valida_titulo_evento($titulos, $id);
+    if (isset($_POST['id'])) {
+
+        $titulos = $_POST['titulo'];
+        $id = $_POST['id'];
+
+        $resultado = $Evento->valida_titulo_evento($titulos, $id);
 
     } else {
 
-    $titulos = $_POST['titulo'];
-    $id = '';
+        $titulos = $_POST['titulo'];
+        $id = '';
 
-    $resultado = $Evento->valida_titulo_evento($titulos, $id);
+        $resultado = $Evento->valida_titulo_evento($titulos, $id);
     }
 
     echo json_encode($resultado);
@@ -106,11 +106,11 @@ if (isset($_POST['coincidencias'])){
 }
 
 
-if (isset($_POST['eliminarEventoSede'])){
+if (isset($_POST['eliminarEventoSede'])) {
 
 
     $id = $_POST['id'];
-    
+
 
     $Evento->eliminar_evento_sede($id);
 
@@ -119,7 +119,7 @@ if (isset($_POST['eliminarEventoSede'])){
     die();
 }
 
-if (isset($_POST['eliminar'])){
+if (isset($_POST['eliminar'])) {
 
     $id = $_POST['id'];
 
@@ -128,7 +128,7 @@ if (isset($_POST['eliminar'])){
     die();
 }
 
-if (isset($_POST['actualizarSedes'])){
+if (isset($_POST['actualizarSedes'])) {
 
     $arraySedes = $_POST['arraySedes'];
     $idEvento = $_POST['idEvento'];
@@ -139,7 +139,7 @@ if (isset($_POST['actualizarSedes'])){
     die();
 }
 
-if (isset($_POST['actualizarComentario'])){
+if (isset($_POST['actualizarComentario'])) {
 
     $comentario = $_POST['comentario'];
     $id = $_POST['id'];
@@ -152,4 +152,4 @@ if (isset($_POST['actualizarComentario'])){
 
 
 
-renderView(); 
+renderView();
