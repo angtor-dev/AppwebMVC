@@ -52,9 +52,9 @@ if (!empty($_POST)) {
         die();
     }
 
-    if (isset($_POST['register'])) {
+    if (isset($_POST['encryptedRegister'])) {
 
-        $respuesta = $usuario->validarRegister($_POST);
+        $respuesta = $usuario->validarRegister($_POST['encryptedRegister']);
 
         if ($respuesta) {
             $respuesta2 = $usuario->registerUser();

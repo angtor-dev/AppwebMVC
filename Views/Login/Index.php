@@ -4,6 +4,20 @@ $_layout = "Login";
 
 ?>
 
+<style>
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+</style>
+
 
 <div class="container-fluid" id="loginMain">
     <div class="row h-100 d-flex justify-content-center">
@@ -261,3 +275,4 @@ $_layout = "Login";
         </div>
     </div>
 </div>
+

@@ -78,6 +78,7 @@ formLogin.addEventListener('submit', async (e) => {
 
     let jsonString = JSON.stringify(json);
     let encrypted = encrypt.encrypt(jsonString);
+
     if (cedulaV === true && claveV === true) {
         $.ajax({
             type: "POST",
@@ -148,6 +149,7 @@ verificarCedula.addEventListener('click', async (e) => {
     const url = '?getKey';
     const response = await fetch(url);
     const publicKey = await response.json();
+    encrypt.setPublicKey(publicKey);
 
     const cedulaRecovery = document.getElementById('cedulaRecovery').value;
 
@@ -158,7 +160,7 @@ verificarCedula.addEventListener('click', async (e) => {
 
             if (cedulaRecoverV === true) {
 
-                encrypt.setPublicKey(publicKey);
+
 
                 const json = {
                     cedula: cedulaRecovery,
@@ -166,6 +168,7 @@ verificarCedula.addEventListener('click', async (e) => {
 
                 let jsonString = JSON.stringify(json);
                 let encrypted = encrypt.encrypt(jsonString);
+
                 $.ajax({
                     type: "POST",
                     url: '',
@@ -234,10 +237,6 @@ verificarCedula.addEventListener('click', async (e) => {
 $('#enviarRecovery').on('click', async (e) => {
     e.preventDefault();
     const respuestaRecovery = document.getElementById('respuestaRecovery').value;
-
-    const url = '?getKey';
-    const response = await fetch(url);
-    const publicKey = await response.json();
 
     if (cedula !== null && respuesta !== null) {
         if (respuestaRecovery == respuesta) {
@@ -432,7 +431,7 @@ const fechaNacimientoInput = document.getElementById('fechaNacimiento');
 const fechaNacimientoError = document.getElementById('fechaNacimientoError');
 
 fechaNacimientoInput.addEventListener('change', function () {
-    if (estadoCivilInput.value === "" || !regexValidaciones.fechaNacimiento.test(fechaNacimientoInput.value)) {
+    if (fechaNacimientoInput.value === "" || !regexValidaciones.fechaNacimiento.test(fechaNacimientoInput.value)) {
         fechaNacimientoError.classList.remove('d-none');
         validationRegister.fechaNacimiento = false;
     } else {
@@ -564,18 +563,44 @@ function Listar_SedesRegistrar() {
 // Obtener el formulario
 const formulario = document.getElementById('registerForm');
 
-$('#register').on('click', () => {
+$('#register').on('click', async (e) => {
 
-    // Serializar los datos del formulario
-    let datosFormulario = $(formulario).serialize();
-    // Agregar el índice adicional
-    datosFormulario += "&register=register";
+    e.preventDefault();
+
+    const url = '?getKey';
+    const response = await fetch(url);
+    const publicKey = await response.json();
+
+    encrypt.setPublicKey(publicKey);
+
+    // Serializar los datos del formulario y convertirlos en un objeto
+    let datosFormulario = $(formulario).serializeArray();
+
+    // Objeto para almacenar los datos encriptados
+    let datosEncriptados = {};
+
+    // Recorrer cada elemento del formulario serializado
+    datosFormulario.forEach(function (campo) {
+        // Convertir el valor del campo a JSON
+        let valorJson = JSON.stringify(campo.value);
+
+        // Encriptar el valor
+        let valorEncriptado = encrypt.encrypt(valorJson);
+
+        // Almacenar el valor encriptado en el objeto usando el nombre del campo como clave
+        datosEncriptados[campo.name] = valorEncriptado;
+    });
+
+    // Ahora 'datosEncriptados' contiene los valores encriptados de cada campo
+
 
     if (validarTodosCampos(validationRegister)) {
         $.ajax({
             type: "POST",
-            url: '/AppwebMVC/Login/Index',
-            data: datosFormulario,
+            url: '',
+            data: {
+                encryptedRegister: datosEncriptados,
+            },
             success: function (response) {
                 console.log(response);
                 const respuesta = JSON.parse(response);

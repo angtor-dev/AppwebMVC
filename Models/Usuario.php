@@ -573,21 +573,28 @@ class Usuario extends Model
 
     }
 
-    public function validarRegister($datos): bool
+    public function validarRegister($encryptedRegister): bool
     {
+
+        if (empty($encryptedRegister)) {
+            return false;
+        }
+
+        $object = $this->desencriptarValores($encryptedRegister);
+        
         try {
-            $nombre = trim($datos["nombre"]);
-            $apellido = trim($datos["apellido"]);
-            $telefono = trim($datos["telefono"]);
-            $cedula = trim($datos["cedula"]);
-            $estadoCivil = trim(strtoupper($datos["estadoCivil"]));
-            $password = trim($datos["password"]);
-            $fechaNacimiento = trim($datos["fechaNacimiento"]);
-            $direccion = trim($datos["direccion"]);
-            $preguntaSecurity = trim($datos["preguntaSecurity"]);
-            $respuestaSecurity = trim($datos["respuestaSecurity"]);
-            $correo = trim(strtolower($datos["correo"]));
-            $idSede = $datos['idSede'];
+            $nombre = trim($object["nombre"]);
+            $apellido = trim($object["apellido"]);
+            $telefono = trim($object["telefono"]);
+            $cedula = trim($object["cedula"]);
+            $estadoCivil = trim(strtoupper($object["estadoCivil"]));
+            $password = trim($object["password"]);
+            $fechaNacimiento = trim($object["fechaNacimiento"]);
+            $direccion = trim($object["direccion"]);
+            $preguntaSecurity = trim($object["preguntaSecurity"]);
+            $respuestaSecurity = trim($object["respuestaSecurity"]);
+            $correo = trim(strtolower($object["correo"]));
+            $idSede = $object['idSede'];
 
             if (!preg_match('/^[A-Za-z\s]+$/', $nombre) || !preg_match('/^[A-Za-z\s]+$/', $apellido)) {
                 throw new Exception("Existen caracteres especiales en algun campo. Verifique", 422);
@@ -614,7 +621,7 @@ class Usuario extends Model
             }
 
             // Validar el campo fechaNacimiento
-            if (!strtotime($fechaNacimiento) || strtotime($datos["fechaNacimiento"]) > time()) {
+            if (!strtotime($fechaNacimiento) || strtotime($object["fechaNacimiento"]) > time()) {
                 throw new Exception("Fecha de nacimiento invalida", 422);
             }
 
@@ -1031,7 +1038,7 @@ class Usuario extends Model
     /// Funciones referentes a encriptados
     private function rsaDescrypt()
     {
-        $text = base64_decode($this->encryptedLogin);
+        $text = base64_decode($this->encrypted);
         $privateKey = openssl_pkey_get_private(privateKey);
         if (!$privateKey) {
             throw new Exception("Failed to get private key");
@@ -1041,6 +1048,16 @@ class Usuario extends Model
 
         return json_decode($res);
     }
+
+    private function desencriptarValores($datosEncriptados) {
+        $resultadosDesencriptados = [];
+        foreach ($datosEncriptados as $name => $encryptedValue) {
+            $this->encrypted = $encryptedValue;
+            $resultadosDesencriptados[$name] = $this->rsaDescrypt();
+        }
+        return $resultadosDesencriptados;
+    }
+
 
     public function validateJwt($jwt)
     {
