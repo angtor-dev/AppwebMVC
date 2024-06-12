@@ -2,7 +2,7 @@
 let encrypt = new JSEncrypt();
 let cedula = null;
 let respuesta = null;
-let correo = null;
+
 
 let choices;
 
@@ -179,9 +179,9 @@ $("#cedulaRecovery").keyup(function (event) {
                         $('#modalPreguntaRecovery').modal('show');
 
                         document.getElementById('preguntaRecovery').textContent = datos['preguntaSecurity'];
-                        cedula = datos['cedula'];
+                        cedula = cedulaRecovery;
                         respuesta = datos['respuestaSecurity'];
-                        correo = datos['correo'];
+                        
 
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
@@ -231,19 +231,30 @@ $("#cedulaRecovery").keyup(function (event) {
 })
 
 
-$('#enviarRecovery').on('click', () => {
+$('#enviarRecovery').on('click',  async (e) => {
+    e.preventDefault();
     const respuestaRecovery = document.getElementById('respuestaRecovery').value;
+
+                const url = '?getKey';
+                const response = await fetch(url);
+                const publicKey = await response.json();
 
     if (cedula !== null && respuesta !== null) {
         if (respuestaRecovery == respuesta) {
+
+            const json = {
+                cedulaRecovery: cedula,
+                respuesta: respuestaRecovery,
+          
+            }
+
+            let jsonString = JSON.stringify(json);
+                let encrypted = encrypt.encrypt(jsonString);
             $.ajax({
                 type: "POST",
-                url: '/AppwebMVC/Login/Index',
+                url: '',
                 data: {
-                    sendRecoveryRespuesta: 'sendRecoveryRespuesta',
-                    cedulaRecovery: cedula,
-                    respuesta: respuestaRecovery,
-                    correo: correo,
+                    sendRecoveryRespuesta: encrypted,      
                 },
                 success: function (response) {
                     const datos = JSON.parse(response);

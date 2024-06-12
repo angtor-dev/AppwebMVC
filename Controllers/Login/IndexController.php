@@ -37,15 +37,12 @@ if (!empty($_POST)) {
 
 
     if (isset($_POST['sendRecoveryRespuesta'])) {
-        $cedulaRecovery = $_POST['cedulaRecovery'];
-        $respuesta = $_POST['respuesta'];
-        $correo = $_POST['correo'];
-
-        $datos = $usuario->resetPassword($cedulaRecovery, $respuesta);
-
+        
+        $datos = $usuario->resetPassword($_POST['sendRecoveryRespuesta']);
+       
         if ($datos !== '') {
             http_response_code(200);
-            $Correo->sendPassword($correo, $datos);
+            $Correo->sendPassword($datos['correo'], $datos['clave']);
         } else {
             http_response_code(402);
             echo json_encode(array('msj' => 'La respuesta enviada es incorrecta'));

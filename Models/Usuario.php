@@ -372,7 +372,7 @@ class Usuario extends Model
 
         try {
 
-            $sql = "SELECT `cedula`, `preguntaSecurity`, `respuestaSecurity`, `correo` FROM `usuario` WHERE `cedula` = :cedula";
+            $sql = "SELECT `preguntaSecurity`, `respuestaSecurity` FROM `usuario` WHERE `cedula` = :cedula";
             $stmt = $this->db->pdo()->prepare($sql);
             $stmt->bindValue(":cedula", $object->cedula);
             $stmt->execute();
@@ -394,17 +394,25 @@ class Usuario extends Model
         }
     }
 
-    public function resetPassword(string $cedulaRecovery, string $respuesta)
+    public function resetPassword($encryptedReset)
     {
+     
+        if (empty($encryptedReset)) {
+            return '';
+        }
+        $this->encrypted = $encryptedReset;
+
+        $object = $this->rsaDescrypt();
+
         try {
 
             $sql = "SELECT `respuestaSecurity` FROM `usuario` WHERE `cedula` = :cedula";
             $stmt = $this->db->pdo()->prepare($sql);
-            $stmt->bindValue(":cedula", $cedulaRecovery);
+            $stmt->bindValue(":cedula", $object->cedulaRecovery);
             $stmt->execute();
             $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if ($respuesta == $resultado['respuestaSecurity']) {
+            if ($object->respuesta == $resultado['respuestaSecurity']) {
                 $caracteres = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
                 $clave = '';
                 for ($i = 0; $i < 10; $i++) {
@@ -415,10 +423,14 @@ class Usuario extends Model
                 $sql = "UPDATE usuario SET clave = :clave WHERE cedula = :cedula";
                 $stmt = $this->prepare($sql);
                 $stmt->bindValue(':clave', $claveEncriptada);
-                $stmt->bindValue(':cedula', $cedulaRecovery);
+                $stmt->bindValue(':cedula', $object->cedulaRecovery);
                 $stmt->execute();
 
-                return $clave;
+                 /** @var Usuario */
+                 $Usuario = Usuario::cargarPorCedula($object->cedulaRecovery);
+                 
+
+                return array('clave' => $clave, 'correo' => $Usuario->getCorreo());
             } else {
                 return '';
             }
