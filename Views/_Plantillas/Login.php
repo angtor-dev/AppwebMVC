@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= APP_NAME ?></title>
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/lib/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/lib/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/css/site.css">
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/lib/choicesjs/choices.css">
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/css/login.css">

@@ -836,6 +836,10 @@ $('#descripcionEditar').on("keyup", function (event) {
 
 
 
+
+
+
+
 const form2 = document.getElementById("editarFormulario");
 
 form2.addEventListener("submit", (e) => {

@@ -1,19 +1,20 @@
 <?php
-/** @var Array<Bitacora> $bitacoras */
+global $viewScripts;
+$viewScripts = ["bitacora.js"];
 $title = "Bitacora";
 ?>
 
 <div class="d-flex align-items-end justify-content-between mb-2">
     <h4 class="mb-0 fw-bold">Bitacora de usuarios</h4>
     <div class="d-flex gap-3">
-        <div class="buscador">
-            <input type="text" id="tabla-bitacora_search" class="form-control" placeholder="Buscar">
+    <div class="buscador">
+            <input type="text" id="search" class="form-control" placeholder="Buscar...">
         </div>
     </div>
 </div>
 
 <div class="table-responsive">
-<table class="table table-bordered table-rounded table-hover datatable" id="tabla-bitacora">
+<table id="tabla-bitacora" class="table table-bordered table-rounded table-hover" style="width:100%">
     <thead>
         <tr>
             <th>Usuario</th>
@@ -23,20 +24,7 @@ $title = "Bitacora";
         </tr>
     </thead>
     <tbody>
-        <?php foreach ($bitacoras as $bitacora) : ?>
-            <tr>
-                <td><?= ($bitacora->usuario?->getCedula() ?? "")." - ".($bitacora->usuario?->getNombre() ?? "") ?></td>
-                <td><?= $bitacora->getRegistro() ?></td>
-                <td><?= $bitacora->getRuta() ?></td>
-                <td><?= date("d/m/Y H:i:s a", strtotime($bitacora->getFecha())) ?></td>
-            </tr>
-        <?php endforeach ?>
+
     </tbody>
 </table>
 </div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        datatables['tabla-bitacora'].order([[3, 'desc']])
-    })
-</script>
