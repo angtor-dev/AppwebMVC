@@ -13,8 +13,7 @@
 .inputLogin{
     /* background-color: #ee344a !important; */
     background: none;
-    border: none;
-    border-bottom: 2px solid #c8c8c8;
+    border: 2px solid #c8c8c8;
     color: white;
     padding: 10px;
     width: 80%;
@@ -22,8 +21,27 @@
 .inputLogin:focus{
     box-shadow: none;
     outline: none;
-    border-bottom: 2px solid white;
+    border: 2px solid white;
 }
+
+
+
+.password-icon {
+  float: right;
+  position: relative;
+  margin: -30.5px -70% 0 0;
+  cursor: pointer;
+  color: #c8c8c8;
+}
+
+.is-invalid ~ .password-icon {
+    /* Estilos que quieres aplicar a .clase-2 cuando .clase-1 está presente */
+    color: #dc3545;
+  }
+
+.form-control.is-invalid.inputLogin {
+    background: none;
+  }
 
 #bienvenida1{
     font-weight: 700;

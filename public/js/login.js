@@ -7,6 +7,60 @@ let correo = null;
 let choices;
 
 
+let cedulaV = false;
+let claveV = false;
+let cedulaRecoverV = false;
+
+$("#cedulaLogin").keyup(function (event) {
+
+    let cedula = $("#cedulaLogin");
+    let div = $("#msjcedulaLogin");
+    if ((/^\d{7,9}(-\d{1,3})?$/).test(cedula.val())) {
+        cedula.removeClass("is-invalid");
+        div.text("");
+        cedulaV = true;
+    } else {
+        cedula.addClass("is-invalid");
+        div.text("Formato incorrecto");
+        cedulaV = false;
+    }
+
+});
+
+
+$("#claveLogin").keyup(function (event) {
+
+    let clave = $("#claveLogin");
+    let div = $("#msjclaveLogin");
+    if ((/^[^\s]*$/).test(clave.val())) {
+        claveV = true;
+        clave.removeClass('is-invalid');
+        div.text('');
+    } else {
+        claveV = false;
+        clave.addClass('is-invalid');
+        div.text('Este campo no acepta espacios en blanco');
+    }
+
+});
+
+
+$("#showPassword").on('click', function (event) {
+    var passwordInput = document.getElementById('claveLogin');
+    var toggleIcon = $('#showPassword');
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        toggleIcon.addClass('fa-eye-slash');
+        toggleIcon.removeClass('fa-eye');
+    } else {
+        passwordInput.type = 'password';
+
+        toggleIcon.addClass('fa-eye');
+        toggleIcon.removeClass('fa-eye-slash');
+    }
+});
+
+
 let formLogin = document.getElementById('loginForm');
 formLogin.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -24,93 +78,147 @@ formLogin.addEventListener('submit', async (e) => {
 
     let jsonString = JSON.stringify(json);
     let encrypted = encrypt.encrypt(jsonString);
+    if (cedulaV === true && claveV === true) {
+        $.ajax({
+            type: "POST",
+            url: '',
+            data: {
+                encryptedLogin: encrypted,
+            },
+            success: function (response) {
+                window.location.replace("/AppwebMVC/");
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                if (jqXHR.responseText) {
+                    let jsonResponse = JSON.parse(jqXHR.responseText);
 
-    $.ajax({
-        type: "POST",
-        url: '',
-        data: {
-            encryptedLogin: encrypted,
-        },
-        success: function (response) {
-            window.location.replace("/AppwebMVC/");
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            if (jqXHR.responseText) {
-                let jsonResponse = JSON.parse(jqXHR.responseText);
-
-                if (jsonResponse.msj) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: jsonResponse.msj,
-                        showConfirmButton: true,
-                    })
+                    if (jsonResponse.msj) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: jsonResponse.msj,
+                            showConfirmButton: true,
+                        })
+                    } else {
+                        const respuesta = JSON.stringify(jsonResponse, null, 2)
+                        Swal.fire({
+                            background: 'red',
+                            color: '#fff',
+                            title: respuesta,
+                            showConfirmButton: true,
+                        })
+                    }
                 } else {
-                    const respuesta = JSON.stringify(jsonResponse, null, 2)
-                    Swal.fire({
-                        background: 'red',
-                        color: '#fff',
-                        title: respuesta,
-                        showConfirmButton: true,
-                    })
+                    alert('Error desconocido: ' + textStatus);
                 }
-            } else {
-                alert('Error desconocido: ' + textStatus);
             }
-        }
-    })
+        })
+    } else {
+
+        Swal.fire({
+            icon: 'error',
+            title: 'Debes llenar el formulario correctamente',
+            showConfirmButton: false,
+            timer: 2000,
+        })
+    }
 })
 
-document.getElementById('verificarCedula').addEventListener('click', () => {
-    const cedulaRecovery = document.getElementById('cedulaRecovery').value;
 
+$("#cedulaRecovery").keyup(function (event) {
+
+    let cedula = $("#cedulaRecovery");
+    let div = $("#msjcedulaRecovery");
+    if ((/^\d{7,9}(-\d{1,3})?$/).test(cedula.val())) {
+        cedula.removeClass("is-invalid");
+        div.text("");
+        cedulaRecoverV = true;
+    } else {
+        cedula.addClass("is-invalid");
+        div.text("Formato incorrecto");
+        cedulaRecoverV = false;
+    }
+
+});
+
+
+    let verificarCedula = document.getElementById('verificarCedula');
+    verificarCedula.addEventListener('click', async (e) => {
+        e.preventDefault();
+
+                const url = '?getKey';
+                const response = await fetch(url);
+                const publicKey = await response.json();
+
+    const cedulaRecovery = document.getElementById('cedulaRecovery').value;
+    
     Swal.showLoading()
     setTimeout(() => {
         Swal.close();
         if (cedulaRecovery !== '' && cedulaRecovery !== null) {
-            $.ajax({
-                type: "POST",
-                url: '/AppwebMVC/Login/Index',
-                data: {
-                    recovery: 'recovery',
-                    cedulaRecovery: cedulaRecovery
-                },
-                success: function (response) {
-                    const datos = JSON.parse(response);
 
-                    $('#modalRecovery').modal('hide');
-                    $('#modalPreguntaRecovery').modal('show');
+            if (cedulaRecoverV === true) {
 
-                    document.getElementById('preguntaRecovery').textContent = datos['preguntaSecurity'];
-                    cedula = datos['cedula'];
-                    respuesta = datos['respuestaSecurity'];
-                    correo = datos['correo'];
+                encrypt.setPublicKey(publicKey);
 
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    if (jqXHR.responseText) {
-                        let jsonResponse = JSON.parse(jqXHR.responseText);
-
-                        if (jsonResponse.msj) {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'DENEGADO',
-                                text: jsonResponse.msj,
-                                showConfirmButton: true,
-                            })
-                        } else {
-                            const respuesta = JSON.stringify(jsonResponse, null, 2)
-                            Swal.fire({
-                                background: 'red',
-                                color: '#fff',
-                                title: respuesta,
-                                showConfirmButton: true,
-                            })
-                        }
-                    } else {
-                        alert('Error desconocido: ' + textStatus);
-                    }
+                const json = {
+                    cedula: cedulaRecovery,
                 }
-            })
+
+                let jsonString = JSON.stringify(json);
+                let encrypted = encrypt.encrypt(jsonString);
+                $.ajax({
+                    type: "POST",
+                    url: '',
+                    data: {
+                        encryptedCedulaRecovery: encrypted,
+                    },
+                    success: function (response) {
+                        const datos = JSON.parse(response);
+
+                        $('#modalRecovery').modal('hide');
+                        $('#modalPreguntaRecovery').modal('show');
+
+                        document.getElementById('preguntaRecovery').textContent = datos['preguntaSecurity'];
+                        cedula = datos['cedula'];
+                        respuesta = datos['respuestaSecurity'];
+                        correo = datos['correo'];
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        if (jqXHR.responseText) {
+                            let jsonResponse = JSON.parse(jqXHR.responseText);
+
+                            if (jsonResponse.msj) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'DENEGADO',
+                                    text: jsonResponse.msj,
+                                    showConfirmButton: true,
+                                })
+                            } else {
+                                const respuesta = JSON.stringify(jsonResponse, null, 2)
+                                Swal.fire({
+                                    background: 'red',
+                                    color: '#fff',
+                                    title: respuesta,
+                                    showConfirmButton: true,
+                                })
+                            }
+                        } else {
+                            alert('Error desconocido: ' + textStatus);
+                        }
+                    }
+                });
+
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'La cedula ingresada es invalida',
+                    text: 'Verifique bien sus datos antes de ser enviado',
+                    showConfirmButton: true,
+                })
+            }
+
         } else {
             Swal.fire({
                 icon: 'error',

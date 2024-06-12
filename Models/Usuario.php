@@ -27,7 +27,7 @@ class Usuario extends Model
     private ?string $motivo;
     private int $estatus;
 
-    private ?string $encryptedLogin;
+    private ?string $encrypted;
 
     public Sede $sede;
     /** @var ?array<Rol> */
@@ -52,7 +52,7 @@ class Usuario extends Model
 
     public function rsaDescrypt()
     {
-        $text = base64_decode($this->encryptedLogin);
+        $text = base64_decode($this->encrypted);
         $privateKey = openssl_pkey_get_private(privateKey);
         if (!$privateKey) {
             throw new Exception("Failed to get private key");
@@ -68,7 +68,7 @@ class Usuario extends Model
         if (empty($encryptedLogin)) {
             return false;
         }
-        $this->encryptedLogin = $encryptedLogin;
+        $this->encrypted = $encryptedLogin;
 
         $object = $this->rsaDescrypt();
 
@@ -360,13 +360,21 @@ class Usuario extends Model
 
 
 
-    public function recovery(string $cedulaRecovery): array
+    public function recovery($encryptedRecovery): array
     {
+
+        if (empty($encryptedRecovery)) {
+            return array();
+        }
+        $this->encrypted = $encryptedRecovery;
+
+        $object = $this->rsaDescrypt();
+
         try {
 
             $sql = "SELECT `cedula`, `preguntaSecurity`, `respuestaSecurity`, `correo` FROM `usuario` WHERE `cedula` = :cedula";
             $stmt = $this->db->pdo()->prepare($sql);
-            $stmt->bindValue(":cedula", $cedulaRecovery);
+            $stmt->bindValue(":cedula", $object->cedula);
             $stmt->execute();
 
             if ($stmt->rowCount() > 0) {

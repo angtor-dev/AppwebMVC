@@ -2,23 +2,6 @@
 $_layout = "Login";
 
 
-$config = [
-    'config' => 'C:\xampp\apache\conf\openssl.cnf',
-    'private_key_bits' => 2048,
-    'default_md' => "aes-256-ccm"
-];
-
-/* $privateKey = openssl_pkey_new($config);
-
-openssl_pkey_export($privateKey, $privateKeyStr);
-$privateKeyDetails = openssl_pkey_get_details($privateKey);
-$publicKey = $privateKeyDetails['key'];
-
-// Guardar la clave privada en un archivo
-file_put_contents("clave_privada.pem", $privateKeyStr);
-
-// Guardar la clave pública en un archivo
-file_put_contents("clave_publica.pem", $publicKey); */
 ?>
 
 
@@ -41,14 +24,17 @@ file_put_contents("clave_publica.pem", $publicKey); */
                     <div class="d-grid gap-4 mb-5">
                         <div class="d-flex flex-column align-items-center">
                             <label class="form-label fw-bold text-white">Cedula</label>
-                            <input type="text" class="inputLogin text-center" name="cedula" id="cedulaLogin"
-                                maxlength="8" required>
+                            <input type="text" class="inputLogin text-center form-control" name="cedula" id="cedulaLogin"
+                                maxlength="12" aria-describedby="msjcedulaLogin" required>
+                                <div id="msjcedulaLogin" class="invalid-feedback" style="width: 80%; "></div>
                         </div>
 
                         <div class="d-flex flex-column align-items-center">
                             <label class="form-label text-white fw-bold">Clave</label>
-                            <input type="password" class="inputLogin text-center" name="clave" id="claveLogin"
-                                maxlength="10" required>
+                            <input type="password" class="inputLogin text-center form-control passLogin" name="clave" id="claveLogin"
+                                maxlength="10" aria-describedby="msjclaveLogin" required>
+                                <spam class="fa-solid fa-eye password-icon" id="showPassword"></spam>
+                            <div id="msjclaveLogin" class="invalid-feedback" style="width: 80%; margin-top: 20px;"></div>
                         </div>
                     </div>
                     <div class="d-flex justify-content-center">
@@ -82,7 +68,8 @@ file_put_contents("clave_publica.pem", $publicKey); */
                 <form method="post">
                     <div class="d-grid">
                         <label class="form-label fw-bold text-center">Ingrese su cedula</label>
-                        <input type="text" class="form-control" name="cedulaRecovery" id="cedulaRecovery">
+                        <input type="text" class="form-control" name="cedulaRecovery" id="cedulaRecovery" aria-describedby="msjcedulaRecovery" required>
+                        <div id="msjcedulaRecovery" class="invalid-feedback"></div>
                     </div>
                 </form>
             </div>
