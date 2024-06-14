@@ -383,30 +383,36 @@ class Grupo extends Model
 
             $this->validarExistenciaEstudianteGrupo($cedula, $Grupo->getidSede());
             $this->validarEstudianteAprobado($cedula, $Grupo->getidNivel());
+            
+            $this->db->pdo()->beginTransaction();
+            $this->db->pdo()->exec("LOCK TABLE grupo READ");
 
             $sql = "INSERT INTO matricula (idGrupo, idEstudiante) VALUES (:idGrupo, :idEstudiante)";
             $stmt = $this->db->pdo()->prepare($sql);
 
             $stmt->bindValue(':idGrupo', $idGrupo);
             $stmt->bindValue(':idEstudiante', $estudiante->id);
-
+            
+            $this->db->pdo()->exec("UNLOCK TABLES");
 
             $stmt->execute();
 
 
             Bitacora::registrar("Estudiante " . $estudiante->getNombreCompleto() . "matriculado en el grupo " . $Grupo->getCodigo() . ".");
 
+            $this->db->pdo()->commit();
+
             http_response_code(200);
             echo json_encode(array('msj' => 'Estudiante ' . $estudiante->getNombreCompleto() . 'matriculado en el grupo ' . $Grupo->getCodigo() . ' exitosamente.', 'status' => 200));
             die();
 
 
-
         } catch (Exception $e) {
             http_response_code($e->getCode());
             echo json_encode(array("msj" => $e->getMessage(), "status" => $e->getCode()));
-
-
+            if ($this->db->pdo()->inTransaction()) {
+                $this->db->pdo()->rollBack();
+            }
             die();
         }
 

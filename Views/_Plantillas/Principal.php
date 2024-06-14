@@ -125,13 +125,10 @@ if (isset($_SESSION['usuario'])) {
                                         </a>
                                     </li>
                                     <li>
-                                        <!-- Ocultado por ahora -->
-                                        <?php if ($usuario->tieneRol("Superusuario")) : ?>
-                                            <!-- <a class="dropdown-item" href="#">
-                                                <i class="fa-solid fa-arrows-rotate fa-fw me-2"></i>
-                                                Elegir sede
-                                            </a> -->
-                                        <?php endif ?>
+                                    <a class="dropdown-item" href="https://drive.google.com/file/d/1_l92SSDTtnJq6HEciekt7trbr8C_I0pX/view?usp=sharing" target="_blank">
+                                    <i class="fa-solid fa-book fa-fw me-2"></i>
+                                            Manual de Usuario
+                                        </a>
                                     </li>
                                     <li>
                                         <hr class="dropdown-divider">

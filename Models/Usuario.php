@@ -72,6 +72,7 @@ class Usuario extends Model
         $query = "SELECT * FROM usuario WHERE cedula = :cedula LIMIT 1";
 
         try {
+            $this->db->pdo()->beginTransaction();
             $stmt = $this->prepare($query);
             $stmt->bindValue('cedula', $object->cedula);
 
@@ -107,8 +108,14 @@ class Usuario extends Model
 
             $_SESSION['jwt'] = array('msj' => 'Has iniciado sesion', 'token' => $jwt);
 
+            $this->db->pdo()->commit();
+
             return true;
         } catch (\Throwable $th) {
+
+            if ($this->db->pdo()->inTransaction()) {
+                $this->db->pdo()->rollBack();
+            }
             http_response_code(500);
             throw $th;
         }
@@ -442,6 +449,7 @@ class Usuario extends Model
                 /** @var Usuario */
                 $Usuario = Usuario::cargarPorCedula($object->cedulaRecovery);
 
+                Bitacora::registrar("Usuario " . $Usuario->getNombreCompleto() . "recupero su contraseña exitosamente.");
 
                 return array('clave' => $clave, 'correo' => $Usuario->getCorreo());
             } else {
@@ -465,6 +473,8 @@ class Usuario extends Model
         VALUES(:cedula, :correo, :clave, :nombre, :apellido, :telefono, :direccion, :estadoCivil, :fechaNacimiento, :preguntaSecurity, :respuestaSecurity, :idSede)";
 
         try {
+
+            $this->db->pdo()->beginTransaction();
 
             $this->encriptarClave();
 
@@ -495,9 +505,15 @@ class Usuario extends Model
             $stmt->bindParam('idUsuario', $idUsuario);
             $stmt->execute();
 
+            $this->db->pdo()->commit();
+
             return true;
 
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
+
+            if ($this->db->pdo()->inTransaction()) {
+                $this->db->pdo()->rollBack();
+            }
             $error_data = array(
                 "error_message" => $e->getMessage(),
                 "error_line" => "Linea del error: " . $e->getLine()

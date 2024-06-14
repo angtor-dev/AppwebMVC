@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('descripcion2').textContent = info.event.extendedProps.descripcion;
         document.getElementById('comentarioPastor').value = info.event.extendedProps.comentario;
 
-      } else if (permisos.consultarUsuario) {
+      } else {
         $('#verEventoUsuario').modal('show');
         document.getElementById('nombre3').textContent = info.event.title;
         document.getElementById('fechaInicio3').textContent = info.event.startStr;
@@ -702,6 +702,21 @@ form.addEventListener("submit", (e) => {
       timer: 2000,
     });
   }
+});
+
+
+$('#cerrarRegistrarEvento').on('click', function (event) {
+
+  document.getElementById('formulario1').reset();
+  $('#agregar').modal('hide');
+  for (const key in validacion1) {
+    validacion1[key] = false;
+  }
+  $("#titulo").removeClass("is-valid is-invalid");
+  $("#fechaInicio").removeClass("is-valid is-invalid");
+  $("#fechaFinal").removeClass("is-valid is-invalid");
+  $("#descripcion").removeClass("is-valid is-invalid");
+
 });
 
 
