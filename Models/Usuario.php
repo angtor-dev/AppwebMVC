@@ -32,6 +32,8 @@ class Usuario extends Model
 
     private ?string $encrypted;
 
+    private ?string $oldToken;
+
     public Sede $sede;
     /** @var ?array<Rol> */
     public ?array $roles;
@@ -65,6 +67,7 @@ class Usuario extends Model
         if (empty($encryptedLogin)) {
             return false;
         }
+
         $this->encrypted = $encryptedLogin;
 
         $object = $this->rsaDescrypt();
@@ -88,11 +91,11 @@ class Usuario extends Model
                 return false;
             }
 
-            // Almacena usuario en sesion
+
             session_start();
             $_SESSION['usuario'] = Usuario::cargar($usuario['id']);
 
-            // Generar JWT
+            // Generacion de el JWT
             $tiempo = time();
             $payload = array(
                 'tiempo' => $tiempo,
@@ -251,6 +254,34 @@ class Usuario extends Model
         }
     }
 
+    public function actualizarClaveToken($newPassword){
+
+        $clave = password_hash($newPassword, PASSWORD_DEFAULT);
+        $query = "UPDATE usuario SET clave = :clave WHERE id = :id";
+
+        try {
+            $stmt = $this->prepare($query);
+            $stmt->bindValue('clave', $clave);
+            $stmt->bindValue('id', $this->id);
+
+            if ($stmt->execute()) {
+                return true;
+            } else {
+
+                return false;
+            }
+              
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
+            $error_data = array(
+                "error_message" => $e->getMessage(),
+                "error_line" => "Linea del error: " . $e->getLine()
+            );
+            http_response_code(422);
+            echo json_encode($error_data);
+            die();
+        }
+        }
+
     private function encriptarClave(): void
     {
         $this->clave = password_hash($this->clave, PASSWORD_DEFAULT);
@@ -341,6 +372,8 @@ class Usuario extends Model
         }
         return $stmt->fetch();
     }
+
+
 
     public static function cargarPorCorreo(string $correo): null|Usuario
     {
@@ -433,25 +466,26 @@ class Usuario extends Model
             $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($object->respuesta == $resultado['respuestaSecurity']) {
-                $caracteres = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-                $clave = '';
-                for ($i = 0; $i < 10; $i++) {
-                    $clave .= $caracteres[rand(0, strlen($caracteres) - 1)];
-                }
 
-                $claveEncriptada = password_hash($clave, PASSWORD_DEFAULT);
-                $sql = "UPDATE usuario SET clave = :clave WHERE cedula = :cedula";
-                $stmt = $this->prepare($sql);
-                $stmt->bindValue(':clave', $claveEncriptada);
+                $token = bin2hex(random_bytes(16));
+                $expiry = time() + 1800;
+
+
+                $sql = "UPDATE usuario SET token = :token, tokenExpiry = :expiry WHERE cedula = :cedula";
+                $stmt = $this->db->pdo()->prepare($sql);
+                $stmt->bindValue(':token', $token);
+                $stmt->bindValue(':expiry', date('Y-m-d H:i:s', $expiry));
                 $stmt->bindValue(':cedula', $object->cedulaRecovery);
                 $stmt->execute();
+
+           
+                $resetUrl = "http://localhost/AppwebMVC/PasswordRecovery?token=$token";
 
                 /** @var Usuario */
                 $Usuario = Usuario::cargarPorCedula($object->cedulaRecovery);
 
-                Bitacora::registrar("Usuario " . $Usuario->getNombreCompleto() . "recupero su contraseña exitosamente.");
-
-                return array('clave' => $clave, 'correo' => $Usuario->getCorreo());
+                Bitacora::registrar("Usuario " . $Usuario->getNombreCompleto() . "genero token para recuperar contraseña.");
+                return array('url' => $resetUrl, 'correo' => $Usuario->getCorreo());
             } else {
                 return '';
             }
@@ -466,6 +500,49 @@ class Usuario extends Model
             die();
         }
     }
+
+    public function tokenValidation(string $newToken = null){
+
+        try{
+ 
+            if (!empty($newToken)) {
+                $this->oldToken = $newToken;
+
+                $token = $this->oldToken ;
+            }else{
+                $token = $this->oldToken;
+            }
+            
+
+            $sql = "SELECT id, tokenExpiry FROM usuario WHERE token = :token";
+            $stmt = $this->db->pdo()->prepare($sql);
+            $stmt->bindValue(':token', $token);
+            $stmt->execute();
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($user && strtotime($user['tokenExpiry']) > time()) {
+
+                $this->id = $user['id'];
+
+                return true;
+            } else {
+                return false;
+            }
+        
+
+        }catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
+            $error_data = array(
+                "error_message" => $e->getMessage(),
+                "error_line" => "Linea del error: " . $e->getLine()
+            );
+            http_response_code(422);
+            echo json_encode($error_data);
+            die();
+        }
+        }
+
+
+    
 
     public function registerUser(): bool
     {
@@ -597,7 +674,7 @@ class Usuario extends Model
         }
 
         $object = $this->desencriptarValores($encryptedRegister);
-        
+
         try {
             $nombre = trim($object["nombre"]);
             $apellido = trim($object["apellido"]);
@@ -1057,7 +1134,7 @@ class Usuario extends Model
         $text = base64_decode($this->encrypted);
         $privateKey = openssl_pkey_get_private(privateKey);
         if (!$privateKey) {
-            throw new Exception("Failed to get private key");
+            throw new Exception("Ocurrio un error al obtener la llave privada");
         }
 
         openssl_private_decrypt($text, $res, $privateKey);
@@ -1065,7 +1142,8 @@ class Usuario extends Model
         return json_decode($res);
     }
 
-    private function desencriptarValores($datosEncriptados) {
+    private function desencriptarValores($datosEncriptados)
+    {
         $resultadosDesencriptados = [];
         foreach ($datosEncriptados as $name => $encryptedValue) {
             $this->encrypted = $encryptedValue;

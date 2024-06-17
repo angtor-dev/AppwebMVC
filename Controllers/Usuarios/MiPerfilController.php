@@ -88,24 +88,24 @@ if (isset($_POST['savePregunta'])) {
 
 function validateJWT()
 {
-    // Obtener el encabezado de autorización
     $headers = apache_request_headers();
 
     // Imprimir todos los encabezados para depuración
     error_log(print_r($headers, true));
 
     global $usuario;
+
     if (!isset($headers['authorization'])) {
         http_response_code(401);
         echo json_encode(array('msj' => $headers));
         die();
     }
 
-    // Extraer el token del encabezado
+    
     $authHeader = $headers['authorization'];
     $jwt = str_replace('Bearer ', '', $authHeader);
 
-    // Validar el token
+   
     if (!$jwt) {
         http_response_code(401);
         echo json_encode(array('msj' => 'Formato de token invalido'));

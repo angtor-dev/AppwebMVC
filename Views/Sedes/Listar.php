@@ -1,7 +1,8 @@
 <?php
 global $viewStyles;
-global $viewScripts;
-$viewScripts = ["listar-sede.js"];
+
+$scriptName = "listar-sede.js";
+agregarScript($scriptName);
 
 /** @var Usuario */
 $usuario = $_SESSION['usuario'];

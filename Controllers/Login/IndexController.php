@@ -44,7 +44,7 @@ if (!empty($_POST)) {
 
         if ($datos !== '') {
             http_response_code(200);
-            $Correo->sendPassword($datos['correo'], $datos['clave']);
+            $Correo->sendUrl($datos['correo'], $datos['url']);
         } else {
             http_response_code(402);
             echo json_encode(array('msj' => 'La respuesta enviada es incorrecta'));

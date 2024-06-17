@@ -1,6 +1,7 @@
 #loginMain{
     background-color: #96979c;
     height: 100vh;
+
 }
 
 #cartaLogin{
@@ -8,6 +9,7 @@
     border-radius: 30px;
     width: 100%;
     padding: 15px;
+    
 }
 
 .inputLogin{

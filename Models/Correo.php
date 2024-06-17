@@ -16,18 +16,19 @@ require 'public/lib/phpmailer/src/SMTP.php';
 class Correo extends Model
 {
 
-   public function sendPassword($destinatario, $password){
+  public function sendUrl($destinatario, $url)
+  {
     $mail = new PHPMailer(true);
     try {
       //Server settings
       $mail->SMTPDebug = 0;                      //Enable verbose debug output
       $mail->isSMTP();                                            //Send using SMTP
-      $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
-      $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-      $mail->Username   = 'llamasdefuego.iglesia@gmail.com';                     //SMTP username
-      $mail->Password   = 'xqghnzcxmncdinai';                               //SMTP password
+      $mail->Host = 'smtp.gmail.com';                     //Set the SMTP server to send through
+      $mail->SMTPAuth = true;                                   //Enable SMTP authentication
+      $mail->Username = 'llamasdefuego.iglesia@gmail.com';                     //SMTP username
+      $mail->Password = 'xqghnzcxmncdinai';                               //SMTP password
       $mail->SMTPSecure = 'ssl';            //Enable implicit TLS encryption
-      $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+      $mail->Port = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
       //Recipients
       $mail->setFrom($destinatario, 'Llamas de Fuego');
@@ -38,15 +39,17 @@ class Correo extends Model
 
       //Content
       $mail->isHTML(true);                                  //Set email format to HTML
-      $mail->Subject =  "Reseteo de contraseña";
-      $mail->Body  = "Su nueva contraseña para ingresar al sistema es ".$password ;
-     
+      $mail->Subject = "Cambio de contraseña";
+      $mail->Body = 'Has solicitado cambiar tu contraseña. Por favor, haz clic en el siguiente enlace para establecer una nueva contraseña. Este enlace es válido por 30 minutos: ' . $url;
+      $mail->AltBody = 'Has solicitado cambiar tu contraseña. Por favor, copia y pega el siguiente enlace en tu navegador para establecer una nueva contraseña. Este enlace es válido por 30 minutos: ' . $url;
+      ;
+
 
       $mail->send();
-      echo json_encode(array('msj'=>'Contraseña reseteada', 'text'=>'Su nueva contraseña ha sido enviada al correo asociado a su cuenta'));
+      echo json_encode(array('msj' => 'Envio de url para cambiar contraseña', 'text' => 'Se envio una url de acceso a cambio de contraseña a el correo asociado a este usuario'));
 
     } catch (Exception $e) {
-      echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+      echo "El mensaje no pudo ser enviado. Mailer Error: {$mail->ErrorInfo}";
     }
   }
 

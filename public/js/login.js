@@ -238,7 +238,10 @@ $('#enviarRecovery').on('click', async (e) => {
     e.preventDefault();
     const respuestaRecovery = document.getElementById('respuestaRecovery').value;
 
+    Swal.close();
     if (cedula !== null && respuesta !== null) {
+
+
         if (respuestaRecovery == respuesta) {
 
             const json = {
@@ -247,21 +250,23 @@ $('#enviarRecovery').on('click', async (e) => {
 
             }
 
-            let jsonString = JSON.stringify(json);
-            let encrypted = encrypt.encrypt(jsonString);
-            $.ajax({
-                type: "POST",
-                url: '',
-                data: {
-                    sendRecoveryRespuesta: encrypted,
-                },
-                success: function (response) {
-                    const datos = JSON.parse(response);
+            Swal.showLoading()
+            setTimeout(() => {
 
-                    $('#modalPreguntaRecovery').modal('hide');
+                let jsonString = JSON.stringify(json);
+                let encrypted = encrypt.encrypt(jsonString);
+                $.ajax({
+                    type: "POST",
+                    url: '',
+                    data: {
+                        sendRecoveryRespuesta: encrypted,
+                    },
+                    success: function (response) {
+                        const datos = JSON.parse(response);
 
-                    Swal.showLoading()
-                    setTimeout(() => {
+                        $('#modalPreguntaRecovery').modal('hide');
+
+
                         Swal.close();
 
                         Swal.fire({
@@ -274,34 +279,35 @@ $('#enviarRecovery').on('click', async (e) => {
                         document.getElementById('preguntaRecovery').textContent = '';
                         email = null;
                         respuesta = null;
-                    }, 1500);
 
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    if (jqXHR.responseText) {
-                        let jsonResponse = JSON.parse(jqXHR.responseText);
 
-                        if (jsonResponse.msj) {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'DENEGADO',
-                                text: jsonResponse.msj,
-                                showConfirmButton: true,
-                            })
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        if (jqXHR.responseText) {
+                            let jsonResponse = JSON.parse(jqXHR.responseText);
+
+                            if (jsonResponse.msj) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'DENEGADO',
+                                    text: jsonResponse.msj,
+                                    showConfirmButton: true,
+                                })
+                            } else {
+                                const respuesta = JSON.stringify(jsonResponse, null, 2)
+                                Swal.fire({
+                                    background: 'red',
+                                    color: '#fff',
+                                    title: respuesta,
+                                    showConfirmButton: true,
+                                })
+                            }
                         } else {
-                            const respuesta = JSON.stringify(jsonResponse, null, 2)
-                            Swal.fire({
-                                background: 'red',
-                                color: '#fff',
-                                title: respuesta,
-                                showConfirmButton: true,
-                            })
+                            alert('Error desconocido: ' + textStatus);
                         }
-                    } else {
-                        alert('Error desconocido: ' + textStatus);
                     }
-                }
-            })
+                })
+            }, 4000);
         } else {
             Swal.fire({
                 icon: 'error',
@@ -319,6 +325,7 @@ $('#enviarRecovery').on('click', async (e) => {
         })
     }
 });
+
 
 
 
