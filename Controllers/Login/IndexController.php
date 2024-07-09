@@ -91,6 +91,7 @@ if (!empty($_POST)) {
 }
 
 if (isset($_GET['getKey'])) {
+    http_response_code(200);
     echo json_encode(publicKey);
     die();
 }
