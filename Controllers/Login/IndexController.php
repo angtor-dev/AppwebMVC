@@ -38,13 +38,27 @@ if (!empty($_POST)) {
     }
 
 
+    if (isset($_POST['sendRecoveryRespuestaWeb'])) {
+
+        $datos = $usuario->resetPasswordWeb($_POST['sendRecoveryRespuestaWeb']);
+
+        if ($datos !== '') {
+            http_response_code(200);
+            $Correo->send($datos['correo'], $datos['url'], 1);
+        } else {
+            http_response_code(402);
+            echo json_encode(array('msj' => 'La respuesta enviada es incorrecta'));
+        }
+        die();
+    }
+
     if (isset($_POST['sendRecoveryRespuesta'])) {
 
         $datos = $usuario->resetPassword($_POST['sendRecoveryRespuesta']);
 
         if ($datos !== '') {
             http_response_code(200);
-            $Correo->sendUrl($datos['correo'], $datos['url']);
+            $Correo->send($datos['correo'], $datos['clave'], 2);
         } else {
             http_response_code(402);
             echo json_encode(array('msj' => 'La respuesta enviada es incorrecta'));

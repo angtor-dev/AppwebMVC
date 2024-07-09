@@ -447,7 +447,7 @@ class Usuario extends Model
         }
     }
 
-    public function resetPassword($encryptedReset)
+    public function resetPasswordWeb($encryptedReset)
     {
 
         if (empty($encryptedReset)) {
@@ -486,6 +486,61 @@ class Usuario extends Model
 
                 Bitacora::registrar("Usuario " . $Usuario->getNombreCompleto() . "genero token para recuperar contraseña.");
                 return array('url' => $resetUrl, 'correo' => $Usuario->getCorreo());
+            } else {
+                return '';
+            }
+
+        } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
+            $error_data = array(
+                "error_message" => $e->getMessage(),
+                "error_line" => "Linea del error: " . $e->getLine()
+            );
+            http_response_code(422);
+            echo json_encode($error_data);
+            die();
+        }
+    }
+
+    public function resetPassword($encryptedReset)
+    {
+
+        if (empty($encryptedReset)) {
+            return '';
+        }
+        $this->encrypted = $encryptedReset;
+
+        $object = $this->rsaDescrypt();
+
+        try {
+
+            $sql = "SELECT `respuestaSecurity` FROM `usuario` WHERE `cedula` = :cedula";
+            $stmt = $this->db->pdo()->prepare($sql);
+            $stmt->bindValue(":cedula", $object->cedulaRecovery);
+            $stmt->execute();
+            $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($object->respuesta == $resultado['respuestaSecurity']) {
+
+                $caracteres = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                $clave = '';
+                for ($i = 0; $i < 10; $i++) {
+                    $clave .= $caracteres[rand(0, strlen($caracteres) - 1)];
+                }
+
+                $claveEncriptada = password_hash($clave, PASSWORD_DEFAULT);
+                $sql = "UPDATE usuario SET clave = :clave WHERE cedula = :cedula";
+                $stmt = $this->prepare($sql);
+                $stmt->bindValue(':clave', $claveEncriptada);
+                $stmt->bindValue(':cedula', $object->cedulaRecovery);
+                $stmt->execute();
+
+
+                /** @var Usuario */
+                $Usuario = Usuario::cargarPorCedula($object->cedulaRecovery);
+
+                Bitacora::registrar("Usuario " . $Usuario->getNombreCompleto() . "recupero su contraseña exitosamente.");
+
+                return array('clave' => $clave, 'correo' => $Usuario->getCorreo());
             } else {
                 return '';
             }

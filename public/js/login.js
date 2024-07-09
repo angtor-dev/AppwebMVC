@@ -259,7 +259,7 @@ $('#enviarRecovery').on('click', async (e) => {
                     type: "POST",
                     url: '',
                     data: {
-                        sendRecoveryRespuesta: encrypted,
+                        sendRecoveryRespuestaWeb: encrypted,
                     },
                     success: function (response) {
                         const datos = JSON.parse(response);
