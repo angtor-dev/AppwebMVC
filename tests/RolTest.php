@@ -57,6 +57,31 @@ final class RolTest extends TestCase
         $this->assertSame('Rol actualizado', $nombreActualizado);
     }
 
+    public function test_GestionarPermiso(): void
+    {
+        $roles = Rol::listar();
+        $rol = $roles[count($roles) -1];
+
+        $_POST['nombre'] = 'Rol actualizado';
+        $_POST['descripcion'] = 'Descripcion de rol actualizada';
+
+        $_POST['idRol'] = $rol->id;
+        $_POST['idModulo'] = 6;
+        $_POST['consultar'] = true;
+        $_POST['registrar'] = true;
+        $_POST['actualizar'] = true;
+        $_POST['eliminar'] = false;
+        
+        $permiso = new Permiso(); 
+        $permiso->mapFromPost();
+
+        $resultado = $permiso->registrar();
+    
+        $this->assertTrue($resultado);
+       
+        
+    }
+
     public function test_eliminar(): void
     {
         $roles = Rol::listar();
@@ -68,7 +93,15 @@ final class RolTest extends TestCase
         $this->assertTrue($resultado);
         $this->assertNull($rol);
     }
+
+    public function test_listar_Bitacora(): void
+    {
+        $bitacoras = Bitacora::listar();
+
+        $this->assertIsArray($bitacoras);
+        $this->assertInstanceOf(Bitacora::class, $bitacoras[0]);
+    }
 }
 
-// php ./tools/phpunit.phar tests/RolTest.php
+// php ./tests/phpunit.phar --color tests/RolTest.php  
 ?>

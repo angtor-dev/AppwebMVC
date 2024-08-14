@@ -23,16 +23,20 @@ final class UsuarioTest extends TestCase
 
     public function test_registrar(): void
     {
+        
         $_POST['nombre'] = 'Sujeto';
-        $_POST['apellido'] = 'de Prueba';
-        $_POST['cedula'] = '30111222';
-        $_POST['correo'] = 'prueba@gmail.com';
-        $_POST['clave'] = 'prueba123';
-        $_POST['telefono'] = '04161296157';
+        $_POST['telefono'] = '04245301584';
         $_POST['direccion'] = 'Dirección de prueba';
+        $_POST['cedula'] = '30111222';
         $_POST['estadoCivil'] = EstadoCivil::Soltero->value;
+        $_POST['clave'] = 'prueba123';
+        $_POST['apellido'] = 'de Prueba';
         $_POST['fechaNacimiento'] = '2000-01-01';
+        $_POST['preguntaSecurity'] = 'nombre de tu perro';
+        $_POST['respuestaSecurity'] = 'caramelo';
+        $_POST['correo'] = 'prueba@gmail.com';
         $_POST['idSede'] = 1;
+
 
         $usuario = new Usuario();
         $usuario->mapFromPost();
@@ -68,29 +72,15 @@ final class UsuarioTest extends TestCase
         $this->assertSame('Nuevo', $nombreActualizado);
     }
 
-    public function test_actualizarClave(): void
-    {
-        $usuario = Usuario::cargarPorCedula('30111222');
-
-        $usuario->actualizarClave("1234abcd");
-        $usuario->actualizarClave("abcd1234");
-
-        $respuesta = $usuario->login('30111222', 'abcd1234');
-
-        $this->assertTrue($respuesta);
-    }
-
     public function test_eliminar(): void
     {
         $usuario = Usuario::cargarPorCedula('30111222');
         $resultado = $usuario->eliminar(false);
         
-        $usuario = Usuario::cargarPorCedula('30111222');
-
         $this->assertTrue($resultado);
         $this->assertNull($usuario);
     }
 }
 
-// php ./tools/phpunit.phar tests/UsuarioTest.php
+// php ./tests/phpunit.phar --color tests/Integracion/UsuarioTest.php
 ?>

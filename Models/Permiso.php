@@ -31,7 +31,20 @@ class Permiso extends Model
         }
     }
 
-    public function registrar() : void
+    public function mapFromPost() : bool
+    {
+        if (!empty($_POST)) {
+            foreach ($_POST as $key => $value) {
+                if (property_exists($this, $key)) {
+                    $this->$key = trim($value);
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public function registrar() 
     {
         $query = "INSERT INTO permiso(idRol, idModulo, consultar, registrar, actualizar, eliminar)
             VALUES(:idRol, :idModulo, :consultar, :registrar, :actualizar, :eliminar)";
@@ -46,6 +59,8 @@ class Permiso extends Model
             $stmt->bindValue("eliminar", $this->eliminar, PDO::PARAM_BOOL);
 
             $stmt->execute();
+
+            return true;
         } catch (\Throwable $th) {
             $_SESSION['errores'][] = "Ha ocurrido un error al registrar los permisos de rol.";
             throw $th;

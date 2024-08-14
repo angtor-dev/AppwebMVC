@@ -41,5 +41,5 @@ final class BitacoraTest extends TestCase
     }
 }
 
-// php ./tools/phpunit.phar tests/BitacoraTest.php
+// php ./tests/phpunit.phar --color tests/BitacoraTest.php
 ?>
