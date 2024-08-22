@@ -18,6 +18,8 @@ final class EliminarTest extends TestCase
         $usuario = Usuario::cargarPorCedula('30111222');
         $resultado = $usuario->eliminar(false);
 
+        $usuario = Usuario::cargarPorCedula('30111222');
+
         $this->assertTrue($resultado);
         $this->assertNull($usuario);
     }

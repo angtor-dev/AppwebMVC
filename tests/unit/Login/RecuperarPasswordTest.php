@@ -16,16 +16,16 @@ final class RecuperarPasswordTest extends TestCase
 
     /** @test **/
     public function PasswordRecovery(): void
-    {
+{
         //Init
  
         $cedula = json_encode([
-            'cedula' => 30111222  
+            'cedula' => 13188888 
         ]);
 
         $respuestaRecovery = json_encode([
-            'cedulaRecovery' => 30111222,
-            'respuesta' => 'caramelo'
+            'cedulaRecovery' => 13196778,
+            'respuesta' => 'Pelusa'
         ]);
 
         function encrypt($data){

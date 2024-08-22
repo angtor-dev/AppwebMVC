@@ -76,11 +76,13 @@ final class UsuarioTest extends TestCase
     {
         $usuario = Usuario::cargarPorCedula('30111222');
         $resultado = $usuario->eliminar(false);
+
+        $usuario = Usuario::cargarPorCedula('30111222');
         
         $this->assertTrue($resultado);
         $this->assertNull($usuario);
     }
 }
 
-// php ./tests/phpunit.phar --color tests/Integracion/UsuarioTest.php
+// php ./tests/phpunit.phar --color tests/integration/UsuarioTest.php
 ?>

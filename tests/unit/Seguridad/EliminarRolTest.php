@@ -7,7 +7,10 @@ require_once "user_config.default.php";
 
 final class EliminarRolTest extends TestCase
 {
-    
+    public function setUp(): void
+    {
+        $_SESSION['usuario'] = Usuario::cargar(1);
+    }
     public function test_eliminar(): void
     {
         $roles = Rol::listar();

@@ -5,7 +5,7 @@ require_once "Models/Usuario.php";
 require_once "config.php";
 require_once "user_config.default.php";
 
-final class RolTest extends TestCase
+final class SeguridadTest extends TestCase
 {
     public function setUp(): void
     {
@@ -103,5 +103,6 @@ final class RolTest extends TestCase
     }
 }
 
-// php ./tests/phpunit.phar --color tests/RolTest.php  
-?>
+// php ./tests/phpunit.phar --color tests/integration/SeguridadTest.php  
+?>./vendor/bin/phpunit
+

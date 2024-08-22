@@ -29,7 +29,6 @@ final class IniciarSesionTest extends TestCase
         openssl_public_encrypt($data, $encrypted, $publicKeyPem);
         $encryptedData = base64_encode($encrypted);
         $respuesta = $this->objeto->login($encryptedData);
-
         //Assert
         $this->assertTrue($respuesta);
     }

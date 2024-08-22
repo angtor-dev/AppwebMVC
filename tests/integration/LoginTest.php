@@ -1,5 +1,7 @@
 <?php
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\Test;
+
 
 require_once "Models/Usuario.php";
 require_once "Models/Bitacora.php";
@@ -18,13 +20,13 @@ final class LoginTest extends TestCase
         $_SESSION['usuario'] = Usuario::cargar(1);
     }
 
-   
+    #[Test]
     public function login(): void
     {
         //Init
         $cedula = 1234567;
         $clave = '1234567b';
-        
+
         $data = json_encode([
             'cedula' => $cedula,
             'clave' => $clave
@@ -40,41 +42,8 @@ final class LoginTest extends TestCase
     }
 
 
-    public function PasswordRecovery(): void
-    {
-        //Init
- 
-        $cedula = json_encode([
-            'cedula' => 30111222  
-        ]);
 
-        $respuestaRecovery = json_encode([
-            'cedulaRecovery' => 30111222,
-            'respuesta' => 'caramelo'
-        ]);
-
-        function encrypt($data){
-
-        $publicKeyPem = openssl_pkey_get_public(publicKey);
-        openssl_public_encrypt($data, $encrypted, $publicKeyPem);
-        $encryptedData = base64_encode($encrypted);
-        return $encryptedData;
-
-        }
-
-        $cedulaEncrypt = encrypt($cedula);
-        $respuestaRecoveryEncrypt = encrypt($respuestaRecovery);
-
-
-        $respuesta1 = $this->objeto->recovery($cedulaEncrypt);
-        $respuesta2 = $this->objeto->resetPasswordWeb($respuestaRecoveryEncrypt);
-
-  
-        $this->assertIsArray($respuesta1);
-        $this->assertIsArray($respuesta2);
-    }
-
-
+    #[Test]
     public function Registrar(): void
     {
         //Init
@@ -91,14 +60,14 @@ final class LoginTest extends TestCase
             'respuestaSecurity' => 'caramelo',
             'correo' => 'prueba@gmail.com',
             'idSede' => 1
-    ];
-        
-      //se encriptan los valores
+        ];
+
+        //se encriptan los valores
         foreach ($data as $key => $value) {
             $publicKeyPem = openssl_pkey_get_public(publicKey);
             openssl_public_encrypt(json_encode($value), $encrypted, $publicKeyPem);
             $encryptValue = base64_encode($encrypted);
-            $aja[$key] = $encryptValue;    
+            $aja[$key] = $encryptValue;
         }
 
         $respuesta_1 = $this->objeto->validarRegister($aja);
@@ -109,16 +78,54 @@ final class LoginTest extends TestCase
         $this->assertTrue($respuesta_2);
     }
 
+    #[Test]
+    public function PasswordRecovery(): void
+    {
+        //Init
 
-    // public function test_eliminar(): void
-    // {
-    //     $usuario = Usuario::cargarPorCedula('30111222');
-    //     $resultado = $usuario->eliminar(false);
-        
-    //     $this->assertTrue($resultado);
-    //     $this->assertNull($usuario);
-    // }
+        $cedula = json_encode([
+            'cedula' => 30111222
+        ]);
+
+        $respuestaRecovery = json_encode([
+            'cedulaRecovery' => 30111222,
+            'respuesta' => 'caramelo'
+        ]);
+
+        function encrypt($data)
+        {
+
+            $publicKeyPem = openssl_pkey_get_public(publicKey);
+            openssl_public_encrypt($data, $encrypted, $publicKeyPem);
+            $encryptedData = base64_encode($encrypted);
+            return $encryptedData;
+
+        }
+
+        $cedulaEncrypt = encrypt($cedula);
+        $respuestaRecoveryEncrypt = encrypt($respuestaRecovery);
+
+
+        $respuesta1 = $this->objeto->recovery($cedulaEncrypt);
+        $respuesta2 = $this->objeto->resetPasswordWeb($respuestaRecoveryEncrypt);
+
+
+        $this->assertIsArray($respuesta1);
+        $this->assertIsArray($respuesta2);
+    }
+
+    #[Test]
+    public function test_eliminar(): void
+    {
+        $usuario = Usuario::cargarPorCedula('30111222');
+        $resultado = $usuario->eliminar(false);
+
+           $usuario = Usuario::cargarPorCedula('30111222');
+
+        $this->assertTrue($resultado);
+        $this->assertNull($usuario);
+    }
 
 }
 
-// php ./tests/phpunit.phar --color tests/Integracion/LoginTest.php
+// php ./tests/phpunit.phar --color tests/integration/LoginTest.php
