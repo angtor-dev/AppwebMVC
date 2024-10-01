@@ -7,5 +7,5 @@ define("DEVELOPER_MODE", true);
 define("REG_NUMERICO", "/^[0-9]+$/");
 define("REG_ALFABETICO", "/^\s*[a-zA-ZáÁéÉíÍóÓúÚüÜñÑ., ]+\s*$/");
 define("REG_ALFANUMERICO", "/^\s*[0-9a-zA-ZáÁéÉíÍóÓúÚüÜñÑ., ]+\s*$/");
-define("REG_CLAVE", "/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/");
+define("REG_CLAVE", "/^(?=.*[a-zA-Z])(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~])[a-zA-Z0-9!@#$%^&*()_+{}\[\]:;<>,.?~]{6,}$/");
 ?>

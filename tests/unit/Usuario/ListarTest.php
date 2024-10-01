@@ -16,6 +16,7 @@ final class ListarTest extends TestCase
     public function test_listar(): void 
     {
         $usuarios = Usuario::listar();
+        print(json_encode($_SESSION['usuario']));
         $this->assertIsArray($usuarios);
     }
 }

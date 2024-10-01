@@ -1,4 +1,5 @@
 <?php
+
 necesitaAutenticacion();
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET')
@@ -21,7 +22,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST')
     } catch (\Throwable $th) {
         redirigir("/AppwebMVC/Seguridad/Roles/");
     }
-
+  
     $_SESSION['exitos'][] = "Rol registrado con exito.";
     Bitacora::registrar("Registro el rol ".$rol->getNombre());
     header("Location: /AppwebMVC/Seguridad/Roles/");

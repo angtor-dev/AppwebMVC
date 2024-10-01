@@ -20,8 +20,6 @@ try {
 } catch (\Throwable $th) {
     redirigir("/AppwebMVC/Usuarios/");
 }
-
-$_SESSION['exitos'][] = "Se ha eliminado al usuario correctamente.";
 Bitacora::registrar("Elimino al usuario ".$usuario->getNombreCompleto());
 redirigir("/AppwebMVC/Usuarios/");
 ?>

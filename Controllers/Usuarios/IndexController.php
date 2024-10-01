@@ -1,4 +1,5 @@
 <?php
+$_SESSION['usuario'] = Usuario::cargar(1);
 necesitaAutenticacion();
 requierePermiso("usuarios", "consultar");
 

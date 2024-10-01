@@ -239,7 +239,7 @@ $('#enviarRecovery').on('click', async (e) => {
     const respuestaRecovery = document.getElementById('respuestaRecovery').value;
 
     Swal.close();
-    if (cedula !== null && respuesta !== null) {
+    if (cedula !== null && respuesta !== null && respuestaRecovery !== null) {
 
 
         if (respuestaRecovery == respuesta) {

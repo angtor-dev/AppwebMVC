@@ -12,8 +12,6 @@ cacheDirectory=".phpunit.cache">
       <file>tests/integration/SeguridadTest.php</file>
     </testsuite>
   </testsuites>
-  <source restrictNotices="true" restrictWarnings="true" ignoreIndirectDeprecations="true" restrictDeprecations="true">
-  </source>
   <php>
     <ini name="error_reporting" value="E_ALL &amp; ~E_DEPRECATED &amp; ~E_USER_DEPRECATED"/>
   </php>

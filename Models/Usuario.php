@@ -214,10 +214,10 @@ class Usuario extends Model
             $stmt->bindParam('idUsuario', $this->id);
             $stmt->bindParam('idRol', $idRol);
 
-            foreach ($this->roles as $rol) {
-                $idRol = $rol->id;
+            // foreach ($this->roles as $rol) {
+                $idRol = 6;
                 $stmt->execute();
-            }
+            // }
 
             // Guarda los cambios
             $this->db->pdo()->commit();
@@ -309,8 +309,8 @@ class Usuario extends Model
         }
 
         if (empty($this->id) && !preg_match(REG_CLAVE, $this->clave)) {
-            $_SESSION['errores'][] = "La clave debe poseer al menos una letra,"
-                . " un número y 6 caracteres de longitud.";
+            $_SESSION['errores'][] = "La clave debe poseer al menos una letra y un caracter especial,"
+                . " debe ser minimo de 6 caracteres de logitud";
             return false;
         }
 

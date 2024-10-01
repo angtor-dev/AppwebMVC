@@ -20,11 +20,13 @@ class Rol extends Model
         }
     }
 
-    public function registrar() : bool
+    public function registrar(): bool
     {
+        
+
         $sql = "INSERT INTO rol(nombre, descripcion, nivel)
             VALUES(:nombre, :descripcion, :nivel)";
-            
+
         try {
             $this->db->pdo()->beginTransaction();
             $modulos = Modulo::listar();
@@ -65,8 +67,10 @@ class Rol extends Model
         }
     }
 
-    public function actualizar() : bool
+    public function actualizar(): bool
     {
+
+
         $sql = "UPDATE rol SET nombre = :nombre, descripcion = :descripcion, nivel = :nivel WHERE id = :id";
 
         try {
@@ -85,7 +89,7 @@ class Rol extends Model
         }
     }
 
-    public function esValido() : bool
+    public function esValido(): bool
     {
         if (empty($this->nombre)) {
             $_SESSION['errores'][] = "Se debe proporcionar un nombre para el rol a registrar.";
@@ -96,13 +100,47 @@ class Rol extends Model
             return false;
         }
 
+          /** @var Rol */
+          $rolActual = Rol::cargar($this->id);
+
+          if(!empty($rolActual)){
+          if ($rolActual->getNombre() !== $this->nombre ) {
+  
+              /** @var Usuario[] */
+              $usuarios = Usuario::listar(1);
+              foreach ($usuarios as $usuario) {
+                  if ($usuario->tieneRol($rolActual->getNombre())) {
+                      $_SESSION['errores'][] = "Editar el nombre del rol afectaria la integridad de los datos ya que este se encuentra en uso";
+                      return false;
+                  }
+              }
+  
+          }
+        }
+
+           /** @var Rol[] */
+           $roles = Rol::listar(1);
+           foreach ($roles as $rol) {
+   
+               if ($this->nombre == $rol->getNombre()) {
+   
+                   if($this->id !== $rolActual->id){
+                   $_SESSION['errores'][] = "Ya existe un Rol con este nombre";
+                   return false;
+                }
+               }
+        
+        }
+
+
+
         return true;
     }
 
-    public function tienePermiso(string $modulo, string $permiso) : bool
+    public function tienePermiso(string $modulo, string $permiso): bool
     {
-        $permiso = "get".$permiso;
-        
+        $permiso = "get" . $permiso;
+
         foreach ($this->permisos as $p) {
             if ($p->modulo->getNombre() == $modulo && $p->$permiso()) {
                 return true;
@@ -112,7 +150,7 @@ class Rol extends Model
     }
 
     /** Mapea los valores de un formulario post a las propiedades del objeto */
-    public function mapFromPost() : bool
+    public function mapFromPost(): bool
     {
         if (!empty($_POST)) {
             foreach ($_POST as $key => $value) {
@@ -126,7 +164,7 @@ class Rol extends Model
     }
 
     /** Busca un y retorna un rol por su nombre */
-    public static function tryFromNombre(string $nombre) : ?Rol
+    public static function tryFromNombre(string $nombre): ?Rol
     {
         $db = Database::getInstance();
         $query = "SELECT * FROM rol WHERE nombre = :nombre LIMIT 1";
@@ -135,7 +173,7 @@ class Rol extends Model
         $stmt->bindValue("nombre", $nombre);
 
         $stmt->execute();
-        
+
         $stmt->setFetchMode(PDO::FETCH_CLASS, "Rol");
 
         if ($stmt->rowCount() == 0) {
@@ -145,13 +183,16 @@ class Rol extends Model
     }
 
     // Getters
-    public function getNombre() : string {
+    public function getNombre(): string
+    {
         return $this->nombre ?? "";
     }
-    public function getDescripcion() : ?string {
+    public function getDescripcion(): ?string
+    {
         return $this->descripcion ?? null;
     }
-    public function getNivel() : int {
+    public function getNivel(): int
+    {
         return $this->nivel ?? 0;
     }
 }

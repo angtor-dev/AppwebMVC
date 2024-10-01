@@ -117,7 +117,7 @@
             <div class="col-sm-6">
                 <label for="input-clave">Contraseña</label>
                 <input class="form-control" type="password" name="clave" id="input-clave" required maxlength="10"
-                    pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$">
+                    pattern="(?=.*[a-zA-Z])(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~])[a-zA-Z0-9!@#$%^&*()_+{}\[\]:;<>,.?~]{6,}">
                 <div class="invalid-feedback">
                     Ingresa una contraseña válida
                 </div>
