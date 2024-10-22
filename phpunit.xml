@@ -10,9 +10,14 @@ cacheDirectory=".phpunit.cache">
       <file>tests/integration/LoginTest.php</file>
       <file>tests/integration/UsuarioTest.php</file>
       <file>tests/integration/SeguridadTest.php</file>
+      <file>tests/integration/SedesTest.php</file>
+      <file>tests/integration/TerritorioTest.php</file>
+      <file>tests/integration/CelulaConsolidacionTest.php</file>
     </testsuite>
   </testsuites>
   <php>
     <ini name="error_reporting" value="E_ALL &amp; ~E_DEPRECATED &amp; ~E_USER_DEPRECATED"/>
   </php>
 </phpunit>
+
+<!-- ./vendor/bin/phpunit -->

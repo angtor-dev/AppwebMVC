@@ -100,7 +100,9 @@ class Rol extends Model
             return false;
         }
 
-          /** @var Rol */
+        if (!empty($this->id)){ 
+            
+            /** @var Rol */
           $rolActual = Rol::cargar($this->id);
 
           if(!empty($rolActual)){
@@ -117,8 +119,8 @@ class Rol extends Model
   
           }
         }
-
-           /** @var Rol[] */
+        
+        /** @var Rol[] */
            $roles = Rol::listar(1);
            foreach ($roles as $rol) {
    
@@ -129,6 +131,8 @@ class Rol extends Model
                    return false;
                 }
                }
+
+        }       
         
         }
 

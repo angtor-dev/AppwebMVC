@@ -166,7 +166,8 @@ class Celulas extends Model
 
             http_response_code(200);
             echo json_encode(array('msj' => 'Celula registrada exitosamente', 'status' => 200));
-            die();
+            // die();
+            return true;
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             
             if ($this->db->pdo()->inTransaction()) {
@@ -179,7 +180,8 @@ class Celulas extends Model
 
             http_response_code(422);
             echo json_encode($error_data);
-            die();
+            // die();
+            return false;
         }
     }
 
@@ -354,7 +356,7 @@ class Celulas extends Model
     {
         try {
 
-            /** @var Celulas**/
+            /** @var Celulas **/
             $consulta = Celulas::cargar($id);
 
             if ($consulta->idTerritorio == $idTerritorio) {
@@ -452,7 +454,8 @@ class Celulas extends Model
 
             http_response_code(200);
             echo json_encode(array('msj' => 'Celula actualizada exitosamente', 'status' => 200));
-            die();
+            // die();
+            return true;
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -461,7 +464,8 @@ class Celulas extends Model
             //print_r($error_data);
             http_response_code(422);
             echo json_encode($error_data);
-            die();
+            // die();
+            return false;
         }
     }
 
@@ -485,7 +489,8 @@ class Celulas extends Model
 
             http_response_code(200);
             echo json_encode(array('msj' => 'Celula eliminada correctamente'));
-            die();
+            // die();
+            return true;
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -494,7 +499,8 @@ class Celulas extends Model
             //print_r($error_data);
             http_response_code(422);
             echo json_encode($error_data);
-            die();
+            // die();
+            return false;
         }
     }
 
@@ -620,7 +626,8 @@ class Celulas extends Model
 
             http_response_code(200);
             echo json_encode(array('msj' => 'Registro de reunion exitosamente', 'status' => 200));
-            die();
+            // die();
+            return true;
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -629,7 +636,8 @@ class Celulas extends Model
 
             http_response_code(422);
             echo json_encode($error_data);
-            die();
+            // die();
+            return false;
         }
     }
 
@@ -970,7 +978,8 @@ class Celulas extends Model
 
             http_response_code(200);
             echo json_encode(array('msj' => 'Reunion actualizada correctamente', 'status' => 200));
-            die();
+            // die();
+            return true;
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -979,7 +988,8 @@ class Celulas extends Model
 
             http_response_code(422);
             echo json_encode($error_data);
-            die();
+            // die();
+            return false;
         }
     }
 
@@ -990,6 +1000,7 @@ class Celulas extends Model
     {
         try {
 
+            if(!empty($id)){
             $sql = "DELETE FROM reunioncelula WHERE id = :id";
 
             $stmt = $this->db->pdo()->prepare($sql);
@@ -1002,7 +1013,14 @@ class Celulas extends Model
 
             http_response_code(200);
             echo json_encode(array('msj' => 'Reunion eliminada correctamente'));
-            die();
+            // die();
+            return true;
+            } else {
+                 
+                echo json_encode(array('msj' => 'Envio un dato invalido'));
+                return false;
+               
+            }
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -1011,7 +1029,8 @@ class Celulas extends Model
             //print_r($error_data);
             http_response_code(422);
             echo json_encode($error_data);
-            die();
+            // die();
+            return false;
         }
     }
 
@@ -1117,6 +1136,7 @@ class Celulas extends Model
     public function eliminar_asistenciaReunion($id)
     {
         try {
+            if(!empty($id)){
             $sql = "DELETE FROM asistencia WHERE id = :id";
 
             $stmt = $this->db->pdo()->prepare($sql);
@@ -1129,7 +1149,12 @@ class Celulas extends Model
 
             http_response_code(200);
             echo json_encode(array('msj' => 'Asistencia eliminada correctamente'));
-            die();
+            // die();
+            return true;
+        } else {
+                echo json_encode(array('msj' => 'Se envio un dato invalido'));
+                return false;
+            }
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -1137,7 +1162,8 @@ class Celulas extends Model
             );
             http_response_code(422);
             echo json_encode($error_data);
-            die();
+            // die();
+            return false;
         }
     }
 
@@ -1220,7 +1246,8 @@ class Celulas extends Model
 
             http_response_code(200);
             echo json_encode(array('msj' => 'Asistencias actualizada correctamente'));
-            die();
+            // die();
+            return true;
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -1228,7 +1255,8 @@ class Celulas extends Model
             );
             http_response_code(422);
             echo json_encode($error_data);
-            die();
+            // die();
+            return  false;
         }
     }
 

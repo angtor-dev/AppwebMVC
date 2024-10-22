@@ -1,4 +1,5 @@
 <?php
+
 necesitaAutenticacion();
 requierePermiso("roles", "consultar");
 

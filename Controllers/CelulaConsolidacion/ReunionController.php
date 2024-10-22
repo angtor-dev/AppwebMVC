@@ -1,6 +1,7 @@
 <?php
 require_once "Models/Celulas.php";
 
+
 necesitaAutenticacion();
 
 requierePermiso("celulaConsolidacion", "registrar");

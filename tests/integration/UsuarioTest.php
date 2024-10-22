@@ -29,7 +29,7 @@ final class UsuarioTest extends TestCase
         $_POST['direccion'] = 'Dirección de prueba';
         $_POST['cedula'] = '30111222';
         $_POST['estadoCivil'] = EstadoCivil::Soltero->value;
-        $_POST['clave'] = 'prueba123';
+        $_POST['clave'] = 'prueba123.';
         $_POST['apellido'] = 'de Prueba';
         $_POST['fechaNacimiento'] = '2000-01-01';
         $_POST['preguntaSecurity'] = 'nombre de tu perro';
@@ -47,6 +47,7 @@ final class UsuarioTest extends TestCase
 
         $this->assertTrue($esValido);
         $this->assertTrue($resultado);
+       
     }
 
     public function test_actualizar(): void
@@ -82,7 +83,8 @@ final class UsuarioTest extends TestCase
         $this->assertTrue($resultado);
         $this->assertNull($usuario);
     }
-}
+ }
+
 
 // php ./tests/phpunit.phar --color tests/integration/UsuarioTest.php
 ?>

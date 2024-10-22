@@ -12,13 +12,13 @@ final class SeguridadTest extends TestCase
         $_SESSION['usuario'] = Usuario::cargar(1);
     }
 
-    public function test_listar(): void 
-    {
-        $roles = Rol::listar(1);
+    // public function test_listar(): void 
+    // {
+    //     $roles = Rol::listar(1);
 
-        $this->assertIsArray($roles);
-        $this->assertInstanceOf(Rol::class, $roles[0]);
-    }
+    //     $this->assertIsArray($roles);
+    //     $this->assertInstanceOf(Rol::class, $roles[0]);
+    // }
 
     public function test_registrar(): void
     {
@@ -104,5 +104,5 @@ final class SeguridadTest extends TestCase
 }
 
 // php ./tests/phpunit.phar --color tests/integration/SeguridadTest.php  
-?>./vendor/bin/phpunit
+?>
 

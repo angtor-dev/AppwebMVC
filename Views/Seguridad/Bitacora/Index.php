@@ -2,14 +2,22 @@
 global $viewScripts;
 $viewScripts = ["bitacora.js"];
 $title = "Bitacora";
+/** @var Usuario */
+$usuarioSesion = $_SESSION['usuario'];
 ?>
 
 <div class="d-flex align-items-end justify-content-between mb-2">
     <h4 class="mb-0 fw-bold">Bitacora de usuarios</h4>
     <div class="d-flex gap-3">
+    <?php if ($usuarioSesion->tieneRol('Superusuario')): ?>
+            <button class="btn btn-accent text-nowrap" id="bd" data-bs-toggle="modal" data-bs-target="#modal_registrar">
+                Respaldo de Base de Datos
+            </button>
+        <?php endif ?>
     <div class="buscador">
             <input type="text" id="search" class="form-control" placeholder="Buscar...">
         </div>
+        
     </div>
 </div>
 

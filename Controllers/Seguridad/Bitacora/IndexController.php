@@ -22,5 +22,12 @@ if (isset($_GET['cargar_data'])) {
     die();
 }
 
+
+
+if (isset($_POST['getbd'])) {
+   $Bitacora->backupDatabase();
+    die();
+}
+
 renderView();
 ?>

@@ -23,7 +23,7 @@ $usuario = $_SESSION['usuario'];
         <div class="buscador">
             <input type="text" id="search" class="form-control" placeholder="Buscar Discipulo">
         </div>
-        <?php if ($usuarioSesion->tienePermiso("discipulos", "registrar")): ?>
+        <?php if ($usuario->tienePermiso("discipulos", "registrar")): ?>
             <button class="btn btn-accent text-nowrap" id="registrar" data-bs-toggle="modal" data-bs-target="#modal_registrar">
                                 <i class="fa-solid fa-plus"></i>
                 Nuevo Discipulo

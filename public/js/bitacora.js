@@ -38,6 +38,46 @@ $(document).ready(function () {
             dataTable.search($(this).val()).draw();
         });
     
-
-
-});
+        $('#bd').on('click', async (e) => {
+          Swal.fire({
+              title: '¿Estás seguro?',
+              text: 'Se realizará un backup de la base de datos.',
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText:   
+       '¡Sí, realizar backup!'
+          }).then((result) => {
+              if (result.isConfirmed) {
+                  $.ajax({
+                      type: "POST",
+                      url: '/AppwebMVC/Seguridad/Bitacora/Index',
+                      data: {
+                          getbd: 'getbd'
+                      },
+                      success: (response) => {
+                          Swal.fire(
+                              '¡Realizado!',
+                              'El backup se ha generado correctamente.',
+                              'success'
+                          );
+                      },
+                      error: (jqXHR, textStatus, errorThrown) => {
+                          // Manejo de errores más detallado
+                          Swal.fire({
+                              icon: 'error',
+                              title: 'Oops...',
+                              text: 'Algo salió mal: ' + errorThrown
+                          });
+                      }
+                  });
+              }
+          });
+      });
+        
+          
+      });
+   
+   
+    

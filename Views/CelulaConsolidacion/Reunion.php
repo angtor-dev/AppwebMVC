@@ -186,7 +186,7 @@ $viewScripts = ["CelulaConsolidacion-reunion.js"];
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Editar asistencias de la Reunion</h5>
+                <h5 class="modal-title">Asistencia</h5>
             </div>
             <div class="modal-body">
                 

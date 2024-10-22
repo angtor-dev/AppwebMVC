@@ -214,10 +214,10 @@ class Usuario extends Model
             $stmt->bindParam('idUsuario', $this->id);
             $stmt->bindParam('idRol', $idRol);
 
-            // foreach ($this->roles as $rol) {
-                $idRol = 6;
+            foreach ($this->roles as $rol) {
+                $idRol = $rol->id;
                 $stmt->execute();
-            // }
+            }
 
             // Guarda los cambios
             $this->db->pdo()->commit();
@@ -295,6 +295,7 @@ class Usuario extends Model
             || empty($this->telefono) || empty($this->direccion)
         ) {
             $_SESSION['errores'][] = "Algunos campos obligatorios estan vacios.";
+            
             return false;
         }
 
@@ -877,7 +878,7 @@ class Usuario extends Model
         try {
 
             if ($opcion == 1) {
-                $sql = "SELECT `correo` FROM `usuario` WHERE correo = :correo";
+                $sql = "SELECT `correo` FROM `usuario` WHERE correo = :correo AND estatus = '1'";
                 $stmt = $this->prepare($sql);
 
                 $stmt->bindValue('correo', $correo);
@@ -888,7 +889,7 @@ class Usuario extends Model
                 }
 
 
-                $sql = "SELECT `cedula` FROM `usuario` WHERE cedula = :cedula";
+                $sql = "SELECT `cedula` FROM `usuario` WHERE cedula = :cedula AND estatus = '1'";
                 $stmt = $this->prepare($sql);
 
                 $stmt->bindValue('cedula', $cedula);

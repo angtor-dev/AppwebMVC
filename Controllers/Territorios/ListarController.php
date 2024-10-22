@@ -1,5 +1,6 @@
 <?php
 require_once "Models/Territorio.php";
+
 // Logica del controlador
 
 necesitaAutenticacion();

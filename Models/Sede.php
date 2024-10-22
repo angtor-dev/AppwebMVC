@@ -110,7 +110,7 @@ class Sede extends Model
 
             http_response_code(200);
             echo json_encode(array('msj' => 'Sede registrada exitosamente', 'status' => 200));
-            die();
+           return true;
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -118,7 +118,7 @@ class Sede extends Model
             );
             http_response_code(422);
             echo json_encode($error_data);
-            die();
+            return false;
         }
     }
 
@@ -189,7 +189,8 @@ class Sede extends Model
 
             http_response_code(200);
             echo json_encode(array('msj' => 'Actualizado correctamente'));
-            die();
+            // die();
+            return true;
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -197,7 +198,8 @@ class Sede extends Model
             );
             http_response_code(422);
             echo json_encode($error_data);
-            die();
+            // die();
+            return false;
         }
     }
 
@@ -215,7 +217,8 @@ class Sede extends Model
             $stmt->execute();
             http_response_code(200);
             echo json_encode(array('msj' => 'Sede eliminada correctamente', 'status' => 200));
-            die();
+            // die();
+            return true;
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -223,7 +226,8 @@ class Sede extends Model
             );
             http_response_code(422);
             echo json_encode($error_data);
-            die();
+            // die();
+            return false;
         }
     }
 

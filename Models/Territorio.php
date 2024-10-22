@@ -136,6 +136,7 @@ class Territorio extends Model
             http_response_code(200);
             echo json_encode(array('msj' => 'Territorio registrado exitosamente', 'status' => 200));
             die();
+            // return true;
 
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
@@ -146,6 +147,7 @@ class Territorio extends Model
             http_response_code(422);
             echo json_encode($error_data);
             die();
+            // return false;
         }
     }
 
@@ -272,7 +274,8 @@ class Territorio extends Model
 
             http_response_code(200);
             echo json_encode(array('msj' => 'Territorio actualizado exitosamente', 'status' => 200));
-            die();
+            // die();
+            return true;
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -281,7 +284,8 @@ class Territorio extends Model
             //print_r($error_data);
             http_response_code(422);
             echo json_encode($error_data);
-            die();
+            // die();
+            return false;
         }
     }
 
@@ -303,7 +307,8 @@ class Territorio extends Model
 
             http_response_code(200);
             echo json_encode(array('msj' => 'Eliminado correctamente'));
-            die();
+            // die();
+            return true;
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),
@@ -312,7 +317,8 @@ class Territorio extends Model
             //print_r($error_data);
             http_response_code(422);
             echo json_encode($error_data);
-            die();
+            // die();
+            return false;
         }
     }
 

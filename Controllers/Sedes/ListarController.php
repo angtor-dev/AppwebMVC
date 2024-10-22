@@ -1,5 +1,6 @@
 <?php
 require_once "Models/Sede.php";
+
 // Logica del controlador
 
 necesitaAutenticacion();

@@ -58,7 +58,7 @@ final class LoginTest extends TestCase
             'fechaNacimiento' => '2000-01-01',
             'preguntaSecurity' => 'nombre de tu perro',
             'respuestaSecurity' => 'caramelo',
-            'correo' => 'prueba@gmail.com',
+            'correo' => 'pruebalogin@gmail.com',
             'idSede' => 1
         ];
 

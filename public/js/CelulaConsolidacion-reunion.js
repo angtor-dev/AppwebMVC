@@ -242,7 +242,7 @@ function Listar_discipulos_reunion(idCelulaConsolidacion, idReunion) {
                 allowHTML: true,
                 searchEnabled: true,  // Habilita la funcionalidad de búsqueda
                 removeItemButton: true,  // Habilita la posibilidad de remover items
-                placeholderValue: 'Selecciona los discipulos',  // Texto del placeholder
+                placeholderValue: 'Editar Asistencia',  // Texto del placeholder
             });
 
         },
