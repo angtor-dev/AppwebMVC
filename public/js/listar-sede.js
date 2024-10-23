@@ -190,7 +190,7 @@ $(document).ready(function () {
 
           const option = document.createElement('option');
           option.value = item.id;
-          option.text = `${item.id} ${item.cedula} ${item.nombre} ${item.apellido}`;
+          option.text = `${item.cedula} ${item.nombre} ${item.apellido}`;
           selector.appendChild(option);
 
         });
@@ -243,7 +243,7 @@ $(document).ready(function () {
 
           const option = document.createElement('option');
           option.value = item.id;
-          option.text = `${item.id} ${item.cedula} ${item.nombre} ${item.apellido}`;
+          option.text = `${item.cedula} ${item.nombre} ${item.apellido}`;
           selector.appendChild(option);
 
         });

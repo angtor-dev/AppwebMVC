@@ -38,7 +38,7 @@ $usuario = $_SESSION['usuario'];
                         <?php if (
                             $usuario->tienePermiso("roles", "actualizar") && $rol->getNombre() != "Superusuario"
                             && $rol->getNombre() != "Usuario" && $rol->getNombre() != "Pastor" && $rol->getNombre() != "Mentor"
-                            && $rol->getNombre() != "Estudiante"
+                            && $rol->getNombre() != "Estudiante" && $rol->getNombre() != "Administrador" && $rol->getNombre() != "LiderCelula" && $rol->getNombre() != "LiderTerritorio"
                         ): ?>
                             <a role="button" onclick="abrirModalRol(<?= $rol->id ?>)">
                                 <i class="fa-solid fa-pen" title="Actualizar" data-bs-toggle="tooltip"></i>
@@ -47,7 +47,7 @@ $usuario = $_SESSION['usuario'];
                         <?php if (
                             $usuario->tienePermiso("roles", "eliminar") && $rol->getNombre() != "Superusuario"
                             && $rol->getNombre() != "Usuario" && $rol->getNombre() != "Pastor" && $rol->getNombre() != "Mentor"
-                            && $rol->getNombre() != "Estudiante"
+                            && $rol->getNombre() != "Estudiante" && $rol->getNombre() != "Administrador" && $rol->getNombre() != "LiderCelula" && $rol->getNombre() != "LiderTerritorio"
                         ): ?>
                             <a role="button" data-bs-toggle="modal" data-bs-target="#confirmar-eliminacion"
                                 data-id="<?= $rol->id ?>">

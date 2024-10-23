@@ -12,7 +12,11 @@ $usuario = $_SESSION['usuario'];
         registrar: <?php echo $usuario->tienePermiso("celulaConsolidacion", "registrar") ? 1 : 0 ?>,
         consultar: <?php echo $usuario->tienePermiso("celulaConsolidacion", "consultar") ? 1 : 0 ?>,
         actualizar: <?php echo $usuario->tienePermiso("celulaConsolidacion", "actualizar") ? 1 : 0 ?>,
-        eliminar: <?php echo $usuario->tienePermiso("celulaConsolidacion", "eliminar") ? 1 : 0 ?>
+        eliminar: <?php echo $usuario->tienePermiso("celulaConsolidacion", "eliminar") ? 1 : 0 ?>,
+        rolLiderCelula: <?php echo (($usuario->tieneRol('SuperUsuario')) || ($usuario->tieneRol('LiderTerritorio'))) ? 1 : 0 ?>,
+        nombre: '<?php echo $usuario->getNombreCompleto() ?>',
+        id: '<?php echo $usuario->id; ?>',
+        cedula: '<?php echo $usuario->getCedula() ?>',
     }
 </script>
 
@@ -75,15 +79,17 @@ $usuario = $_SESSION['usuario'];
                                 </div>
                             </div>
 
-
                             <div class="mb-3">
+                            
                                 <label for="idLider" class="form-label fw-bold">Lider Responsable</label>
+
                                 <select class="form-select" id="idLider" name="idLider">
                                 </select>
                                 <div class="alert alert-danger d-flex align-items-center mt-3 d-none" id="msj_idLider"
                                     role="alert">
                                 </div>
                             </div>
+                           
 
                             <div class="mb-3">
                                 <label for="CoLider" class="form-label fw-bold">Co Lider Responsable</label>

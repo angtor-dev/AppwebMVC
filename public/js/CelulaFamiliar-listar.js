@@ -193,14 +193,25 @@ $(document).ready(function () {
 
                 let selector2 = document.getElementById('idCoLider2');
 
-                data.forEach(item => {
+                if (permisos.rolLiderCelula){
 
-                    const option = document.createElement('option');
-                    option.value = item.id;
-                    option.text = `${item.cedula} ${item.nombre} ${item.apellido}`;
-                    selector.appendChild(option);
-
-                });
+                    data.forEach(item => {
+    
+                        const option = document.createElement('option');
+                        option.value = item.id;
+                        option.text = `${item.cedula} ${item.nombre} ${item.apellido}`;
+                        selector.appendChild(option);
+    
+                    })
+                   
+                    }else{
+    
+                        const option = document.createElement('option');
+                        option.value = permisos.id;
+                        option.text = `${permisos.cedula} ${permisos.nombre}`;
+                        selector.appendChild(option);
+    
+                    }
 
                 data.forEach(item => {
 
@@ -329,14 +340,25 @@ $(document).ready(function () {
                 placeholderOption2.disabled = true;
                 selector2.appendChild(placeholderOption2);
 
-                data.forEach(item => {
+                if (permisos.rolLiderCelula){
 
-                    const option = document.createElement('option');
-                    option.value = item.id;
-                    option.text = `${item.cedula} ${item.nombre} ${item.apellido}`;
-                    selector.appendChild(option);
-
-                });
+                    data.forEach(item => {
+    
+                        const option = document.createElement('option');
+                        option.value = item.id;
+                        option.text = `${item.cedula} ${item.nombre} ${item.apellido}`;
+                        selector.appendChild(option);
+    
+                    })
+                   
+                    }else{
+    
+                        const option = document.createElement('option');
+                        option.value = permisos.id;
+                        option.text = `${permisos.cedula} ${permisos.nombre}`;
+                        selector.appendChild(option);
+    
+                    }
 
                 data.forEach(item => {
 

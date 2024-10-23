@@ -300,7 +300,7 @@ class Celulas extends Model
                 return $resultado;
             }
 
-            if ($usuario->tieneRol('Lider')) {
+            if ($usuario->tieneRol('LiderCelula')) {
                 $sql = "SELECT Lider.id AS idLider,
                         CoLider.id AS idCoLider,
                         Lider.nombre AS nombreLider,
@@ -653,16 +653,14 @@ class Celulas extends Model
 
             if ($usuario->tieneRol('SuperUsuario')) {
                 $sql = "SELECT usuario.id, usuario.cedula, usuario.nombre, usuario.apellido 
-            FROM usuariorol INNER JOIN usuario ON usuario.id = usuariorol.idUsuario WHERE usuario.estatus = '1' AND usuariorol.idRol IN (1, 2, 3, 4, 5, 6)";
+            FROM usuariorol INNER JOIN usuario ON usuario.id = usuariorol.idUsuario WHERE usuario.estatus = '1' AND usuariorol.idRol IN (1, 2, 3, 4, 5, 6) GROUP BY usuario.id";
 
                 $stmt = $this->db->pdo()->prepare($sql);
 
                 $stmt->execute();
                 $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 return $resultado;
-            }
-
-            if ($usuario->tieneRol('Pastor') || $usuario->tieneRol('LiderTerritorio')) {
+            } else {
 
                 $sql = "SELECT usuario.id, usuario.cedula, usuario.nombre, usuario.apellido 
             FROM usuariorol INNER JOIN usuario ON usuario.id = usuariorol.idUsuario WHERE usuario.idSede = :idSede AND usuario.estatus = '1' AND usuariorol.idRol IN (1, 2, 3, 4, 5,6)";
@@ -676,19 +674,7 @@ class Celulas extends Model
                 return $resultado;
             }
 
-            if ($usuario->tieneRol('Lider')) {
-
-                $sql = "SELECT usuario.id, usuario.cedula, usuario.nombre, usuario.apellido 
-            FROM usuariorol INNER JOIN usuario ON usuario.idS = :idLider AND usuario.estatus = '1'";
-
-                $stmt = $this->db->pdo()->prepare($sql);
-
-                $stmt->bindValue(':idLider', $usuario->id);
-
-                $stmt->execute();
-                $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                return $resultado;
-            }
+    
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.
             $error_data = array(
                 "error_message" => $e->getMessage(),

@@ -335,7 +335,7 @@ class Territorio extends Model
 
             if ($usuario->tieneRol('SuperUsuario')) {
                 $sql = "SELECT usuario.id, usuario.cedula, usuario.nombre, usuario.apellido 
-            FROM usuariorol INNER JOIN usuario ON usuario.id = usuariorol.idUsuario WHERE usuario.estatus = '1' AND usuariorol.idRol IN (4, 5)";
+            FROM usuariorol INNER JOIN usuario ON usuario.id = usuariorol.idUsuario WHERE usuario.estatus = '1' AND usuariorol.idRol IN (4, 5) GROUP BY usuario.id";
 
                 $stmt = $this->db->pdo()->prepare($sql);
 
@@ -345,7 +345,7 @@ class Territorio extends Model
             } else {
 
                 $sql = "SELECT usuario.id, usuario.cedula, usuario.nombre, usuario.apellido 
-            FROM usuariorol INNER JOIN usuario ON usuario.id = usuariorol.idUsuario WHERE usuario.idSede = :idSede AND usuario.estatus = '1' AND usuariorol.idRol IN (4, 5)";
+            FROM usuariorol INNER JOIN usuario ON usuario.id = usuariorol.idUsuario WHERE usuario.idSede = :idSede AND usuario.estatus = '1' AND usuariorol.idRol IN (4, 5) GROUP BY usuario.id";
 
                 $stmt = $this->db->pdo()->prepare($sql);
 

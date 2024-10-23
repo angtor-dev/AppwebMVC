@@ -58,8 +58,8 @@ $(document).ready(function () {
                       },
                       success: (response) => {
                           Swal.fire(
-                              '¡Realizado!',
-                              'El backup se ha generado correctamente.',
+                              'Archivo descargado con exito',
+                              'El backup de la Base de Datos se ha generado correctamente.',
                               'success'
                           );
                       },

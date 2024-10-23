@@ -14,7 +14,11 @@ $usuario = $_SESSION['usuario'];
         registrar: <?php echo $usuario->tienePermiso("celulaCrecimiento", "registrar") ? 1 : 0 ?>,
         consultar: <?php echo $usuario->tienePermiso("celulaCrecimiento", "consultar") ? 1 : 0 ?>,
         actualizar: <?php echo $usuario->tienePermiso("celulaCrecimiento", "actualizar") ? 1 : 0 ?>,
-        eliminar: <?php echo $usuario->tienePermiso("celulaCrecimiento", "eliminar") ? 1 : 0 ?>
+        eliminar: <?php echo $usuario->tienePermiso("celulaCrecimiento", "eliminar") ? 1 : 0 ?>,
+        rolLiderCelula: <?php echo (($usuario->tieneRol('SuperUsuario')) || ($usuario->tieneRol('LiderTerritorio'))) ? 1 : 0 ?>,
+        nombre: '<?php echo $usuario->getNombreCompleto() ?>',
+        id: '<?php echo $usuario->id; ?>',
+        cedula: '<?php echo $usuario->getCedula() ?>',
     }
 </script>
 
