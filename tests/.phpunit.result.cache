@@ -1,0 +1,1 @@
+{"version":1,"defects":[],"times":{"SeguridadTest::test_registrar":0.013,"SeguridadTest::test_actualizar":0.126,"SeguridadTest::test_GestionarPermiso":0.019,"SeguridadTest::test_eliminar":0.034,"SeguridadTest::test_listar_Bitacora":21.457}}

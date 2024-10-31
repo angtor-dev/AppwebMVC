@@ -135,7 +135,7 @@ class Territorio extends Model
 
             http_response_code(200);
             echo json_encode(array('msj' => 'Territorio registrado exitosamente', 'status' => 200));
-            die();
+            return true;
             // return true;
 
         } catch (Exception $e) { // Muestra el mensaje de error y detén la ejecución.

@@ -154,9 +154,6 @@ final class CelulaConsolidacionTest extends TestCase
     {
         $id = 53;
 
-        // $arrayAccion = array('id' => $id, 'idCelula' => '', 'accion' => 'eliminar');
-
-        // $this->Celulas->validacion_accion_reunion($arrayAccion);
         $resultado = $this->Celulas->eliminar_reuniones($id);    
 
         $this->assertTrue($resultado);

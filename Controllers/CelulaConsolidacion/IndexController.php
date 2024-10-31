@@ -7,6 +7,8 @@ necesitaAutenticacion();
 
 requierePermiso("celulaConsolidacion", "consultar");
 
+
+
 $usuarioSesion = $_SESSION['usuario'];
 
 $Celulas = new Celulas();

@@ -39,6 +39,7 @@ final class TerritorioTest extends TestCase
         $this->Territorio->validacion_datos($idSede, $nombre, $idLider, $detalles);
         $this->Territorio->validacion_existencia($nombre, $idSede, $idTerritorio = '');
         $this->Territorio->valida_lider($idLider, $id = '');
+        
         $resultado = $this->Territorio->registrar_territorio($idSede, $nombre, $idLider, $detalles);
 
 

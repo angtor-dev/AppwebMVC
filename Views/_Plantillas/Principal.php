@@ -59,10 +59,11 @@ if (isset($_SESSION['usuario'])) {
                     </button>
                     <div class="text-end">
                         <?php if (isset($_SESSION['usuario'])) : ?>
-                            <!-- <button class="btn btn-dark">
-                                <i class="fa-solid fa-message"></i>
-                                0
-                            </button> -->
+                      
+
+                            <!-- chatbot -->
+
+                            <!-- fin chatbot -->
                             <div class="dropdown-center d-inline-block">
                                 <?php
                                 $classBtn = $cantNotif > 0
