@@ -5,6 +5,7 @@ $viewScripts = ["CelulaConsolidacion-listar.js"];
 
 /** @var Usuario */
 $usuario = $_SESSION['usuario'];
+
 ?>
 
 <script>

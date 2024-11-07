@@ -11,20 +11,20 @@
 
         <!-- Anjhel -->
         <?php if ($usuario->tienePermiso("sedes", "consultar")) : ?>
-            <a href="<?= LOCAL_DIR ?>Sedes/Listar" class="nav-link <?= strtolower($uriParts[1] ?? "") == "sedes" ? "active" : "" ?>">
+            <a href="<?= LOCAL_DIR ?>Sedes/Listar" class="nav-link <?= strtolower($uriParts[0] ?? "") == "sedes" ? "active" : "" ?>">
                 <i class="fa-solid fa-church fa-fw me-2"></i>
                 Sedes
             </a>
         <?php endif ?>
 
         <?php if ($usuario->tienePermiso("territorios", "consultar")) : ?>
-            <a href="<?= LOCAL_DIR ?>Territorios/Listar" class="nav-link" <?= empty($uriParts[0]) || strtolower($uriParts[0]) == "agenda" ? "active" : "" ?>">
+            <a href="<?= LOCAL_DIR ?>Territorios/Listar" class="nav-link <?= strtolower($uriParts[0] ?? "") == "territorios" ? "active" : "" ?>">
                 <i class="fa-sharp fa-solid fa-earth-americas fa-fw me-2"></i>
                 Territorios
             </a>
         <?php endif ?>
 
-        <a href="<?= LOCAL_DIR ?>Agenda/Index" class="nav-link <?= empty($uriParts[0]) || strtolower($uriParts[0]) == "agenda" ? "active" : "" ?>">
+        <a href="<?= LOCAL_DIR ?>Agenda/Index" class="nav-link <?= strtolower($uriParts[0]) == "agenda" ? "active" : "" ?>">
             <i class="fa-solid fa-calendar fa-fw me-2"></i>
             Agenda
         </a>

@@ -1,8 +1,7 @@
 <?php
 global $viewStyles;
 
-$scriptName = "listar-sede.js";
-agregarScript($scriptName);
+agregarScript("listar-sede.js");
 
 /** @var Usuario */
 $usuario = $_SESSION['usuario'];
@@ -15,6 +14,7 @@ $usuario = $_SESSION['usuario'];
         actualizar: <?php echo $usuario->tienePermiso("sedes", "actualizar") ? 1 : 0  ?>,
         eliminar: <?php echo $usuario->tienePermiso("sedes", "eliminar") ? 1 : 0  ?>
     }
+
 
 </script>
 

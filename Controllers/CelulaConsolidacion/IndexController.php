@@ -3,6 +3,7 @@ require_once "Models/Territorio.php";
 require_once "Models/Celulas.php";
 
 
+
 necesitaAutenticacion();
 
 requierePermiso("celulaConsolidacion", "consultar");
