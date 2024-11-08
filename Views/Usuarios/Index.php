@@ -5,8 +5,8 @@ $title = "Usuarios";
 $usuarioSesion = $_SESSION['usuario'];
 ?>
 
-<?php if (!empty($alertas['exito']) && count($alertas['exito']) > 0) : ?>
-    <?php foreach ($alertas['exito'] as $alerta) : ?>
+<?php if (!empty($alertas['exito']) && count($alertas['exito']) > 0): ?>
+    <?php foreach ($alertas['exito'] as $alerta): ?>
         <div class="alert alert-success fade show alert-dismissible">
             <?= $alerta ?>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -41,16 +41,16 @@ $usuarioSesion = $_SESSION['usuario'];
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($usuarios as $usuario) : ?>
+            <?php foreach ($usuarios as $usuario): ?>
                 <tr>
                     <td><?= $usuario->getNombreCompleto() ?></td>
                     <td><?= $usuario->getCedula() ?></td>
                     <td><?= $usuario->getCorreo() ?></td>
                     <td>
                         <?=
-                        implode(", ", array_map(function(Rol $rol) {
-                            return $rol->getNombre();
-                        }, $usuario->roles));
+                            implode(", ", array_map(function (Rol $rol) {
+                                                        return $rol->getNombre();
+                                                    }, $usuario->roles));
                         ?>
                     </td>
                     <td>
@@ -92,7 +92,8 @@ $usuarioSesion = $_SESSION['usuario'];
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No, cancelar</button>
-                <a href="#" data-href="/AppwebMVC/Usuarios/Eliminar?id=" type="button" class="btn btn-danger btn-eliminar">Si, eliminar</a>
+                <a href="#" data-href="/AppwebMVC/Usuarios/Eliminar?id=" type="button"
+                    class="btn btn-danger btn-eliminar">Si, eliminar</a>
             </div>
         </div>
     </div>
@@ -143,7 +144,7 @@ $usuarioSesion = $_SESSION['usuario'];
         })
         form.querySelector('#input-cedula').addEventListener('blur', async e => {
             let value = e.target.value
-            let res = await fetch("/AppwebMVC/Usuarios/Buscar?tipo=cedula&valor="+value)
+            let res = await fetch("/AppwebMVC/Usuarios/Buscar?tipo=cedula&valor=" + value)
             if (await res.text() === 'true') {
                 e.target.classList.add('is-invalid')
                 e.target.nextElementSibling.textContent = "La cédula ya existe"
@@ -155,7 +156,7 @@ $usuarioSesion = $_SESSION['usuario'];
                 e.target.classList.add('is-invalid')
             }
 
-            let res = await fetch("/AppwebMVC/Usuarios/Buscar?tipo=correo&valor="+value)
+            let res = await fetch("/AppwebMVC/Usuarios/Buscar?tipo=correo&valor=" + value)
             if (await res.text() === 'true' && (!e.target.dataset.valor || e.target.dataset.valor != value)) {
                 e.target.classList.add('is-invalid')
                 e.target.nextElementSibling.textContent = "Ya existe un usuario con este correo"
