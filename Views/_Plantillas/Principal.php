@@ -77,41 +77,41 @@ foreach ($chatbotModulos as $modulo) {
                     <div class="text-end">
                         <?php if (isset($_SESSION['usuario'])): ?>
                             <!-- chatbot -->
-                            <?php if ($usuario->tieneRol('SuperUsuario') && ($chatbotStatus == true)): ?>
+                            <?php /* if ($usuario->tieneRol('SuperUsuario') && ($chatbotStatus == true)):  */ ?>
 
 
-                                <button class="btn btn-dark me-2" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"
-                                    aria-controls="offcanvasExample">
-                                    <i class="fa-solid fa-comments"></i>
-                                    <span>
-                                        Asistente
-                                    </span>
-                                </button>
+                            <button class="btn btn-dark me-2" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"
+                                aria-controls="offcanvasExample">
+                                <i class="fa-solid fa-comments"></i>
+                                <span>
+                                    Asistente
+                                </span>
+                            </button>
 
-                                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExample"
-                                    aria-labelledby="offcanvasExampleLabel">
-                                    <div class="offcanvas-header">
-                                        <h5 class="offcanvas-title" id="offcanvasExampleLabel">Asistente "Llamas de Fuego"</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
-                                            aria-label="Close"></button>
-                                    </div>
-                                    <div class="offcanvas-body">
-                                        <div class="chat-container">
-                                            <div class="chat-messages">
-                                                <div class="chat-message bot">
-                                                    <div class="message-content bot">¿Cómo puedo ayudarte?</div>
-                                                </div>
+                            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExample"
+                                aria-labelledby="offcanvasExampleLabel">
+                                <div class="offcanvas-header">
+                                    <h5 class="offcanvas-title" id="offcanvasExampleLabel">Asistente "Llamas de Fuego"</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="offcanvas-body">
+                                    <div class="chat-container">
+                                        <div class="chat-messages">
+                                            <div class="chat-message bot">
+                                                <div class="message-content bot">¿Cómo puedo ayudarte?</div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="chat-input">
-                                        <input type="textarea" id="userInput" placeholder="Escribe tu mensaje" class="bg-white">
-                                        <button class="btn btn-secondary" onclick="sendMessage()"><i
-                                                class="fa-solid fa-paper-plane"></i></button>
-                                    </div>
                                 </div>
+                                <div class="chat-input">
+                                    <input type="textarea" id="userInput" placeholder="Escribe tu mensaje" class="bg-white">
+                                    <button class="btn btn-secondary" onclick="sendMessage()"><i
+                                            class="fa-solid fa-paper-plane"></i></button>
+                                </div>
+                            </div>
 
-                            <?php endif ?>
+                            <?php /* endif */ ?>
 
                             <style>
                                 .chat-container {
