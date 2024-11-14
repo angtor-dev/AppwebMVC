@@ -21,8 +21,7 @@ async function sendMessage() {
     // Crear un div para el contenido del mensaje del bot
     const botMessageContent = document.createElement('div');
     botMessageContent.classList.add('message-content', 'bot');
-    botMessageContent.textContent
-        = "Chat en construcción";
+
 
     // Agregar el contenido al contenedor del mensaje
     botMessageDiv.appendChild(botMessageContent);
@@ -30,7 +29,7 @@ async function sendMessage() {
     // Agregar ambas burbujas al contenedor de mensajes
     const chatMessages = document.querySelector('.chat-messages');
     chatMessages.appendChild(userMessageDiv);
-    chatMessages.appendChild(botMessageDiv);
+
 
     // Limpiar el input
     document.getElementById('userInput').value = '';
@@ -42,7 +41,9 @@ async function sendMessage() {
             question: userInput,
         },
         success: function (response) {
-            console.log(response);
+            const result = JSON.parse(response)
+            botMessageContent.textContent = result;
+            chatMessages.appendChild(botMessageDiv);
         },
         error: function (jqXHR, textStatus, errorThrown) {
             if (jqXHR.responseText) {
