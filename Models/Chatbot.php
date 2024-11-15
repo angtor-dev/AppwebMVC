@@ -21,7 +21,7 @@ class Chatbot extends Model
         $question = $this->preprocesarPregunta($pregunta);
         $question = "%$question%";  // Formato para búsqueda con LIKE
 
-        // Consulta SQL utilizando MATCH...AGAINST para búsqueda de texto completo en 'question'
+        // Consulta SQL utilizando MATCH...AGAINST para búsqueda de texto completo en 'question'. Esto es mas eficiente que solo usar la consulta LIKE
         // Esto requiere que la columna 'question' tenga un índice FULLTEXT previamente creado.
         $sql = "SELECT answer FROM chatbot_conocimiento WHERE MATCH(question) AGAINST (:question IN NATURAL LANGUAGE MODE)";
         $statement = $this->db->pdo()->prepare($sql);
