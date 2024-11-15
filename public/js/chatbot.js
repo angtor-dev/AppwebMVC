@@ -43,6 +43,7 @@ async function sendMessage() {
         success: function (response) {
             const result = JSON.parse(response)
             botMessageContent.textContent = result;
+            // Agrega la burbuja de respuesta del chatbot al contenedor de mensajes
             chatMessages.appendChild(botMessageDiv);
         },
         error: function (jqXHR, textStatus, errorThrown) {
