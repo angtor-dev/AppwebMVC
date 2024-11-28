@@ -8,6 +8,18 @@ require_once "Models/Model.php";
  */
 class Chatbot extends Model
 {
+    private $sinonimos = [
+        'realizar' => 'hacer',
+    'efectuar' => 'hacer',
+    'ejecutar' => 'hacer',
+    'inscribir' => 'registrar',
+    'anotar' => 'registrar',
+    'documentar' => 'registrar',
+    'borrar' => 'eliminar',
+    'suprimir' => 'eliminar',
+    'quitar' => 'eliminar',
+    'anjhel' => 'eliminar'
+    ];
     /**
      * Obtiene una respuesta de la base de datos para una pregunta dada.
      * Utiliza una búsqueda de texto completo en la columna 'question' de la tabla 'chatbot_conocimiento'.
@@ -15,24 +27,29 @@ class Chatbot extends Model
      * @param string $pregunta La pregunta que se desea hacer al chatbot.
      * @return string La respuesta obtenida de la base de datos o un mensaje por defecto si no se encuentra respuesta.
      */
+  
     public function getRespuesta($pregunta): string
     {
         // Preprocesar la pregunta para normalizarla antes de buscarla en la base de datos
         $question = $this->preprocesarPregunta($pregunta);
-        $question = "%$question%";  // Formato para búsqueda con LIKE
+        
 
-        // Consulta SQL utilizando MATCH...AGAINST para búsqueda de texto completo en 'question'. Esto es mas eficiente que solo usar la consulta LIKE
-        // Esto requiere que la columna 'question' tenga un índice FULLTEXT previamente creado.
-        $sql = "SELECT answer FROM chatbot_conocimiento WHERE MATCH(question) AGAINST (:question IN NATURAL LANGUAGE MODE)";
-        $statement = $this->db->pdo()->prepare($sql);
-        $statement->bindParam(':question', $question, PDO::PARAM_STR);
-        $statement->execute();
+        // Realizar la búsqueda inicial
+    $respuesta = $this->buscarRespuestaEnBaseDeDatos($question);
 
-        // Obtener el resultado y devolver la respuesta
-        $respuesta = $statement->fetch(PDO::FETCH_ASSOC);
+    // Si se encontró una respuesta, devolverla
+    if ($respuesta) {
+        return $respuesta;
+    } else {
 
-        // Si se encuentra una respuesta, se devuelve; de lo contrario, un mensaje por defecto
-        return $respuesta ? $respuesta['answer'] : "Lo siento, no tengo una respuesta para eso.";
+    // Si no se encontró, intentar con sinónimos
+    $respuesta = $this->nuevapregunta($question);
+         
+        return $respuesta ?: 'Lo siento, no tengo una respuesta para eso.';
+
+     }
+    // Si aún no se encontró respuesta, devolver un mensaje por defecto
+    
     }
 
     /**
@@ -61,4 +78,64 @@ class Chatbot extends Model
 
         return $pregunta;
     }
+
+
+    function nuevapregunta($pregunta) {
+     // Accedemos a la base de conocimientos global
+    
+
+     $nuevaPregunta = $this->obtenerPreguntaConSinonimos($pregunta);
+     $respuesta = $this->buscarRespuestaEnBaseDeDatos($nuevaPregunta);
+
+     return $respuesta;
+       
+    }
+
+    private function obtenerPreguntaConSinonimos($pregunta) {
+        // 1. Desglosar la pregunta en un array de palabras
+    $arrayPregunta = explode(' ', $pregunta);
+
+    // 2. Inicializar la nueva pregunta
+    $nuevaPregunta = '';
+
+    // 3. Iterar sobre cada palabra de la pregunta y buscar su sinónimo
+    foreach ($arrayPregunta as $palabra) {
+        // Convertir la palabra a minúsculas para una comparación más robusta
+        $palabraMinuscula = strtolower($palabra);
+
+        // Buscar el sinónimo en el diccionario
+        $sinonimo = $this->sinonimos[$palabraMinuscula] ?? $palabraMinuscula;
+
+        // Agregar el sinónimo o la palabra original a la nueva pregunta
+        $nuevaPregunta .= $sinonimo . ' ';
+    }
+
+    // Eliminar el último espacio sobrante
+    $nuevaPregunta = trim($nuevaPregunta);
+
+    return $nuevaPregunta;
+       }
+
+
+    private function buscarRespuestaEnBaseDeDatos($question)
+{
+    // Consulta SQL utilizando MATCH...AGAINST para búsqueda de texto completo en 'question'. Esto es mas eficiente que solo usar la consulta LIKE
+        // Esto requiere que la columna 'question' tenga un índice FULLTEXT previamente creado.
+
+        $question = "%$question%";  // Formato para búsqueda con LIKE
+
+        $sql = "SELECT answer FROM chatbot_conocimiento WHERE MATCH(question) AGAINST (:question IN NATURAL LANGUAGE MODE)";
+        $statement = $this->db->pdo()->prepare($sql);
+        $statement->bindParam(':question', $question, PDO::PARAM_STR);
+        $statement->execute();
+
+        // Obtener el resultado y devolver la respuesta
+        $respuesta = $statement->fetch(PDO::FETCH_ASSOC);
+
+        return $respuesta ? $respuesta['answer'] : false;
+}
+
+
+
+
 }
