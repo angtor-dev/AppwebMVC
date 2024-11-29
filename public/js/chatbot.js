@@ -1,74 +1,80 @@
-async function sendMessage() {
-    const userInput = document.getElementById('userInput').value;
+$("#userInput").keypress(function (event) {
+    if (event.which === 13) {
+        const chatMessagesScroll = document.querySelector('.containerChatbot');
 
-    // Crear un nuevo div contenedor para el mensaje del usuario
-    const userMessageDiv = document.createElement('div');
-    userMessageDiv.classList.add('chat-message', 'user');
+        const userInput = document.getElementById('userInput').value;
 
-    // Crear un div para el contenido del mensaje del usuario
-    const userMessageContent = document.createElement('div');
-    userMessageContent.classList.add('message-content', 'user');
-    userMessageContent.textContent
-        = userInput;
+        // Crear un nuevo div contenedor para el mensaje del usuario
+        const userMessageDiv = document.createElement('div');
+        userMessageDiv.classList.add('chat-message', 'user');
 
-    // Agregar el contenido al contenedor del mensaje
-    userMessageDiv.appendChild(userMessageContent);
+        // Crear un div para el contenido del mensaje del usuario
+        const userMessageContent = document.createElement('div');
+        userMessageContent.classList.add('message-content', 'user');
+        userMessageContent.textContent
+            = userInput;
 
-    // Crear un nuevo div contenedor para el mensaje del bot
-    const botMessageDiv = document.createElement('div');
-    botMessageDiv.classList.add('chat-message', 'bot');
+        // Agregar el contenido al contenedor del mensaje
+        userMessageDiv.appendChild(userMessageContent);
 
-    // Crear un div para el contenido del mensaje del bot
-    const botMessageContent = document.createElement('div');
-    botMessageContent.classList.add('message-content', 'bot');
+        // Crear un nuevo div contenedor para el mensaje del bot
+        const botMessageDiv = document.createElement('div');
+        botMessageDiv.classList.add('chat-message', 'bot');
 
-
-    // Agregar el contenido al contenedor del mensaje
-    botMessageDiv.appendChild(botMessageContent);
-
-    // Agregar ambas burbujas al contenedor de mensajes
-    const chatMessages = document.querySelector('.chat-messages');
-    chatMessages.appendChild(userMessageDiv);
+        // Crear un div para el contenido del mensaje del bot
+        const botMessageContent = document.createElement('div');
+        botMessageContent.classList.add('message-content', 'bot');
 
 
-    // Limpiar el input
-    document.getElementById('userInput').value = '';
+        // Agregar el contenido al contenedor del mensaje
+        botMessageDiv.appendChild(botMessageContent);
 
-    $.ajax({
-        type: "POST",
-        url: "/AppwebMVC/Chatbot/Index",
-        data: {
-            question: userInput,
-        },
-        success: function (response) {
-            const result = JSON.parse(response)
-            botMessageContent.textContent = result;
-            // Agrega la burbuja de respuesta del chatbot al contenedor de mensajes
-            chatMessages.appendChild(botMessageDiv);
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            if (jqXHR.responseText) {
-                let jsonResponse = JSON.parse(jqXHR.responseText);
+        // Agregar ambas burbujas al contenedor de mensajes
+        const chatMessages = document.querySelector('.chat-messages');
+        chatMessages.appendChild(userMessageDiv);
 
-                if (jsonResponse.msj) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'DENEGADO',
-                        text: jsonResponse.msj,
-                        showConfirmButton: true,
-                    })
+
+        // Limpiar el input
+        document.getElementById('userInput').value = '';
+
+        $.ajax({
+            type: "POST",
+            url: "/AppwebMVC/Chatbot/Index",
+            data: {
+                question: userInput,
+            },
+            success: function (response) {
+                const result = JSON.parse(response)
+                botMessageContent.textContent = result;
+                // Agrega la burbuja de respuesta del chatbot al contenedor de mensajes
+                chatMessages.appendChild(botMessageDiv);
+
+                chatMessagesScroll.scrollTop = chatMessagesScroll.scrollHeight;
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                if (jqXHR.responseText) {
+                    let jsonResponse = JSON.parse(jqXHR.responseText);
+
+                    if (jsonResponse.msj) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'DENEGADO',
+                            text: jsonResponse.msj,
+                            showConfirmButton: true,
+                        })
+                    } else {
+                        const respuesta = JSON.stringify(jsonResponse, null, 2)
+                        Swal.fire({
+                            background: 'red',
+                            color: '#fff',
+                            title: respuesta,
+                            showConfirmButton: true,
+                        })
+                    }
                 } else {
-                    const respuesta = JSON.stringify(jsonResponse, null, 2)
-                    Swal.fire({
-                        background: 'red',
-                        color: '#fff',
-                        title: respuesta,
-                        showConfirmButton: true,
-                    })
+                    alert('Error desconocido: ' + textStatus);
                 }
-            } else {
-                alert('Error desconocido: ' + textStatus);
             }
-        }
-    })
-}
+        })
+    }
+})

@@ -44,6 +44,7 @@ foreach ($chatbotModulos as $modulo) {
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/lib/quill/quill.snow.css">
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/css/utilities.css">
     <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/css/site.css">
+    <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/css/chatbot.css">
     <?php if (!empty($viewStyles)): ?>
         <?php foreach ($viewStyles as $css): ?>
             <link rel="stylesheet" href="<?= LOCAL_DIR ?>public/css/<?= $css ?>">
@@ -95,7 +96,7 @@ foreach ($chatbotModulos as $modulo) {
                                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
                                         aria-label="Close"></button>
                                 </div>
-                                <div class="offcanvas-body">
+                                <div class="offcanvas-body containerChatbot">
                                     <div class="chat-container">
                                         <div class="chat-messages">
                                             <div class="chat-message bot">
@@ -105,123 +106,12 @@ foreach ($chatbotModulos as $modulo) {
                                     </div>
                                 </div>
                                 <div class="chat-input">
-                                    <input type="textarea" id="userInput" placeholder="Escribe tu mensaje" class="bg-white">
-                                    <button class="btn btn-secondary" onclick="sendMessage()"><i
-                                            class="fa-solid fa-paper-plane"></i></button>
+                                    <input type="text" id="userInput" placeholder="Escribe tu pregunta..." class="bg-white">
                                 </div>
                             </div>
 
                             <?php /* endif */ ?>
 
-                            <style>
-                                .chat-container {
-
-                                    width: 100%;
-                                    padding: 20px;
-                                    overflow-x: hidden;
-                                }
-
-                                .chat-messages {
-                                    flex-direction: column;
-                                }
-
-                                .chat-message {
-
-                                    margin-bottom: 10px;
-                                    flex-wrap: wrap;
-                                    display: flex;
-                                }
-
-
-                                .chat-message.bot {
-
-                                    justify-content: start;
-
-                                }
-
-                                .chat-message.user {
-
-                                    justify-content: end;
-
-                                }
-
-                                .message-content.bot {
-
-
-                                    border-radius: 10px;
-                                    padding: 10px;
-                                    max-width: 80%;
-
-
-                                    background-color: #f67483;
-
-                                    color: white;
-                                }
-
-                                .message-content.user {
-
-
-                                    /* Color de fondo para mensajes del usuario */
-                                    border-radius: 10px;
-                                    padding: 10px;
-                                    max-width: 80%;
-
-
-                                    background-color: #96979c;
-
-                                    color: white;
-                                }
-
-                                .chat-input {
-                                    display: flex;
-                                    align-items: center;
-                                    padding: 10px;
-                                    /* Ajusta el padding según tus preferencias */
-                                }
-
-                                .chat-input input {
-                                    flex-grow: 2;
-                                    /* Hace que el input ocupe todo el espacio disponible */
-                                    height: 40px;
-                                    /* Ajusta la altura del input */
-                                    border-radius: 5px;
-                                    /* Redondea ligeramente las esquinas */
-                                    padding: 0 10px;
-                                    border: none;
-                                    /* Quita el borde por defecto */
-                                    box-shadow: inset 0px 2px 4px rgba(0, 0, 0, 0.1);
-                                    /* Agrega una sombra interna */
-                                }
-
-                                .offcanvas-header {
-
-                                    border-bottom-color: black;
-
-                                }
-
-                                .chat-input button {
-                                    width: 40px;
-                                    /* Ajusta el ancho del botón */
-                                    height: 40px;
-                                    border-radius: 50%;
-                                    margin-left: 5px;
-                                    /* Hace el botón circular */
-                                    background-color: #96979c;
-                                    /* Color del botón */
-                                    border: none;
-                                    cursor: pointer;
-                                    transition: background-color 0.3s ease;
-                                }
-
-                                .chat-input button:hover {
-                                    background-color: #f67483;
-                                    /* Cambia el color al pasar el mouse */
-                                }
-
-                                .chat-input button:focus {
-                                    outline: none;
-                                }
-                            </style>
                             <!-- fin chatbot -->
                             <div class="dropdown-center d-inline-block">
                                 <?php
